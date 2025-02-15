@@ -446,4 +446,17 @@
       background: rgba(136, 132, 216, 0.1);
     }
   }
+}
+
+.test-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: #8884d8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 999;
 } 

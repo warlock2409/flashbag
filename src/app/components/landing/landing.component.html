@@ -94,4 +94,17 @@
       <img src="assets/app-preview.png" alt="App Preview">
     </div>
   </section>
+
+  <!-- Add test button and side panel -->
+  <button class="test-btn" (click)="openPanel()">Open Side Panel</button>
+
+  <app-side-panel 
+    [isOpen]="isPanelOpen" 
+    [title]="'Test Panel'"
+    (closePanel)="closePanel()">
+    <div>
+      <h4>Panel Content</h4>
+      <p>This is a test content for the side panel.</p>
+    </div>
+  </app-side-panel>
 </div> 

@@ -5,6 +5,7 @@ import { ProductCardComponent } from '../shared/product-card/product-card.compon
 import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
 import { DealCardComponent } from '../shared/deal-card/deal-card.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
+import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
 
 @Component({
   selector: 'app-landing',
@@ -17,7 +18,8 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
     ProductCardComponent,
     SearchBarComponent,
     DealCardComponent,
-    NavbarComponent
+    NavbarComponent,
+    SidePanelComponent
   ]
 })
 export class LandingComponent {
@@ -162,4 +164,14 @@ export class LandingComponent {
     },
     // Add more deals as needed
   ];
+
+  isPanelOpen = false;
+
+  openPanel() {
+    this.isPanelOpen = true;
+  }
+
+  closePanel() {
+    this.isPanelOpen = false;
+  }
 } 
