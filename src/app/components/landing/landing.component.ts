@@ -6,6 +6,7 @@ import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
 import { DealCardComponent } from '../shared/deal-card/deal-card.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
+import { VideoReelComponent } from '../shared/video-reel/video-reel.component';
 
 @Component({
   selector: 'app-landing',
@@ -19,7 +20,8 @@ import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
     SearchBarComponent,
     DealCardComponent,
     NavbarComponent,
-    SidePanelComponent
+    SidePanelComponent,
+    VideoReelComponent
   ]
 })
 export class LandingComponent {
@@ -27,9 +29,9 @@ export class LandingComponent {
 
   categories = [
     { id: 'deals', label: 'Flashbag Deals', active: true },
-    { id: 'services', label: 'Services', active: false },
-    { id: 'products', label: 'Products', active: false },
-    { id: 'rentals', label: 'Rentals', active: false }
+    // { id: 'services', label: 'Services', active: false },
+    // { id: 'products', label: 'Products', active: false },
+    // { id: 'rentals', label: 'Rentals', active: false }
   ];
 
   activeCategory = 'deals';

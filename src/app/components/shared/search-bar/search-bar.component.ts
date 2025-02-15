@@ -142,7 +142,7 @@ import { ClickOutsideDirective } from '../../../directives/click-outside.directi
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 16px;
+        padding: 8px 0px;
         border-right: 1px solid #dee2e6;
         background: white;
         border-radius: 4px;
@@ -152,7 +152,7 @@ import { ClickOutsideDirective } from '../../../directives/click-outside.directi
 
           input {
             width: 100%;
-            padding: 8px 12px;
+            padding: 8px 0px;
             border: none;
             outline: none;
             font-size: 14px;

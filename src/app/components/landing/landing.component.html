@@ -22,24 +22,16 @@
     <p class="appointment-count">4,73,230 appointments booked today</p>
   </section>
 
-  <!-- Flashbag Deals Section -->
-  <section class="section deals-section">
+  <!-- Deals Section -->
+  <section class="deals-section">
     <h2>Flashbag Deals</h2>
     <div class="deals-grid">
-      <app-deal-card *ngFor="let deal of deals"
-        [image]="deal.image"
-        [title]="deal.title"
-        [consignmentSize]="deal.consignmentSize"
-        [unit]="deal.unit"
-        [rating]="deal.rating"
-        [bookingProgress]="deal.bookingProgress"
-        [bookedQuantity]="deal.bookedQuantity"
-        [deliveryDate]="deal.deliveryDate"
-        [lastBookingDate]="deal.lastBookingDate"
-        [currentPrice]="deal.currentPrice">
-      </app-deal-card>
+      <app-deal-card *ngFor="let deal of deals" [deal]="deal"></app-deal-card>
     </div>
   </section>
+
+  <!-- Video Reels Section -->
+  <app-video-reel></app-video-reel>
 
   <!-- Recommended Section -->
   <section class="section">

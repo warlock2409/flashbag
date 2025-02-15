@@ -23,42 +23,42 @@ import { BookingPanelService } from '../../../services/booking-panel.service';
   template: `
     <div class="deal-card">
       <div class="deal-image">
-        <img [src]="image" [alt]="title">
+        <img [src]="deal.image" [alt]="deal.title">
       </div>
       <div class="deal-content">
-        <h3 class="title">{{title}}</h3>
+        <h3 class="title">{{deal.title}}</h3>
         
         <div class="info-row">
           <div class="consignment">
-            <span class="size">{{consignmentSize}}</span>
-            <span class="unit">{{unit}}</span>
+            <span class="size">{{deal.consignmentSize}}</span>
+            <span class="unit">{{deal.unit}}</span>
           </div>
           <div class="rating">
-            <span class="rating-number">{{rating}}</span>
+            <span class="rating-number">{{deal.rating}}</span>
             <mat-icon class="star-icon">star</mat-icon>
           </div>
         </div>
 
         <div class="progress-container">
           <div class="progress-bar">
-            <div class="progress" [style.width.%]="bookingProgress"></div>
+            <div class="progress" [style.width.%]="deal.bookingProgress"></div>
           </div>
-          <span class="progress-text">{{bookedQuantity}} booked</span>
+          <span class="progress-text">{{deal.bookedQuantity}} booked</span>
         </div>
 
         <div class="dates">
           <div class="date-item">
             <span class="label">Delivery by</span>
-            <span class="value">{{deliveryDate | date:'mediumDate'}}</span>
+            <span class="value">{{deal.deliveryDate | date:'mediumDate'}}</span>
           </div>
           <div class="date-item">
             <span class="label">Book before</span>
-            <span class="value">{{lastBookingDate | date:'mediumDate'}}</span>
+            <span class="value">{{deal.lastBookingDate | date:'mediumDate'}}</span>
           </div>
         </div>
 
         <div class="price-section">
-          <div class="price">₹{{currentPrice}}</div>
+          <div class="price">₹{{deal.currentPrice}}</div>
           <button class="book-button" (click)="onBook()">Book Now</button>
         </div>
       </div>
@@ -216,16 +216,18 @@ import { BookingPanelService } from '../../../services/booking-panel.service';
   `]
 })
 export class DealCardComponent {
-  @Input() image!: string;
-  @Input() title!: string;
-  @Input() consignmentSize!: number;
-  @Input() unit!: string;
-  @Input() rating!: number;
-  @Input() bookingProgress!: number;
-  @Input() bookedQuantity!: number;
-  @Input() deliveryDate!: Date;
-  @Input() lastBookingDate!: Date;
-  @Input() currentPrice!: number;
+  @Input() deal!: {
+    image: string;
+    title: string;
+    consignmentSize: number;
+    unit: 'kgs' | 'bags';
+    rating: number;
+    bookingProgress: number;
+    bookedQuantity: number;
+    deliveryDate: Date;
+    lastBookingDate: Date;
+    currentPrice: number;
+  };
 
   @ViewChild(BookingPanelComponent) bookingPanel?: BookingPanelComponent;
 
@@ -252,18 +254,18 @@ export class DealCardComponent {
   }
 
   openBookingPanel() {
-    console.log("Opening booking panel with deal:", this.title);
+    console.log("Opening booking panel with deal:", this.deal.title);
     this.bookingPanelService.openPanel({
-      image: this.image,
-      title: this.title,
-      consignmentSize: this.consignmentSize,
-      unit: this.unit,
-      rating: this.rating,
-      bookingProgress: this.bookingProgress,
-      bookedQuantity: this.bookedQuantity,
-      deliveryDate: this.deliveryDate,
-      lastBookingDate: this.lastBookingDate,
-      currentPrice: this.currentPrice
+      image: this.deal.image,
+      title: this.deal.title,
+      consignmentSize: this.deal.consignmentSize,
+      unit: this.deal.unit,
+      rating: this.deal.rating,
+      bookingProgress: this.deal.bookingProgress,
+      bookedQuantity: this.deal.bookedQuantity,
+      deliveryDate: this.deal.deliveryDate,
+      lastBookingDate: this.deal.lastBookingDate,
+      currentPrice: this.deal.currentPrice
     });
   }
 } 
