@@ -1,0 +1,13 @@
+<div class="rentals-list">
+  <div *ngFor="let rental of rentals" class="rental-item">
+    <div class="rental-info">
+      <h3>{{rental.name}}</h3>
+      <p *ngIf="rental.description">{{rental.description}}</p>
+      <span class="duration">{{rental.duration}}</span>
+    </div>
+    <div class="rental-price">
+      <span>${{rental.price}}</span>
+      <button class="rent-btn">Rent</button>
+    </div>
+  </div>
+</div> 

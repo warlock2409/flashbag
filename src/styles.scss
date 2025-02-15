@@ -1,1 +1,47 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use '@angular/material' as mat;
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Import theme
+@import 'styles/theme';
+
+// Global styles
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+// Dialog styles
+.login-dialog-container {
+  .mat-mdc-dialog-container {
+    padding: 0;
+  }
+}
+
+.cdk-overlay-container {
+  z-index: 1000;
+}
+
+.cdk-overlay-pane {
+  max-width: 95vw !important;
+}
+
+.cdk-global-overlay-wrapper {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.light-backdrop {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  /* background-color: var(--mdc-dialog-container-color, white); */
+}
+

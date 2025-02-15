@@ -1,0 +1,84 @@
+// @use '@angular/material' as mat;
+
+// // Define brand colors
+// $primary-palette: (
+//   50: #f3f3f9,
+//   100: #e8e7f4,
+//   500: #8884d8,  // Primary brand color
+//   700: #6c63c7,  // Darker shade
+//   contrast: (
+//     50: rgba(0,0,0,0.87),
+//     100: rgba(0,0,0,0.87),
+//     500: white,
+//     700: white,
+//   )
+// );
+
+// // Create the palettes
+// $primary: mat.define-palette($primary-palette);
+// $accent: mat.define-palette(mat.$purple-palette, A200, A100, A400);
+
+// // Create the theme
+// $theme: mat.define-light-theme((
+//   color: (
+//     primary: $primary,
+//     accent: $accent,
+//   )
+// ));
+
+// // Include only once
+// @include mat.core();
+
+// // Apply the theme
+// @include mat.all-component-themes($theme);
+
+// // Dark theme palette
+// $dark-primary: mat.define-palette(mat.$purple-palette);
+// $dark-accent: mat.define-palette(mat.$indigo-palette, A200, A100, A400);
+// $dark-theme: mat.define-dark-theme((
+//   color: (
+//     primary: $dark-primary,
+//     accent: $dark-accent,
+//   ),
+//   typography: mat.define-typography-config(),
+//   density: 0,
+// ));
+
+// // Custom brand colors
+// $brand-colors: (
+//   primary: #8884d8,
+//   secondary: #6c63c7,
+//   background: (
+//     light: #ffffff,
+//     dark: #121212
+//   ),
+//   surface: (
+//     light: #f5f5f5,
+//     dark: #1e1e1e
+//   ),
+//   text: (
+//     light: #333333,
+//     dark: #ffffff
+//   )
+// );
+
+// // Apply theme based on class
+// .light-theme {
+//   @include mat.all-component-themes($theme);
+  
+//   --primary: #{map-get($brand-colors, primary)};
+//   --secondary: #{map-get($brand-colors, secondary)};
+//   --background: #{map-get(map-get($brand-colors, background), light)};
+//   --surface: #{map-get(map-get($brand-colors, surface), light)};
+//   --text: #{map-get(map-get($brand-colors, text), light)};
+// }
+
+// .dark-theme {
+//   @include mat.all-component-themes($dark-theme);
+  
+//   --primary: #{map-get($brand-colors, primary)};
+//   --secondary: #{map-get($brand-colors, secondary)};
+//   --background: #{map-get(map-get($brand-colors, background), dark)};
+//   --surface: #{map-get(map-get($brand-colors, surface), dark)};
+//   --text: #{map-get(map-get($brand-colors, text), dark)};
+// } 

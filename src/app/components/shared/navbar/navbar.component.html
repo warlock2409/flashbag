@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a class="logo" routerLink="/home">Flashbag</a>
+    <div class="nav-items">
+      <ng-container *ngFor="let item of allNavItems">
+        <a [routerLink]="item.path" routerLinkActive="active">
+          <i *ngIf="item.icon" [class]="item.icon"></i>
+          {{item.label}}
+        </a>
+      </ng-container>
+    </div>
+  </div>
+  
+  <div class="navbar-right">
+    <div class="auth-buttons">
+      <button class="btn-login customer" routerLink="/login" [queryParams]="{type: 'customer'}">
+        Customer Login
+      </button>
+      <button class="btn-login business" routerLink="/login" [queryParams]="{type: 'business'}">
+        Business Login
+      </button>
+    </div>
+  </div>
+</nav> 

@@ -1,0 +1,97 @@
+<div class="landing-page">
+  <!-- Header -->
+  <header>
+    <!-- Remove this header section since we'll use the common navbar -->
+  </header>
+
+  <app-navbar></app-navbar>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Book local beauty and wellness services</h1>
+    <div class="category-toggles">
+      <button 
+        *ngFor="let category of categories"
+        [class.active]="category.active"
+        (click)="setActiveCategory(category.id)"
+        class="category-btn">
+        {{category.label}}
+      </button>
+    </div>
+    <app-search-bar [category]="activeCategory"></app-search-bar>
+    <p class="appointment-count">4,73,230 appointments booked today</p>
+  </section>
+
+  <!-- Flashbag Deals Section -->
+  <section class="section deals-section">
+    <h2>Flashbag Deals</h2>
+    <div class="deals-grid">
+      <app-deal-card *ngFor="let deal of deals"
+        [image]="deal.image"
+        [title]="deal.title"
+        [consignmentSize]="deal.consignmentSize"
+        [unit]="deal.unit"
+        [rating]="deal.rating"
+        [bookingProgress]="deal.bookingProgress"
+        [bookedQuantity]="deal.bookedQuantity"
+        [deliveryDate]="deal.deliveryDate"
+        [lastBookingDate]="deal.lastBookingDate"
+        [currentPrice]="deal.currentPrice">
+      </app-deal-card>
+    </div>
+  </section>
+
+  <!-- Recommended Section -->
+  <section class="section">
+    <h2>Recommended</h2>
+    <div class="card-grid">
+      <app-product-card *ngFor="let item of recommendedItems"
+        [id]="item.id"
+        [image]="item.image"
+        [title]="item.title"
+        [location]="item.location"
+        [rating]="item.rating">
+      </app-product-card>
+    </div>
+  </section>
+
+  <!-- New Section -->
+  <section class="section">
+    <h2>New to Flashbag</h2>
+    <div class="card-grid">
+      <app-product-card *ngFor="let item of newItems"
+        [id]="item.id"
+        [image]="item.image"
+        [title]="item.title"
+        [location]="item.location"
+        [rating]="item.rating">
+      </app-product-card>
+    </div>
+  </section>
+
+  <!-- Trending Section -->
+  <section class="section">
+    <h2>Trending</h2>
+    <div class="card-grid">
+      <app-product-card *ngFor="let item of trendingItems"
+        [id]="item.id"
+        [image]="item.image"
+        [title]="item.title"
+        [location]="item.location"
+        [rating]="item.rating">
+      </app-product-card>
+    </div>
+  </section>
+
+  <!-- App Download Section -->
+  <section class="app-download">
+    <div class="app-content">
+      <h2>Download the Flashbag app</h2>
+      <p>Book affordable beauty and wellness services with the Flashbag mobile app</p>
+      <img src="assets/qr-code.png" alt="QR Code" class="qr-code">
+    </div>
+    <div class="app-preview">
+      <img src="assets/app-preview.png" alt="App Preview">
+    </div>
+  </section>
+</div> 

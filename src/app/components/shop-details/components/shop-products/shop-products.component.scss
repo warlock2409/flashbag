@@ -1,0 +1,35 @@
+.products-list {
+  .product-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+
+    .product-info {
+      h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+      p {
+        color: #666;
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+
+    .product-price {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .buy-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background: #000;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+} 

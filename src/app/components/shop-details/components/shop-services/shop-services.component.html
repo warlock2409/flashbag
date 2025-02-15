@@ -1,0 +1,13 @@
+<div class="services-list">
+  <div *ngFor="let service of services" class="service-item">
+    <div class="service-info">
+      <h3>{{service.name}}</h3>
+      <p *ngIf="service.description">{{service.description}}</p>
+      <span class="duration">{{service.duration}}</span>
+    </div>
+    <div class="service-price">
+      <span>${{service.price}}</span>
+      <button class="book-btn">Book</button>
+    </div>
+  </div>
+</div> 

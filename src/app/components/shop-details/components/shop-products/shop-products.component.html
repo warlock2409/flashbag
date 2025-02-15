@@ -1,0 +1,12 @@
+<div class="products-list">
+  <div *ngFor="let product of products" class="product-item">
+    <div class="product-info">
+      <h3>{{product.name}}</h3>
+      <p *ngIf="product.description">{{product.description}}</p>
+    </div>
+    <div class="product-price">
+      <span>${{product.price}}</span>
+      <button class="buy-btn">Buy</button>
+    </div>
+  </div>
+</div> 

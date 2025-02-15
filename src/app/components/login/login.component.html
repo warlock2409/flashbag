@@ -1,0 +1,65 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="login-header">
+      <span class="login-badge">{{loginType === 'business' ? 'Business' : 'Customer'}} Login</span>
+      <h2>Welcome to Flashbag!</h2>
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.invalid }"
+      />
+      <div class="invalid-feedback" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+        <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</div>
+        <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        [ngClass]="{ 'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.invalid }"
+      />
+      <div class="invalid-feedback" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</div>
+      </div>
+    </div>
+
+    <div class="form-options">
+      <label class="remember-me">
+        <input type="checkbox" formControlName="rememberMe">
+        <span>Remember me</span>
+      </label>
+      <a href="#" class="forgot-password">Forgot password?</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+
+    <button type="submit" [disabled]="loading || loginForm.invalid" class="btn btn-primary">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Login
+    </button>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <button type="button" class="btn btn-google">
+      <img src="assets/google-icon.svg" alt="Google icon">
+      Continue with Google
+    </button>
+
+    <button type="button" class="btn btn-create-account">
+      Create an Account
+    </button>
+  </form>
+</div> 

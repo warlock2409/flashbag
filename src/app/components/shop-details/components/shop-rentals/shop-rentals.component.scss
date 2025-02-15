@@ -1,0 +1,39 @@
+.rentals-list {
+  .rental-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+
+    .rental-info {
+      h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+      }
+      p {
+        color: #666;
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+      .duration {
+        color: #666;
+        font-size: 14px;
+      }
+    }
+
+    .rental-price {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .rent-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background: #000;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+} 

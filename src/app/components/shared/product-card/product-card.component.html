@@ -1,0 +1,11 @@
+<div class="product-card" [routerLink]="['/shop', id]">
+  <img [src]="image" [alt]="title">
+  <div class="card-content">
+    <h3>{{title}}</h3>
+    <p class="location" *ngIf="location">{{location}}</p>
+    <div class="rating" *ngIf="rating">
+      <span class="stars">★★★★★</span>
+      <span class="rating-text">{{rating}}</span>
+    </div>
+  </div>
+</div> 
