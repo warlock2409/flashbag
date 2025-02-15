@@ -49,7 +49,7 @@ import { MatIconModule } from '@angular/material/icon';
       position: fixed;
       top: 0;
       right: 0;
-      width: 400px;
+      width: 480px;
       height: 100%;
       background: white;
       box-shadow: -2px 0 8px rgba(0,0,0,0.1);

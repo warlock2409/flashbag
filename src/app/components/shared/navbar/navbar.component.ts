@@ -7,20 +7,30 @@ import { filter } from 'rxjs/operators';
 import { ThemeService } from '../../../services/theme.service';
 import { AuthService } from '../../../services/auth.service';
 import { DOCUMENT } from '@angular/common';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatIconModule} from '@angular/material/icon';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { OrderPanelService } from '../../../services/order-panel.service';
+import { Injectable } from '@angular/core';
+import { ProfilePanelService } from '../../../services/profile-panel.service';
+import { SettingsPanelService } from '../../../services/settings-panel.service';
+
+@Injectable()
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, SearchBarComponent, MatIconModule, MatMenuModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    SearchBarComponent,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule
+  ],
   template: `
     <nav class="navbar">
-      <div class="nav-left">
-        <a class="logo" routerLink="/">Flashbag</a>
-      </div>
-      <div class="nav-search" *ngIf="!isLandingPage && !isLoginPage">
-        <app-search-bar [isNavbar]="true" [category]="'services'"></app-search-bar>
-      </div>
+      <div class="logo">Flashbag</div>
       <div class="nav-right">
         <ng-container *ngIf="!authService.isLoggedIn()">
           <button class="btn-login customer" routerLink="/login" [queryParams]="{type: 'customer'}">
@@ -30,25 +40,45 @@ import {MatIconModule} from '@angular/material/icon';
             Business Login
           </button>
         </ng-container>
+        <button *ngIf="authService.isLoggedIn()" 
+                class="nav-icon-btn"
+                (click)="openOrders()">
+          <mat-icon>receipt_long</mat-icon>
+        </button>
         <div class="avatar-container" *ngIf="authService.isLoggedIn()">
           <button class="avatar-btn" [matMenuTriggerFor]="menu">
-            <div class="avatar">
-              {{ (authService.currentUserValue?.email ?? 'U').charAt(0).toUpperCase() }}
+            <div class="avatar-circle">
+              {{ getUserInitial() }}
             </div>
           </button>
-          <mat-menu #menu="matMenu" class="avatar-menu">
-            <button mat-menu-item (click)="openCart()">
-              <mat-icon>shopping_cart</mat-icon>
-              <span>Cart</span>
-            </button>
-            <button mat-menu-item routerLink="/account">
-              <mat-icon>settings</mat-icon>
-              <span>Account Settings</span>
-            </button>
-            <button mat-menu-item (click)="logout()">
-              <mat-icon>logout</mat-icon>
-              <span>Logout</span>
-            </button>
+          <mat-menu #menu="matMenu" class="admin-menu">
+            <div class="menu-header">
+              <div class="avatar-circle menu-avatar">
+                {{ getUserInitial() }}
+              </div>
+              <div class="user-info">
+                <span class="name">{{ getUserEmail() }}</span>
+                <span class="email">{{ getUserEmail() }}</span>
+              </div>
+            </div>
+            <div class="menu-items">
+              <button mat-menu-item (click)="openOrders()">
+                <mat-icon>receipt_long</mat-icon>
+                <span>Orders</span>
+              </button>
+              <button mat-menu-item (click)="openProfile()">
+                <mat-icon>account_circle</mat-icon>
+                <span>Profile</span>
+              </button>
+              <button mat-menu-item (click)="openSettings()">
+                <mat-icon>settings</mat-icon>
+                <span>Settings</span>
+              </button>
+              <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+              </button>
+            </div>
           </mat-menu>
         </div>
         <button class="theme-toggle" (click)="toggleTheme()">
@@ -58,6 +88,34 @@ import {MatIconModule} from '@angular/material/icon';
     </nav>
   `,
   styles: [`
+
+    .btn-login {
+        padding: 0.5rem 1.5rem;
+        border: 2px solid #000;
+        border-radius: 25px;
+        background: transparent;
+        color: #000;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+
+        &:hover {
+          background: #000;
+          color: white;
+        }
+
+        &.business {
+          background: #000;
+          color: white;
+
+          &:hover {
+            background: transparent;
+            color: #000;
+          }
+        }
+    }
+  
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -72,23 +130,12 @@ import {MatIconModule} from '@angular/material/icon';
       z-index: 1000;
       gap: 24px;
 
-      .nav-left {
+      .logo {
         min-width: 120px;
-        .logo {
-          font-size: 24px;
-          font-weight: 600;
-          text-decoration: none;
-          color: #000;
-        }
-      }
-
-      .nav-search {
-        flex: 1;
-        max-width: 800px;
-        ::ng-deep .search-container {
-          padding: 0;
-          margin: 0;
-        }
+        font-size: 24px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #000;
       }
 
       .nav-right {
@@ -96,21 +143,7 @@ import {MatIconModule} from '@angular/material/icon';
         display: flex;
         gap: 12px;
         justify-content: flex-end;
-
-        .btn-login {
-          padding: 8px 16px;
-          border-radius: 4px;
-          border: 1px solid #ddd;
-          background: white;
-          font-size: 14px;
-          cursor: pointer;
-
-          &.business {
-            background: #000;
-            color: white;
-            border: none;
-          }
-        }
+        align-items: center;
       }
     }
 
@@ -119,12 +152,6 @@ import {MatIconModule} from '@angular/material/icon';
         padding: 8px 16px;
         flex-wrap: wrap;
         
-        .nav-search {
-          order: 3;
-          width: 100%;
-          max-width: none;
-        }
-
         .nav-right {
           min-width: auto;
           gap: 8px;
@@ -149,15 +176,119 @@ import {MatIconModule} from '@angular/material/icon';
       }
     }
 
-    ::ng-deep .avatar-menu {
-      .mat-mdc-menu-item {
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: rgba(0,0,0,0.05);
+        color: #333;
+      }
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .avatar-container {
+      position: relative;
+    }
+
+    .avatar-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #8884d8;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #6c63c7;
+      }
+    }
+
+    .menu-avatar {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+
+    ::ng-deep .admin-menu {
+      .mat-mdc-menu-content {
+        padding: 0;
+      }
+
+      .menu-header {
+        padding: 16px;
+        border-bottom: 1px solid #eee;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
+        background: #f8f8f8;
+        min-width: 200px;
 
-        mat-icon {
-          margin-right: 8px;
-          color: #666;
+        .menu-avatar {
+          width: 48px;
+          height: 48px;
+          font-size: 20px;
+        }
+
+        .user-info {
+          display: flex;
+          flex-direction: column;
+
+          .name {
+            font-weight: 500;
+            color: #333;
+          }
+
+          .email {
+            font-size: 14px;
+            color: #666;
+          }
+        }
+      }
+
+      .menu-items {
+        padding: 8px 0;
+
+        .mat-mdc-menu-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          color: #333;
+
+          mat-icon {
+            margin: 0;
+            color: #666;
+          }
+
+          &:hover {
+            background: #f5f5f5;
+          }
         }
       }
     }
@@ -172,7 +303,10 @@ export class NavbarComponent {
     private router: Router,
     private themeService: ThemeService,
     public authService: AuthService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private orderPanelService: OrderPanelService,
+    private profilePanelService: ProfilePanelService,
+    private settingsPanelService: SettingsPanelService
   ) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -190,14 +324,30 @@ export class NavbarComponent {
     this.themeService.toggleTheme();
   }
 
-  logout() {
-    this.authService.logout();
+  getUserInitial(): string {
+    const email = this.authService.currentUserValue?.email;
+    return email ? email.charAt(0).toUpperCase() : 'U';
   }
 
-  openCart() {
-    const cartSidebar = this.document.querySelector('app-cart-sidebar');
-    if (cartSidebar) {
-      (cartSidebar as any).open();
-    }
+  getUserEmail(): string {
+    return this.authService.currentUserValue?.email || 'User';
+  }
+
+  openOrders() {
+    console.log('Opening orders panel');
+    this.orderPanelService.openPanel();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
+
+  openProfile() {
+    this.profilePanelService.openPanel();
+  }
+
+  openSettings() {
+    this.settingsPanelService.openPanel();
   }
 } 

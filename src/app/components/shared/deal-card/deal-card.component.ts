@@ -1,4 +1,4 @@
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input, Inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,6 +6,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../../services/auth.service';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { DOCUMENT } from '@angular/common';
+import { BookingPanelComponent } from '../booking-panel/booking-panel.component';
+import { BookingPanelService } from '../../../services/booking-panel.service';
 
 @Component({
   selector: 'app-deal-card',
@@ -15,7 +17,8 @@ import { DOCUMENT } from '@angular/common';
     RouterModule, 
     MatIconModule,
     MatDialogModule,
-    LoginDialogComponent
+    LoginDialogComponent,
+    BookingPanelComponent
   ],
   template: `
     <div class="deal-card">
@@ -216,46 +219,51 @@ export class DealCardComponent {
   @Input() image!: string;
   @Input() title!: string;
   @Input() consignmentSize!: number;
-  @Input() unit!: 'bags' | 'kgs' | 'liters' | 'EA';
-  @Input() rating: number = 0;
+  @Input() unit!: string;
+  @Input() rating!: number;
   @Input() bookingProgress!: number;
   @Input() bookedQuantity!: number;
   @Input() deliveryDate!: Date;
   @Input() lastBookingDate!: Date;
   @Input() currentPrice!: number;
 
+  @ViewChild(BookingPanelComponent) bookingPanel?: BookingPanelComponent;
+
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
-    @Inject(DOCUMENT) private document: Document
+    private bookingPanelService: BookingPanelService
   ) {}
 
   onBook() {
     if (!this.authService.isLoggedIn()) {
       const dialogRef = this.dialog.open(LoginDialogComponent, {
-        width: '380px',
-        // panelClass: 'login-dialog-container',
-        // backdropClass: 'light-backdrop',
-        // hasBackdrop: true,
-        // position: { top: '100px' },
-        // autoFocus: true,
-        // disableClose: false
+        width: '380px'
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.openCart();
+          this.openBookingPanel();
         }
       });
     } else {
-      this.openCart();
+      this.openBookingPanel();
     }
   }
 
-  private openCart() {
-    const cartSidebar = this.document.querySelector('app-cart-sidebar');
-    if (cartSidebar) {
-      (cartSidebar as any).open();
-    }
+  openBookingPanel() {
+    console.log("Opening booking panel with deal:", this.title);
+    this.bookingPanelService.openPanel({
+      image: this.image,
+      title: this.title,
+      consignmentSize: this.consignmentSize,
+      unit: this.unit,
+      rating: this.rating,
+      bookingProgress: this.bookingProgress,
+      bookedQuantity: this.bookedQuantity,
+      deliveryDate: this.deliveryDate,
+      lastBookingDate: this.lastBookingDate,
+      currentPrice: this.currentPrice
+    });
   }
 } 

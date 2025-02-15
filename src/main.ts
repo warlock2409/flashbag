@@ -7,6 +7,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app-routing.module';
+import { OrderPanelService } from './app/services/order-panel.service';
+import { ProfilePanelService } from './app/services/profile-panel.service';
+import { SettingsPanelService } from './app/services/settings-panel.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -14,6 +17,8 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimations(),
-    provideAnimations()
-]
+    OrderPanelService,
+    ProfilePanelService,
+    SettingsPanelService
+  ]
 }).catch(err => console.error(err));
