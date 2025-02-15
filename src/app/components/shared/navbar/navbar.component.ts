@@ -40,24 +40,19 @@ import { SettingsPanelService } from '../../../services/settings-panel.service';
             Business Login
           </button>
         </ng-container>
-        <button *ngIf="authService.isLoggedIn()" 
-                class="nav-icon-btn"
-                (click)="openOrders()">
-          <mat-icon>receipt_long</mat-icon>
-        </button>
         <div class="avatar-container" *ngIf="authService.isLoggedIn()">
           <button class="avatar-btn" [matMenuTriggerFor]="menu">
             <div class="avatar-circle">
-              {{ getUserInitial() }}
+              <span class="placeholder-text">{{ getInitials() }}</span>
             </div>
           </button>
           <mat-menu #menu="matMenu" class="admin-menu">
             <div class="menu-header">
               <div class="avatar-circle menu-avatar">
-                {{ getUserInitial() }}
+                <span class="placeholder-text">{{ getInitials() }}</span>
               </div>
               <div class="user-info">
-                <span class="name">{{ getUserEmail() }}</span>
+                <span class="name">{{ getUserName() }}</span>
                 <span class="email">{{ getUserEmail() }}</span>
               </div>
             </div>
@@ -215,80 +210,54 @@ import { SettingsPanelService } from '../../../services/settings-panel.service';
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: #8884d8;
+      background: linear-gradient(45deg, #8884d8, #6c63c7);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
+      text-transform: uppercase;
       transition: all 0.2s;
 
       &:hover {
-        background: #6c63c7;
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+
+      &.menu-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+
+      .placeholder-text {
+        line-height: 1;
+        user-select: none;
       }
     }
 
-    .menu-avatar {
-      width: 48px;
-      height: 48px;
-      font-size: 20px;
-    }
+    .menu-header {
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8f8f8;
+      min-width: 200px;
 
-    ::ng-deep .admin-menu {
-      .mat-mdc-menu-content {
-        padding: 0;
-      }
-
-      .menu-header {
-        padding: 16px;
-        border-bottom: 1px solid #eee;
+      .user-info {
         display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #f8f8f8;
-        min-width: 200px;
+        flex-direction: column;
 
-        .menu-avatar {
-          width: 48px;
-          height: 48px;
-          font-size: 20px;
-        }
-
-        .user-info {
-          display: flex;
-          flex-direction: column;
-
-          .name {
-            font-weight: 500;
-            color: #333;
-          }
-
-          .email {
-            font-size: 14px;
-            color: #666;
-          }
-        }
-      }
-
-      .menu-items {
-        padding: 8px 0;
-
-        .mat-mdc-menu-item {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px 16px;
+        .name {
+          font-weight: 500;
           color: #333;
+        }
 
-          mat-icon {
-            margin: 0;
-            color: #666;
-          }
-
-          &:hover {
-            background: #f5f5f5;
-          }
+        .email {
+          font-size: 14px;
+          color: #666;
         }
       }
     }
@@ -324,13 +293,26 @@ export class NavbarComponent {
     this.themeService.toggleTheme();
   }
 
-  getUserInitial(): string {
-    const email = this.authService.currentUserValue?.email;
-    return email ? email.charAt(0).toUpperCase() : 'U';
+  getInitials(): string {
+    const email = this.getUserEmail();
+    if (!email) return 'U';
+    
+    // Split email and get first letter of each part before @
+    const nameParts = email.split('@')[0].split('.');
+    return nameParts.map(part => part[0].toUpperCase()).join('');
+  }
+
+  getUserName(): string {
+    const email = this.getUserEmail();
+    if (!email) return 'User';
+    
+    // Convert email name part to display name
+    const name = email.split('@')[0].split('.');
+    return name.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
   }
 
   getUserEmail(): string {
-    return this.authService.currentUserValue?.email || 'User';
+    return this.authService.currentUserValue?.email || '';
   }
 
   openOrders() {
