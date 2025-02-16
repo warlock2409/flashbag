@@ -1,0 +1,29 @@
+.customers-container {
+  padding: 20px;
+
+  .customer-table {
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+
+  .mat-mdc-row {
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .mat-mdc-header-cell {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .mat-mdc-cell {
+    padding: 8px 16px;
+  }
+} 

@@ -1,0 +1,75 @@
+<div class="orders-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Orders Management</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="filter-chips">
+        <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+          <mat-chip-option *ngFor="let filter of filters" 
+                          [value]="filter.value"
+                          [selected]="selectedFilter === filter.value">
+            {{filter.label}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+
+      <div class="orders-content" [ngSwitch]="selectedFilter">
+        <div *ngSwitchCase="'flashbag'" class="flashbag-deals">
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let deal of flashbagDeals">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{deal.title}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  Created: {{deal.date | date:'mediumDate'}} | 
+                  Delivery: {{deal.deliveryDate | date:'mediumDate'}} | 
+                  Orders: {{deal.orders.length}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <table mat-table [dataSource]="deal.orders" class="orders-table">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>Order ID</th>
+                  <td mat-cell *matCellDef="let order">{{order.id}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="customer">
+                  <th mat-header-cell *matHeaderCellDef>Customer</th>
+                  <td mat-cell *matCellDef="let order">{{order.customer}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                  <td mat-cell *matCellDef="let order">{{order.quantity}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="total">
+                  <th mat-header-cell *matHeaderCellDef>Total</th>
+                  <td mat-cell *matCellDef="let order">${{order.total}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['id', 'customer', 'quantity', 'total']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['id', 'customer', 'quantity', 'total'];"></tr>
+              </table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <div *ngSwitchCase="'services'" class="services">
+          <p>Services orders coming soon...</p>
+        </div>
+
+        <div *ngSwitchCase="'products'" class="products">
+          <p>Products orders coming soon...</p>
+        </div>
+
+        <div *ngSwitchCase="'rental'" class="rental">
+          <p>Rental orders coming soon...</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div> 

@@ -1,0 +1,48 @@
+.orders-container {
+  padding: 20px;
+
+  .filter-chips {
+    margin: 20px 0;
+  }
+
+  .orders-content {
+    margin-top: 20px;
+  }
+
+  .orders-table {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  mat-expansion-panel {
+    margin: 8px 0;
+  }
+
+  mat-panel-description {
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 2;
+    
+    @media screen and (max-width: 600px) {
+      display: none;
+    }
+  }
+
+  mat-panel-title {
+    flex: 0 0 200px;
+  }
+
+  .mat-column-id {
+    width: 100px;
+  }
+
+  .mat-column-total {
+    width: 100px;
+    text-align: right;
+  }
+
+  .mat-column-quantity {
+    width: 100px;
+    text-align: center;
+  }
+} 

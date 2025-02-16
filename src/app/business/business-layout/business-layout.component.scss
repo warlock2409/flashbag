@@ -1,0 +1,144 @@
+.sidenav-container {
+  height: 100vh;
+  
+  .sidenav {
+    width: 65px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    
+    &.expanded {
+      width: 200px;
+
+      .nav-item {
+        .nav-label {
+          opacity: 1;
+          transform: translateX(0);
+          visibility: visible;
+        }
+      }
+    }
+
+    mat-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 8px;
+      height: 56px;
+      color: rgb(19, 17, 17);
+
+      span {
+        flex: 1;
+        opacity: 1;
+        transition: all 0.3s ease;
+        transform: translateX(0);
+      }
+    }
+
+    mat-nav-list {
+      padding-top: 0;
+    }
+
+    .nav-item {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      margin: 4px 0;
+      transition: all 0.3s ease;
+      border-radius: 0 24px 24px 0;
+      
+      mat-icon {
+        margin-right: 16px;
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        line-height: 24px;
+        color: #666;
+        transition: all 0.3s ease;
+      }
+
+      .nav-label {
+        opacity: 0;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        white-space: nowrap;
+        transform: translateX(-10px);
+        visibility: hidden;
+      }
+
+      &.active {
+        background: rgba(25, 118, 210, 0.1);
+        mat-icon {
+          color: #1976d2;
+        }
+        .nav-label {
+          color: #1976d2;
+          font-weight: 500;
+        }
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.04);
+        mat-icon {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .sidenav:not(.expanded) {
+    .nav-item {
+      justify-content: center;
+      padding: 0;
+      width: 100%;
+      border-radius: 0;
+      
+      mat-icon {
+        margin: 0;
+      }
+    }
+
+    mat-toolbar {
+      justify-content: center;
+      padding: 0;
+
+      span {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+
+      button {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.content {
+  padding: 20px;
+}
+
+mat-sidenav-content {
+  background: #f5f5f5;
+}
+
+// Fix for Material list item styles
+::ng-deep {
+  .mat-mdc-list-item {
+    padding: 0 !important;
+    
+    .mdc-list-item__content {
+      padding: 0 !important;
+      display: flex !important;
+      justify-content: center !important;
+    }
+  }
+
+  .sidenav:not(.expanded) {
+    .mat-mdc-list-item {
+      .mdc-list-item__content {
+        padding: 0 !important;
+        justify-content: center !important;
+      }
+    }
+  }
+} 
