@@ -59,7 +59,7 @@ import { BookingPanelService } from '../../../services/booking-panel.service';
 
         <div class="price-section">
           <div class="price">₹{{deal.currentPrice}}</div>
-          <button class="book-button" (click)="onBook()">Book Now</button>
+          <button class="book-button" (click)="onBook($event)">Book Now</button>
         </div>
       </div>
     </div>
@@ -237,7 +237,8 @@ export class DealCardComponent {
     private bookingPanelService: BookingPanelService
   ) {}
 
-  onBook() {
+  onBook(event: Event) {
+    event.stopPropagation();
     if (!this.authService.isLoggedIn()) {
       const dialogRef = this.dialog.open(LoginDialogComponent, {
         width: '380px'

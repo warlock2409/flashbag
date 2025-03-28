@@ -14,6 +14,9 @@ import { OrderPanelService } from '../../../services/order-panel.service';
 import { Injectable } from '@angular/core';
 import { ProfilePanelService } from '../../../services/profile-panel.service';
 import { SettingsPanelService } from '../../../services/settings-panel.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Injectable()
 @Component({
@@ -26,62 +29,10 @@ import { SettingsPanelService } from '../../../services/settings-panel.service';
     SearchBarComponent,
     MatIconModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
-  template: `
-    <nav class="navbar">
-      <div class="logo">Flashbag</div>
-      <div class="nav-right">
-        <ng-container *ngIf="!authService.isLoggedIn()">
-          <button class="btn-login customer" routerLink="/login" [queryParams]="{type: 'customer'}">
-            Customer Login
-          </button>
-          <button class="btn-login business" routerLink="/login" [queryParams]="{type: 'business'}">
-            Business Login
-          </button>
-        </ng-container>
-        <div class="avatar-container" *ngIf="authService.isLoggedIn()">
-          <button class="avatar-btn" [matMenuTriggerFor]="menu">
-            <div class="avatar-circle">
-              <span class="placeholder-text">{{ getInitials() }}</span>
-            </div>
-          </button>
-          <mat-menu #menu="matMenu" class="admin-menu">
-            <div class="menu-header">
-              <div class="avatar-circle menu-avatar">
-                <span class="placeholder-text">{{ getInitials() }}</span>
-              </div>
-              <div class="user-info">
-                <span class="name">{{ getUserName() }}</span>
-                <span class="email">{{ getUserEmail() }}</span>
-              </div>
-            </div>
-            <div class="menu-items">
-              <button mat-menu-item (click)="openOrders()">
-                <mat-icon>receipt_long</mat-icon>
-                <span>Orders</span>
-              </button>
-              <button mat-menu-item (click)="openProfile()">
-                <mat-icon>account_circle</mat-icon>
-                <span>Profile</span>
-              </button>
-              <button mat-menu-item (click)="openSettings()">
-                <mat-icon>settings</mat-icon>
-                <span>Settings</span>
-              </button>
-              <button mat-menu-item (click)="logout()">
-                <mat-icon>logout</mat-icon>
-                <span>Logout</span>
-              </button>
-            </div>
-          </mat-menu>
-        </div>
-        <button class="theme-toggle" (click)="toggleTheme()">
-          <i class="icon-{{ isDarkTheme ? 'sun' : 'moon' }}"></i>
-        </button>
-      </div>
-    </nav>
-  `,
+  templateUrl: './navbar.component.html',
   styles: [`
 
     .btn-login {
@@ -267,6 +218,7 @@ export class NavbarComponent {
   isLandingPage = false;
   isLoginPage = false;
   isDarkTheme = false;
+  isBusinessRoute: boolean = false;
 
   constructor(
     private router: Router,
@@ -275,7 +227,8 @@ export class NavbarComponent {
     @Inject(DOCUMENT) private document: Document,
     private orderPanelService: OrderPanelService,
     private profilePanelService: ProfilePanelService,
-    private settingsPanelService: SettingsPanelService
+    private settingsPanelService: SettingsPanelService,
+    private dialog: MatDialog
   ) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -287,6 +240,16 @@ export class NavbarComponent {
     this.themeService.isDarkTheme$.subscribe(
       isDark => this.isDarkTheme = isDark
     );
+  }
+
+
+  ngOnInit() {
+    this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe(() => {
+      // Now this.router.url reflects the current, fully updated URL
+      this.isBusinessRoute = this.router.url.includes('/business');
+    });
   }
 
   toggleTheme() {
@@ -331,5 +294,31 @@ export class NavbarComponent {
 
   openSettings() {
     this.settingsPanelService.openPanel();
+  }
+
+  openLoginDialog() {
+    const dialogRef = this.dialog.open(LoginDialogComponent, {
+      width: '400px',
+      data: { type: 'customer' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle successful login
+        console.log('Logged in:', result);
+      }
+    });
+  }
+
+  navigateToHome() {
+    if (this.authService.isLoggedIn()) {
+      if (this.authService.isBusiness()) {
+        this.router.navigate(['/business/home']);
+      } else {
+        this.router.navigate(['/']);
+      }
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 } 

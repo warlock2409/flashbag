@@ -1,0 +1,23 @@
+.request-dialog {
+  padding: 16px;
+
+  .request-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+}
+
+mat-dialog-actions {
+  margin-top: 16px;
+  padding: 16px 0;
+} 

@@ -5,11 +5,14 @@ import { CustomersComponent } from './customers/customers.component';
 import { BusinessLayoutComponent } from './business-layout/business-layout.component';
 import { ConsignmentComponent } from './consignment/consignment.component';
 import { OrdersComponent } from './orders/orders.component';
+import { BusinessGuard } from '../guards/business.guard';
+import { BusinessRequestsComponent } from './business-requests/business-requests.component';
 
 const routes: Routes = [
   {
     path: '',
     component: BusinessLayoutComponent,
+    canActivate: [BusinessGuard],
     children: [
       {
         path: '',
@@ -31,6 +34,10 @@ const routes: Routes = [
       {
         path: 'orders',
         component: OrdersComponent
+      },
+      {
+        path: 'requests',
+        component: BusinessRequestsComponent
       }
     ]
   }

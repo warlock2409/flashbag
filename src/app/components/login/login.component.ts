@@ -4,13 +4,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { BusinessRequestDialogComponent } from '../business-request-dialog/business-request-dialog.component';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule]
+  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -19,14 +22,16 @@ export class LoginComponent implements OnInit {
   loginType: 'customer' | 'business' = 'customer';
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {
-    this.loginForm = this.formBuilder.group({
+    this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      rememberMe: [false]
     });
   }
 
@@ -46,6 +51,8 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
+    this.error = '';
+
     this.authService.login(
       this.loginForm.get('email')?.value,
       this.loginForm.get('password')?.value,
@@ -62,10 +69,26 @@ export class LoginComponent implements OnInit {
   }
 
   private redirectBasedOnRole() {
-    if (this.authService.isSeller()) {
-      this.router.navigate(['/seller-dashboard']);
+    if (this.authService.isBusiness()) {
+      this.router.navigate(['/business/home']);
     } else {
-      this.router.navigate(['/marketplace']);
+      this.router.navigate(['/']);
     }
+  }
+
+  openBusinessRequest() {
+    const dialogRef = this.dialog.open(BusinessRequestDialogComponent, {
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the business request submission
+        console.log('Business request:', result);
+        // Show success message
+        this.error = ''; // Clear any existing errors
+        // You might want to show a success message or redirect
+      }
+    });
   }
 } 

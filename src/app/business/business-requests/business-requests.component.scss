@@ -1,0 +1,47 @@
+.requests-container {
+  padding: 20px;
+
+  mat-card-content {
+    overflow: hidden;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 0 -16px;  // Compensate for card padding
+    padding: 0 16px;  // Add padding back to maintain alignment
+  }
+
+  .requests-table {
+    width: 100%;
+    margin-top: 16px;
+    min-width: 1000px; // Ensures table maintains minimum width for readability
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap; // Prevent button wrapping
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+
+    &.pending {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    &.approved {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    &.rejected {
+      background: #ffebee;
+      color: #c62828;
+    }
+  }
+}

@@ -162,7 +162,7 @@ export class LoginDialogComponent {
 
   onSubmit() {
     if (this.isLogin) {
-      this.authService.login(this.email, this.password).subscribe({
+      this.authService.login(this.email, this.password, 'customer').subscribe({
         next: (user) => {
           this.dialogRef.close(true);
         },

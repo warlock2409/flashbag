@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
 import { DealCardComponent } from '../shared/deal-card/deal-card.component';
@@ -35,6 +35,8 @@ export class LandingComponent {
   ];
 
   activeCategory = 'deals';
+
+  constructor(private router: Router) {}
 
   setActiveCategory(categoryId: string) {
     this.activeCategory = categoryId;
@@ -139,6 +141,7 @@ export class LandingComponent {
 
   deals = [
     {
+      id: '1',
       image: 'https://placehold.co/400x300/8884d8/ffffff?text=Coffee+Beans',
       title: 'Premium Coffee Beans',
       consignmentSize: 50,
@@ -152,6 +155,7 @@ export class LandingComponent {
       currentPrice: 2999
     },
     {
+      id: '2',
       image: 'https://placehold.co/400x300/8884d8/ffffff?text=Green+Tea',
       title: 'Organic Green Tea',
       consignmentSize: 100,
@@ -175,5 +179,9 @@ export class LandingComponent {
 
   closePanel() {
     this.isPanelOpen = false;
+  }
+
+  navigateToProduct(productId: string) {
+    this.router.navigate(['/product', productId]);
   }
 } 

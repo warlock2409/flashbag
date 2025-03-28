@@ -23,6 +23,10 @@
         <mat-icon>people</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Customers</span>
       </a>
+      <a mat-list-item routerLink="./requests" routerLinkActive="active" class="nav-item">
+        <mat-icon>business_center</mat-icon>
+        <span class="nav-label" *ngIf="isExpanded">Business Requests</span>
+      </a>
       <a mat-list-item routerLink="./consignment" routerLinkActive="active" class="nav-item">
         <mat-icon>local_shipping</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Consignment</span>

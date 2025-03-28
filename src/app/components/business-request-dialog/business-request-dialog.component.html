@@ -1,0 +1,54 @@
+<div class="request-dialog">
+  <h2 mat-dialog-title>Request Business Account</h2>
+  
+  <mat-dialog-content>
+    <form [formGroup]="requestForm" class="request-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Business Name</mat-label>
+        <input matInput formControlName="businessName" placeholder="Enter your business name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Owner Name</mat-label>
+        <input matInput formControlName="ownerName" placeholder="Enter owner's full name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="Enter business email">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phone" placeholder="Enter contact number">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Business Type</mat-label>
+        <mat-select formControlName="businessType">
+          <mat-option *ngFor="let type of businessTypes" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Business Description</mat-label>
+        <textarea matInput formControlName="description" 
+                  rows="4" 
+                  placeholder="Describe your business and how you plan to use our platform">
+        </textarea>
+        <mat-hint>Minimum 50 characters</mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" 
+            (click)="onSubmit()" 
+            [disabled]="!requestForm.valid">
+      Submit Request
+    </button>
+  </mat-dialog-actions>
+</div> 

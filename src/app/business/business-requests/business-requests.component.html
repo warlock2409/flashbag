@@ -1,0 +1,82 @@
+<div class="requests-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Business Account Requests</mat-card-title>
+      <mat-card-subtitle>Review and manage business account requests</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="requests" class="requests-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let request">{{request.id}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="businessName">
+            <th mat-header-cell *matHeaderCellDef>Business Name</th>
+            <td mat-cell *matCellDef="let request">{{request.businessName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ownerName">
+            <th mat-header-cell *matHeaderCellDef>Owner Name</th>
+            <td mat-cell *matCellDef="let request">{{request.ownerName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let request">{{request.email}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let request">{{request.phone}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="businessType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let request">{{request.businessType}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let request">
+              <span class="status-badge" [class]="request.status">
+                {{request.status | titlecase}}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="submittedDate">
+            <th mat-header-cell *matHeaderCellDef>Submitted</th>
+            <td mat-cell *matCellDef="let request">{{request.submittedDate | date:'mediumDate'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let request">
+              <div class="action-buttons">
+                <button mat-button color="primary" (click)="viewDetails(request)">
+                  View
+                </button>
+                <button mat-button color="accent" 
+                        (click)="approveRequest(request)"
+                        [disabled]="request.status !== 'pending'">
+                  Approve
+                </button>
+                <button mat-button color="warn" 
+                        (click)="rejectRequest(request)"
+                        [disabled]="request.status !== 'pending'">
+                  Reject
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

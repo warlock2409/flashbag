@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LandingComponent } from './components/landing/landing.component';
 import { HomeComponent } from './components/home/home.component';
 import { ShopDetailsComponent } from './components/shop-details/shop-details.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -13,6 +14,10 @@ export const routes: Routes = [
   {
     path: 'business',
     loadChildren: () => import('./business/business.module').then(m => m.BusinessModule)
+  },
+  {
+    path: 'product/:id',
+    component: ProductDetailComponent
   },
   // Add more routes later for marketplace and seller dashboard
 ];

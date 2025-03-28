@@ -22,6 +22,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CreateDealDialogComponent } from './consignment/create-deal-dialog/create-deal-dialog.component';
 import { OrdersComponent } from './orders/orders.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { BusinessRequestsComponent } from './business-requests/business-requests.component';
+import { ApprovalDialogComponent } from './business-requests/approval-dialog/approval-dialog.component';
+import { RequestDetailsDialogComponent } from './business-requests/request-details-dialog/request-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    MatExpansionModule
+    MatExpansionModule,
+    BusinessRequestsComponent,
+    ApprovalDialogComponent,
+    RequestDetailsDialogComponent
   ]
 })
 export class BusinessModule { } 

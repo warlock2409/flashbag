@@ -8,7 +8,7 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1>Book local beauty and wellness services</h1>
+    <h1>If you're great at planning, you're in the right place!</h1>
     <div class="category-toggles">
       <button 
         *ngFor="let category of categories"
@@ -26,7 +26,11 @@
   <section class="deals-section">
     <h2>Flashbag Deals</h2>
     <div class="deals-grid">
-      <app-deal-card *ngFor="let deal of deals" [deal]="deal"></app-deal-card>
+      <app-deal-card 
+        *ngFor="let deal of deals" 
+        [deal]="deal"
+        (click)="navigateToProduct(deal.id)">
+      </app-deal-card>
     </div>
   </section>
 
