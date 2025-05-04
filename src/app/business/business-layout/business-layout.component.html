@@ -31,12 +31,15 @@
         <mat-icon>local_shipping</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Consignment</span>
       </a>
+      <a mat-list-item routerLink="./settings" routerLinkActive="active" class="nav-item">
+        <mat-icon>settings</mat-icon>
+        <span class="nav-label" *ngIf="isExpanded">Business Management</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content>
     <mat-toolbar>
-      <span>Dashboard Content</span>
     </mat-toolbar>
     <div class="content">
       <router-outlet></router-outlet>

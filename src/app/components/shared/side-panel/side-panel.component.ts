@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule, MatIconModule],
   template: `
     <div class="side-panel-container" [class.open]="isOpen">
-      <div class="side-panel">
+      <div class="side-panel" [ngStyle]="panelStyles">
         <div class="panel-header">
           <h3>{{ title }}</h3>
           <button class="close-btn" (click)="close()">
@@ -26,7 +26,6 @@ import { MatIconModule } from '@angular/material/icon';
     .side-panel-container {
       visibility: hidden;
       position: fixed;
-      top: 0;
       right: 0;
       bottom: 0;
       left: 0;
@@ -47,10 +46,9 @@ import { MatIconModule } from '@angular/material/icon';
 
     .side-panel {
       position: fixed;
-      top: 0;
+      bottom: 0;
       right: 0;
       width: 480px;
-      height: 100%;
       background: white;
       box-shadow: -2px 0 8px rgba(0,0,0,0.1);
       transform: translateX(100%);
@@ -89,7 +87,7 @@ import { MatIconModule } from '@angular/material/icon';
     .panel-content {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 10px;
     }
 
     .overlay {
@@ -114,6 +112,7 @@ export class SidePanelComponent {
   @Input() isOpen = false;
   @Input() title = '';
   @Output() closePanel = new EventEmitter<void>();
+  @Input() panelStyles: { [key: string]: string } = {};
 
   close() {
     this.closePanel.emit();

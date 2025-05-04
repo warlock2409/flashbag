@@ -25,7 +25,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { BusinessRequestsComponent } from './business-requests/business-requests.component';
 import { ApprovalDialogComponent } from './business-requests/approval-dialog/approval-dialog.component';
 import { RequestDetailsDialogComponent } from './business-requests/request-details-dialog/request-details-dialog.component';
-
+import { SettingsComponent } from './settings/settings.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { SidePanelComponent } from '../components/shared/side-panel/side-panel.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -33,7 +35,8 @@ import { RequestDetailsDialogComponent } from './business-requests/request-detai
     CustomersComponent,
     ConsignmentComponent,
     CreateDealDialogComponent,
-    OrdersComponent
+    OrdersComponent,
+    SettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +58,9 @@ import { RequestDetailsDialogComponent } from './business-requests/request-detai
     MatExpansionModule,
     BusinessRequestsComponent,
     ApprovalDialogComponent,
-    RequestDetailsDialogComponent
-  ]
+    RequestDetailsDialogComponent,
+    MatProgressBarModule,
+    SidePanelComponent
+  ],
 })
 export class BusinessModule { } 

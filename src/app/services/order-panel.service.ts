@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -15,10 +16,23 @@ export interface Order {
   timeline: OrderTimeline[];
 }
 
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  status: number;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class OrderPanelService {
+
+  constructor(private http: HttpClient){}
+
+  getRentalBookings(shopId: number) {
+    let url = "http://localhost:8080/shop/{id}/rental-bookings".replace('{id}',shopId.toString());
+    return this.http.get<ApiResponse<any>>(url);
+  }
+  
   private isOpenSubject = new BehaviorSubject<boolean>(false);
   isOpen$ = this.isOpenSubject.asObservable();
 
