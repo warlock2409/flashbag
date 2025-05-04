@@ -32,7 +32,9 @@ interface Deal {
     <app-side-panel 
       [isOpen]="isOpen" 
       [title]="getPanelTitle()"
-      (closePanel)="close()">
+      (closePanel)="close()"
+      [panelStyles]="{ 'top': '0' }"
+      >
       
       <div class="booking-steps">
         <div [ngSwitch]="currentStep$ | async">

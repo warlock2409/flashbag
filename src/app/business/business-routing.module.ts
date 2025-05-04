@@ -7,6 +7,7 @@ import { ConsignmentComponent } from './consignment/consignment.component';
 import { OrdersComponent } from './orders/orders.component';
 import { BusinessGuard } from '../guards/business.guard';
 import { BusinessRequestsComponent } from './business-requests/business-requests.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -38,7 +39,12 @@ const routes: Routes = [
       {
         path: 'requests',
         component: BusinessRequestsComponent
-      }
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent
+      },
+
     ]
   }
 ];

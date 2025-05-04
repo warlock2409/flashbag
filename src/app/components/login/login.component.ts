@@ -1,3 +1,4 @@
+declare var google:any;
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -36,6 +37,18 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    google.accounts.id.initialize({
+      client_id: "196972985831-fma8p5mvuhhrl3tkrhpborng0094f48o.apps.googleusercontent.com",
+      callback: (resp:any)=>{
+
+      }
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large" }  // customization attributes
+    );
+
     this.route.queryParams.subscribe(params => {
       this.loginType = params['type'] || 'customer';
     });
@@ -91,4 +104,6 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
+  
 } 

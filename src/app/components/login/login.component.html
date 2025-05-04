@@ -4,16 +4,11 @@
       <span class="login-badge">{{loginType === 'business' ? 'Business' : 'Customer'}} Login</span>
       <h2>Welcome to Flashbag!</h2>
     </div>
-    
+
     <div class="form-group">
       <label for="email">Email Address</label>
-      <input
-        type="email"
-        id="email"
-        formControlName="email"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.invalid }"
-      />
+      <input type="email" id="email" formControlName="email" class="form-control"
+        [ngClass]="{ 'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.invalid }" />
       <div class="invalid-feedback" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
         <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</div>
         <div *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</div>
@@ -22,21 +17,16 @@
 
     <div class="form-group">
       <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        formControlName="password"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.invalid }"
-      />
+      <input type="password" id="password" formControlName="password" class="form-control"
+        [ngClass]="{ 'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.invalid }" />
       <div class="invalid-feedback" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
         <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</div>
       </div>
     </div>
 
-    <div class="remember-me">
+    <!-- <div class="remember-me">
       <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-    </div>
+    </div> -->
 
     <div class="form-options">
       <a href="#" class="forgot-password">Forgot password?</a>
@@ -53,16 +43,19 @@
       <span>or</span>
     </div>
 
-    <button type="button" class="btn btn-google">
+    <!-- <button type="button" class="btn btn-google">
       <img src="assets/google-icon.svg" alt="Google icon">
       Continue with Google
     </button>
 
-    <button *ngIf="loginType === 'business'" 
-            type="button" 
-            class="btn btn-create-account"
-            (click)="openBusinessRequest()">
+    <div style="border: 1px solid red; height: 100px; width: 100%;">
+      <div id="buttonDiv"></div>
+    </div> -->
+
+
+    <button *ngIf="loginType === 'business'" type="button" class="btn btn-create-account"
+      (click)="openBusinessRequest()">
       Request Business Account
     </button>
   </form>
-</div> 
+</div>

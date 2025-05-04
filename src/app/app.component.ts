@@ -30,7 +30,8 @@ import { SettingsPanelComponent } from './components/shared/settings-panel/setti
   `,
   styles: [`
     .main-content {
-      padding-top: 64px; // Height of navbar
+      padding-top: 60px;
+      background: violet; // Height of navbar
     }
   `]
 })

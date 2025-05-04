@@ -14,6 +14,10 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
+  getToken() {
+    let user = localStorage.getItem('currentUser');
+    return user ? JSON.parse(user).token : null;
+  }
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   public isAuthenticated = new BehaviorSubject<boolean>(false);
@@ -40,18 +44,16 @@ export class AuthService {
 
   login(email: string, password: string, type: 'customer' | 'business'): Observable<any> {
     // Mock authentication
-    const mockUser: User = {
-      id: '1',
-      email: email,
-      role: type
-    };
+    const loginPayload = { email, password, type };
+
+    let url = 'http://localhost:8080/user/login'
 
     // Simulate API call
-    return of(mockUser).pipe(
-      delay(1000), // Simulate network delay
-      tap(user => {
-        this.currentUserSubject.next(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+    return this.http.post(url, loginPayload).pipe(
+      tap((response: any) => {
+        // Assuming the API returns user details on successful login
+        this.currentUserSubject.next(response);
+        localStorage.setItem('currentUser', JSON.stringify(response));
         this.isAuthenticated.next(true);
       })
     );

@@ -1,13 +1,17 @@
 .sidenav-container {
   height: 100vh;
-  
+  display: flex;
+  flex-direction: row;
+
   .sidenav {
-    width: 65px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0; // Prevent shrinking
+    width: 65px; // Initial collapsed width
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); // Transition on transform
     overflow: hidden;
-    
+
     &.expanded {
       width: 200px;
+      transform: translateX(0); // Expand by translating
 
       .nav-item {
         .nav-label {
@@ -28,7 +32,7 @@
       span {
         flex: 1;
         opacity: 1;
-        transition: all 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
         transform: translateX(0);
       }
     }
@@ -47,7 +51,7 @@
       border-radius: 0 24px 24px 0;
       
       mat-icon {
-        margin-right: 16px;
+        margin-right: 8px;
         width: 24px;
         height: 24px;
         font-size: 24px;
@@ -91,7 +95,7 @@
       padding: 0;
       width: 100%;
       border-radius: 0;
-      
+
       mat-icon {
         margin: 0;
       }
@@ -113,23 +117,31 @@
   }
 }
 
+
 .content {
   padding: 20px;
 }
 
 mat-sidenav-content {
   background: #f5f5f5;
+  width: 100%;
 }
 
 // Fix for Material list item styles
 ::ng-deep {
+  .mdc-list-item__primary-text {
+    display: flex;
+    margin-left: 6px;
+  }
   .mat-mdc-list-item {
     padding: 0 !important;
     
     .mdc-list-item__content {
       padding: 0 !important;
+      padding-left: .5rem;
       display: flex !important;
-      justify-content: center !important;
+      // justify-content: center !important;
+      align-items: center;
     }
   }
 
