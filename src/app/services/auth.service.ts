@@ -45,7 +45,7 @@ export class AuthService {
   login(email: string, password: string, type: 'customer' | 'business'): Observable<any> {
     // Mock authentication
     const loginPayload = { email, password, type };
-
+    
     let url = 'http://localhost:8080/user/login'
 
     // Simulate API call
@@ -57,7 +57,7 @@ export class AuthService {
         this.isAuthenticated.next(true);
       })
     );
-  }
+  } 
 
   logout(): void {
     this.currentUserSubject.next(null);

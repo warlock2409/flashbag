@@ -6,22 +6,30 @@ import { AuthService } from '../services/auth.service';  // Adjust the import to
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+    const updatedUrl = req.url.replace('http://localhost:8080', 'https://6694-223-184-94-31.ngrok-free.app');
+    const updatedReq = req.clone({
+        url: updatedUrl,
+        setHeaders: {
+            'ngrok-skip-browser-warning': 'true',  // <--- This header skips the warning
+        }
+    });
+
     // Skip adding the token for login requests
-    if (req.url.includes('login')) {
-        return next(req);
+    if (updatedReq.url.includes('login')) {
+        return next(updatedReq);
     }
 
     // Get the AuthService instance
     const authService = inject(AuthService);
-    const token = authService.getToken();  // Get the auth token from your AuthService
+    const token = authService.getToken();
 
     // Check if the token exists before adding it to the request
     if (!token) {
-        return next(req);  // If no token, pass the request as-is
+        return next(updatedReq);
     }
 
-    // Clone the request and add the Authorization header with the token
-    const clonedRequest = req.clone({
+    // Clone again to add the Authorization header
+    const clonedRequest = updatedReq.clone({
         setHeaders: {
             Authorization: `Bearer ${token}`,
         },

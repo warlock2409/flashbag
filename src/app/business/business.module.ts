@@ -28,6 +28,7 @@ import { RequestDetailsDialogComponent } from './business-requests/request-detai
 import { SettingsComponent } from './settings/settings.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SidePanelComponent } from '../components/shared/side-panel/side-panel.component';
+import { NgxTimelineModule } from '@frxjs/ngx-timeline';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -60,7 +61,8 @@ import { SidePanelComponent } from '../components/shared/side-panel/side-panel.c
     ApprovalDialogComponent,
     RequestDetailsDialogComponent,
     MatProgressBarModule,
-    SidePanelComponent
+    SidePanelComponent,
+    NgxTimelineModule
   ],
 })
 export class BusinessModule { } 

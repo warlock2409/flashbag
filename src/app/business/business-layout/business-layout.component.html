@@ -33,15 +33,14 @@
       </a>
       <a mat-list-item routerLink="./settings" routerLinkActive="active" class="nav-item">
         <mat-icon>settings</mat-icon>
-        <span class="nav-label" *ngIf="isExpanded">Business Management</span>
+        <span class="nav-label" *ngIf="isExpanded">Management</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <mat-toolbar>
-    </mat-toolbar>
-    <div class="content">
+  <mat-sidenav-content class="content">
+    <mat-toolbar></mat-toolbar>
+    <div >
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

@@ -50,6 +50,58 @@ html, body {
   display: flex;
 }
 
+.align-center{
+  align-items: center;
+}
+
+.gap-3{
+  gap: .3rem;
+}
+
+.gap-1rem{
+  gap: 1.2rem;
+} 
+
+.wrap{
+  flex-wrap: wrap;
+}
+
+
 .js-sa{
   justify-content: space-around;
 }
+
+.js-sb{
+  justify-content: space-between;
+}
+
+.js-se{
+  justify-content: space-evenly;
+}
+
+.js-c{
+  justify-content: center;
+}
+
+.mdc-list-item__primary-text {
+  display: flex;
+  margin-left: 16px !important;
+  width: 100% !important;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 16px 16px !important;
+}
+
+.text-align-center{
+  text-align: center;
+}
+
+.m-4{
+  margin: .5rem;
+}
+
+.m-8{
+  margin: 1rem;
+}
+

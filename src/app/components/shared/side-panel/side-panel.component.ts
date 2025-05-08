@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div class="panel-content">
+        <div class="panel-content scroll-hidden">
           <ng-content></ng-content>
         </div>
       </div>
@@ -48,7 +48,7 @@ import { MatIconModule } from '@angular/material/icon';
       position: fixed;
       bottom: 0;
       right: 0;
-      width: 480px;
+      width: 500px;
       background: white;
       box-shadow: -2px 0 8px rgba(0,0,0,0.1);
       transform: translateX(100%);
@@ -99,6 +99,16 @@ import { MatIconModule } from '@angular/material/icon';
       background: rgba(0,0,0,0.5);
       opacity: 0;
       transition: opacity 0.3s ease;
+    }
+
+    .scroll-hidden {
+      overflow: auto; /* Enables scrolling */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    .scroll-hidden::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
 
     @media (max-width: 480px) {

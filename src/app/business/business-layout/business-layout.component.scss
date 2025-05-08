@@ -1,5 +1,5 @@
 .sidenav-container {
-  height: 100vh;
+  height: calc(100vh - 66px);
   display: flex;
   flex-direction: row;
 
@@ -153,4 +153,10 @@ mat-sidenav-content {
       }
     }
   }
+}
+
+.content {
+  height: 100vh;
+  overflow-y: auto;
 } 
+

@@ -1,0 +1,160 @@
+.settings-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 24px;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.2em;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+}
+
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 36px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 10px 24px;
+    border-radius: 24px;
+    cursor: pointer;
+    color: #222;
+    transition: background 0.2s;
+}
+
+.tab.active,
+.tab:hover {
+    background: #222;
+    color: #fff;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+}
+
+.settings-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    padding: 28px 24px;
+    transition: box-shadow 0.2s;
+}
+
+.settings-card:hover {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+}
+
+mat-icon {
+    //   font-size: 2.4rem;
+    margin-top: 4px;
+    overflow:visible !important;
+}
+
+.tabs {
+    position: sticky;
+    top: -20px; // <-- Set this to your top nav height
+    background: #f5f5f5;
+    z-index: 10;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.settings-card h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+}
+
+.settings-card p {
+    color: #555;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.section {
+    max-width: 1200px;
+    margin: 56px auto 0 auto;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.simple-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+}
+
+.simple-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 28px 22px 18px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.simple-card:hover {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    border-color: #bdbdbd;
+}
+
+.card-title {
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+.card-desc {
+    color: #555;
+    font-size: 0.98rem;
+    margin-bottom: 18px;
+}
+
+.view-link {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-top: auto;
+    transition: color 0.2s;
+}
+
+.view-link mat-icon {
+    font-size: 1.1rem;
+    margin-left: 4px;
+    transition: transform 0.2s;
+}
+
+.view-link:hover {
+    color: #6c63ff;
+}
+
+.view-link:hover mat-icon {
+    transform: translateX(3px);
+}

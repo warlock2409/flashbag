@@ -7,9 +7,8 @@
     <mat-card-content>
       <div class="filter-chips">
         <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
-          <mat-chip-option *ngFor="let filter of filters" 
-                          [value]="filter.value"
-                          [selected]="selectedFilter === filter.value">
+          <mat-chip-option *ngFor="let filter of filters" [value]="filter.value"
+            [selected]="selectedFilter === filter.value">
             {{filter.label}}
           </mat-chip-option>
         </mat-chip-listbox>
@@ -24,8 +23,8 @@
                   {{deal.title}}
                 </mat-panel-title>
                 <mat-panel-description>
-                  Created: {{deal.date | date:'mediumDate'}} | 
-                  Delivery: {{deal.deliveryDate | date:'mediumDate'}} | 
+                  Created: {{deal.date | date:'mediumDate'}} |
+                  Delivery: {{deal.deliveryDate | date:'mediumDate'}} |
                   Orders: {{deal.orders.length}}
                 </mat-panel-description>
               </mat-expansion-panel-header>
@@ -81,7 +80,8 @@
                 </ng-container>
                 <ng-container matColumnDef="dateRange">
                   <mat-header-cell *matHeaderCellDef> Booking </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ formatDateRange(booking.startDate, booking.endDate)}} </mat-cell>
+                  <mat-cell *matCellDef="let booking"> {{ formatDateRange(booking.startDate, booking.endDate)}}
+                  </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="customerName">
                   <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
@@ -93,8 +93,8 @@
                 </ng-container>
                 <ng-container matColumnDef="status">
                   <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> 
-                    {{ booking.status }} 
+                  <mat-cell *matCellDef="let booking">
+                    {{ booking.status }}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="phoneNumber">
@@ -103,7 +103,15 @@
                 </ng-container>
                 <ng-container matColumnDef="totalAmount">
                   <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.totalAmount }} </mat-cell>
+                  <mat-cell *matCellDef="let booking">
+                     <div *ngIf="booking.totalAmount ">
+                       {{ booking.totalAmount }} 
+                     </div>
+                     <div *ngIf="!booking.totalAmount ">
+                        No Payment
+                     </div>
+                     
+                    </mat-cell>
                 </ng-container>
                 <!-- Actions Column -->
                 <ng-container matColumnDef="actions">
@@ -112,41 +120,370 @@
                     <button mat-button color="primary" (click)="openPanel(booking)">View</button>
                   </mat-cell>
                 </ng-container>
-            
+
                 <!-- Header and Row Definitions -->
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            
+
               </mat-table>
             </div>
-            
+
           </div>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <app-side-panel 
-    [isOpen]="isPanelOpen" 
-    [title]="'Bookings'"
-    (closePanel)="closePanel()"
-    [panelStyles]="{ 'height': 'calc(100% - 60px)'}"
-    >
+  <app-side-panel [isOpen]="isPanelOpen" [title]="'Bookings'" (closePanel)="closePanel()"
+    [panelStyles]="{ 'height': 'calc(100% - 60px)'}">
     <div>
-      <div class="flex js-sa">
-        <button mat-mini-fab color="primary">
+      <div class="flex gap-1rem js-c m-8">
+        <button mat-stroked-button color="primary">
+          <mat-icon style="color: green;">check_circle</mat-icon> Accept
+        </button>
+        <button mat-stroked-button>
+          <mat-icon color="warn">cancel</mat-icon> Reject
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="flex js-sa" style="padding: 0;margin-top: 1rem;">
+        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'user'}" (click)="setActivePanel('user')">
           <mat-icon>account_circle</mat-icon>
         </button>
-        <button mat-mini-fab color="primary">
+        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'car'}" (click)="setActivePanel('car')">
           <mat-icon>directions_car</mat-icon>
         </button>
-        <button mat-mini-fab color="primary">
-          <mat-icon>calendar_month</mat-icon>
+        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'driver'}" (click)="setActivePanel('driver')">
+          <mat-icon>sports_motorsports</mat-icon>
         </button>
-        <button mat-mini-fab color="primary">
+        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'assignment'}" (click)="setActivePanel('assignment')">
           <mat-icon>assignment</mat-icon>
         </button>
       </div>
+
+      <ng-container [ngSwitch]="activePanel">
+        <!-- Car -->
+        <ng-container *ngSwitchCase="'car'">
+          <mat-card class="user-info-card">
+            <div class="user-header">
+              <div class="avatar-circle">
+                <img *ngIf="selectedBooking?.carImage; else carInitials" [src]="selectedBooking.carImage" alt="Car Image" />
+                <ng-template #carInitials>
+                  <span class="placeholder-text">{{ getInitials(selectedBooking.vehicleName) }}</span>
+                </ng-template>
+              </div>
+              <div class="user-details">
+                <div class="user-name">{{ selectedBooking.vehicleName }}</div>
+                <div class="user-phone">Reg. No: {{ selectedBooking.registerNumber || 'N/A' }}</div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+
+            <div class="customer-profile">
+              <div class="profile-status flex gap-1rem wrap"> 
+                <div class="license-expiry">
+                  <span>Insurance Expiry</span>
+                  <div class="expiry-date">{{ selectedBooking.insuranceExpiry | date:'mediumDate' }}</div>
+                </div>
+                <div class="license-expiry">
+                  <span>Kilometers Run</span>
+                  <div class="expiry-date">{{ selectedBooking.kmRun || 'N/A' }} km</div>
+                </div>
+                <div class="license-expiry">
+                  <span>FC Date</span>
+                  <div class="expiry-date">{{ selectedBooking.fcDate | date:'mediumDate' }}</div>
+                </div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+
+            <div class="user-past-bookings">
+              <div class="bookings-header">
+                <h4>Past Bookings</h4>
+              </div>
+              <mat-accordion class="past-bookings-accordion">
+                <mat-expansion-panel *ngFor="let booking of carPastBookings">
+                  <mat-expansion-panel-header>
+                    <div class="past-booking-summary">
+                      <span>{{ booking.date | date }}</span>
+                      <span class="vehicle">{{ booking.vehicleName }}</span>
+                      <span class="rating">
+                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
+                      </span>
+                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
+                        <mat-icon>
+                          {{ booking.status === 'Completed' ? 'check_circle' :
+                             booking.status === 'Canceled' ? 'cancel' :
+                             booking.status === 'Rejected' ? 'block' :
+                             booking.status === 'Pending' ? 'hourglass_empty' :
+                             booking.status === 'Confirmed' ? 'check_circle_outline' :
+                             'info' }}
+                        </mat-icon>
+                        <!-- {{ booking.status }} -->
+                      </span>
+                    </div>
+                  </mat-expansion-panel-header>
+                  <div class="past-booking-details">
+                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
+                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
+                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </mat-card>
+        </ng-container>
+        <!-- Customer -->
+        <ng-container *ngSwitchCase="'user'">
+          <mat-card class="user-info-card">
+            <div class="user-header">
+              <div class="avatar-circle">
+                <img *ngIf="user.image; else initials" [src]="user.image" alt="User Image" />
+                <ng-template #initials>
+                  <span class="placeholder-text">{{ getInitials(user.name) }}</span>
+                </ng-template>
+              </div>
+              <div class="user-details">
+                <div class="user-name flex js-sb align-center">
+                  {{ user.name }}
+                  <span class="trust-score">
+                    <mat-icon class="star">star</mat-icon>
+                    {{ user.trustScore }}
+                  </span>
+                </div>
+                <div class="user-phone">{{ user.phone }}</div>
+                <div class="user-email" *ngIf="user.email">{{ user.email }}</div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="customer-profile">
+              <div class="profile-status">
+                <div class="status-item">
+                  <span>License Status</span>
+                  <div class="toggle-buttons">
+                    <button mat-button [class.active]="user.licenseStatus === 'verified'" color="primary">
+                      <mat-icon>verified</mat-icon>
+                      Verified
+                    </button>
+                    <button mat-button [class.active]="user.licenseStatus === 'pending'" color="warn">
+                      <mat-icon>pending</mat-icon>
+                      Pending
+                    </button>
+                  </div>
+                </div>
+      
+                <div class="license-expiry">
+                  <span>License Expiry</span>
+                  <div class="expiry-date">{{ user.licenseExpiry | date:'mediumDate' }}</div>
+                </div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="user-criteria">
+              <h4>Customer Profile</h4>
+              <div class="criteria-header">
+                <div class="criteria-filter">
+                  <button mat-button [class.active]="criteriaFilter === 'all'" (click)="setCriteriaFilter('all')">
+                    All
+                  </button>
+                  <button mat-button [class.active]="criteriaFilter === 'verified'" (click)="setCriteriaFilter('verified')">
+                    <mat-icon>verified</mat-icon>
+                    Verified
+                  </button>
+                  <button mat-button [class.active]="criteriaFilter === 'pending'" (click)="setCriteriaFilter('pending')">
+                    <mat-icon>pending</mat-icon>
+                    Pending
+                  </button>
+                </div>
+              </div>
+              <mat-list>
+                <mat-list-item *ngFor="let criterion of filteredCriteria">
+                  <div class="criteria-item">
+                    <mat-chip [color]="criterion.completed ? 'primary' : 'warn'" [class.completed]="criterion.completed">
+                      <mat-icon style="transform: translateY(3px);">{{ criterion.completed ? 'check_circle' : 'pending'
+                        }}</mat-icon>
+                      {{ criterion.completed ? 'Verified' : 'Pending' }}
+                    </mat-chip>
+                    <span class="criteria-label">{{ criterion.label }}</span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="user-past-bookings">
+              <div class="bookings-header">
+                <h4>Past Bookings</h4>
+                <div class="revenue-info">
+                  <span class="revenue-label">Total Revenue</span>
+                  <span class="revenue-amount">₹{{ calculateTotalRevenue() }}</span>
+                </div>
+              </div>
+              <mat-accordion class="past-bookings-accordion">
+                <mat-expansion-panel *ngFor="let booking of user.pastBookings">
+                  <mat-expansion-panel-header>
+                    <div class="past-booking-summary">
+                      <span>{{ booking.date | date }}</span>
+                      <span class="vehicle">{{ booking.vehicleName }}</span>
+                      <span class="rating">
+                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
+                      </span>
+                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
+                        <mat-icon>
+                          {{ booking.status === 'Completed' ? 'check_circle' :
+                             booking.status === 'Canceled' ? 'cancel' :
+                             booking.status === 'Rejected' ? 'block' :
+                             booking.status === 'Pending' ? 'hourglass_empty' :
+                             booking.status === 'Confirmed' ? 'check_circle_outline' :
+                             'info' }}
+                        </mat-icon>
+                        <!-- {{ booking.status }} -->
+                      </span>
+                    </div>
+                  </mat-expansion-panel-header>
+                  <div class="past-booking-details">
+                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
+                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
+                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </mat-card>
+        </ng-container>
+        <!-- Driver -->
+        <ng-container *ngSwitchCase="'driver'">
+          <mat-card class="user-info-card">
+            <div class="user-header">
+              <div class="avatar-circle">
+                <img *ngIf="user.image; else initials" [src]="user.image" alt="User Image" />
+                <ng-template #initials>
+                  <span class="placeholder-text">{{ getInitials(user.name) }}</span>
+                </ng-template>
+              </div>
+              <div class="user-details">
+                <div class="user-name flex js-sb align-center">
+                  {{ user.name }}
+                  <span class="trust-score">
+                    <mat-icon class="star">star</mat-icon>
+                    {{ user.trustScore }}
+                  </span>
+                </div>
+                <div class="user-phone">{{ user.phone }}</div>
+                <div class="user-email" *ngIf="user.email">{{ user.email }}</div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="customer-profile">
+              <div class="profile-status">
+                <div class="status-item">
+                  <span>License Status</span>
+                  <div class="toggle-buttons">
+                    <button mat-button [class.active]="user.licenseStatus === 'verified'" color="primary">
+                      <mat-icon>verified</mat-icon>
+                      Verified
+                    </button>
+                    <button mat-button [class.active]="user.licenseStatus === 'pending'" color="warn">
+                      <mat-icon>pending</mat-icon>
+                      Pending
+                    </button>
+                  </div>
+                </div>
+      
+                <div class="license-expiry">
+                  <span>License Expiry</span>
+                  <div class="expiry-date">{{ user.licenseExpiry | date:'mediumDate' }}</div>
+                </div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="user-criteria">
+              <h4>Customer Profile</h4>
+              <div class="criteria-header">
+                <div class="criteria-filter">
+                  <button mat-button [class.active]="criteriaFilter === 'all'" (click)="setCriteriaFilter('all')">
+                    All
+                  </button>
+                  <button mat-button [class.active]="criteriaFilter === 'verified'" (click)="setCriteriaFilter('verified')">
+                    <mat-icon>verified</mat-icon>
+                    Verified
+                  </button>
+                  <button mat-button [class.active]="criteriaFilter === 'pending'" (click)="setCriteriaFilter('pending')">
+                    <mat-icon>pending</mat-icon>
+                    Pending
+                  </button>
+                </div>
+              </div>
+              <mat-list>
+                <mat-list-item *ngFor="let criterion of filteredCriteria">
+                  <div class="criteria-item">
+                    <mat-chip [color]="criterion.completed ? 'primary' : 'warn'" [class.completed]="criterion.completed">
+                      <mat-icon style="transform: translateY(3px);">{{ criterion.completed ? 'check_circle' : 'pending'
+                        }}</mat-icon>
+                      {{ criterion.completed ? 'Verified' : 'Pending' }}
+                    </mat-chip>
+                    <span class="criteria-label">{{ criterion.label }}</span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+            <mat-divider></mat-divider>
+      
+            <div class="user-past-bookings">
+              <div class="bookings-header">
+                <h4>Past Bookings</h4>
+                <div class="revenue-info">
+                  <span class="revenue-label">Total Revenue</span>
+                  <span class="revenue-amount">₹{{ calculateTotalRevenue() }}</span>
+                </div>
+              </div>
+              <mat-accordion class="past-bookings-accordion">
+                <mat-expansion-panel *ngFor="let booking of user.pastBookings">
+                  <mat-expansion-panel-header>
+                    <div class="past-booking-summary">
+                      <span>{{ booking.date | date }}</span>
+                      <span class="vehicle">{{ booking.vehicleName }}</span>
+                      <span class="rating">
+                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
+                      </span>
+                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
+                        <mat-icon>
+                          {{ booking.status === 'Completed' ? 'check_circle' :
+                             booking.status === 'Canceled' ? 'cancel' :
+                             booking.status === 'Rejected' ? 'block' :
+                             booking.status === 'Pending' ? 'hourglass_empty' :
+                             booking.status === 'Confirmed' ? 'check_circle_outline' :
+                             'info' }}
+                        </mat-icon>
+                        <!-- {{ booking.status }} -->
+                      </span>
+                    </div>
+                  </mat-expansion-panel-header>
+                  <div class="past-booking-details">
+                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
+                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
+                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </mat-card>
+        </ng-container>
+        <!-- Assesment -->
+        <ng-container *ngSwitchCase="'assignment'" style="scale: 0.7;">
+          <ngx-timeline 
+          [events]="events"
+          [enableAnimation]="false"
+          ></ngx-timeline>
+        </ng-container>
+      </ng-container>
     </div>
+
+    
   </app-side-panel>
-</div> 
+
+</div>
