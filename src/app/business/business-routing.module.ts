@@ -8,6 +8,8 @@ import { OrdersComponent } from './orders/orders.component';
 import { BusinessGuard } from '../guards/business.guard';
 import { BusinessRequestsComponent } from './business-requests/business-requests.component';
 import { SettingsComponent } from './settings/settings.component';
+import { BusinessSetupComponent } from './settings/components/business-setup/business-setup.component';
+import { SettingsPlaceholderComponent } from './settings/settings-placeholder/settings-placeholder.component';
 
 const routes: Routes = [
   {
@@ -42,7 +44,17 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsComponent
+        component: SettingsPlaceholderComponent,
+        children: [
+          {
+            path:"",
+            component:SettingsComponent
+          },
+          {
+            path: 'business-setup',
+            component: BusinessSetupComponent
+          }
+        ]
       },
 
     ]

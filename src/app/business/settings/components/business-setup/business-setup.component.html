@@ -1,0 +1,38 @@
+<div class="setup-container">
+
+    <div class="flex js-sb align-center">
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Businesses</mat-label>
+              <input type="text"
+                     placeholder="Pick one"
+                     aria-label="Number"
+                     matInput
+                     [formControl]="businessControl"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                @for (option of filteredOptions | async; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+          <button nz-button nzType="primary">Primary</button>
+          <button mat-stroked-button>Create New Business</button>
+    </div>
+
+    <div>
+        <mat-drawer-container class="example-container" autosize>
+
+            <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="showFiller">
+              
+            </mat-drawer>
+          
+            <div class="example-sidenav-content">
+              
+            </div>
+          
+          </mat-drawer-container>
+    </div>
+
+</div>

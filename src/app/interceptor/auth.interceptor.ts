@@ -6,9 +6,9 @@ import { AuthService } from '../services/auth.service';  // Adjust the import to
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-    const updatedUrl = req.url.replace('http://localhost:8080', 'https://6694-223-184-94-31.ngrok-free.app');
+    // const updatedUrl = req.url.replace('http://localhost:8080', 'https://6694-223-184-94-31.ngrok-free.app');
     const updatedReq = req.clone({
-        url: updatedUrl,
+        url: req.url,
         setHeaders: {
             'ngrok-skip-browser-warning': 'true',  // <--- This header skips the warning
         }

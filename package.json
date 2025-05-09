@@ -22,6 +22,7 @@
     "@angular/router": "^18.2.13",
     "@frxjs/ngx-timeline": "^19.0.2",
     "google-one-tap": "^1.0.6",
+    "ng-zorro-antd": "^19.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

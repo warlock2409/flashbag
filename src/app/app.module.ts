@@ -8,8 +8,6 @@ import { routes } from './app-routing.module';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatMenuModule} from '@angular/material/menu';
-import { AuthInterceptor } from './interceptor/auth.interceptor';
-import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [],
@@ -21,7 +19,7 @@ import { AuthService } from './services/auth.service';
     HttpClientModule,
     NavbarComponent,
     BrowserAnimationsModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: []

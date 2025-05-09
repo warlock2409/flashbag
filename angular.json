@@ -32,7 +32,8 @@
             ],
             "styles": [
               "src/styles/theme.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [],
             "browser": "src/main.ts"
