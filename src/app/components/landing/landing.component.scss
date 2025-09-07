@@ -1,3 +1,27 @@
+
+
+// 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .landing-page {
   min-height: 100vh;
   background: #fff;
@@ -65,7 +89,7 @@
     background: white;
     padding: 12px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     .search-input {
       flex: 1;
@@ -215,7 +239,7 @@
       li {
         padding: 0.5rem 0;
         color: #444;
-        
+
         &:before {
           content: "✓";
           margin-right: 0.5rem;
@@ -240,9 +264,17 @@
       }
     }
 
-    &.products { border-top: 5px solid #FF6B6B; }
-    &.services { border-top: 5px solid #4ECDC4; }
-    &.rentals { border-top: 5px solid #45B7D1; }
+    &.products {
+      border-top: 5px solid #FF6B6B;
+    }
+
+    &.services {
+      border-top: 5px solid #4ECDC4;
+    }
+
+    &.rentals {
+      border-top: 5px solid #45B7D1;
+    }
   }
 }
 
@@ -307,7 +339,7 @@
       position: relative;
       border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 
       .tag {
         position: absolute;
@@ -319,9 +351,20 @@
         font-weight: 500;
         z-index: 1;
 
-        &.products { background: #FFE0E0; color: #FF6B6B; }
-        &.services { background: #E0FFF9; color: #4ECDC4; }
-        &.rentals { background: #E0F4FF; color: #45B7D1; }
+        &.products {
+          background: #FFE0E0;
+          color: #FF6B6B;
+        }
+
+        &.services {
+          background: #E0FFF9;
+          color: #4ECDC4;
+        }
+
+        &.rentals {
+          background: #E0F4FF;
+          color: #45B7D1;
+        }
       }
 
       img {
@@ -348,7 +391,7 @@
 .deals-section {
   background: #f8f8f8;
   padding: 48px 24px;
-  
+
   h2 {
     font-size: 24px;
     margin-bottom: 24px;
@@ -358,7 +401,7 @@
     padding: 0 12px;
     color: #333;
   }
-  
+
   .deals-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -375,7 +418,7 @@
     .nav-right {
       display: flex;
       gap: 0.5rem;
-      
+
       .btn-login {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
@@ -459,4 +502,4 @@
   border-radius: 4px;
   cursor: pointer;
   z-index: 999;
-} 
+}

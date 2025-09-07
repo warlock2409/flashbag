@@ -1,0 +1,338 @@
+<div class="mb-4">
+    <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title> Welcome to Marketing </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div>
+                <p class="text-gray-800">
+                    This is your central hub for engaging with customers and growing your business.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 mt-2">
+                    <li>Create and manage targeted marketing campaigns.</li>
+                    <li>Send messages directly to customers via <strong>WhatsApp</strong>.</li>
+                    <li><em>Email</em> and <em>SMS</em> marketing will be available soon.</li>
+                </ul>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+
+<div class="flex justify-center mb-4">
+    <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
+</div>
+
+
+<div *ngIf="activeSegment == 'Import'" class="flex justify-center">
+    <div>
+        <div class="mb-4 flex flex-col md:flex-row gap-2 justify-between">
+            <div class="text-2xl font-bold text-blue-600 flex items-center gap-2"> <mat-icon>contacts_product</mat-icon>
+                {{totalCustomer}}</div>
+            <button mat-raised-button (click)="addCustomerMannually()"
+                style="background-color:#a684ff; color: whitesmoke;">Add Customers</button>
+        </div>
+
+        <!-- Upload Document -->
+        <mat-card class="p-4 shadow rounded border border-gray-200 mb-4 max-w-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex-1">
+                    <div class="text-lg font-semibold text-gray-800 mb-1">
+                        Upload Customer By CSV
+                    </div>
+                    <div class="text-sm text-gray-500 mb-4">
+                        Please upload a CSV file containing your customer data. Make sure it follows the correct format.
+                    </div>
+                    <input type="file" #fileInput accept=".xlsx,.xls,.csv" (change)="onFileSelected($event)"
+                        class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                </div>
+            </div>
+
+            <div class="overflow-y-scroll border border-gray-300 mt-4" style="height: 150px;"
+                *ngIf="parsedData.length > 0 ">
+
+                <div class="flex justify-center p-4">
+                    <button mat-raised-button (click)="uploadCustomers()"
+                        style="background-color:#a684ff; color: whitesmoke;">Upload customers</button>
+                </div>
+
+
+                <table class="table-auto w-full text-left border-collapse">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="p-2 border-b">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of parsedData">
+                            <td class="p-2 border-b">{{ row.firstName }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </mat-card>
+
+
+        <mat-card class="p-4 shadow rounded border border-gray-200 max-w-2xl" *ngIf="isUploading">
+            <div class="text-sm text-gray-600 mt-2">
+                Customers:
+                <span class="font-medium text-black">{{ parsedData.length }}</span>
+            </div>
+            <div class="flex gap-1 mt-2 text-green-800" style="align-items: center;">
+                <mat-icon style="width: 26px;">upload_file</mat-icon>
+                <mat-progress-bar mode="determinate" color="primary" [value]="currentIndex/parsedData.length*100">
+                </mat-progress-bar>
+            </div>
+        </mat-card>
+    </div>
+
+</div>
+
+<div *ngIf="activeSegment == 'Campaigns'">
+    <!-- Main Content Area -->
+    <div class="flex-1 overflow-auto">
+        <!-- Header and Create Button -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+            <div>
+                <p class="text-gray-600">Manage and track all your marketing campaigns</p>
+            </div>
+            <div class="flex justify-center p-4">
+                <button mat-raised-button (click)="createCampaign()"
+                    style="background-color:#a684ff; color: whitesmoke;">
+                    <mat-icon>add</mat-icon>Create New Campaign</button>
+            </div>
+        </div>
+
+        <!-- Campaign Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Campaign Card 1 -->
+            <div class="campaign-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Summer Sale 2023</h3>
+                            <p class="text-sm text-gray-500 mt-1">Created: 15 Jun 2023</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                    </div>
+                    <p class="text-gray-600 mt-3">Promoting summer collection with 30% discount</p>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span
+                            class="channel-badge px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fas fa-envelope mr-1"></i> Email
+                        </span>
+                        <span
+                            class="channel-badge px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </span>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex justify-between">
+                        <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </button>
+                        <button class="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                            <i class="fas fa-pause mr-1"></i> Pause
+                        </button>
+                        <button class="text-red-500 hover:text-red-700 text-sm font-medium">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Card 2 -->
+            <div class="campaign-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">New Product Launch</h3>
+                            <p class="text-sm text-gray-500 mt-1">Created: 5 Jul 2023</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Draft</span>
+                    </div>
+                    <p class="text-gray-600 mt-3">Announcing our revolutionary new product line</p>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span
+                            class="channel-badge px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fas fa-envelope mr-1"></i> Email
+                        </span>
+                        <span
+                            class="channel-badge px-3 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fas fa-mobile-alt mr-1"></i> Push
+                        </span>
+                        <span
+                            class="channel-badge px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </span>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex justify-between">
+                        <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </button>
+                        <button class="text-green-500 hover:text-green-700 text-sm font-medium">
+                            <i class="fas fa-play mr-1"></i> Activate
+                        </button>
+                        <button class="text-red-500 hover:text-red-700 text-sm font-medium">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Card 3 -->
+            <div class="campaign-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300">
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Holiday Special</h3>
+                            <p class="text-sm text-gray-500 mt-1">Created: 1 Dec 2022</p>
+                        </div>
+                        <span
+                            class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Completed</span>
+                    </div>
+                    <p class="text-gray-600 mt-3">Seasonal promotion for Christmas and New Year</p>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span
+                            class="channel-badge px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fas fa-envelope mr-1"></i> Email
+                        </span>
+                        <span
+                            class="channel-badge px-3 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full flex items-center">
+                            <i class="fas fa-sms mr-1"></i> SMS
+                        </span>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex justify-between">
+                        <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </button>
+                        <button class="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                            <i class="fas fa-chart-bar mr-1"></i> Stats
+                        </button>
+                        <button class="text-red-500 hover:text-red-700 text-sm font-medium">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Campaign Performance</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-indigo-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Total Campaigns</p>
+                            <p class="text-xl font-semibold text-gray-800">24</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 text-green-600">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Active</p>
+                            <p class="text-xl font-semibold text-gray-800">8</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-pause"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Drafts</p>
+                            <p class="text-xl font-semibold text-gray-800">5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Avg. Open Rate</p>
+                            <p class="text-xl font-semibold text-gray-800">32%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="activeSegment == 'Usage'" class="flex justify-center ">
+    <div class="w-full">
+        <mat-card class="p-2 shadow-sm rounded-lg border border-gray-200 max-w-2xl m-auto">
+            <mat-card-header>
+                <mat-card-title class="text-lg font-semibold text-gray-800 ">
+                    Credits
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="flex items-center justify-between text-gray-700 mt-2">
+                    <div>
+                        <div class="text-sm">Used Credits</div>
+                        <div class="text-2xl font-bold text-blue-600">100</div>
+                    </div>
+                    <div>
+                        <div class="text-sm">Remaining Credits</div>
+                        <div class="text-2xl font-bold text-green-600 text-end">200</div>
+                    </div>
+                </div>
+
+                <mat-progress-bar mode="determinate" color="primary" [value]="(100 / 200) * 100"
+                    class="mt-4"></mat-progress-bar>
+
+                <div class="text-xs text-gray-500 mt-1">
+                    You’ve used {{ 100 }} out of {{ 200 }} credits.
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button mat-stroked-button style="background-color:#3ca70b; color: whitesmoke;">Recharge</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="mt-4 p-4 shadow-sm rounded-lg border border-gray-200 max-w-2xl m-auto">
+            <mat-card-header>
+                <mat-card-title class="text-lg font-semibold text-gray-800">
+                    What'sApp Blast
+                </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="flex items-center justify-between text-gray-700 mt-2">
+                    <div>
+                        <div class="text-sm">Marketing</div>
+                        <div class="text-2xl font-bold text-blue-600">100</div>
+                    </div>
+                    <div>
+                        <div class="text-sm">Utilitity</div>
+                        <div class="text-2xl font-bold text-green-600 text-end">200</div>
+                    </div>
+                </div>
+
+                <div class="text-xs text-gray-500 mt-2">
+                    You’ve send {{ 100 }} Marketing and {{ 200 }} Utilitity.
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

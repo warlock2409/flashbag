@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Super App — Products, Rentals, Services</title>
+    <meta name="description" content="One super app to buy products, book rentals, and hire services—unified search, checkout, and ops in a single platform." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="antialiased bg-[#0B0D12] text-white/90 font-sans" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;">
+    <!-- Page backdrop effects -->
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+      <div class="absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_-10%,rgba(70,90,255,0.18),transparent_60%)]"></div>
+      <div class="absolute inset-x-0 top-[-20%] mx-auto h-[500px] w-[900px] blur-3xl opacity-50" style="background: conic-gradient(from 240deg at 50% 50%, rgba(86,109,254,.25), rgba(16,185,129,.15), rgba(99,102,241,.2), rgba(86,109,254,.25));"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-black/30 border-b border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-2 group">
+              <div class="h-8 w-8 grid place-items-center rounded-md bg-white/10 ring-1 ring-white/15 group-hover:ring-white/25 transition">
+                <span class="text-xs font-semibold tracking-tight">SA</span>
+              </div>
+              <span class="text-sm sm:text-base font-semibold tracking-tight">Super App</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-1 ml-6 text-sm">
+              <a href="#features" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Features</a>
+              <a href="#solutions" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Solutions</a>
+              <a href="#pricing" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Pricing</a>
+              <a href="#docs" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Docs</a>
+            </nav>
+          </div>
+          <div class="hidden md:flex items-center gap-2">
+            <button class="inline-flex items-center gap-2 px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">
+              <i data-lucide="search" class="w-4 h-4"></i>
+              <span class="text-sm">Search</span>
+            </button>
+            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">Sign in</a>
+            <a href="#cta" class="px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">Get started</a>
+          </div>
+          <button id="menuBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-white/10 ring-1 ring-white/10 hover:ring-white/20 transition" aria-label="Open menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden border-t border-white/10">
+          <nav class="py-3 grid gap-1 text-sm">
+            <a href="#features" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Features</a>
+            <a href="#solutions" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Solutions</a>
+            <a href="#pricing" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Pricing</a>
+            <a href="#docs" class="px-3 py-2 rounded-md text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-transparent hover:ring-white/10 transition">Docs</a>
+            <div class="flex gap-2 pt-1">
+              <a href="#" class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition text-center">Sign in</a>
+              <a href="#cta" class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition text-center">Get started</a>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-8">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-6">
+            <div class="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/70 hover:text-white hover:border-white/20 transition">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              Unified commerce for anything
+            </div>
+            <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white">
+              One super app for products, rentals, and services.
+            </h1>
+            <p class="mt-4 text-white/70 text-base sm:text-lg max-w-xl">
+              Search, book, buy, and manage everything in one place. A seamless flow from discovery to checkout to ops—designed for marketplaces, teams, and solo builders.
+            </p>
+
+            <!-- Search / Filters -->
+            <div class="mt-8">
+              <div class="p-2 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl">
+                <div class="flex gap-2 mb-2">
+                  <button data-category="product" class="cat-tab px-3 py-1.5 rounded-md text-xs sm:text-sm bg-white/10 text-white ring-1 ring-white/15 hover:ring-white/25 transition">
+                    <span class="inline-flex items-center gap-1.5"><i data-lucide="package" class="w-4 h-4"></i> Products</span>
+                  </button>
+                  <button data-category="rental" class="cat-tab px-3 py-1.5 rounded-md text-xs sm:text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                    <span class="inline-flex items-center gap-1.5"><i data-lucide="key" class="w-4 h-4"></i> Rentals</span>
+                  </button>
+                  <button data-category="service" class="cat-tab px-3 py-1.5 rounded-md text-xs sm:text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                    <span class="inline-flex items-center gap-1.5"><i data-lucide="wrench" class="w-4 h-4"></i> Services</span>
+                  </button>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg bg-black/30 border border-white/10 px-3 py-2.5">
+                  <i data-lucide="search" class="w-5 h-5 text-white/60"></i>
+                  <input id="heroSearch" type="text" placeholder="Find cameras, apartments, or electricians…" class="flex-1 bg-transparent outline-none text-sm sm:text-base placeholder-white/40 text-white" />
+                  <button id="searchBtn" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">
+                    Search
+                  </button>
+                </div>
+                <p id="searchStatus" class="mt-2 text-xs text-white/50"></p>
+              </div>
+              <div class="mt-4 flex items-center gap-4">
+                <a href="#cta" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">
+                  <i data-lucide="rocket" class="w-4 h-4"></i> Get started free
+                </a>
+                <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                  <i data-lucide="play" class="w-4 h-4"></i> Watch demo
+                </a>
+              </div>
+            </div>
+
+            <!-- Social proof -->
+            <div class="mt-10">
+              <p class="text-xs uppercase tracking-widest text-white/40">Trusted by fast-growing teams</p>
+              <div class="mt-3 grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-6">
+                <div class="h-8 rounded md:h-9 grid place-items-center text-white/40 border border-white/10 bg-white/5 tracking-tight text-xs sm:text-sm">ALTA</div>
+                <div class="h-8 rounded md:h-9 grid place-items-center text-white/40 border border-white/10 bg-white/5 tracking-tight text-xs sm:text-sm">NOVA</div>
+                <div class="h-8 rounded md:h-9 grid place-items-center text-white/40 border border-white/10 bg-white/5 tracking-tight text-xs sm:text-sm">KITE</div>
+                <div class="h-8 rounded md:h-9 grid place-items-center text-white/40 border border-white/10 bg-white/5 tracking-tight text-xs sm:text-sm">AXIS</div>
+                <div class="h-8 rounded md:h-9 grid place-items-center text-white/40 border border-white/10 bg-white/5 tracking-tight text-xs sm:text-sm">ORB</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mock preview -->
+          <div class="lg:col-span-6">
+            <div class="rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-3 md:p-4 shadow-2xl ring-1 ring-white/10">
+              <div class="rounded-lg border border-white/10 bg-black/30 overflow-hidden">
+                <div class="flex items-center gap-2 px-3 py-2 border-b border-white/10">
+                  <div class="flex gap-1.5">
+                    <span class="h-2.5 w-2.5 rounded-full bg-red-500/70"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-yellow-500/70"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-green-500/70"></span>
+                  </div>
+                  <div class="ml-auto text-xs text-white/50">Unified Dashboard</div>
+                </div>
+                <div class="grid md:grid-cols-5">
+                  <aside class="md:col-span-2 border-r border-white/10 p-3 sm:p-4">
+                    <div class="space-y-2">
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm bg-white/10 ring-1 ring-white/15 hover:ring-white/25 transition">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Overview
+                      </button>
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                        <i data-lucide="package" class="w-4 h-4"></i> Products
+                      </button>
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                        <i data-lucide="key" class="w-4 h-4"></i> Rentals
+                      </button>
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                        <i data-lucide="wrench" class="w-4 h-4"></i> Services
+                      </button>
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                        <i data-lucide="users" class="w-4 h-4"></i> Customers
+                      </button>
+                      <button class="w-full inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm text-white/80 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                        <i data-lucide="settings" class="w-4 h-4"></i> Settings
+                      </button>
+                    </div>
+                  </aside>
+                  <div class="md:col-span-3 p-3 sm:p-4 space-y-4">
+                    <div class="grid sm:grid-cols-3 gap-3">
+                      <div class="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                        <div class="text-xs text-white/50">GMV (30d)</div>
+                        <div class="mt-1 text-xl font-semibold tracking-tight">$84,240</div>
+                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 text-[11px] ring-1 ring-emerald-500/20">
+                          <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +12.4%
+                        </div>
+                      </div>
+                      <div class="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                        <div class="text-xs text-white/50">Active rentals</div>
+                        <div class="mt-1 text-xl font-semibold tracking-tight">318</div>
+                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-300 text-[11px] ring-1 ring-sky-500/20">
+                          <i data-lucide="clock" class="w-3.5 h-3.5"></i> Avg 4.2 days
+                        </div>
+                      </div>
+                      <div class="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                        <div class="text-xs text-white/50">Service bookings</div>
+                        <div class="mt-1 text-xl font-semibold tracking-tight">1,142</div>
+                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-300 text-[11px] ring-1 ring-violet-500/20">
+                          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 98.2% fill
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Chart card -->
+                    <div class="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                      <h3 class="text-sm font-medium tracking-tight">Demand trends</h3>
+                      <p class="text-xs text-white/50">Products vs Rentals vs Services (last 6 weeks)</p>
+                      <div class="mt-2 rounded-md border border-white/10 bg-black/30 p-2">
+                        <div class="relative">
+                          <div class="h-[220px]">
+                            <canvas id="kpiChart"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-3 gap-3">
+                      <div class="rounded-lg overflow-hidden border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?q=80&w=1200&auto=format&fit=crop" alt="Mirrorless camera product" class="h-28 w-full object-cover" />
+                        <div class="p-3">
+                          <div class="text-sm font-medium tracking-tight">Zeno Mirrorless X2</div>
+                          <div class="text-xs text-white/50">$1,299 • In stock</div>
+                        </div>
+                      </div>
+                      <div class="rounded-lg overflow-hidden border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop" alt="Modern apartment rental" class="h-28 w-full object-cover" />
+                        <div class="p-3">
+                          <div class="text-sm font-medium tracking-tight">Loft • Downtown</div>
+                          <div class="text-xs text-white/50">$129/night • 4.9★</div>
+                        </div>
+                      </div>
+                      <div class="rounded-lg overflow-hidden border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop" alt="Professional service provider" class="h-28 w-full object-cover" />
+                        <div class="p-3">
+                          <div class="text-sm font-medium tracking-tight">Pro Electrician</div>
+                          <div class="text-xs text-white/50">From $75/hr • 5.0★</div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-white/40">Real-time data, unified catalog, and streamlined operations in one place.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature pillars -->
+    <section id="features" class="py-14 sm:py-16 border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight">Built for every model</h2>
+          <p class="mt-2 text-white/60">Sell physical goods, manage rentals with availability, and book services with schedules—without switching tools.</p>
+        </div>
+        <div class="mt-8 grid md:grid-cols-3 gap-4">
+          <div class="rounded-xl p-5 border border-white/10 bg-white/[0.03] hover:bg-white/[0.05] transition group">
+            <div class="inline-flex items-center gap-2 text-emerald-300">
+              <i data-lucide="package" class="w-5 h-5"></i>
+              <span class="text-sm font-medium">Products</span>
+            </div>
+            <h3 class="mt-3 text-xl font-semibold tracking-tight">Inventory-first commerce</h3>
+            <p class="mt-2 text-sm text-white/60">Variants, bundles, taxes, and multi-location stock built-in. Fast checkout with wallets and subscriptions.</p>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="badge-check" class="w-4 h-4 text-emerald-300"></i> SKUs, variants, and kits</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="credit-card" class="w-4 h-4 text-emerald-300"></i> Global payments</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-emerald-300"></i> Fulfillment + returns</li>
+            </ul>
+          </div>
+
+          <div class="rounded-xl p-5 border border-white/10 bg-white/[0.03] hover:bg-white/[0.05] transition group">
+            <div class="inline-flex items-center gap-2 text-sky-300">
+              <i data-lucide="key" class="w-5 h-5"></i>
+              <span class="text-sm font-medium">Rentals</span>
+            </div>
+            <h3 class="mt-3 text-xl font-semibold tracking-tight">Availability by the hour or day</h3>
+            <p class="mt-2 text-sm text-white/60">Calendars, deposits, insurance, and check-in flows. Smart pricing by demand and duration.</p>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="calendar-days" class="w-4 h-4 text-sky-300"></i> Live calendars</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-sky-300"></i> Deposits & coverage</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-sky-300"></i> Pickup & delivery</li>
+            </ul>
+          </div>
+
+          <div class="rounded-xl p-5 border border-white/10 bg-white/[0.03] hover:bg-white/[0.05] transition group">
+            <div class="inline-flex items-center gap-2 text-violet-300">
+              <i data-lucide="wrench" class="w-5 h-5"></i>
+              <span class="text-sm font-medium">Services</span>
+            </div>
+            <h3 class="mt-3 text-xl font-semibold tracking-tight">Scheduling with availability</h3>
+            <p class="mt-2 text-sm text-white/60">Team rosters, buffers, skills, and zones. Confirmations with no-shows handled.</p>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-violet-300"></i> Staff + roles</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="alarm-clock" class="w-4 h-4 text-violet-300"></i> Smart buffers</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4 text-violet-300"></i> Reminders & chat</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solutions -->
+    <section id="solutions" class="py-14 sm:py-16 border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight">A single platform for multi-line businesses</h2>
+            <p class="mt-3 text-white/65">Mix inventory, calendars, and schedules in one catalog. Route orders to the right workflow automatically and keep ops simple as you scale.</p>
+            <div class="mt-6 grid sm:grid-cols-2 gap-3">
+              <div class="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <div class="inline-flex items-center gap-2 text-emerald-300 text-sm">
+                  <i data-lucide="shopping-bag" class="w-4 h-4"></i> Unified checkout
+                </div>
+                <p class="mt-2 text-sm text-white/70">One cart for goods, timeslots, and services with taxes and discounts applied correctly.</p>
+              </div>
+              <div class="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <div class="inline-flex items-center gap-2 text-sky-300 text-sm">
+                  <i data-lucide="cpu" class="w-4 h-4"></i> Automation
+                </div>
+                <p class="mt-2 text-sm text-white/70">Workflows for approvals, holds, and fulfillment. Webhooks and APIs for everything.</p>
+              </div>
+              <div class="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <div class="inline-flex items-center gap-2 text-violet-300 text-sm">
+                  <i data-lucide="lock" class="w-4 h-4"></i> Compliance
+                </div>
+                <p class="mt-2 text-sm text-white/70">Built-in PII protections, audit logs, and roles so your team ships safely.</p>
+              </div>
+              <div class="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+                <div class="inline-flex items-center gap-2 text-amber-300 text-sm">
+                  <i data-lucide="globe" class="w-4 h-4"></i> Global-ready
+                </div>
+                <p class="mt-2 text-sm text-white/70">Multi-currency, multi-timezone, and localized experiences out of the box.</p>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <a href="#docs" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+                <i data-lucide="book-open" class="w-4 h-4"></i> Explore docs
+              </a>
+              <a href="#cta" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">
+                <i data-lucide="bolt" class="w-4 h-4"></i> Launch a test space
+              </a>
+            </div>
+          </div>
+          <div class="rounded-xl overflow-hidden border border-white/10 bg-white/[0.03]">
+            <img src="https://images.unsplash.com/photo-1707343843437-caacff5cfa74?q=80&w=2000&auto=format&fit=crop" alt="App interface preview" class="w-full h-96 object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-14 sm:py-16 border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight">Simple, scalable pricing</h2>
+          <p class="mt-2 text-white/60">Start free. Upgrade when you grow. No hidden fees.</p>
+        </div>
+        <div class="mt-8 grid md:grid-cols-3 gap-4">
+          <!-- Starter -->
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.05] transition">
+            <h3 class="text-xl font-semibold tracking-tight">Starter</h3>
+            <p class="mt-1 text-sm text-white/60">For launching your first catalog</p>
+            <div class="mt-4 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight">$0</span>
+              <span class="text-sm text-white/50">/mo</span>
+            </div>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> 100 items</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> 1 location</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Basic checkout</li>
+            </ul>
+            <a href="#cta" class="mt-5 inline-flex w-full justify-center items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">Get started</a>
+          </div>
+          <!-- Growth -->
+          <div class="rounded-xl border border-emerald-400/30 ring-1 ring-emerald-400/20 bg-emerald-400/5 p-5 relative overflow-hidden">
+            <div class="absolute right-3 top-3 text-[10px] uppercase tracking-widest text-emerald-300 ring-1 ring-emerald-400/30 px-2 py-0.5 rounded">Popular</div>
+            <h3 class="text-xl font-semibold tracking-tight">Growth</h3>
+            <p class="mt-1 text-sm text-white/60">For teams scaling ops and sales</p>
+            <div class="mt-4 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight">$79</span>
+              <span class="text-sm text-white/50">/mo</span>
+            </div>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Unlimited items</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Multi-location</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Subscriptions</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Automation</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Priority support</li>
+            </ul>
+            <a href="#cta" class="mt-5 inline-flex w-full justify-center items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">Start free trial</a>
+          </div>
+          <!-- Scale -->
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5 hover:bg-white/[0.05] transition">
+            <h3 class="text-xl font-semibold tracking-tight">Scale</h3>
+            <p class="mt-1 text-sm text-white/60">For marketplaces and enterprises</p>
+            <div class="mt-4 flex items-baseline gap-1">
+              <span class="text-3xl font-semibold tracking-tight">Custom</span>
+            </div>
+            <ul class="mt-4 space-y-2 text-sm text-white/70">
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> SLAs & SSO</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Dedicated support</li>
+              <li class="inline-flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-300"></i> Custom contracts</li>
+            </ul>
+            <a href="#cta" class="mt-5 inline-flex w-full justify-center items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">Contact sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-14 sm:py-16 border-t border-white/10">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight">Questions, answered</h2>
+          <p class="mt-2 text-white/60">Everything you need to know before you ship.</p>
+        </div>
+        <div class="mt-8 grid md:grid-cols-2 gap-4">
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div class="inline-flex items-center gap-2 text-sm text-white/70"><i data-lucide="layers" class="w-4 h-4"></i> How do catalogs work?</div>
+            <p class="mt-2 text-sm text-white/60">Create items as goods, rentals, or services. Each type has its own attributes—stock, calendars, or schedules—yet lives in one unified catalog.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div class="inline-flex items-center gap-2 text-sm text-white/70"><i data-lucide="credit-card" class="w-4 h-4"></i> Which payments are supported?</div>
+            <p class="mt-2 text-sm text-white/60">Cards, wallets, bank debits, and invoicing in 135+ currencies. Taxes and compliance included.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div class="inline-flex items-center gap-2 text-sm text-white/70"><i data-lucide="plug-zap" class="w-4 h-4"></i> Can I integrate my systems?</div>
+            <p class="mt-2 text-sm text-white/60">Yes—use webhooks and a full API for inventory, bookings, and orders. SDKs for web and mobile.</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+            <div class="inline-flex items-center gap-2 text-sm text-white/70"><i data-lucide="shield" class="w-4 h-4"></i> Is my data secure?</div>
+            <p class="mt-2 text-sm text-white/60">We apply encryption in transit and at rest with granular permissions and audit logs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="py-14 sm:py-16 border-t border-white/10">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-6 sm:p-8 text-center">
+          <div class="inline-flex items-center justify-center gap-2 px-2.5 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/70">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Launch in minutes
+          </div>
+          <h3 class="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">Start building your marketplace today</h3>
+          <p class="mt-2 text-white/65">Create your workspace, import your catalog, and invite your team. No credit card required.</p>
+          <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-black bg-white hover:bg-white/90 ring-1 ring-white/10 transition">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> Create account
+            </a>
+            <a href="#pricing" class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white/90 hover:text-white hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition">
+              <i data-lucide="coin" class="w-4 h-4"></i> See pricing
+            </a>
+          </div>
+          <div class="mt-6 flex items-center justify-center gap-2 text-xs text-white/45">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i> No commitment • Cancel anytime
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div>
+            <div class="inline-flex items-center gap-2">
+              <div class="h-8 w-8 grid place-items-center rounded-md bg-white/10 ring-1 ring-white/15">
+                <span class="text-xs font-semibold tracking-tight">SA</span>
+              </div>
+              <span class="text-sm font-semibold tracking-tight">Super App</span>
+            </div>
+            <p class="mt-3 text-sm text-white/60">Unified commerce across products, rentals, and services.</p>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-white/80">Product</div>
+            <ul class="mt-2 space-y-1 text-sm text-white/60">
+              <li><a href="#features" class="hover:text-white">Features</a></li>
+              <li><a href="#pricing" class="hover:text-white">Pricing</a></li>
+              <li><a href="#docs" class="hover:text-white">Docs</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-white/80">Company</div>
+            <ul class="mt-2 space-y-1 text-sm text-white/60">
+              <li><a href="#" class="hover:text-white">About</a></li>
+              <li><a href="#" class="hover:text-white">Careers</a></li>
+              <li><a href="#" class="hover:text-white">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-white/80">Legal</div>
+            <ul class="mt-2 space-y-1 text-sm text-white/60">
+              <li><a href="#" class="hover:text-white">Privacy</a></li>
+              <li><a href="#" class="hover:text-white">Terms</a></li>
+              <li><a href="#" class="hover:text-white">Security</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10 pt-5 text-xs text-white/45">
+          <div>© <span id="year"></span> Super App, Inc.</div>
+          <div class="flex items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition"><i data-lucide="twitter" class="w-3.5 h-3.5"></i> <span>Twitter</span></a>
+            <a href="#" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition"><i data-lucide="github" class="w-3.5 h-3.5"></i> <span>GitHub</span></a>
+            <a href="#" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-white/5 ring-1 ring-white/10 hover:ring-white/20 transition"><i data-lucide="mail" class="w-3.5 h-3.5"></i> <span>Email</span></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Init icons with stroke-width 1.5
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+          menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        }
+
+        // Footer year
+        const y = document.getElementById('year');
+        if (y) y.textContent = new Date().getFullYear();
+
+        // Category tabs
+        const tabs = document.querySelectorAll('.cat-tab');
+        let active = 'product';
+        tabs.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            active = btn.getAttribute('data-category');
+            tabs.forEach((b) => {
+              b.classList.remove('bg-white/10','text-white','ring-white/15');
+              b.classList.add('text-white/80');
+            });
+            btn.classList.add('bg-white/10','text-white','ring-white/15');
+            btn.classList.remove('text-white/80');
+            const input = document.getElementById('heroSearch');
+            if (input) {
+              if (active === 'product') input.placeholder = 'Find cameras, keyboards, apparel…';
+              if (active === 'rental') input.placeholder = 'Find cars, apartments, gear to rent…';
+              if (active === 'service') input.placeholder = 'Find electricians, cleaners, tutors…';
+            }
+          });
+        });
+
+        // Search action (demo)
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('heroSearch');
+        const searchStatus = document.getElementById('searchStatus');
+        if (searchBtn && searchInput && searchStatus) {
+          searchBtn.addEventListener('click', () => {
+            const q = searchInput.value.trim() || (active === 'product' ? 'camera' : active === 'rental' ? 'apartment' : 'electrician');
+            searchStatus.textContent = 'Searching ' + active + ' for "' + q + '"…';
+            setTimeout(() => (searchStatus.textContent = 'Showing top results for "' + q + '"'), 700);
+          });
+        }
+
+        // Chart.js
+        const ctx = document.getElementById('kpiChart');
+        if (ctx) {
+          const style = getComputedStyle(document.documentElement);
+          const grid = 'rgba(255,255,255,0.08)';
+          const white = 'rgba(255,255,255,0.9)';
+          const emerald = 'rgba(16,185,129,0.9)';
+          const sky = 'rgba(56,189,248,0.9)';
+          const violet = 'rgba(167,139,250,0.9)';
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6'],
+              datasets: [
+                { label: 'Products', data: [18, 22, 25, 28, 27, 31], borderColor: emerald, backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.35, fill: true, pointRadius: 2 },
+                { label: 'Rentals', data: [12, 14, 16, 19, 23, 24], borderColor: sky, backgroundColor: 'rgba(56,189,248,0.12)', tension: 0.35, fill: true, pointRadius: 2 },
+                { label: 'Services', data: [10, 12, 11, 14, 17, 20], borderColor: violet, backgroundColor: 'rgba(167,139,250,0.12)', tension: 0.35, fill: true, pointRadius: 2 }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: white, boxWidth: 10, boxHeight: 10, font: { size: 10 } } },
+                tooltip: { mode: 'index', intersect: false }
+              },
+              interaction: { mode: 'index', intersect: false },
+              scales: {
+                x: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: grid, drawBorder: false } },
+                y: { ticks: { color: 'rgba(255,255,255,0.6)' }, grid: { color: grid, drawBorder: false } }
+              }
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

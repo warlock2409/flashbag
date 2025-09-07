@@ -1,0 +1,187 @@
+<!-- Dialog Overlay -->
+<div id="membershipDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col dialog-animate">
+
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <h2 class="text-lg font-semibold text-gray-800 m-0">New Membership</h2>
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500">
+                <mat-icon style="color: lightcoral;">cancel</mat-icon>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <mat-stepper #stepper>
+                <mat-step>
+                    <ng-template matStepLabel>Membership Details</ng-template>
+                    <!-- Basic Information -->
+                    <div class="mb-4">
+                        <h3 class="text-xl font-medium  ">Basic Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- Membership Name -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Membership Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" placeholder="Enter membership name" class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.name">
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Industry <span class="text-red-500">*</span>
+                                </label>
+                                <select class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="membershipPlan.industryId">
+                                    <option *ngFor="let industry of industries" [value]="industry.id">
+                                        {{ industry.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Services and Sessions -->
+                    <div class="mb-4">
+                        <h3 class="text-xl font-medium  mb-4">Services and Sessions</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- Services Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Included services <span class="text-red-500">*</span>
+                                </label>
+                                <div class="flex justify-between items-center bg-gray-100 rounded-md p-4 cursor-pointer"
+                                    (click)="openServiceDialog()">
+                                    <span>{{selectedServices.length}} services</span>
+                                    <span class="text-violet-600 font-medium">Edit</span>
+                                </div>
+                            </div>
+
+                            <!-- Sessions -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Sessions <span class="text-red-500">*</span>
+                                </label>
+                                <select class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="benefitType">
+                                    <option value="DURATION_ACCESS">Duration Access</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing and Payment -->
+                    <div class="mb-4">
+                        <h3 class="text-xl font-medium  mb-4">Pricing and Payment</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- Valid For -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Valid For <span class="text-red-500">*</span>
+                                </label>
+                                <select class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="days">
+                                    <option value="7">7 Days</option>
+                                    <option value="30">1 Months</option>
+                                    <option value="120">4 Months</option>
+                                    <option value="240">8 Months</option>
+                                    <option value="360">12 Months</option>
+                                </select>
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Price <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" placeholder="INR 0.00" class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.basePrice">
+                            </div>
+
+                            <!-- Billing Cycle -->
+                            <!-- <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Billing Cycle</label>
+                        <select class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option>One-time</option>
+                            <option>Monthly</option>
+                            <option>Quarterly</option>
+                            <option>Yearly</option>
+                        </select>
+                    </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Online Sales -->
+                    <div class="mb-4">
+                        <h3 class="text-xl font-medium  mb-4">Online Sales & Redemption</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked
+                                    class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="ml-2 text-gray-700">Enable online sales</span>
+                            </label>
+                            <!-- <label class="flex items-center">
+                        <input type="checkbox" checked
+                            class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <span class="ml-2 text-gray-700">Enable online redemption</span>
+                    </label>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Redemption Code (optional)
+                        </label>
+                        <input type="text" placeholder="e.g., GOLD2023" class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Short Description -->
+                    <div class="md:col-span-2 mb-4">
+                        <h3 class="text-xl font-medium  mb-4">Short Description</h3>
+                        <input type="text" placeholder="Enter short description" class="w-full rounded-md border border-gray-300 px-3 py-2 
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.description">
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div>
+                        <h3 class="text-xl font-medium  mb-4">Terms & Conditions</h3>
+                        <textarea placeholder="Enter terms and conditions..." class="w-full rounded-md border border-gray-300 px-3 py-2 h-32 
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Shops Mapping</ng-template>
+                    <div *ngIf="shops.length > 0">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Service available shops</label>
+                        <div class="space-y-2" formArrayName="shops">
+                            <div *ngFor="let shop of shops; let i = index" class="flex items-center gap-2">
+                                <input type="checkbox" [id]="'shop-'+i">
+                                <label [for]="'shop-'+i">{{ shop.name }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </div>
+
+        <!-- Dialog Content -->
+
+        <!-- Dialog Footer -->
+        <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
+            <div class="space-x-3 flex gap-2">
+                <button mat-stroked-button mat-dialog-close *ngIf="stepper.selectedIndex != (stepper.steps.length - 1)">Cancel</button>
+                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
+                    type="submit" (click)="validateMembershipDetails()">
+                    Next
+                </button>
+                <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)" (click)="stepperPrev()">Back</button>
+                <button mat-raised-button style="background-color: #a684ff; color: white;"
+                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)" (click)="createMembership()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,11 +12,14 @@ export class BusinessGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
+    console.log(this.authService.isLoggedIn,"isLoggedIn",this.authService.isBusiness());
+    
     if (this.authService.isLoggedIn() && this.authService.isBusiness()) {
       return true;
     }
 
     this.router.navigate(['/login'], { queryParams: { type: 'business' } });
+    
     return false;
   }
 } 

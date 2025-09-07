@@ -20,8 +20,8 @@ import {MatMenuModule} from '@angular/material/menu';
     NavbarComponent,
     BrowserAnimationsModule,
     MatMenuModule,
+    
   ],
-  providers: [],
   bootstrap: []
 })
 export class AppModule { }

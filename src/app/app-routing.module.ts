@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadChildren: () => import('./business/business.module').then(m => m.BusinessModule)
   },
   {
+    path: 'onboarding',
+    loadChildren: () => import('./onboarding/onboarding.module').then(m => m.OnboardingModule)
+  },
+  {
     path: 'product/:id',
     component: ProductDetailComponent
   },

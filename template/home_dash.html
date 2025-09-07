@@ -1,0 +1,845 @@
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HomeOS Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+* {
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+font-family: 'Inter', sans-serif;
+}
+.glass-card {
+background: rgba(255, 255, 255, 0.03);
+backdrop-filter: blur(20px) saturate(180%);
+border: 1px solid rgba(255, 255, 255, 0.08);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.glass-card-hover:hover {
+background: rgba(255, 255, 255, 0.08);
+border: 1px solid rgba(255, 255, 255, 0.15);
+transform: translateY(-4px) scale(1.01);
+box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.floating-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(40px);
+opacity: 0.3;
+animation: float 8s ease-in-out infinite;
+}
+.floating-orb:nth-child(1) {
+width: 200px;
+height: 200px;
+background: linear-gradient(45deg, #3B82F6, #8B5CF6);
+top: 10%;
+right: 20%;
+animation-delay: -2s;
+}
+.floating-orb:nth-child(2) {
+width: 300px;
+height: 300px;
+background: linear-gradient(45deg, #EF4444, #F59E0B);
+bottom: 20%;
+left: 10%;
+animation-delay: -4s;
+}
+.floating-orb:nth-child(3) {
+width: 150px;
+height: 150px;
+background: linear-gradient(45deg, #10B981, #06B6D4);
+top: 50%;
+left: 60%;
+animation-delay: -6s;
+}
+@keyframes float {
+0%, 100% { transform: translate(0, 0) rotate(0deg); }
+33% { transform: translate(20px, -30px) rotate(120deg); }
+66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+.animate-fade-in {
+animation: fadeIn 1s ease-out forwards;
+opacity: 0;
+}
+.animate-slide-up {
+animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+opacity: 0;
+transform: translateY(40px);
+}
+.animate-slide-right {
+animation: slideRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+opacity: 0;
+transform: translateX(-30px);
+}
+.animate-blur-in {
+animation: blurIn 1.2s ease-out forwards;
+opacity: 0;
+filter: blur(8px);
+}
+.animate-scale-in {
+animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+opacity: 0;
+transform: scale(0.8);
+}
+.animate-pulse-glow {
+animation: pulseGlow 2s ease-in-out infinite;
+}
+.animate-rotate {
+animation: rotate 8s linear infinite;
+}
+.animate-counter {
+animation: countUp 2s ease-out forwards;
+animation-delay: 1s;
+}
+.animate-progress-fill {
+animation: progressFill 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+animation-delay: 1.2s;
+width: 0;
+}
+.animate-number-bounce {
+animation: numberBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+animation-delay: 1s;
+}
+@keyframes fadeIn {
+to { opacity: 1; }
+}
+@keyframes slideUp {
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideRight {
+to { opacity: 1; transform: translateX(0); }
+}
+@keyframes blurIn {
+to { opacity: 1; filter: blur(0); }
+}
+@keyframes scaleIn {
+to { opacity: 1; transform: scale(1); }
+}
+@keyframes pulseGlow {
+0%, 100% {
+box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+transform: scale(1);
+}
+50% {
+box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+transform: scale(1.02);
+}
+}
+@keyframes rotate {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+@keyframes countUp {
+from {
+opacity: 0;
+transform: translateY(20px) scale(0.8);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+}
+@keyframes progressFill {
+from { width: 0; }
+to { width: var(--progress-width); }
+}
+@keyframes numberBounce {
+0% {
+opacity: 0;
+transform: scale(0.3) translateY(30px);
+}
+50% {
+transform: scale(1.1) translateY(-10px);
+}
+100% {
+opacity: 1;
+transform: scale(1) translateY(0);
+}
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+.delay-1200 { animation-delay: 1.2s; }
+.delay-1400 { animation-delay: 1.4s; }
+.delay-1600 { animation-delay: 1.6s; }
+.sparkle {
+position: absolute;
+width: 2px;
+height: 2px;
+background: white;
+border-radius: 50%;
+animation: sparkle 3s ease-in-out infinite;
+}
+.sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+.sparkle:nth-child(2) { top: 40%; right: 30%; animation-delay: 1s; }
+.sparkle:nth-child(3) { bottom: 30%; left: 60%; animation-delay: 2s; }
+.sparkle:nth-child(4) { top: 60%; right: 20%; animation-delay: 0.5s; }
+.sparkle:nth-child(5) { bottom: 60%; left: 40%; animation-delay: 1.5s; }
+@keyframes sparkle {
+0%, 100% { opacity: 0; transform: scale(0); }
+50% { opacity: 1; transform: scale(1); }
+}
+.progress-ring {
+stroke-dasharray: 251;
+stroke-dashoffset: 251;
+animation: progressRing 2.5s ease-out forwards;
+animation-delay: 1.2s;
+}
+@keyframes progressRing {
+from { stroke-dashoffset: 251; }
+to { stroke-dashoffset: 62.75; }
+}
+.toggle-switch {
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.toggle-switch:hover {
+transform: scale(1.05);
+box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+}
+.toggle-switch.active {
+background: linear-gradient(45deg, #10B981, #06B6D4);
+}
+.toggle-switch.active:hover {
+box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+}
+.toggle-switch.active .toggle-knob {
+transform: translateX(16px);
+background: white;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.toggle-knob {
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.number-digit {
+display: inline-block;
+animation: digitFlip 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+animation-delay: var(--digit-delay);
+opacity: 0;
+transform: rotateX(90deg);
+}
+@keyframes digitFlip {
+0% {
+opacity: 0;
+transform: rotateX(90deg) scale(0.5);
+}
+50% {
+opacity: 0.7;
+transform: rotateX(0deg) scale(1.1);
+}
+100% {
+opacity: 1;
+transform: rotateX(0deg) scale(1);
+}
+}
+/* Enhanced Hover States */
+.hover-lift {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-lift:hover {
+transform: translateY(-2px);
+}
+.hover-glow:hover {
+box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+.hover-scale:hover {
+transform: scale(1.05);
+}
+.nav-item {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+.nav-item::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+transition: left 0.6s;
+}
+.nav-item:hover::before {
+left: 100%;
+}
+.card-hover-gradient {
+position: relative;
+overflow: hidden;
+}
+.card-hover-gradient::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: var(--hover-gradient);
+opacity: 0;
+transition: opacity 0.5s ease;
+pointer-events: none;
+z-index: 1;
+}
+.card-hover-gradient:hover::before {
+opacity: 1;
+}
+.card-hover-gradient > * {
+position: relative;
+z-index: 2;
+}
+.room-card {
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+.room-card::after {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+transition: left 0.6s ease;
+pointer-events: none;
+}
+.room-card:hover::after {
+left: 100%;
+}
+.room-card:hover {
+transform: translateY(-3px) scale(1.02);
+background: rgba(255, 255, 255, 0.1);
+border-color: rgba(255, 255, 255, 0.2);
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.icon-hover {
+transition: all 0.3s ease;
+}
+.icon-hover:hover {
+transform: rotate(5deg) scale(1.1);
+}
+.progress-hover:hover .progress-bar {
+animation: progressPulse 1s ease-in-out infinite;
+}
+@keyframes progressPulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.8; }
+}
+.button-hover {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+.button-hover::before {
+content: '';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 0;
+height: 0;
+background: rgba(255, 255, 255, 0.1);
+border-radius: 50%;
+transform: translate(-50%, -50%);
+transition: width 0.6s, height 0.6s;
+}
+.button-hover:hover::before {
+width: 300px;
+height: 300px;
+}
+.text-hover {
+transition: all 0.3s ease;
+}
+.text-hover:hover {
+background: linear-gradient(45deg, #3B82F6, #8B5CF6, #06B6D4);
+background-size: 200% 200%;
+animation: gradientShift 2s ease infinite;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+@keyframes gradientShift {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+</style></head>
+
+<body class="bg-black text-white antialiased overflow-x-hidden">
+  <div class="min-h-screen relative">
+    <!-- Enhanced Background with Cozy Home -->
+    <div class="fixed inset-0 animate-blur-in delay-100">
+      <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cc673ecb-d2ff-41e7-b415-17f32b9884bf_3840w.jpg" alt="Cozy modern home interior" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/70"></div>
+      <div class="floating-orb"></div>
+      <div class="floating-orb"></div>
+      <div class="floating-orb"></div>
+      
+      <!-- Sparkles -->
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+
+    <!-- Enhanced Header -->
+    <header class="relative z-50 p-6 animate-slide-right delay-200">
+      <div class="flex items-center justify-between max-w-7xl mx-auto">
+        <div class="flex items-center space-x-4 animate-scale-in delay-300">
+          <div class="relative">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg animate-pulse-glow hover-scale cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="home" class="lucide lucide-home w-5 h-5 text-white icon-hover"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            </div>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent text-hover cursor-pointer">HomeOS</h1>
+            <p class="text-xs text-white/50">Smart Home Control</p>
+          </div>
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-1 glass-card rounded-2xl p-2 animate-fade-in delay-400 hover-glow">
+          <button class="nav-item px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white text-sm font-medium button-hover border border-white/10">Dashboard</button>
+          <button class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Rooms</button>
+          <button class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Devices</button>
+          <button class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Settings</button>
+        </nav>
+
+        <div class="flex items-center space-x-4 animate-fade-in delay-500">
+          <button class="relative p-3 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" class="lucide lucide-bell w-5 h-5 text-white group-hover:scale-110 transition-transform"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse group-hover:scale-125"></div>
+          </button>
+          <div class="relative hover-scale cursor-pointer">
+            <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/46ced6a9-43d9-4cb3-9d41-e60c4df9040e_320w.jpg" alt="Profile" class="w-10 h-10 rounded-full object-cover ring-2 ring-white/20 transition-all hover:ring-white/50 hover:ring-4">
+            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black hover:scale-110 transition-transform"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Enhanced Main Content -->
+    <main class="relative z-40 px-6 pb-6">
+      <div class="max-w-7xl mx-auto">
+        <!-- Enhanced Welcome Section -->
+        <div class="mb-12 animate-slide-up delay-300">
+          <div class="relative">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent mb-6 leading-tight cursor-default">
+              Good evening,<br>Dania.
+            </h1>
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-3xl -z-10 animate-pulse"></div>
+          </div>
+          <p class="text-xl md:text-2xl text-white/70 max-w-3xl leading-relaxed animate-fade-in delay-600 hover:text-white/90 transition-colors duration-500">
+            Your home is running efficiently. <span class="text-green-400 font-semibold hover:text-green-300 transition-colors cursor-pointer">3 automations active</span>, energy usage optimal.
+          </p>
+          <div class="flex items-center space-x-6 mt-6 animate-slide-right delay-700">
+            <div class="flex items-center space-x-2 hover-lift cursor-pointer group">
+              <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse group-hover:scale-150 transition-transform"></div>
+              <span class="text-sm text-white/60 group-hover:text-white/90 transition-colors">All systems online</span>
+            </div>
+            <div class="flex items-center space-x-2 hover-lift cursor-pointer group">
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse group-hover:scale-150 transition-transform"></div>
+              <span class="text-sm text-white/60 group-hover:text-white/90 transition-colors">12 devices connected</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Dashboard Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <!-- Enhanced Temperature Card with Animated Numbers -->
+          <div class="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-400 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style="--hover-gradient: linear-gradient(135deg, rgba(251, 113, 133, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%)">
+            <div class="relative z-10">
+              <div class="flex items-start justify-between mb-6">
+                <div class="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="thermometer" class="lucide lucide-thermometer w-6 h-6 text-orange-400 group-hover:scale-110 transition-transform"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path></svg>
+                </div>
+                <div class="relative group-hover:scale-110 transition-transform">
+                  <svg class="w-12 h-12 animate-rotate" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"></circle>
+                    <circle cx="50" cy="50" r="40" stroke="#fb7185" stroke-width="4" fill="none" class="progress-ring" stroke-linecap="round"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-xs font-medium text-white/80 number-digit group-hover:scale-125 transition-transform" style="--digit-delay: 1.3s">75%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Living Room</p>
+                <p class="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-orange-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                  <span class="number-digit" style="--digit-delay: 1s">2</span><span class="number-digit" style="--digit-delay: 1.1s">2</span><span class="number-digit" style="--digit-delay: 1.2s">°</span><span class="number-digit" style="--digit-delay: 1.3s">C</span>
+                </p>
+                <div class="flex items-center space-x-2">
+                  <span class="text-xs text-white/50 group-hover:text-white/70 transition-colors">Target: 21°C</span>
+                  <div class="flex space-x-1">
+                    <div class="w-1 h-1 bg-orange-400 rounded-full animate-pulse group-hover:scale-150"></div>
+                    <div class="w-1 h-1 bg-orange-400 rounded-full animate-pulse delay-100 group-hover:scale-150"></div>
+                    <div class="w-1 h-1 bg-orange-400/50 rounded-full animate-pulse delay-200 group-hover:scale-150"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Energy Usage Card -->
+          <div class="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-500 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style="--hover-gradient: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%)">
+            <div class="relative z-10">
+              <div class="flex items-start justify-between mb-6">
+                <div class="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" class="lucide lucide-zap w-6 h-6 text-green-400 group-hover:scale-110 transition-transform"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                </div>
+                <div class="flex items-center space-x-2 group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-down" class="lucide lucide-trending-down w-4 h-4 text-green-400"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+                  <span class="text-xs text-green-400 bg-green-500/20 px-2 py-1 rounded-full font-medium hover:bg-green-500/30 transition-colors">-12%</span>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <p class="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Energy Usage</p>
+                <p class="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                  <span class="number-digit" style="--digit-delay: 1s">1</span><span class="number-digit" style="--digit-delay: 1.1s">.</span><span class="number-digit" style="--digit-delay: 1.2s">2</span><span class="number-digit" style="--digit-delay: 1.3s">k</span><span class="number-digit" style="--digit-delay: 1.4s">W</span>
+                </p>
+                <div class="space-y-2 progress-hover">
+                  <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden group-hover:h-3 transition-all">
+                    <div class="progress-bar bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full animate-progress-fill group-hover:h-3 transition-all" style="--progress-width: 35%"></div>
+                  </div>
+                  <div class="flex justify-between text-xs text-white/50 group-hover:text-white/70 transition-colors">
+                    <span>0kW</span>
+                    <span>3.5kW max</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Security Card -->
+          <div class="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-600 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style="--hover-gradient: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)">
+            <div class="relative z-10">
+              <div class="flex items-start justify-between mb-6">
+                <div class="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" class="lucide lucide-shield-check w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                </div>
+                <div class="flex items-center space-x-2 group-hover:scale-110 transition-transform">
+                  <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse group-hover:scale-125"></div>
+                  <span class="text-xs text-green-400 font-medium number-digit hover:text-green-300 transition-colors" style="--digit-delay: 1.2s">ACTIVE</span>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Security System</p>
+                <p class="text-2xl font-bold tracking-tight text-white animate-counter group-hover:scale-105 transition-transform">Armed - Home</p>
+                <div class="flex items-center space-x-4 mt-4">
+                  <div class="flex items-center space-x-1 hover-lift cursor-pointer">
+                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">
+                      <span class="number-digit" style="--digit-delay: 1.4s">8</span> sensors
+                    </span>
+                  </div>
+                  <div class="flex items-center space-x-1 hover-lift cursor-pointer">
+                    <div class="w-1.5 h-1.5 bg-blue-400 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">
+                      <span class="number-digit" style="--digit-delay: 1.5s">4</span> cameras
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Lights Card -->
+          <div class="glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-700 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer" style="--hover-gradient: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)">
+            <div class="relative z-10">
+              <div class="flex items-start justify-between mb-6">
+                <div class="p-3 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="lightbulb" class="lucide lucide-lightbulb w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                </div>
+                <span class="text-xs text-white/60 bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors group-hover:scale-110">
+                  <span class="number-digit" style="--digit-delay: 1.3s">6</span> of <span class="number-digit" style="--digit-delay: 1.4s">12</span> on
+                </span>
+              </div>
+              <div class="space-y-4">
+                <p class="text-sm text-white/60 font-medium group-hover:text-white/80 transition-colors">Smart Lighting</p>
+                <p class="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                  <span class="number-digit" style="--digit-delay: 1s">7</span><span class="number-digit" style="--digit-delay: 1.1s">5</span><span class="number-digit" style="--digit-delay: 1.2s">%</span>
+                </p>
+                <div class="flex items-center space-x-2 mt-4">
+                  <div class="flex space-x-1 group-hover:scale-110 transition-transform">
+                    <div class="w-2 h-8 bg-gradient-to-t from-yellow-400 to-yellow-300 rounded-full animate-pulse group-hover:scale-125"></div>
+                    <div class="w-2 h-6 bg-gradient-to-t from-yellow-400/60 to-yellow-300/60 rounded-full animate-pulse delay-100 group-hover:scale-125"></div>
+                    <div class="w-2 h-4 bg-white/20 rounded-full group-hover:bg-white/40 transition-colors"></div>
+                    <div class="w-2 h-3 bg-white/20 rounded-full group-hover:bg-white/40 transition-colors"></div>
+                  </div>
+                  <span class="text-xs text-white/50 ml-2 group-hover:text-white/70 transition-colors">Adaptive brightness</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Bottom Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Enhanced Room Controls -->
+          <div class="lg:col-span-2">
+            <div class="glass-card rounded-3xl p-8 animate-slide-up delay-800 transition-all duration-500 hover:bg-white/8 hover:shadow-2xl hover:shadow-blue-500/10">
+              <div class="flex items-center justify-between mb-8">
+                <div>
+                  <h3 class="text-2xl font-bold tracking-tight mb-2 text-hover">Room Controls</h3>
+                  <p class="text-white/60 hover:text-white/80 transition-colors">Manage all your smart rooms</p>
+                </div>
+                <button class="text-sm text-blue-400 hover:text-blue-300 transition-all bg-blue-500/10 px-4 py-2 rounded-xl hover:bg-blue-500/20 hover:scale-105 button-hover">View All</button>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Kitchen -->
+                <div class="room-card bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 icon-hover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="chef-hat" class="lucide lucide-chef-hat w-5 h-5 text-purple-400"><path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path><path d="M6 17h12"></path></svg>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-lg hover:text-purple-300 transition-colors cursor-pointer">Kitchen</span>
+                        <p class="text-xs text-white/60">
+                          <span class="number-digit" style="--digit-delay: 1.6s">3</span> devices active
+                        </p>
+                      </div>
+                    </div>
+                    <div class="toggle-switch w-12 h-6 relative cursor-pointer bg-gray-600 rounded-full" onclick="toggleSwitch(this)">
+                      <div class="toggle-knob absolute right-1 top-1 w-4 h-4 bg-white rounded-full transform translate-x-4" style="transform: translateX(0px);"></div>
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="w-full bg-white/10 rounded-full h-1 hover:h-2 transition-all">
+                      <div class="bg-gradient-to-r from-purple-400 to-pink-400 h-1 rounded-full animate-progress-fill delay-1400 hover:h-2 transition-all" style="--progress-width: 80%"></div>
+                    </div>
+                    <p class="text-xs text-white/50 hover:text-white/70 transition-colors">Cooking mode active</p>
+                  </div>
+                </div>
+
+                <!-- Bedroom -->
+                <div class="room-card bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 icon-hover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="bed" class="lucide lucide-bed w-5 h-5 text-blue-400"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-lg hover:text-blue-300 transition-colors cursor-pointer">Bedroom</span>
+                        <p class="text-xs text-white/60">Sleep mode</p>
+                      </div>
+                    </div>
+                    <div class="toggle-switch w-12 h-6 relative cursor-pointer active bg-gradient-to-r from-green-500 to-emerald-500 rounded-full" onclick="toggleSwitch(this)">
+                      <div class="toggle-knob absolute left-1 top-1 w-4 h-4 bg-white rounded-full" style="transform: translateX(16px);"></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-3 hover-lift cursor-pointer group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="moon" class="lucide lucide-moon w-4 h-4 text-blue-300 group-hover:scale-110 transition-transform"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
+                    <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">Night mode until <span class="number-digit" style="--digit-delay: 1.8s">7</span>:00 AM</span>
+                  </div>
+                </div>
+
+                <!-- Living Room -->
+                <div class="room-card bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="p-3 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 icon-hover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="tv" class="lucide lucide-tv w-5 h-5 text-orange-400"><path d="m17 2-5 5-5-5"></path><rect width="20" height="15" x="2" y="7" rx="2"></rect></svg>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-lg hover:text-orange-300 transition-colors cursor-pointer">Living Room</span>
+                        <p class="text-xs text-white/60">Entertainment mode</p>
+                      </div>
+                    </div>
+                    <div class="toggle-switch w-12 h-6 relative cursor-pointer bg-gray-600 rounded-full" onclick="toggleSwitch(this)">
+                      <div class="toggle-knob absolute right-1 top-1 w-4 h-4 bg-white rounded-full transform translate-x-4" style="transform: translateX(0px);"></div>
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="w-full bg-white/10 rounded-full h-1 hover:h-2 transition-all">
+                      <div class="bg-gradient-to-r from-orange-400 to-red-400 h-1 rounded-full animate-progress-fill delay-1600 hover:h-2 transition-all" style="--progress-width: 60%"></div>
+                    </div>
+                    <p class="text-xs text-white/50 hover:text-white/70 transition-colors">Movie night preset</p>
+                  </div>
+                </div>
+
+                <!-- Office -->
+                <div class="room-card bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="p-3 rounded-xl bg-gradient-to-br from-gray-500/20 to-slate-500/20 icon-hover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="monitor" class="lucide lucide-monitor w-5 h-5 text-gray-400"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+                      </div>
+                      <div>
+                        <span class="font-semibold text-lg hover:text-gray-300 transition-colors cursor-pointer">Office</span>
+                        <p class="text-xs text-white/60">Away mode</p>
+                      </div>
+                    </div>
+                    <div class="toggle-switch w-12 h-6 bg-gray-600 rounded-full relative cursor-pointer" onclick="toggleSwitch(this)">
+                      <div class="toggle-knob absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-3 hover-lift cursor-pointer group">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full group-hover:scale-150 transition-transform"></div>
+                    <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">Auto-schedule active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Energy Chart -->
+          <div class="glass-card rounded-3xl p-8 animate-slide-up delay-900 transition-all duration-500 hover:bg-white/8 hover:shadow-2xl hover:shadow-green-500/10">
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h3 class="text-xl font-bold tracking-tight mb-2 text-hover">Energy Analytics</h3>
+                <p class="text-white/60 text-sm hover:text-white/80 transition-colors">Today's consumption</p>
+              </div>
+              <div class="flex items-center space-x-2 text-xs bg-green-500/20 text-green-400 px-3 py-2 rounded-xl hover:bg-green-500/30 hover:scale-105 transition-all cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-down" class="lucide lucide-trending-down w-3 h-3"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+                <span class="font-semibold number-digit" style="--digit-delay: 2s">-12%</span>
+              </div>
+            </div>
+            <div class="h-40 mb-6 hover:scale-105 transition-transform">
+              <canvas id="energyChart" class="w-full h-full" width="678" height="320" style="display: block; box-sizing: border-box; height: 160px; width: 339px;"></canvas>
+            </div>
+            <div class="text-center space-y-3">
+              <p class="text-3xl font-bold tracking-tight bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent hover:scale-105 transition-transform cursor-default">
+                <span class="number-digit" style="--digit-delay: 2.2s">2</span><span class="number-digit" style="--digit-delay: 2.3s">4</span><span class="number-digit" style="--digit-delay: 2.4s">.</span><span class="number-digit" style="--digit-delay: 2.5s">8</span> kWh
+              </p>
+              <p class="text-sm text-white/60 hover:text-white/80 transition-colors">vs <span class="number-digit" style="--digit-delay: 2.6s">28.2</span> kWh yesterday</p>
+              <div class="flex items-center justify-center space-x-4 text-xs">
+                <div class="flex items-center space-x-2 hover-lift cursor-pointer group">
+                  <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform"></div>
+                  <span class="text-white/60 group-hover:text-white/80 transition-colors">Today</span>
+                </div>
+                <div class="flex items-center space-x-2 hover-lift cursor-pointer group">
+                  <div class="w-2 h-2 bg-white/30 rounded-full group-hover:scale-150 transition-transform"></div>
+                  <span class="text-white/60 group-hover:text-white/80 transition-colors">Yesterday</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Toggle switch functionality
+    function toggleSwitch(element) {
+      element.classList.toggle('active');
+      const knob = element.querySelector('.toggle-knob');
+      if (element.classList.contains('active')) {
+        element.classList.add('bg-gradient-to-r', 'from-green-500', 'to-emerald-500');
+        element.classList.remove('bg-gray-600');
+        knob.style.transform = 'translateX(16px)';
+      } else {
+        element.classList.remove('bg-gradient-to-r', 'from-green-500', 'to-emerald-500');
+        element.classList.add('bg-gray-600');
+        knob.style.transform = 'translateX(0px)';
+      }
+    }
+
+    // Enhanced Energy Chart
+    const ctx = document.getElementById('energyChart').getContext('2d');
+    
+    // Create gradients
+    const primaryGradient = ctx.createLinearGradient(0, 0, 0, 160);
+    primaryGradient.addColorStop(0, 'rgba(59, 130, 246, 0.6)');
+    primaryGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+    const secondaryGradient = ctx.createLinearGradient(0, 0, 0, 160);
+    secondaryGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+    secondaryGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM'],
+        datasets: [{
+          label: 'Today',
+          data: [2.1, 3.8, 4.2, 3.1, 5.4, 4.8],
+          borderColor: '#3B82F6',
+          backgroundColor: primaryGradient,
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBorderWidth: 2,
+          pointHoverBorderColor: '#3B82F6',
+          pointHoverBackgroundColor: '#ffffff',
+        }, {
+          label: 'Yesterday',
+          data: [2.8, 4.1, 4.8, 4.2, 6.1, 5.5],
+          borderColor: 'rgba(255, 255, 255, 0.3)',
+          backgroundColor: secondaryGradient,
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderDash: [5, 5],
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+            borderWidth: 1,
+            cornerRadius: 12,
+            displayColors: false,
+            callbacks: {
+              title: function(context) {
+                return context[0].label;
+              },
+              label: function(context) {
+                return `${context.parsed.y} kWh`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            display: true,
+            grid: { 
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.6)',
+              font: { size: 10 }
+            }
+          },
+          y: {
+            display: false,
+            grid: { display: false }
+          }
+        },
+        elements: {
+          line: {
+            borderCapStyle: 'round',
+            borderJoinStyle: 'round'
+          }
+        }
+      }
+    });
+  </script>
+
+</body></html>

@@ -1,0 +1,111 @@
+<h2 mat-dialog-title>
+    <i class="fa-solid fa-bullhorn mr-2"></i>
+    Create New Campaign
+</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="px-2 pb-4 sm:p-4 sm:pb-4 sm:min-w-[320px] md:min-w-[520px]">
+        <div class="mt-6">
+            <div class="mb-4">
+                <label for="campaignName" class="block text-sm font-medium text-gray-700">Campaign
+                    Name</label>
+                <input type="text" id="campaignName"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+
+            <div class="mb-4">
+                <label for="campaignDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="campaignDescription" rows="3"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Channels</label>
+                <div class="mt-2 space-y-2">
+                    <div class="flex items-center">
+                        <input id="whatsapp-channel" name="channels" type="checkbox"
+                            [(ngModel)]="campaignMedium.whatsapp"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="whatsapp-channel" class="ml-2 block text-sm text-gray-700 flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-500"></i> WhatsApp
+                        </label>
+                    </div>
+
+                    <div class="flex gap-4" *ngIf="campaignMedium.whatsapp">
+                        <label for="bordered-radio-1"
+                            class="flex items-center px-4 py-2 border border-gray-200 rounded-md cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <input id="bordered-radio-1" type="radio" value="default" name="bordered-radio"
+                                class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 dark:border-gray-600" />
+                            <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                Marketing 
+                            </span>
+                        </label>
+
+                        <label for="bordered-radio-2"
+                            class="flex items-center px-4 py-2 border border-gray-200 rounded-md cursor-pointer dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                            <input checked id="bordered-radio-2" type="radio" value="checked" name="bordered-radio"
+                                class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2 dark:border-gray-600" />
+                            <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                Utilitity
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="email-channel" name="channels" type="checkbox" [(ngModel)]="campaignMedium.email"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="email-channel" class="ml-2 block text-sm text-gray-700 flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-500"></i> Email
+                        </label>
+                    </div>
+
+
+                    <div class="flex items-center">
+                        <input id="sms-channel" name="channels" type="checkbox" [(ngModel)]="campaignMedium.sms"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="sms-channel" class="ml-2 block text-sm text-gray-700 flex items-center">
+                            <i class="fas fa-sms mr-2 text-red-500"></i> SMS
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="push-channel" name="channels" type="checkbox"
+                            [(ngModel)]="campaignMedium.pushNotification"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="push-channel" class="ml-2 block text-sm text-gray-700 flex items-center">
+                            <i class="fas fa-mobile-alt mr-2 text-purple-500"></i> Push Notification
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="mb-4">
+                <label for="schedule" class="block text-sm font-medium text-gray-700">Schedule</label>
+                <select id="schedule"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <option>Send immediately</option>
+                    <option>Schedule for later</option>
+                    <option>Recurring</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="audience" class="block text-sm font-medium text-gray-700">Target
+                    Audience</label>
+                <select id="audience"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <option>All Customers</option>
+                    <option>New Customers</option>
+                    <option>Repeat Customers</option>
+                    <option>High Value Customers</option>
+                    <option>Inactive Customers</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial
+        style="background-color:#a684ff; color: whitesmoke;">Create</button>
+</mat-dialog-actions>

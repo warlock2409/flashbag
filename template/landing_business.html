@@ -1,0 +1,886 @@
+<html lang="en" class="h-full bg-neutral-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solace One — Flow-first device</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-full font-sans antialiased"
+    style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;">
+    <div class="min-h-screen">
+        <!-- Page container -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Nav -->
+            <header class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="h-9 w-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shadow-sm ring-1 ring-black/10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="leaf" class="lucide lucide-leaf h-4 w-4">
+                            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z">
+                            </path>
+                            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                        </svg>
+                    </div>
+                    <span class="text-lg tracking-tight font-medium text-neutral-900">solace</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-6 text-sm text-neutral-600">
+                    <a href="#" class="hover:text-neutral-900 transition-colors">Home</a>
+                    <a href="#" class="hover:text-neutral-900 transition-colors">Device</a>
+                    <a href="#" class="hover:text-neutral-900 transition-colors">Story</a>
+                    <a href="#" class="hover:text-neutral-900 transition-colors">Support</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg ring-1 ring-black/10 bg-white text-neutral-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="menu" class="lucide lucide-menu h-5 w-5">
+                            <path d="M4 12h16"></path>
+                            <path d="M4 18h16"></path>
+                            <path d="M4 6h16"></path>
+                        </svg>
+                    </button>
+                    <a href="#"
+                        class="hidden md:inline-flex items-center justify-center rounded-xl bg-amber-500 text-neutral-900 px-4 py-2.5 text-sm font-medium shadow-sm hover:bg-amber-400 transition-colors">
+                        Preorder
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4 ml-2">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Hero Card -->
+            <section class="mt-6">
+                <div class="relative overflow-hidden rounded-3xl ring-1 ring-black/10 bg-neutral-900">
+                    <!-- Background image -->
+                    <div class="absolute inset-0">
+                        <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/80525773-1209-43bf-b1fc-df487cfc36b6_1600w.jpg"
+                            alt="Calm workspace" class="h-full w-full object-cover opacity-70">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-transparent"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="relative z-10 p-5 sm:p-8 md:p-12 lg:p-16">
+                        <!-- Floating mini-nav and newsletter on large screens -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            <div class="lg:col-span-7">
+                                <h1
+                                    class="text-white tracking-tight text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05]">
+                                    The instrument, reimagined
+                                </h1>
+                                <p class="mt-5 text-neutral-200 text-base sm:text-lg max-w-xl">
+                                    Meet Solace One — a calm‑first device designed for deep focus, gentle light, and
+                                    days of battery. A quieter way to think and make.
+                                </p>
+
+                                <!-- Feature points -->
+                                <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="moon"
+                                                class="lucide lucide-moon h-4 w-4">
+                                                <path
+                                                    d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-white font-medium text-sm">Paper‑calm display</p>
+                                            <p class="text-neutral-300 text-xs">Soft contrast, low glare</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="target"
+                                                class="lucide lucide-target h-4 w-4">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <circle cx="12" cy="12" r="6"></circle>
+                                                <circle cx="12" cy="12" r="2"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-white font-medium text-sm">Flow‑first OS</p>
+                                            <p class="text-neutral-300 text-xs">No noise, just intent</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="battery"
+                                                class="lucide lucide-battery h-4 w-4">
+                                                <path d="M 22 14 L 22 10"></path>
+                                                <rect x="2" y="6" width="16" height="12" rx="2"></rect>
+                                            </svg>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-white font-medium text-sm">Days of charge</p>
+                                            <p class="text-neutral-300 text-xs">Up to 72h real work</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CTA row -->
+                                <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-3">
+                                    <a href="#"
+                                        class="inline-flex items-center justify-center rounded-xl bg-amber-500 text-neutral-900 px-5 py-3 text-sm font-medium shadow-md hover:bg-amber-400 transition-colors">
+                                        Order now
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right"
+                                            class="lucide lucide-arrow-right h-4 w-4 ml-2">
+                                            <path d="M5 12h14"></path>
+                                            <path d="m12 5 7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <button
+                                        class="inline-flex items-center gap-2 text-sm text-white/90 hover:text-white transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" data-lucide="info"
+                                            class="lucide lucide-info h-4 w-4">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M12 16v-4"></path>
+                                            <path d="M12 8h.01"></path>
+                                        </svg>
+                                        Learn more
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Newsletter card (floating on the right) -->
+                            <div class="lg:col-span-5">
+                                <div
+                                    class="lg:ml-auto w-full max-w-md lg:max-w-sm rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/10 shadow-lg p-4 sm:p-5">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <p class="text-neutral-900 font-medium tracking-tight">Newsletter</p>
+                                            <p class="text-neutral-500 text-xs mt-0.5">Updates. No noise.</p>
+                                        </div>
+                                        <span class="inline-flex items-center gap-2 text-[11px] text-neutral-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                data-lucide="shield-check"
+                                                class="lucide lucide-shield-check h-3.5 w-3.5">
+                                                <path
+                                                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                                                </path>
+                                                <path d="m9 12 2 2 4-4"></path>
+                                            </svg>
+                                            Privacy-first
+                                        </span>
+                                    </div>
+                                    <form class="mt-3">
+                                        <div class="flex gap-2">
+                                            <div class="relative flex-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    data-lucide="mail"
+                                                    class="lucide lucide-mail h-4 w-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2">
+                                                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                                </svg>
+                                                <input type="email" placeholder="you@domain.com"
+                                                    class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400">
+                                            </div>
+                                            <button type="submit"
+                                                class="rounded-xl bg-neutral-900 text-white px-4 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors">
+                                                Subscribe
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom overlays -->
+                        <div class="mt-8 sm:mt-12 flex items-end justify-between">
+                            <!-- Video teaser -->
+                            <button class="group inline-flex items-center gap-3">
+                                <div
+                                    class="relative w-40 sm:w-48 aspect-[16/10] rounded-xl overflow-hidden ring-2 ring-amber-400/70 shadow-lg">
+                                    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a6398c31-e7f2-45ea-9396-0967a4ff0c97_800w.jpg"
+                                        alt="Product teaser" class="h-full w-full object-cover">
+                                    <div class="absolute inset-0 bg-black/20"></div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div
+                                            class="h-10 w-10 rounded-full bg-white/90 text-neutral-900 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="play"
+                                                class="lucide lucide-play h-5 w-5 translate-x-0.5">
+                                                <path
+                                                    d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hidden sm:flex flex-col">
+                                    <span class="text-white/90 text-sm font-medium">Watch the overview</span>
+                                    <span class="text-neutral-300 text-xs">1 min • No fluff</span>
+                                </div>
+                            </button>
+
+                            <!-- Inline stock badge + CTA -->
+                            <div class="hidden md:flex items-center gap-3">
+                                <div class="text-xs text-neutral-300">
+                                    In stock • Ships in 2–5 business days
+                                </div>
+                                <a href="#"
+                                    class="inline-flex items-center justify-center rounded-xl bg-amber-500 text-neutral-900 px-4 py-2.5 text-sm font-medium shadow-md hover:bg-amber-400 transition-colors">
+                                    Order now
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" data-lucide="arrow-right"
+                                        class="lucide lucide-arrow-right h-4 w-4 ml-2">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Supporting row (optional brand hints) -->
+            <section class="mt-8">
+                <div class="text-center">
+                    <p class="text-neutral-600 text-xs transition-colors hover:text-emerald-600">Core features</p>
+                    <h2
+                        class="mt-1 text-4xl font-semibold tracking-tight text-neutral-900 transition-colors hover:text-emerald-700">
+                        Built for deep focus</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                01 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="moon" class="lucide lucide-moon h-5 w-5">
+                                    <path
+                                        d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401">
+                                    </path>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                E-ink Display</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">
+                                Paper-like clarity</p>
+                        </div>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                02 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="battery" class="lucide lucide-battery h-5 w-5">
+                                    <path d="M 22 14 L 22 10"></path>
+                                    <rect x="2" y="6" width="16" height="12" rx="2"></rect>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Long Battery</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">3 days of
+                                use</p>
+                        </div>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                03 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="target" class="lucide lucide-target h-5 w-5">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <circle cx="12" cy="12" r="6"></circle>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Minimal OS</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">Zero
+                                distractions</p>
+                        </div>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                04 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="keyboard"
+                                    class="lucide lucide-keyboard h-5 w-5">
+                                    <path d="M10 8h.01"></path>
+                                    <path d="M12 12h.01"></path>
+                                    <path d="M14 8h.01"></path>
+                                    <path d="M16 12h.01"></path>
+                                    <path d="M18 8h.01"></path>
+                                    <path d="M6 8h.01"></path>
+                                    <path d="M7 16h10"></path>
+                                    <path d="M8 12h.01"></path>
+                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Tactile Keys</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">
+                                Satisfying typing</p>
+                        </div>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                05 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="wifi" class="lucide lucide-wifi h-5 w-5">
+                                    <path d="M12 20h.01"></path>
+                                    <path d="M2 8.82a15 15 0 0 1 20 0"></path>
+                                    <path d="M5 12.859a10 10 0 0 1 14 0"></path>
+                                    <path d="M8.5 16.429a5 5 0 0 1 7 0"></path>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Always Connected</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">Built-in
+                                WiFi</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="relative overflow-hidden rounded-2xl ring-1 ring-emerald-300 p-5 bg-gradient-to-tr from-emerald-700 to-emerald-500 text-white">
+                        <div class="absolute inset-0"
+                            style="background: radial-gradient(160px 160px at 30% 30%, rgba(255,255,255,0.25), transparent 60%), radial-gradient(220px 220px at 70% 70%, rgba(0,0,0,0.25), transparent 60%);">
+                        </div>
+                        <div class="relative flex items-center justify-between">
+                            <span class="text-[11px] text-white/80">{ 06 }</span>
+                        </div>
+                        <div class="relative mt-6">
+                            <p class="text-white font-medium tracking-tight">Premium Build</p>
+                            <p class="text-white/90 text-sm">Aluminum body</p>
+                        </div>
+                        <button
+                            class="relative mt-8 h-9 w-9 rounded-full bg-white text-neutral-900 flex items-center justify-center shadow-sm transition-colors hover:text-emerald-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" data-lucide="arrow-up-right"
+                                class="lucide lucide-arrow-up-right h-4 w-4">
+                                <path d="M7 7h10v10"></path>
+                                <path d="M7 17 17 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                07 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="sun" class="lucide lucide-sun h-5 w-5">
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                    <path d="M12 2v2"></path>
+                                    <path d="M12 20v2"></path>
+                                    <path d="m4.93 4.93 1.41 1.41"></path>
+                                    <path d="m17.66 17.66 1.41 1.41"></path>
+                                    <path d="M2 12h2"></path>
+                                    <path d="M20 12h2"></path>
+                                    <path d="m6.34 17.66-1.41 1.41"></path>
+                                    <path d="m19.07 4.93-1.41 1.41"></path>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Ambient Light</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">Auto
+                                adjusting</p>
+                        </div>
+                    </div>
+
+                    <div class="group rounded-2xl bg-white ring-1 ring-black/10 p-5 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-neutral-400 transition-colors group-hover:text-emerald-600">{
+                                08 }</span>
+                        </div>
+                        <div class="mt-6">
+                            <div
+                                class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="cloud" class="lucide lucide-cloud h-5 w-5">
+                                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                                </svg>
+                            </div>
+                            <p
+                                class="mt-4 text-neutral-900 font-medium tracking-tight transition-colors group-hover:text-emerald-700">
+                                Cloud Sync</p>
+                            <p class="text-neutral-600 text-sm transition-colors group-hover:text-emerald-600">Seamless
+                                backup</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="services" class="mt-10">
+                <div class="relative overflow-hidden rounded-3xl ring-1 ring-black/10 bg-neutral-900">
+                    <!-- Background -->
+                    <div class="absolute inset-0">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/79d3006c-9c25-4539-b5f8-94e6afdb2fcb_1600w.jpg"
+                            alt="" class="h-full w-full object-cover opacity-30">
+                        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-transparent"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="relative z-10 p-5 sm:p-8 md:p-12">
+                        <!-- Header -->
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-2 text-white/80 text-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="sparkles"
+                                    class="lucide lucide-sparkles h-3.5 w-3.5">
+                                    <path
+                                        d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+                                    </path>
+                                    <path d="M20 2v4"></path>
+                                    <path d="M22 4h-4"></path>
+                                    <circle cx="4" cy="20" r="2"></circle>
+                                </svg>
+                                <span>What we do</span>
+                            </div>
+                            <div class="flex items-baseline gap-2">
+                                <h2
+                                    class="text-white tracking-tight text-5xl sm:text-6xl md:text-7xl font-semibold leading-[1.05]">
+                                    Services.</h2>
+
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div class="mt-8 rounded-2xl bg-white/5 ring-1 ring-white/10 overflow-hidden">
+                            <!-- 001 -->
+                            <details class="group open:bg-white/5">
+                                <summary class="list-none">
+                                    <div
+                                        class="flex items-center gap-4 justify-between border-b border-white/10 p-4 sm:p-5">
+                                        <div class="text-white/50 text-[11px]">(001)</div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-white font-medium tracking-tight">Device onboarding &amp;
+                                                setup</p>
+                                        </div>
+                                        <div
+                                            class="shrink-0 h-8 w-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                                                class="lucide lucide-plus h-4 w-4 group-open:hidden">
+                                                <path d="M5 12h14"></path>
+                                                <path d="M12 5v14"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="minus"
+                                                class="lucide lucide-minus h-4 w-4 hidden group-open:block">
+                                                <path d="M5 12h14"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </summary>
+                                <div class="p-4 sm:p-6">
+                                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                                        <div class="lg:col-span-7 flex items-start gap-4">
+                                            <div
+                                                class="shrink-0 h-14 w-20 rounded-xl overflow-hidden ring-1 ring-white/20 bg-white/10">
+                                                <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/e19a3dc7-18ba-4146-ba87-10e8dc301957_320w.jpg"
+                                                    alt="Setup preview" class="h-full w-full object-cover">
+                                            </div>
+                                            <div>
+                                                <h3 class="text-white font-medium tracking-tight">Seamless start, tuned
+                                                    for focus</h3>
+                                                <p class="text-neutral-300 text-sm mt-1">We unbox, configure OS, migrate
+                                                    your notes and docs, and tailor profiles for reading, writing, and
+                                                    deep work.</p>
+                                            </div>
+                                        </div>
+                                        <div class="lg:col-span-5">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-white/80 text-xs">Categories</p>
+                                            </div>
+                                            <div class="mt-3 flex flex-wrap gap-2">
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">E‑ink
+                                                    tuning</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">App
+                                                    profiles</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">Cloud
+                                                    sync</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">Shortcuts</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">Wi‑Fi</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">Security</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white text-neutral-900 text-xs px-2.5 py-1">Automations</span>
+                                                <span
+                                                    class="inline-flex items-center rounded-full bg-white/80 text-neutral-900 text-xs px-2.5 py-1">6+</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <a href="#"
+                                            class="inline-flex items-center justify-center rounded-xl bg-amber-500 text-neutral-900 px-4 py-2.5 text-sm font-medium shadow-sm hover:bg-amber-400 transition-colors">
+                                            Get started
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right"
+                                                class="lucide lucide-arrow-right h-4 w-4 ml-2">
+                                                <path d="M5 12h14"></path>
+                                                <path d="m12 5 7 7-7 7"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- 002 -->
+                            <details class="group">
+                                <summary class="list-none">
+                                    <div
+                                        class="flex items-center gap-4 justify-between border-t border-b border-white/10 p-4 sm:p-5">
+                                        <div class="text-white/50 text-[11px]">(002)</div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-white font-medium tracking-tight">Workspace optimization</p>
+                                        </div>
+                                        <div
+                                            class="shrink-0 h-8 w-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                                                class="lucide lucide-plus h-4 w-4 group-open:hidden">
+                                                <path d="M5 12h14"></path>
+                                                <path d="M12 5v14"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="minus"
+                                                class="lucide lucide-minus h-4 w-4 hidden group-open:block">
+                                                <path d="M5 12h14"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </summary>
+                                <div class="p-4 sm:p-6">
+                                    <p class="text-neutral-300 text-sm max-w-3xl">We map your daily rhythms and build
+                                        layouts, themes, and quick actions that reduce friction and boost flow.</p>
+                                </div>
+                            </details>
+
+                            <!-- 003 -->
+                            <details class="group">
+                                <summary class="list-none">
+                                    <div
+                                        class="flex items-center gap-4 justify-between border-t border-b border-white/10 p-4 sm:p-5">
+                                        <div class="text-white/50 text-[11px]">(003)</div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-white font-medium tracking-tight">Team training</p>
+                                        </div>
+                                        <div
+                                            class="shrink-0 h-8 w-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                                                class="lucide lucide-plus h-4 w-4 group-open:hidden">
+                                                <path d="M5 12h14"></path>
+                                                <path d="M12 5v14"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="minus"
+                                                class="lucide lucide-minus h-4 w-4 hidden group-open:block">
+                                                <path d="M5 12h14"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </summary>
+                                <div class="p-4 sm:p-6">
+                                    <p class="text-neutral-300 text-sm max-w-3xl">Hands‑on sessions covering best
+                                        practices, shortcuts, and shared libraries for consistent, efficient work.</p>
+                                </div>
+                            </details>
+
+                            <!-- 004 -->
+                            <details class="group">
+                                <summary class="list-none">
+                                    <div
+                                        class="flex items-center gap-4 justify-between border-t border-white/10 p-4 sm:p-5">
+                                        <div class="text-white/50 text-[11px]">(004)</div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-white font-medium tracking-tight">Priority support</p>
+                                        </div>
+                                        <div
+                                            class="shrink-0 h-8 w-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                                                class="lucide lucide-plus h-4 w-4 group-open:hidden">
+                                                <path d="M5 12h14"></path>
+                                                <path d="M12 5v14"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="minus"
+                                                class="lucide lucide-minus h-4 w-4 hidden group-open:block">
+                                                <path d="M5 12h14"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </summary>
+                                <div class="p-4 sm:p-6">
+                                    <p class="text-neutral-300 text-sm max-w-3xl">Direct line to our team with
+                                        next‑business‑day replies, replacement fast‑track, and proactive check‑ins.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="contact" class="mt-10">
+                <div class="relative overflow-hidden rounded-3xl ring-1 ring-black/10 bg-neutral-900">
+                    <!-- Background -->
+                    <div class="absolute inset-0">
+                        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/60668e31-2150-424e-b292-05bfdda254e0_1600w.jpg"
+                            alt="Abstract minimal background" class="h-full w-full object-cover opacity-40">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/80 via/50 to-transparent"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="relative z-10 p-5 sm:p-8 md:p-12">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            <!-- Form card -->
+                            <div class="lg:col-span-5">
+                                <div
+                                    class="rounded-2xl bg-white/90 backdrop-blur ring-1 ring-black/10 shadow-lg p-4 sm:p-5">
+                                    <div class="flex items-center justify-between">
+                                        <div class="">
+                                            <p class="text-[11px] text-neutral-500">Solace Support</p>
+                                            <h3
+                                                class="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+                                                Have a question?</h3>
+                                        </div>
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-neutral-900 text-white flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                data-lucide="message-square"
+                                                class="lucide lucide-message-square h-4 w-4">
+                                                <path
+                                                    d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <form action="#" method="POST" class="mt-4 space-y-3">
+                                        <div>
+                                            <label for="ct-name" class="block text-xs text-neutral-600">Your name<span
+                                                    class="text-neutral-400"> *</span></label>
+                                            <input id="ct-name" name="name" type="text" required=""
+                                                placeholder="Jane Doe"
+                                                class="mt-1 w-full pl-3 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400">
+                                        </div>
+                                        <div>
+                                            <label for="ct-email" class="block text-xs text-neutral-600">E‑mail<span
+                                                    class="text-neutral-400"> *</span></label>
+                                            <div class="relative mt-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    data-lucide="mail"
+                                                    class="lucide lucide-mail h-4 w-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2">
+                                                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                                </svg>
+                                                <input id="ct-email" name="email" type="email" required=""
+                                                    placeholder="you@solace.com"
+                                                    class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="ct-msg" class="block text-xs text-neutral-600">Message</label>
+                                            <textarea id="ct-msg" name="message" rows="4" placeholder="How can we help?"
+                                                class="mt-1 w-full resize-y pl-3 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400"></textarea>
+                                        </div>
+                                        <button type="submit"
+                                            class="w-full inline-flex items-center justify-center rounded-xl bg-neutral-900 text-white px-4 py-3 text-sm font-medium hover:bg-neutral-800 transition-colors">
+                                            Send message
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right"
+                                                class="lucide lucide-arrow-right h-4 w-4 ml-2">
+                                                <path d="M5 12h14"></path>
+                                                <path d="m12 5 7 7-7 7"></path>
+                                            </svg>
+                                        </button>
+                                        <p class="text-[11px] text-neutral-500">By submitting, you agree to our Terms
+                                            and Privacy Policy.</p>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Copy + highlights -->
+                            <div class="lg:col-span-7">
+                                <h2 class="text-white tracking-tight text-5xl sm:text-6xl font-semibold leading-[1.05]">
+                                    Let's talk.</h2>
+                                <p class="sm:text-lg max-w-2xl text-base text-neutral-200 mt-4">
+                                    Tell us about your setup—support, bulk orders, or partnerships. We reply within one
+                                    business day.
+                                </p>
+
+                                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-emerald-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="clock-3"
+                                                class="lucide lucide-clock-3 h-4 w-4">
+                                                <path d="M12 6v6h4"></path>
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-white font-medium text-sm">Quick response</p>
+                                            <p class="text-neutral-300 text-xs">Most messages receive a reply in under
+                                                24h.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-emerald-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" data-lucide="route"
+                                                class="lucide lucide-route h-4 w-4">
+                                                <circle cx="6" cy="19" r="3"></circle>
+                                                <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path>
+                                                <circle cx="18" cy="5" r="3"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="">
+                                            <p class="text-white font-medium text-sm">Clear next steps</p>
+                                            <p class="text-neutral-300 text-xs">We’ll follow up with a concise plan and
+                                                timeline.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Direct contact card -->
+                                <div class="mt-7">
+                                    <div
+                                        class="inline-flex items-center gap-3 rounded-2xl bg-white/95 backdrop-blur ring-1 ring-black/10 shadow-lg p-3">
+                                        <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/09f960eb-611f-430b-86b4-1d5a280d6eb8_800w.jpg"
+                                            alt="Team lead" class="h-12 w-12 rounded-xl object-cover">
+                                        <div class="min-w-0">
+                                            <p class="text-[11px] text-neutral-500 leading-none">Team Lead</p>
+                                            <p class="text-neutral-900 font-medium tracking-tight truncate">Ava Kim</p>
+                                        </div>
+                                        <a href="mailto:hello@solace.dev"
+                                            class="ml-1 inline-flex items-center gap-2 rounded-xl bg-neutral-900 text-white px-3 py-2 text-xs font-medium hover:bg-neutral-800 transition-colors">
+                                            Ask directly
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                data-lucide="message-circle"
+                                                class="lucide lucide-message-circle h-3.5 w-3.5">
+                                                <path
+                                                    d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="py-10 text-center text-xs text-neutral-500">
+                © <span id="year">2025</span> Solace. All rights reserved.
+            </footer>
+        </div>
+    </div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+            document.getElementById('year').textContent = new Date().getFullYear();
+        });
+    </script>
+
+</body>
+
+</html>

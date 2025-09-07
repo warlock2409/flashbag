@@ -1,0 +1,167 @@
+<div>
+    <nz-card nzTitle="Memberships" [nzExtra]="extraTemplate">
+        @for (membership of memberships; track $index) {
+        <nz-card [nzTitle]="membership.name" [nzExtra]="editTemplate" class="m-b-4">
+            <div class="flex gap-1rem">
+                <div>
+                    <nz-avatar nzShape="square" style="border-radius: 3px;width: 200px;height: 150px;"
+                        nzSrc="https://t3.ftcdn.net/jpg/06/36/32/40/360_F_636324002_tPkNWNUb6NZFMDeu0uC1YnSD2PDaCcy8.jpg"></nz-avatar>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:0"></h4>
+                    <!-- <nz-rate [ngModel]="4.5" nzAllowHalf></nz-rate>
+                    <span>(190)</span> -->
+                    <p class="child_text">{{membership.description}}</p>
+                    <div class="flex gap-1rem wrap">
+                        <div class="date_block">
+                            <span class="child_text">Benifits</span>
+                            <div class="expiry-date">{{membership.benefits.length}}</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Industry</span>
+                            <div class="expiry-date">{{membership.industry}}</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Price</span>
+                            <div class="expiry-date">{{membership.basePrice | currency:'INR'}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+        }
+    </nz-card>
+
+    <ng-template #editTemplate>
+        <a (click)="openPanel()">Edit</a>
+    </ng-template>
+
+    <ng-template #extraTemplate>
+        <button mat-stroked-button (click)="openMembershipAction()">
+            <i class="fas fa-plus"></i>
+            Create Membership
+        </button>
+    </ng-template>
+</div>
+
+<app-side-panel [isOpen]="isPanelOpen" [title]="'Membership'" (closePanel)="closePanel()"
+    [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'500px'}" class="p-4">
+
+    <div class="flex js-sb m-b-8">
+        <h2 class="m-0">Quarterly Plan</h2>
+        <div>
+            <nz-rate [ngModel]="2.5" nzAllowHalf></nz-rate>
+            <span> (200)</span>
+        </div>
+    </div>
+
+    <div class="flex js-c m-b-8">
+        <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
+    </div>
+
+    <div *ngIf="activeSegment == 'Trend'">
+        <div class="p-4 flex wrap js-sb m-b-8">
+            <div class="date_block">
+                <span class="child_text">Total Users</span>
+                <div class="expiry-date">{{1924 | number}}</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Active Users</span>
+                <div class="expiry-date">{{1924 | number}}</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Idle Users</span>
+                <div class="expiry-date">{{75 | number}}</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Revenue</span>
+                <div class="expiry-date">{{75000 | number}}</div>
+            </div>
+        </div>
+
+        <div>
+            <canvas id="myChart" style="width:100%; max-width:700px;"></canvas>
+        </div>
+
+    </div>
+
+    <div *ngIf="activeSegment == 'Details'">
+        <div>
+            <span>Membership name</span>
+            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-4">
+                <input type="text" nz-input [(ngModel)]="inputValue" placeholder="Membership name" />
+            </nz-input-group>
+            <ng-template #inputClearTpl>
+                @if (inputValue) {
+                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+                    (click)="inputValue = null" />
+                }
+            </ng-template>
+            <span>Description</span>
+            <nz-input-group [nzSuffix]="textAreaClearTpl" class="ant-input-affix-wrapper-textarea-with-clear-btn m-b-4">
+                <textarea nz-input [(ngModel)]="textValue" placeholder="Membership description"></textarea>
+            </nz-input-group>
+            <ng-template #textAreaClearTpl>
+                @if (textValue) {
+                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle" (click)="textValue = null" />
+                }
+            </ng-template>
+
+            <span>Membership plan</span>
+            <nz-select [(ngModel)]="selectedValue" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose"
+                class="m-b-4">
+                @for (option of optionList; track option) {
+                <nz-option [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                }
+            </nz-select>
+
+            <span>Membership type</span>
+            <nz-select [(ngModel)]="selectedValue" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose"
+                class="m-b-4">
+                @for (option of optionList; track option) {
+                <nz-option [nzValue]="option" [nzLabel]="option.label"></nz-option>
+                }
+            </nz-select>
+
+            <span>Maximum number of members</span>
+            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-4">
+                <input type="number" nz-input [(ngModel)]="inputValue" placeholder="Max Members" />
+            </nz-input-group>
+            <ng-template #inputClearTpl>
+                @if (inputValue) {
+                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+                    (click)="inputValue = null" />
+                }
+            </ng-template>
+
+            <span>Price</span>
+            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-8">
+                <input type="number" nz-input [(ngModel)]="inputValue" placeholder="Price" />
+            </nz-input-group>
+            <ng-template #inputClearTpl>
+                @if (inputValue) {
+                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+                    (click)="inputValue = null" />
+                }
+            </ng-template>
+
+            <div class="flex js-sb">
+                <button nz-button [nzLoading]="loading" style="width: 100px;">
+                    <nz-icon *ngIf="loading" nzType="poweroff" />
+                    <span *ngIf="!loading">
+                        Cancel
+                    </span>
+                </button>
+                <button nz-button [nzLoading]="!loading" style="width: 100px;">
+                    <nz-icon *ngIf="!loading" nzType="poweroff" />
+                    <span *ngIf="loading">
+                        Update
+                    </span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</app-side-panel>

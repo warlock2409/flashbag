@@ -1,0 +1,277 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-black text-white antialiased selection:bg-white/20 selection:text-white"
+    style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;">
+    <!-- Background (masks removed) -->
+    <div class="fixed inset-0 -z-10">
+        <img src="https://images.unsplash.com/photo-1503416997304-7f8bf166c121?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="" class="h-full w-full object-cover object-center opacity-70">
+    </div>
+
+    <!-- Main -->
+    <main class="relative flex min-h-screen items-center justify-center p-4 sm:p-6">
+        <!-- Glow removed -->
+
+        <!-- Card -->
+        <div class="relative z-10 w-full max-w-3xl">
+            <div
+                class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl shadow-2xl shadow-black/40 ring-1 ring-white/10 transition-all duration-300 hover:border-white/20 hover:ring-white/20 shadow-[0_0_40px_rgba(249,115,22,0.35)] hover:shadow-[0_0_64px_rgba(0,0,0,0.55)]">
+                <!-- Top hairline -->
+                <div
+                    class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent">
+                </div>
+
+                <!-- Split: Image + Details -->
+                <div class="relative flex flex-col sm:flex-row">
+                    <!-- Image (Left) -->
+                    <div class="relative w-full sm:w-1/2 h-48 sm:h-auto" data-animate=""
+                        style="transition-delay: 60ms;">
+                        <!-- https://images.unsplash.com/photo-1612723203798-321285cf5e3e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D -->
+                        <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/bc0e3057-c73b-46a1-a617-dceb564857f0_800w.jpg"
+                            alt="Futuristic render" class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/50 via-black/30 to-transparent"></div>
+                        <div
+                            class="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-lg border border-white/10 bg-black/30 px-3 py-2 backdrop-blur-md">
+                            <div class="flex items-center gap-2 text-xs text-white/75">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" data-lucide="image" class="lucide lucide-image h-3.5 w-3.5">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="9" r="2"></circle>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                </svg>
+                                Visual channel
+                            </div>
+                            <span class="text-[11px] text-white/60">1:1 layout</span>
+                        </div>
+                    </div>
+
+                    <!-- Details (Right) -->
+                    <div class="p-6 sm:p-8 w-full sm:w-1/2">
+                        <div class="mb-6 flex items-center justify-between">
+                            <!-- Logo -->
+                            <div class="flex items-center gap-3" data-animate="">
+                                <div
+                                    class="grid h-10 w-10 place-items-center shadow-black/30 text-white/90 bg-stone-400/20 border-white/15 border rounded-xl shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" data-lucide="message-square"
+                                        class="lucide lucide-message-square h-5 w-5">
+                                        <path
+                                            d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="">
+                                    <div class="text-sm tracking-widest text-white/60">CH</div>
+                                    <div class="text-[22px] tracking-tight font-semibold">Chatter</div>
+                                </div>
+                            </div>
+                            <!-- Meta -->
+                            <div class="text-xs text-white/50" data-animate="" style="transition-delay: 60ms;">v1.0
+                            </div>
+                        </div>
+
+                        <div class="mb-6" data-animate="" style="transition-delay: 80ms;">
+                            <h1 class="text-[26px] font-semibold tracking-tight">Welcome back</h1>
+                            <p class="mt-1.5 text-sm text-white/60">Sign in to continue your conversation.</p>
+                        </div>
+
+                        <!-- Form -->
+                        <form class="space-y-4">
+                            <!-- Email -->
+                            <div class="space-y-2" data-animate="" style="transition-delay: 120ms;">
+                                <label for="email" class="block text-sm text-white/80">Email or username</label>
+                                <div
+                                    class="group/input relative flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition-all hover:border-white/20 focus-within:border-white/25 focus-within:bg-white/[0.07]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" data-lucide="mail"
+                                        class="lucide lucide-mail mr-2 h-4.5 w-4.5 text-white/60">
+                                        <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    </svg>
+                                    <input id="email" type="text" inputmode="email" autocomplete="username"
+                                        placeholder="you@domain.com"
+                                        class="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none">
+                                    <div
+                                        class="pointer-events-none absolute inset-0 rounded-xl ring-0 ring-orange-400/0 transition-all group-focus-within/input:ring-2 group-focus-within/input:ring-orange-400/25">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="space-y-2" data-animate="" style="transition-delay: 160ms;">
+                                <div class="flex items-center justify-between">
+                                    <label for="password" class="block text-sm text-white/80">Password</label>
+                                    <a href="#"
+                                        class="text-xs text-orange-300/80 hover:text-orange-300 hover:underline underline-offset-4 transition-colors">Forgot?</a>
+                                </div>
+                                <div
+                                    class="group/input relative flex items-center rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 transition-all hover:border-white/20 focus-within:border-white/25 focus-within:bg-white/[0.07]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" data-lucide="lock"
+                                        class="lucide lucide-lock mr-2 h-4.5 w-4.5 text-white/60">
+                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    <input id="password" type="password" autocomplete="current-password"
+                                        placeholder="••••••••"
+                                        class="w-full bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none">
+                                    <button type="button" id="togglePassword"
+                                        class="ml-2 grid h-8 w-8 place-items-center rounded-lg text-white/70 hover:text-white/90 hover:bg-white/10 transition-colors"
+                                        aria-label="Toggle password visibility">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round" data-lucide="eye"
+                                            class="lucide lucide-eye h-4.5 w-4.5">
+                                            <path
+                                                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0">
+                                            </path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </button>
+                                    <div
+                                        class="pointer-events-none absolute inset-0 rounded-xl ring-0 ring-orange-400/0 transition-all group-focus-within/input:ring-2 group-focus-within/input:ring-orange-400/25">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Options -->
+                            <div class="flex items-center justify-between pt-1" data-animate=""
+                                style="transition-delay: 200ms;">
+                                <label class="inline-flex cursor-pointer select-none items-center gap-2">
+                                    <input id="remember" type="checkbox" class="peer sr-only">
+                                    <span
+                                        class="grid h-5 w-5 place-items-center rounded-md border border-white/15 bg-white/5 transition-all peer-checked:bg-orange-500 peer-checked:border-orange-400 peer-checked:shadow-[0_0_0_3px_rgba(249,115,22,0.25)]">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"
+                                            class="h-3.5 w-3.5 opacity-0 transition-opacity duration-200 peer-checked:opacity-100">
+                                            <path fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" d="M20 6 9 17l-5-5"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="text-sm text-white/80">Remember me</span>
+                                </label>
+                                <a href="#"
+                                    class="text-sm text-white/60 hover:text-white/80 hover:underline underline-offset-4 transition-colors">Need
+                                    help?</a>
+                            </div>
+
+                            <!-- Divider -->
+                            <div class="relative" data-animate="" style="transition-delay: 220ms;">
+                                <div class="my-2 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent">
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="grid gap-3" data-animate="" style="transition-delay: 240ms;">
+                                <button id="submitBtn" type="submit"
+                                    class="group relative inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-orange-900/30 outline-none ring-1 ring-orange-400/30 transition-all hover:shadow-orange-900/40 focus-visible:ring-2 focus-visible:ring-orange-300 disabled:cursor-not-allowed disabled:opacity-60 hover:brightness-110 hover:saturate-125"
+                                    style="background: radial-gradient(120% 120% at 0% 0%, rgba(251,146,60,1) 0%, rgba(249,115,22,1) 36%, rgba(251,146,60,0.25) 60%), radial-gradient(120% 120% at 100% 0%, rgba(245,158,11,1) 0%, rgba(251,146,60,0.9) 45%, rgba(245,158,11,0.25) 70%), radial-gradient(140% 140% at 100% 100%, rgba(249,115,22,1) 10%, rgba(234,88,12,1) 45%, rgba(154,52,18,1) 85%);"
+                                    disabled="">
+                                    <span
+                                        class="absolute inset-0 -z-10 rounded-xl bg-orange-400/20 opacity-0 blur-xl transition-opacity group-hover:opacity-100"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" data-lucide="log-in"
+                                        class="lucide lucide-log-in mr-2 h-4.5 w-4.5">
+                                        <path d="m10 17 5-5-5-5"></path>
+                                        <path d="M15 12H3"></path>
+                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                    </svg>
+                                    Sign in
+                                </button>
+                                <p class="text-center text-xs text-white/55">New here? <a href="#"
+                                        class="text-orange-300/90 hover:text-orange-300 underline underline-offset-4">Create
+                                        an account</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bottom subtle footer -->
+                <div
+                    class="flex items-center justify-between rounded-b-2xl border-t border-white/10 bg-white/[0.04] px-6 py-3 text-[11px] text-white/55">
+                    <div class="flex items-center gap-2" data-animate="" style="transition-delay: 260ms;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="shield" class="lucide lucide-shield h-3.5 w-3.5">
+                            <path
+                                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                            </path>
+                        </svg>
+                        <span>End‑to‑end ready</span>
+                    </div>
+                    <div class="flex items-center gap-2" data-animate="" style="transition-delay: 280ms;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                            data-lucide="clock" class="lucide lucide-clock h-3.5 w-3.5">
+                            <path d="M12 6v6l4 2"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        <span>Fast handoff</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize lucide icons
+        function renderIcons() {
+            lucide.createIcons({ attrs: { "stroke-width": 1.5 } });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Icons
+            renderIcons();
+
+            // Password toggle
+            const pwd = document.getElementById("password");
+            const toggle = document.getElementById("togglePassword");
+            toggle?.addEventListener("click", () => {
+                const isHidden = pwd.type === "password";
+                pwd.type = isHidden ? "text" : "password";
+                const icon = toggle.querySelector("i[data-lucide]");
+                if (icon) {
+                    icon.setAttribute("data-lucide", isHidden ? "eye-off" : "eye");
+                    renderIcons();
+                }
+            });
+
+            // Enable/disable submit button
+            const email = document.getElementById("email");
+            const submit = document.getElementById("submitBtn");
+            function validate() {
+                const ok = (email.value || "").trim().length > 2 && (pwd.value || "").length >= 6;
+                submit.disabled = !ok;
+            }
+            email.addEventListener("input", validate);
+            pwd.addEventListener("input", validate);
+            validate();
+
+            // Prevent default form submit for demo
+            document.querySelector("form")?.addEventListener("submit", (e) => {
+                e.preventDefault();
+                submit.classList.add("scale-[.99]");
+                setTimeout(() => submit.classList.remove("scale-[.99]"), 120);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

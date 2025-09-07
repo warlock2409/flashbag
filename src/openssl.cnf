@@ -1,0 +1,20 @@
+[ req ]
+default_bits       = 2048
+default_md         = sha256
+default_keyfile    = ssl.key
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_ca
+prompt             = no
+
+[ req_distinguished_name ]
+C  = IN
+ST = Tamil Nadu
+L  = Chennai
+O  = YourCompany
+CN = localhost
+
+[ v3_ca ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = localhost

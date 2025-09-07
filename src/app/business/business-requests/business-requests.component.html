@@ -1,20 +1,112 @@
+<div class="m-8 cursor">
+  <mat-icon (click)="openPanel()">settings</mat-icon>
+</div>
+
+<div class="flex m-8 js-sb">
+  <nz-segmented [nzOptions]="options" [ngModel]="activeSegment"
+    (nzValueChange)="handleValueChange($event)"></nz-segmented>
+  <div>
+    <button mat-stroked-button (click)="createOrganization()">Create</button>
+  </div>
+</div>
+
 <div class="requests-container">
+  <mat-progress-bar mode="buffer" *ngIf="buffer"></mat-progress-bar>
+
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Business Account Requests</mat-card-title>
+      <mat-card-title>
+        Business Account Requests
+      </mat-card-title>
       <mat-card-subtitle>Review and manage business account requests</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <div class="table-wrapper">
+        <table mat-table [dataSource]="organizationSource" multiTemplateDataRows class="requests-table">
+          <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+            <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+            <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="expand">
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button aria-label="expand row"
+                (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions">actions</th>
+            <td mat-cell *matCellDef="let element">
+              @if (element.status == 'PENDING') {
+              <button mat-stroked-button class="m-r-4"
+                (click)="action('ACTIVE',element); $event.stopPropagation()">Approve</button>
+
+              <button mat-stroked-button (click)="action('BLOCKED',element); $event.stopPropagation()">Reject</button>
+              }
+              @if (element.status == 'ACTIVE') {
+              <button mat-stroked-button class="m-r-4"
+                (click)="action('INACTIVE',element); $event.stopPropagation()">Deactivate</button>
+              <button mat-stroked-button (click)="action('BLOCKED',element); $event.stopPropagation()">Block</button>
+              }
+              @if (element.status == 'INACTIVE') {
+              <button mat-stroked-button class="m-r-4"
+                (click)="action('ACTIVE',element); $event.stopPropagation()">Activate</button>
+              <button mat-stroked-button (click)="action('BLOCKED',element); $event.stopPropagation()">Block</button>
+              }
+               @if (element.status == 'BLOCKED') {
+              <button mat-stroked-button class="m-r-4"
+                (click)="action('ACTIVE',element); $event.stopPropagation()">Activate</button>
+              }
+
+            </td>
+          </ng-container>
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+              <div class="example-element-detail"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+                <div class="width-100" style="padding-bottom: 1rem;">
+                  <p>Active Business Models</p>
+
+                  <nz-select [nzMaxTagCount]="4" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                    nzPlaceHolder="Please select" [(ngModel)]="element.selectedBusinessModelIds"
+                    (ngModelChange)="onOrgModelChange($event,element)">
+                    <nz-option *ngFor="let item of businessModels" [nzLabel]="item.name" [nzValue]="item.id">
+                    </nz-option>
+                  </nz-select>
+                  <ng-template #tagPlaceHolder let-selectedList>
+                    and {{ selectedList.length }} more selected
+                  </ng-template>
+
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+
+      </div>
+      <!--  -->
+      <!-- <div class="table-wrapper">
         <table mat-table [dataSource]="requests" class="requests-table">
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let request">{{request.id}}</td>
           </ng-container>
 
-          <ng-container matColumnDef="businessName">
-            <th mat-header-cell *matHeaderCellDef>Business Name</th>
+          <ng-container matColumnDef="organizationName">
+            <th mat-header-cell *matHeaderCellDef>Organization Name</th>
             <td mat-cell *matCellDef="let request">{{request.businessName}}</td>
           </ng-container>
 
@@ -59,14 +151,12 @@
                 <button mat-button color="primary" (click)="viewDetails(request)">
                   View
                 </button>
-                <button mat-button color="accent" 
-                        (click)="approveRequest(request)"
-                        [disabled]="request.status !== 'pending'">
+                <button mat-button color="accent" (click)="approveRequest(request)"
+                  [disabled]="request.status !== 'pending'">
                   Approve
                 </button>
-                <button mat-button color="warn" 
-                        (click)="rejectRequest(request)"
-                        [disabled]="request.status !== 'pending'">
+                <button mat-button color="warn" (click)="rejectRequest(request)"
+                  [disabled]="request.status !== 'pending'">
                   Reject
                 </button>
               </div>
@@ -76,7 +166,31 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-      </div>
+      </div> -->
     </mat-card-content>
   </mat-card>
 </div>
+
+
+<app-side-panel [isOpen]="isPanelOpen" [title]="'Business Configuration'" (closePanel)="closePanel()"
+  [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'800px'}" class="p-4">
+
+  <div class="flex js-c m-b-8">
+    <nz-segmented [nzOptions]="bizOptions" (nzValueChange)="bizOptionsChange($event)"></nz-segmented>
+  </div>
+
+  <div>
+    <div class="flex js-e">
+      <button nz-button nzType="dashed" (click)="createNewBusinessModel()">Create Model</button>
+    </div>
+    <div class="filter-chips">
+      <mat-chip-listbox [value]="selectedModel" (change)="onModelChange($event.value)">
+        <mat-chip-option *ngFor="let filter of businessModels" [value]="filter.value"
+          [selected]="selectedModel === filter.name">
+          {{filter.name}}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+</app-side-panel>

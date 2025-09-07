@@ -1,26 +1,55 @@
 <nav class="navbar">
-  <div class="logo" (click)="navigateToHome()" style="cursor: pointer">Flashbag</div>
+  <div class="flex items-center gap-3">
+    <div
+      class="h-10 w-10 rounded-xl bg-black text-white flex items-center justify-center shadow-sm ring-1 ring-black/10">
+      <img src="../../../assets/png/logo.png" alt="" srcset="">
+    </div>
+    <span class="text-lg tracking-tight font-medium text-neutral-900 ml-2">9Myle</span>
+  </div>
+  <nav class="hidden md:flex items-center gap-6 text-sm text-neutral-600">
+    <a href="#" class="hover:text-neutral-900 transition-colors">Home</a>
+    <a href="#" class="hover:text-neutral-900 transition-colors">Device</a>
+    <a href="#" class="hover:text-neutral-900 transition-colors">Story</a>
+    <a href="#" class="hover:text-neutral-900 transition-colors">Support</a>
+  </nav>
+  <div class="flex items-center gap-3">
+    <button
+      class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg ring-1 ring-black/10 bg-white text-neutral-700">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu"
+        class="lucide lucide-menu h-5 w-5">
+        <path d="M4 12h16"></path>
+        <path d="M4 18h16"></path>
+        <path d="M4 6h16"></path>
+      </svg>
+    </button>
+    
+    <button mat-stroked-button routerLink="/login" [queryParams]="{type: 'business'}" *ngIf="!authService.isLoggedIn() && !hideLoginButtons">
+      Business Login
+    </button>
+  </div>
+</nav>
+
+<!-- <nav class="navbar">
+  <div class="logo" (click)="navigateToHome()" style="cursor: pointer">9 Myle</div>
   <div class="nav-right">
-    <ng-container *ngIf="!authService.isLoggedIn()">
-      <button *ngIf="!isBusinessRoute" 
-              class="btn-login customer" 
-              (click)="openLoginDialog()">
+    
+    <ng-container *ngIf="!authService.isLoggedIn() && !hideLoginButtons">
+      <button *ngIf="!isBusinessRoute" class="btn-login customer" (click)="openLoginDialog()">
         Customer Login
       </button>
-      <button class="btn-login business" 
-              routerLink="/login" 
-              [queryParams]="{type: 'business'}">
+      <button class="btn-login business" routerLink="/login" [queryParams]="{type: 'business'}">
         Business Login
       </button>
     </ng-container>
 
-    <!-- Add back the avatar section -->
     <div class="avatar-container" *ngIf="authService.isLoggedIn()">
       <button class="avatar-btn" [matMenuTriggerFor]="menu">
         <div class="avatar-circle">
           <span class="placeholder-text">{{ getInitials() }}</span>
         </div>
       </button>
+
       <mat-menu #menu="matMenu" class="admin-menu">
         <div class="menu-header">
           <div class="avatar-circle menu-avatar">
@@ -51,8 +80,10 @@
         </div>
       </mat-menu>
     </div>
+
     <button class="theme-toggle" (click)="toggleTheme()">
       <i class="icon-{{ isDarkTheme ? 'sun' : 'moon' }}"></i>
     </button>
+    
   </div>
-</nav> 
+</nav> -->

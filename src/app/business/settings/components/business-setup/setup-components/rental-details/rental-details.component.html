@@ -1,0 +1,120 @@
+
+<div>
+    <nz-card nzTitle="Rental" [nzExtra]="extraTemplate">
+        <nz-card nzTitle="Honda City" [nzExtra]="editTemplate" class="m-b-4">
+            <div class="flex gap-1rem">
+                <div>
+                    <nz-avatar nzShape="square" [nzSize]="200" style="border-radius: 3px;"
+                        nzSrc="https://imgd-ct.aeplcdn.com/1056x660/n/cw/ec/143725/honda-city-front-view3.jpeg?isig=0&wm=4&q=80"></nz-avatar>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:0"></h4>
+                    <nz-rate [ngModel]="4.5" nzAllowHalf></nz-rate>
+                    <span>(190)</span>
+                    <p class="child_text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        At beatae est provident autem nostrum ea consequatur eius voluptatum accusamus distinctio ab,
+                        totam voluptate odio quo placeat fugit asperiores quia sequi.</p>
+                    <div class="flex gap-1rem wrap">
+                        <div class="date_block">
+                            <span class="child_text">Km Runs</span>
+                            <div class="expiry-date">{{156000 | number}}</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Insurance Expires</span>
+                            <div class="expiry-date">28 Days</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Rent/Day</span>
+                            <div class="expiry-date">2800</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+        <nz-card nzTitle="Kia Carnival" [nzExtra]="editTemplate" class="m-b-4">
+            <div class="flex gap-1rem">
+                <div>
+                    <nz-avatar nzShape="square" [nzSize]="200" style="border-radius: 3px;"
+                        nzSrc="https://imgd-ct.aeplcdn.com/1056x660/n/cw/ec/138947/carnival-exterior-front-view-21.jpeg?isig=0&q=80"></nz-avatar>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:0"></h4>
+                    <nz-rate [ngModel]="4" nzAllowHalf></nz-rate>
+                    <span>(190)</span>
+                    <p class="child_text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        At beatae est provident autem nostrum ea consequatur eius voluptatum accusamus distinctio ab,
+                        totam voluptate odio quo placeat fugit asperiores quia sequi.</p>
+                    <div class="flex gap-1rem wrap">
+                        <div class="date_block">
+                            <span class="child_text">Km Runs</span>
+                            <div class="expiry-date">{{56000 | number}}</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Insurance Expires</span>
+                            <div class="expiry-date">258 Days</div>
+                        </div>
+                        <div class="date_block">
+                            <span class="child_text">Rent/Day</span>
+                            <div class="expiry-date">4800</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+    </nz-card>
+
+    <ng-template #editTemplate>
+        <a (click)="openPanel()">Edit</a>
+    </ng-template>
+
+    <ng-template #extraTemplate>
+        <a>Create</a>
+    </ng-template>
+</div>
+
+<app-side-panel [isOpen]="isPanelOpen" [title]="'Rental'" (closePanel)="closePanel()"
+    [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'500px'}" class="p-4">
+
+    <div class="flex js-sb m-b-8">
+        <h2 class="m-0">Honda City</h2>
+        <div>
+            <nz-rate [ngModel]="4.5" nzAllowHalf></nz-rate>
+            <span> (200)</span>
+        </div>
+    </div>
+
+    <div class="flex js-c m-b-8">
+        <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
+    </div>
+
+    <div *ngIf="activeSegment == 'Details'">
+
+    </div>
+
+    <div *ngIf="activeSegment == 'Trend'">
+        <div class="p-4 flex wrap js-sb m-b-8">
+            <div class="date_block">
+                <span class="child_text">Total Bookings</span>
+                <div class="expiry-date">{{1924 | number}}</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Km Runs</span>
+                <div class="expiry-date">{{1924 | number}}</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Next FC</span>
+                <div class="expiry-date">Jan 10, 2026</div>
+            </div>
+            <div class="date_block">
+                <span class="child_text">Revenue</span>
+                <div class="expiry-date">{{75000 | number}}</div>
+            </div>
+        </div>
+
+        <div>
+            <canvas id="myChart" style="width:100%; max-width:700px;"></canvas>
+        </div>
+
+    </div>
+
+</app-side-panel>

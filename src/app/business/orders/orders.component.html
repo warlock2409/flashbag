@@ -1,489 +1,195 @@
-<div class="orders-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Orders Management</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <div class="filter-chips">
-        <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
-          <mat-chip-option *ngFor="let filter of filters" [value]="filter.value"
-            [selected]="selectedFilter === filter.value">
-            {{filter.label}}
-          </mat-chip-option>
-        </mat-chip-listbox>
+<div class="min-h-screen antialiased text-neutral-900 bg-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Top Bar -->
+    <header class="flex items-center justify-between gap-4">
+      <div class="flex items-start gap-3">
+        <div class="h-9 w-9 rounded-md bg-violet-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
+          <span class="text-sm font-semibold tracking-tight"
+            style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">IN</span>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900"
+            style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;margin: 0;">
+            Invoices
+          </h1>
+          <p class="text-xs text-neutral-600">
+            Track, search, and manage your billing
+          </p>
+        </div>
       </div>
 
-      <div class="orders-content" [ngSwitch]="selectedFilter">
-        <div *ngSwitchCase="'flashbag'" class="flashbag-deals">
-          <mat-accordion>
-            <mat-expansion-panel *ngFor="let deal of flashbagDeals">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{deal.title}}
-                </mat-panel-title>
-                <mat-panel-description>
-                  Created: {{deal.date | date:'mediumDate'}} |
-                  Delivery: {{deal.deliveryDate | date:'mediumDate'}} |
-                  Orders: {{deal.orders.length}}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button mat-stroked-button>
+          <i class="fa-solid fa-download"></i>
+          Export
+        </button>
+        <button mat-stroked-button (click)="openNewInvoice()">
+          <i class="fa-solid fa-plus"></i>
+          New Invoice
+        </button>
+      </div>
+    </header>
 
-              <table mat-table [dataSource]="deal.orders" class="orders-table">
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef>Order ID</th>
-                  <td mat-cell *matCellDef="let order">{{order.id}}</td>
-                </ng-container>
+    <!-- Controls -->
+    <section class="mt-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+      <!-- Search -->
+      <div class="relative flex-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="search"
+          class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500">
+          <path d="m21 21-4.34-4.34"></path>
+          <circle cx="11" cy="11" r="8"></circle>
+        </svg>
+        <input id="search" type="text" placeholder="Search by invoice or client…" [(ngModel)]="searchQuery"
+          (input)="onSearchChange()"
+          class="w-full rounded-md bg-white pl-9 pr-3 py-2 text-sm text-neutral-900 placeholder-neutral-500 ring-1 ring-inset ring-neutral-200 focus:outline-none focus:ring-neutral-300"
+          style="font-family: 'Inter', ui-sans-serif, system-ui;">
+      </div>
+      <!-- Segmented Filter -->
+      <div class="inline-flex w-full md:w-auto items-center rounded-lg bg-white ring-1 ring-inset ring-neutral-200 p-1"
+        role="tablist">
+        <button *ngFor="let tab of tabs" (click)="selectTab(tab.value)"
+          class="filter-btn flex-1 md:flex-none inline-flex items-center cursor-pointer gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+          [ngClass]="{
+          'text-neutral-900 bg-neutral-100': selectedTab === tab.value,
+          'text-neutral-600 hover:text-neutral-900': selectedTab !== tab.value
+          }" [attr.aria-selected]="selectedTab === tab.value">
+          <span class="inline-flex h-5 min-w-[28px] items-center justify-center rounded-full text-xs ring-1 ring-inset"
+            [ngClass]="tab.badgeClass">•</span>
+          {{ tab.label }}
+          <span class="ml-1 text-neutral-500 text-xs tabular-nums" *ngIf="tab.count !== null">
+            ({{ tab.count }})
+          </span>
+        </button>
+      </div>
+    </section>
 
-                <ng-container matColumnDef="customer">
-                  <th mat-header-cell *matHeaderCellDef>Customer</th>
-                  <td mat-cell *matCellDef="let order">{{order.customer}}</td>
-                </ng-container>
+    <!-- Table (Desktop) -->
+    <section class="mt-6 hidden md:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+      <div
+        class="grid grid-cols-12 px-4 sm:px-6 py-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200">
+        <div class="col-span-3">Invoice</div>
+        <div class="col-span-3">Client</div>
+        <div class="col-span-2">Issued</div>
+        <!-- <div class="col-span-2">Due</div> -->
+        <div class="col-span-3 text-right">Amount</div>
+        <div class="col-span-1 text-right">Status</div>
+      </div>
 
-                <ng-container matColumnDef="quantity">
-                  <th mat-header-cell *matHeaderCellDef>Quantity</th>
-                  <td mat-cell *matCellDef="let order">{{order.quantity}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="total">
-                  <th mat-header-cell *matHeaderCellDef>Total</th>
-                  <td mat-cell *matCellDef="let order">${{order.total}}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="['id', 'customer', 'quantity', 'total']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['id', 'customer', 'quantity', 'total'];"></tr>
-              </table>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </div>
-
-        <div *ngSwitchCase="'services'" class="services">
-          <p>Services orders coming soon...</p>
-        </div>
-
-        <div *ngSwitchCase="'products'" class="products">
-          <p>Products orders coming soon...</p>
-        </div>
-
-        <div *ngSwitchCase="'rental'" class="rental">
-          <div class="booking-list">
-            <div class="booking-list">
-              <mat-progress-bar mode="query" *ngIf="buffer"></mat-progress-bar>
-              <mat-table [dataSource]="bookings" class="mat-elevation-z8">
-                <ng-container matColumnDef="bookingId">
-                  <mat-header-cell *matHeaderCellDef> Booking ID</mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.requestedOn | date }} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="vehicleName">
-                  <mat-header-cell *matHeaderCellDef> Vehicle Name </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.vehicleName }} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="dateRange">
-                  <mat-header-cell *matHeaderCellDef> Booking </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ formatDateRange(booking.startDate, booking.endDate)}}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="customerName">
-                  <mat-header-cell *matHeaderCellDef> Customer </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.customerName }} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="registerNumber">
-                  <mat-header-cell *matHeaderCellDef> Reg.No </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.registerNumber }} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="status">
-                  <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                  <mat-cell *matCellDef="let booking">
-                    {{ booking.status }}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="phoneNumber">
-                  <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
-                  <mat-cell *matCellDef="let booking"> {{ booking.phoneNumber }} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="totalAmount">
-                  <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
-                  <mat-cell *matCellDef="let booking">
-                     <div *ngIf="booking.totalAmount ">
-                       {{ booking.totalAmount }} 
-                     </div>
-                     <div *ngIf="!booking.totalAmount ">
-                        No Payment
-                     </div>
-                     
-                    </mat-cell>
-                </ng-container>
-                <!-- Actions Column -->
-                <ng-container matColumnDef="actions">
-                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                  <mat-cell *matCellDef="let booking">
-                    <button mat-button color="primary" (click)="openPanel(booking)">View</button>
-                  </mat-cell>
-                </ng-container>
-
-                <!-- Header and Row Definitions -->
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-              </mat-table>
+      <div id="table-body" class="divide-y divide-neutral-100">
+        <!-- Rows -->
+        @for (invoice of invoiceList; track $index) {
+        <div data-role="row" (click)="openExisitingInvoice(invoice)"
+          class="grid grid-cols-12 px-4 sm:px-6 py-4 hover:bg-neutral-50 transition-colors hover:border-neutral-200 cursor-pointer">
+          <div class="col-span-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              data-lucide="file-text" class="lucide lucide-file-text w-4 h-4 text-neutral-500">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+              <path d="M10 9H8"></path>
+              <path d="M16 13H8"></path>
+              <path d="M16 17H8"></path>
+            </svg>
+            <span class="font-medium text-neutral-900">{{invoice.invoiceNumber}}</span>
+          </div>
+          <div class="col-span-3">
+            <div class="font-medium text-neutral-800">
+              {{ invoice.customer?.firstName }}
             </div>
-
+            <div class="text-sm text-gray-400">
+              {{ invoice.customer?.email }}
+            </div>
+            <div class="text-sm text-gray-400">
+              {{ invoice.customer?.phone }}
+            </div>
+          </div>
+          <div class="col-span-2 text-neutral-500">{{ invoice.invoiceDate | date:'MMM d, y, h:mm a'}}</div>
+          <!-- <div class="col-span-2 text-neutral-500">Sep 11, 2025</div> -->
+          <div class="col-span-3 text-right text-neutral-900">{{invoice.grandTotal | currency:'INR':'symbol':'1.2-2'}}
+          </div>
+          <div class="col-span-1 flex items-start justify-end">
+            <span class="inline-flex items-start rounded-full px-2 py-0.5 text-xs ring-1 ring-inset"
+              [ngClass]="statusClasses[invoice.status!]">
+              {{ invoice.status }}
+            </span>
           </div>
         </div>
+        }
       </div>
-    </mat-card-content>
-  </mat-card>
+    </section>
 
-  <app-side-panel [isOpen]="isPanelOpen" [title]="'Bookings'" (closePanel)="closePanel()"
-    [panelStyles]="{ 'height': 'calc(100% - 60px)'}">
-    <div>
-      <div class="flex gap-1rem js-c m-8">
-        <button mat-stroked-button color="primary">
-          <mat-icon style="color: green;">check_circle</mat-icon> Accept
-        </button>
-        <button mat-stroked-button>
-          <mat-icon color="warn">cancel</mat-icon> Reject
-        </button>
+    <!-- Cards (Mobile) -->
+    <section id="cards" class="mt-6 space-y-3 md:hidden">
+      <!-- Card -->
+      <article data-role="card" data-invoice-id="1045" data-status="open"
+        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              data-lucide="file-text" class="lucide lucide-file-text w-4 h-4 text-neutral-500">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+              <path d="M10 9H8"></path>
+              <path d="M16 13H8"></path>
+              <path d="M16 17H8"></path>
+            </svg>
+            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
+              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
+              INV-1045
+            </h3>
+          </div>
+          <span
+            class="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-700 ring-1 ring-inset ring-amber-500/20">Open</span>
+        </div>
+        <div class="mt-2 text-sm text-neutral-700">Nova Systems</div>
+        <div class="mt-3 flex items-center justify-between text-sm">
+          <div class="text-neutral-500">
+            <span class="text-neutral-500">Issued:</span> Aug 12, 2025
+          </div>
+          <div class="text-neutral-500">
+            <span class="text-neutral-500">Due:</span> Sep 11, 2025
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between">
+          <div class="text-neutral-900 font-medium">$3,200.00</div>
+          <button
+            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
+            View
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
+              <path d="M7 7h10v10"></path>
+              <path d="M7 17 17 7"></path>
+            </svg>
+          </button>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Empty state -->
+    <div id="empty" class="hidden mt-14 flex flex-col items-center justify-center text-center"
+      *ngIf="invoiceList.length == 0">
+      <div class="h-12 w-12 rounded-lg bg-neutral-50 ring-1 ring-inset ring-neutral-200 grid place-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="inbox"
+          class="lucide lucide-inbox w-6 h-6 text-neutral-500">
+          <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+          <path
+            d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+          </path>
+        </svg>
       </div>
-      <mat-divider></mat-divider>
-      <div class="flex js-sa" style="padding: 0;margin-top: 1rem;">
-        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'user'}" (click)="setActivePanel('user')">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'car'}" (click)="setActivePanel('car')">
-          <mat-icon>directions_car</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'driver'}" (click)="setActivePanel('driver')">
-          <mat-icon>sports_motorsports</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" [ngClass]="{active: activePanel === 'assignment'}" (click)="setActivePanel('assignment')">
-          <mat-icon>assignment</mat-icon>
-        </button>
-      </div>
-
-      <ng-container [ngSwitch]="activePanel">
-        <!-- Car -->
-        <ng-container *ngSwitchCase="'car'">
-          <mat-card class="user-info-card">
-            <div class="user-header">
-              <div class="avatar-circle">
-                <img *ngIf="selectedBooking?.carImage; else carInitials" [src]="selectedBooking.carImage" alt="Car Image" />
-                <ng-template #carInitials>
-                  <span class="placeholder-text">{{ getInitials(selectedBooking.vehicleName) }}</span>
-                </ng-template>
-              </div>
-              <div class="user-details">
-                <div class="user-name">{{ selectedBooking.vehicleName }}</div>
-                <div class="user-phone">Reg. No: {{ selectedBooking.registerNumber || 'N/A' }}</div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-
-            <div class="customer-profile">
-              <div class="profile-status flex gap-1rem wrap"> 
-                <div class="license-expiry">
-                  <span>Insurance Expiry</span>
-                  <div class="expiry-date">{{ selectedBooking.insuranceExpiry | date:'mediumDate' }}</div>
-                </div>
-                <div class="license-expiry">
-                  <span>Kilometers Run</span>
-                  <div class="expiry-date">{{ selectedBooking.kmRun || 'N/A' }} km</div>
-                </div>
-                <div class="license-expiry">
-                  <span>FC Date</span>
-                  <div class="expiry-date">{{ selectedBooking.fcDate | date:'mediumDate' }}</div>
-                </div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-
-            <div class="user-past-bookings">
-              <div class="bookings-header">
-                <h4>Past Bookings</h4>
-              </div>
-              <mat-accordion class="past-bookings-accordion">
-                <mat-expansion-panel *ngFor="let booking of carPastBookings">
-                  <mat-expansion-panel-header>
-                    <div class="past-booking-summary">
-                      <span>{{ booking.date | date }}</span>
-                      <span class="vehicle">{{ booking.vehicleName }}</span>
-                      <span class="rating">
-                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
-                      </span>
-                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
-                        <mat-icon>
-                          {{ booking.status === 'Completed' ? 'check_circle' :
-                             booking.status === 'Canceled' ? 'cancel' :
-                             booking.status === 'Rejected' ? 'block' :
-                             booking.status === 'Pending' ? 'hourglass_empty' :
-                             booking.status === 'Confirmed' ? 'check_circle_outline' :
-                             'info' }}
-                        </mat-icon>
-                        <!-- {{ booking.status }} -->
-                      </span>
-                    </div>
-                  </mat-expansion-panel-header>
-                  <div class="past-booking-details">
-                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
-                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
-                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-          </mat-card>
-        </ng-container>
-        <!-- Customer -->
-        <ng-container *ngSwitchCase="'user'">
-          <mat-card class="user-info-card">
-            <div class="user-header">
-              <div class="avatar-circle">
-                <img *ngIf="user.image; else initials" [src]="user.image" alt="User Image" />
-                <ng-template #initials>
-                  <span class="placeholder-text">{{ getInitials(user.name) }}</span>
-                </ng-template>
-              </div>
-              <div class="user-details">
-                <div class="user-name flex js-sb align-center">
-                  {{ user.name }}
-                  <span class="trust-score">
-                    <mat-icon class="star">star</mat-icon>
-                    {{ user.trustScore }}
-                  </span>
-                </div>
-                <div class="user-phone">{{ user.phone }}</div>
-                <div class="user-email" *ngIf="user.email">{{ user.email }}</div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="customer-profile">
-              <div class="profile-status">
-                <div class="status-item">
-                  <span>License Status</span>
-                  <div class="toggle-buttons">
-                    <button mat-button [class.active]="user.licenseStatus === 'verified'" color="primary">
-                      <mat-icon>verified</mat-icon>
-                      Verified
-                    </button>
-                    <button mat-button [class.active]="user.licenseStatus === 'pending'" color="warn">
-                      <mat-icon>pending</mat-icon>
-                      Pending
-                    </button>
-                  </div>
-                </div>
-      
-                <div class="license-expiry">
-                  <span>License Expiry</span>
-                  <div class="expiry-date">{{ user.licenseExpiry | date:'mediumDate' }}</div>
-                </div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="user-criteria">
-              <h4>Customer Profile</h4>
-              <div class="criteria-header">
-                <div class="criteria-filter">
-                  <button mat-button [class.active]="criteriaFilter === 'all'" (click)="setCriteriaFilter('all')">
-                    All
-                  </button>
-                  <button mat-button [class.active]="criteriaFilter === 'verified'" (click)="setCriteriaFilter('verified')">
-                    <mat-icon>verified</mat-icon>
-                    Verified
-                  </button>
-                  <button mat-button [class.active]="criteriaFilter === 'pending'" (click)="setCriteriaFilter('pending')">
-                    <mat-icon>pending</mat-icon>
-                    Pending
-                  </button>
-                </div>
-              </div>
-              <mat-list>
-                <mat-list-item *ngFor="let criterion of filteredCriteria">
-                  <div class="criteria-item">
-                    <mat-chip [color]="criterion.completed ? 'primary' : 'warn'" [class.completed]="criterion.completed">
-                      <mat-icon style="transform: translateY(3px);">{{ criterion.completed ? 'check_circle' : 'pending'
-                        }}</mat-icon>
-                      {{ criterion.completed ? 'Verified' : 'Pending' }}
-                    </mat-chip>
-                    <span class="criteria-label">{{ criterion.label }}</span>
-                  </div>
-                </mat-list-item>
-              </mat-list>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="user-past-bookings">
-              <div class="bookings-header">
-                <h4>Past Bookings</h4>
-                <div class="revenue-info">
-                  <span class="revenue-label">Total Revenue</span>
-                  <span class="revenue-amount">₹{{ calculateTotalRevenue() }}</span>
-                </div>
-              </div>
-              <mat-accordion class="past-bookings-accordion">
-                <mat-expansion-panel *ngFor="let booking of user.pastBookings">
-                  <mat-expansion-panel-header>
-                    <div class="past-booking-summary">
-                      <span>{{ booking.date | date }}</span>
-                      <span class="vehicle">{{ booking.vehicleName }}</span>
-                      <span class="rating">
-                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
-                      </span>
-                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
-                        <mat-icon>
-                          {{ booking.status === 'Completed' ? 'check_circle' :
-                             booking.status === 'Canceled' ? 'cancel' :
-                             booking.status === 'Rejected' ? 'block' :
-                             booking.status === 'Pending' ? 'hourglass_empty' :
-                             booking.status === 'Confirmed' ? 'check_circle_outline' :
-                             'info' }}
-                        </mat-icon>
-                        <!-- {{ booking.status }} -->
-                      </span>
-                    </div>
-                  </mat-expansion-panel-header>
-                  <div class="past-booking-details">
-                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
-                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
-                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-          </mat-card>
-        </ng-container>
-        <!-- Driver -->
-        <ng-container *ngSwitchCase="'driver'">
-          <mat-card class="user-info-card">
-            <div class="user-header">
-              <div class="avatar-circle">
-                <img *ngIf="user.image; else initials" [src]="user.image" alt="User Image" />
-                <ng-template #initials>
-                  <span class="placeholder-text">{{ getInitials(user.name) }}</span>
-                </ng-template>
-              </div>
-              <div class="user-details">
-                <div class="user-name flex js-sb align-center">
-                  {{ user.name }}
-                  <span class="trust-score">
-                    <mat-icon class="star">star</mat-icon>
-                    {{ user.trustScore }}
-                  </span>
-                </div>
-                <div class="user-phone">{{ user.phone }}</div>
-                <div class="user-email" *ngIf="user.email">{{ user.email }}</div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="customer-profile">
-              <div class="profile-status">
-                <div class="status-item">
-                  <span>License Status</span>
-                  <div class="toggle-buttons">
-                    <button mat-button [class.active]="user.licenseStatus === 'verified'" color="primary">
-                      <mat-icon>verified</mat-icon>
-                      Verified
-                    </button>
-                    <button mat-button [class.active]="user.licenseStatus === 'pending'" color="warn">
-                      <mat-icon>pending</mat-icon>
-                      Pending
-                    </button>
-                  </div>
-                </div>
-      
-                <div class="license-expiry">
-                  <span>License Expiry</span>
-                  <div class="expiry-date">{{ user.licenseExpiry | date:'mediumDate' }}</div>
-                </div>
-              </div>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="user-criteria">
-              <h4>Customer Profile</h4>
-              <div class="criteria-header">
-                <div class="criteria-filter">
-                  <button mat-button [class.active]="criteriaFilter === 'all'" (click)="setCriteriaFilter('all')">
-                    All
-                  </button>
-                  <button mat-button [class.active]="criteriaFilter === 'verified'" (click)="setCriteriaFilter('verified')">
-                    <mat-icon>verified</mat-icon>
-                    Verified
-                  </button>
-                  <button mat-button [class.active]="criteriaFilter === 'pending'" (click)="setCriteriaFilter('pending')">
-                    <mat-icon>pending</mat-icon>
-                    Pending
-                  </button>
-                </div>
-              </div>
-              <mat-list>
-                <mat-list-item *ngFor="let criterion of filteredCriteria">
-                  <div class="criteria-item">
-                    <mat-chip [color]="criterion.completed ? 'primary' : 'warn'" [class.completed]="criterion.completed">
-                      <mat-icon style="transform: translateY(3px);">{{ criterion.completed ? 'check_circle' : 'pending'
-                        }}</mat-icon>
-                      {{ criterion.completed ? 'Verified' : 'Pending' }}
-                    </mat-chip>
-                    <span class="criteria-label">{{ criterion.label }}</span>
-                  </div>
-                </mat-list-item>
-              </mat-list>
-            </div>
-            <mat-divider></mat-divider>
-      
-            <div class="user-past-bookings">
-              <div class="bookings-header">
-                <h4>Past Bookings</h4>
-                <div class="revenue-info">
-                  <span class="revenue-label">Total Revenue</span>
-                  <span class="revenue-amount">₹{{ calculateTotalRevenue() }}</span>
-                </div>
-              </div>
-              <mat-accordion class="past-bookings-accordion">
-                <mat-expansion-panel *ngFor="let booking of user.pastBookings">
-                  <mat-expansion-panel-header>
-                    <div class="past-booking-summary">
-                      <span>{{ booking.date | date }}</span>
-                      <span class="vehicle">{{ booking.vehicleName }}</span>
-                      <span class="rating">
-                        <mat-icon style="transform: translateY(-2px);">star</mat-icon> {{ booking.rating }}
-                      </span>
-                      <span class="booking-status-icon" [ngClass]="booking.status.toLowerCase()">
-                        <mat-icon>
-                          {{ booking.status === 'Completed' ? 'check_circle' :
-                             booking.status === 'Canceled' ? 'cancel' :
-                             booking.status === 'Rejected' ? 'block' :
-                             booking.status === 'Pending' ? 'hourglass_empty' :
-                             booking.status === 'Confirmed' ? 'check_circle_outline' :
-                             'info' }}
-                        </mat-icon>
-                        <!-- {{ booking.status }} -->
-                      </span>
-                    </div>
-                  </mat-expansion-panel-header>
-                  <div class="past-booking-details">
-                    <div><strong>Customer Review:</strong> {{ booking.customerReview }}</div>
-                    <div><strong>Shop Review:</strong> {{ booking.shopReview }}</div>
-                    <div><strong>Driver Review:</strong> {{ booking.driverReview }}</div>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-          </mat-card>
-        </ng-container>
-        <!-- Assesment -->
-        <ng-container *ngSwitchCase="'assignment'" style="scale: 0.7;">
-          <ngx-timeline 
-          [events]="events"
-          [enableAnimation]="false"
-          ></ngx-timeline>
-        </ng-container>
-      </ng-container>
+      <h3 class="mt-4 text-lg font-semibold tracking-tight text-neutral-900"
+        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
+        No invoices match your filters
+      </h3>
+      <p class="mt-1 text-sm text-neutral-600">
+        Try a different status or clear your search.
+      </p>
     </div>
 
-    
-  </app-side-panel>
-
+  </div>
 </div>

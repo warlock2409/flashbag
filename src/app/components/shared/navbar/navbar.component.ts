@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+
 @Injectable()
 @Component({
   selector: 'app-navbar',
@@ -68,7 +69,7 @@ import { MatDialogModule } from '@angular/material/dialog';
       align-items: center;
       padding: 8px 24px;
       background: #ffffff;
-      border-bottom: 1px solid #eee;
+      border-bottom: 2px solid #a684ff;
       position: fixed;
       top: 0;
       left: 0;
@@ -215,11 +216,12 @@ import { MatDialogModule } from '@angular/material/dialog';
   `]
 })
 export class NavbarComponent {
+  hideLoginButtons = false; // Hide in onboard route
   isLandingPage = false;
   isLoginPage = false;
   isDarkTheme = false;
   isBusinessRoute: boolean = false;
-
+  hiddenRoutes = ['/onboarding'];
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -230,11 +232,15 @@ export class NavbarComponent {
     private settingsPanelService: SettingsPanelService,
     private dialog: MatDialog
   ) {
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
+      const url = event.urlAfterRedirects;
       this.isLandingPage = event.url === '/';
       this.isLoginPage = event.url.includes('/login');
+      const hiddenRoutes = ['/onboarding'];
+      this.hideLoginButtons = hiddenRoutes.includes(url);
     });
 
     this.themeService.isDarkTheme$.subscribe(
@@ -244,12 +250,13 @@ export class NavbarComponent {
 
 
   ngOnInit() {
+
     this.router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe(() => {
-      // Now this.router.url reflects the current, fully updated URL
-      this.isBusinessRoute = this.router.url.includes('/business');
-    });
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Now this.router.url reflects the current, fully updated URL
+        this.isBusinessRoute = this.router.url.includes('/business');
+      });
   }
 
   toggleTheme() {
@@ -259,7 +266,7 @@ export class NavbarComponent {
   getInitials(): string {
     const email = this.getUserEmail();
     if (!email) return 'U';
-    
+
     // Split email and get first letter of each part before @
     const nameParts = email.split('@')[0].split('.');
     return nameParts.map(part => part[0].toUpperCase()).join('');
@@ -268,7 +275,7 @@ export class NavbarComponent {
   getUserName(): string {
     const email = this.getUserEmail();
     if (!email) return 'User';
-    
+
     // Convert email name part to display name
     const name = email.split('@')[0].split('.');
     return name.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
@@ -321,4 +328,6 @@ export class NavbarComponent {
       this.router.navigate(['/']);
     }
   }
+
+  // WABA
 } 

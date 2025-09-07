@@ -1,0 +1,112 @@
+<div>
+    <div>
+        <nz-card class="rounded-xl shadow-sm" nzTitle="Business details" [nzExtra]="extraTemplate">
+            <p *ngIf="currentView=='organization'">Set your organization name and manage plan</p>
+            <p *ngIf="currentView=='business'">Set your business name, tax and language preferences, and manage external
+                links.</p>
+
+            <nz-descriptions style="width: 100%;" nzBordered nzLayout="vertical" [nzColumn]="2">
+
+                @if (currentView=='organization') {
+                <nz-descriptions-item nzTitle="Organization name">{{details?.name}}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Country" >{{ details?.country
+                    }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Currency">{{ details?.currency
+                    }}</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Added on">
+                    2018-04-24 18:00:00
+                </nz-descriptions-item>
+
+                }@else {
+                <nz-descriptions-item nzTitle="Business name">BI Fitness</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Tax calculation">Retail prices include tax</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Team default language">🇬🇧 English (English)</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Client default language">🇬🇧 English (English)</nz-descriptions-item>
+                <nz-descriptions-item nzTitle="External Links" [nzSpan]="2">
+                </nz-descriptions-item>
+
+                <nz-descriptions-item nzTitle="Facebook">
+                    <a href="">Add</a>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="X (Twitter)">
+                    <a href="">Add</a>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Instagram">
+                    <a href="">Add</a>
+                </nz-descriptions-item>
+                <nz-descriptions-item nzTitle="Website">
+                    <a href="">Add</a>
+                </nz-descriptions-item>
+                }
+
+                <nz-descriptions-item nzTitle="Status">
+                    <nz-badge [nzStatus]="getStatusColor(details?.status)"
+                        [nzText]="details?.status?.charAt(0)?.toUpperCase() + details?.status.slice(1).toLowerCase()"></nz-badge>
+                </nz-descriptions-item>
+
+            </nz-descriptions>
+        </nz-card>
+
+        <ng-template #extraTemplate>
+            <a>Edit</a>
+        </ng-template>
+    </div>
+
+    <!-- Current Plan -->
+
+    <!-- No plan -->
+    <div *ngIf="!details?.organizationPlan"
+        class="mt-4 pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 relative max-w-[320px]">
+        <div class="p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">You don’t have an active plan</h3>
+            <p class="text-gray-600 mb-6">
+                Choose a plan to unlock all features and keep your business running smoothly.
+            </p>
+            <button (click)="buyPlan()"
+                class="cursor w-full py-3 px-6 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-violet-100 transition">
+                Explore Our Plans
+            </button>
+        </div>
+    </div>
+
+    <!-- Has plan -->
+    <div *ngIf="details?.organizationPlan"
+        class="mt-4 pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 relative max-w-[320px]">
+        <div class="p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ details.organizationPlan.planName }}</h3>
+            <p class="text-gray-600 mb-4">
+                Subscribed on: {{ details.organizationPlan.startDate | date:'mediumDate' }} <br>
+                Expires on: {{ details.organizationPlan.endDate | date:'mediumDate' }}
+            </p>
+            <p class="text-gray-600 mb-4">
+                Price: ₹{{ details.organizationPlan.subscribedPrice }}
+            </p>
+            <!-- <div class="mb-4">
+                <p class="font-semibold text-gray-800">Limits:</p>
+                <ul class="list-disc list-inside text-gray-600">
+                    <li>Branches: {{ details.organizationPlan.branchLimit }}</li>
+                    <li>Members: {{ details.organizationPlan.memberLimit }}</li>
+                    <li>Staff: {{ details.organizationPlan.staffLimit }}</li>
+                    <li>Check-ins: {{ details.organizationPlan.checkInLimit }}</li>
+                    <li>Products: {{ details.organizationPlan.productLimit }}</li>
+                    <li>Utility messages: {{ details.organizationPlan.utilityMessageLimit }}</li>
+                    <li>Marketing messages: {{ details.organizationPlan.marketingMessageLimit }}</li>
+                </ul>
+            </div> -->
+            <!-- <div class="mb-4" *ngIf="details.organizationPlan.addOns?.length">
+                <p class="font-semibold text-gray-800">Add-ons:</p>
+                <ul class="list-disc list-inside text-gray-600">
+                    <li *ngFor="let addon of details.organizationPlan.addOns">
+                        {{ addon.type }}: {{ addon.value }} (₹{{ addon.price }})
+                    </li>
+                </ul>
+            </div> -->
+            <p class="text-gray-600 mb-4">Payment Status: {{ details.organizationPlan.paymentStatus }}</p>
+            <button (click)="buyPlan()"
+                class="cursor w-full py-3 px-6 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-violet-100 transition">
+                Manage Plan
+            </button>
+        </div>
+    </div>
+
+</div>

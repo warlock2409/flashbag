@@ -10,17 +10,53 @@ export interface User {
   token?: string;
 }
 
+export interface OrganizationDTO {
+  id?: number;
+  name?: string;
+  code?: string;
+  termAccepted?: boolean;
+  visitors?: number;
+  email?: string;
+  status?: string; // Use enum if defined in your frontend
+}
+
+export interface UserDto {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  token?: string;
+  organizationDto?: OrganizationDTO[];
+}
+
+export interface StaffDTO {
+  id?: number;
+  staffType?: StaffType; // Define enum StaffType in frontend
+  userDto?: UserDto;
+  organizationDto?: OrganizationDTO;
+  userId?: number;
+}
+
+export enum StaffType { OWNER, DRIVER, FRONT_DESK }
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
   getToken() {
     let user = localStorage.getItem('currentUser');
     return user ? JSON.parse(user).token : null;
   }
+
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
+
   public isAuthenticated = new BehaviorSubject<boolean>(false);
+
   isAuthenticated$ = this.isAuthenticated.asObservable();
 
   constructor(private http: HttpClient) {
@@ -45,19 +81,44 @@ export class AuthService {
   login(email: string, password: string, type: 'customer' | 'business'): Observable<any> {
     // Mock authentication
     const loginPayload = { email, password, type };
-    
+
     let url = 'http://localhost:8080/user/login'
 
     // Simulate API call
     return this.http.post(url, loginPayload).pipe(
       tap((response: any) => {
-        // Assuming the API returns user details on successful login
         this.currentUserSubject.next(response);
         localStorage.setItem('currentUser', JSON.stringify(response));
         this.isAuthenticated.next(true);
       })
     );
-  } 
+  }
+
+  registerOrganization(staffDto: StaffDTO) {
+    let url = 'http://localhost:8080/user/register/organization';
+
+    return this.http.post(url, staffDto).pipe(
+      tap((response: any) => {
+        this.currentUserSubject.next(response.data.userDto);
+        localStorage.setItem('currentUser', JSON.stringify(response.data.userDto));
+      })
+    );
+  }
+
+  register(email: string, password: string, identity: 'customer' | 'business'): Observable<any> {
+    // Mock authentication
+    const loginPayload = { email, password, identity };
+
+    let url = 'http://localhost:8080/user/register'
+
+    // Simulate API call
+    return this.http.post(url, loginPayload).pipe(
+      tap((response: any) => {
+        this.currentUserSubject.next(response.data);
+        localStorage.setItem('currentUser', JSON.stringify(response.data));
+      })
+    );
+  }
 
   logout(): void {
     this.currentUserSubject.next(null);
@@ -78,7 +139,7 @@ export class AuthService {
   }
 
   isBusiness(): boolean {
-    return this.currentUserValue?.role === 'business';
+    return this.currentUserValue?.role != 'business';
   }
 
   getCurrentUser(): User | null {

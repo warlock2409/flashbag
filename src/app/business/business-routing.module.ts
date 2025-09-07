@@ -10,6 +10,13 @@ import { BusinessRequestsComponent } from './business-requests/business-requests
 import { SettingsComponent } from './settings/settings.component';
 import { BusinessSetupComponent } from './settings/components/business-setup/business-setup.component';
 import { SettingsPlaceholderComponent } from './settings/settings-placeholder/settings-placeholder.component';
+import { BusinessDetailsComponent } from './settings/components/business-setup/setup-components/business-details/business-details.component';
+import { LocationComponent } from './settings/components/business-setup/setup-components/location/location.component';
+import { MembershipDetailsComponent } from './settings/components/business-setup/setup-components/membership-details/membership-details.component';
+import { RentalDetailsComponent } from './settings/components/business-setup/setup-components/rental-details/rental-details.component';
+import { MarketingComponent } from './marketing/marketing.component';
+import { SelectOrganizationComponent } from './pages/select-organization/select-organization.component';
+import { ServiceDetailsComponent } from './settings/components/business-setup/setup-components/service-details/service-details.component';
 
 const routes: Routes = [
   {
@@ -31,6 +38,10 @@ const routes: Routes = [
         component: CustomersComponent
       },
       {
+        path: 'marketing',
+        component: MarketingComponent
+      },
+      {
         path: 'consignment',
         component: ConsignmentComponent
       },
@@ -47,18 +58,47 @@ const routes: Routes = [
         component: SettingsPlaceholderComponent,
         children: [
           {
-            path:"",
-            component:SettingsComponent
+            path: "",
+            component: SettingsComponent
           },
           {
             path: 'business-setup',
-            component: BusinessSetupComponent
+            component: BusinessSetupComponent,
+            children: [
+              {
+                path: "organization-details",
+                component: BusinessDetailsComponent
+              },
+              {
+                path: "details",
+                component: BusinessDetailsComponent
+              },
+              {
+                path: "locations",
+                component: LocationComponent
+              },
+              {
+                path: "service",
+                component: ServiceDetailsComponent
+              },
+              {
+                path: "membership",
+                component: MembershipDetailsComponent
+              },
+              {
+                path: "rental",
+                component: RentalDetailsComponent
+              }
+            ]
           }
         ]
       },
-
     ]
-  }
+  },
+  {
+    path: 'pick-organization',
+    component: SelectOrganizationComponent
+  },
 ];
 
 @NgModule({

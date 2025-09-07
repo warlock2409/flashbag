@@ -1,38 +1,51 @@
 <div class="setup-container">
 
-    <div class="flex js-sb align-center">
-        <form class="example-form">
-            <mat-form-field class="example-full-width">
-              <mat-label>Businesses</mat-label>
-              <input type="text"
-                     placeholder="Pick one"
-                     aria-label="Number"
-                     matInput
-                     [formControl]="businessControl"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                @for (option of filteredOptions | async; track option) {
-                  <mat-option [value]="option">{{option}}</mat-option>
-                }
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
-          <button nz-button nzType="primary">Primary</button>
-          <button mat-stroked-button>Create New Business</button>
+  <div class="flex js-sb align-center">
+    <div class="filter-chips">
+      <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+        <mat-chip-option *ngFor="let filter of filters" [value]="filter.name"
+          [selected]="selectedFilter === filter.name">
+          {{filter.name}}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+  <div class="flex gap-1rem js-c">
+
+    <div style="width: 230px;">
+      <ul nz-menu nzMode="inline">
+        <li nz-submenu nzTitle="Organization setup" nzOpen>
+          <ul>
+            <li nz-menu-item (click)="navigateTo('./details',['view','organization'])">Organization details</li>
+          </ul>
+        </li>
+        <li nz-submenu nzTitle="Business setup" nzOpen>
+          <ul>
+            <li nz-menu-item (click)="navigateTo('./details',['view','business'])">Business details</li>
+            <li nz-menu-item (click)="navigateTo('./locations')">Locations</li>
+          </ul>
+        </li>
+
+        <li nz-submenu nzTitle="Catelog" nzOpen>
+          <ul>
+            <li nz-menu-item>Products</li>
+            <li nz-menu-item (click)="navigateTo('./rental')">Rental</li>
+            <li nz-menu-item (click)="navigateTo('./service')" [class.ant-menu-item-selected]="isActive('service')">Services</li>
+            <li nz-menu-item (click)="navigateTo('./membership')">Memberships</li>
+          </ul>
+        </li>
+      </ul>
     </div>
 
-    <div>
-        <mat-drawer-container class="example-container" autosize>
-
-            <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="showFiller">
-              
-            </mat-drawer>
-          
-            <div class="example-sidenav-content">
-              
-            </div>
-          
-          </mat-drawer-container>
+    <div style="width: 1000px;">
+      <router-outlet></router-outlet>
     </div>
+
+  </div>
 
 </div>
+
+<footer style="height: 5rem; width: 100%;">
+
+</footer>

@@ -1,0 +1,36 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loader"></mat-progress-bar>
+<h2 mat-dialog-title>{{data.title}}</h2>
+
+<mat-dialog-content class="mat-typography" *ngIf="data.type == 'CREATE_BUSINESS_MODEL'">
+    <form [formGroup]="firstFormGroup" class="p-4">
+        <!-- Organization Name -->
+        <mat-form-field appearance="outline" class="width-100">
+            <mat-label>Business Model Name</mat-label>
+            <input matInput placeholder="Enter Business Model Name" formControlName="name" required>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-content class="mat-typography" *ngIf="data.type == 'CREATE_ORGANIZATION'">
+    <form [formGroup]="firstFormGroup" class="p-4">
+        <ng-template matStepLabel>Organization Details</ng-template>
+        <!-- Organization Name -->
+        <mat-form-field appearance="outline" class="width-100">
+            <mat-label>Organization Name</mat-label>
+            <input matInput placeholder="Enter Organization Name" formControlName="name" required>
+        </mat-form-field>
+        <br>
+        <!-- Organization Email -->
+        <mat-form-field appearance="outline" class="width-100">
+            <mat-label>Organization Email</mat-label>
+            <input matInput placeholder="Enter Organization Email" formControlName="email" required>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close color="warn">Cancel</button>
+    <button mat-stroked-button [mat-dialog-close]="true" [disabled]="firstFormGroup.invalid" (click)="onCreate()">
+        Create
+    </button>
+</mat-dialog-actions>

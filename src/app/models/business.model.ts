@@ -1,0 +1,59 @@
+export interface BusinessModel {
+    id: number;
+    name: string;
+    description: string;
+    configurations: any[]; // You can replace 'any' with a proper type if you know the shape
+    active: boolean;
+    industryDtoList?: Industry[];
+}
+
+export interface IndustryType {
+    id:number,
+    name: string;
+    description: string | null;
+}
+
+export interface Industry {
+    id:number,
+    name: string;
+    description: string | null;
+    industryTypeDtoList: IndustryType[];
+}
+
+export interface Plan {
+    id: number;
+    name: string;
+    basePrice: number;
+    description: string;
+    branchLimit: number;
+    memberLimit: number;
+    staffLimit: number;
+    deleted: boolean;
+    planBusinessModelConfigs: PlanBusinessModelConfig[];
+}
+
+export interface PlanBusinessModelConfig {
+    id: number;
+    businessModel: string; // or BusinessModelType enum if you have it defined
+    checkInLimit: number | null;
+    productLimit: number | null;
+    rentalItemLimit: number | null;
+    includedUtilityMessages: number | null;
+    includedMarketingMessages: number | null;
+}
+
+
+export interface PlanAddOn {
+    id: number;
+    planId: number;
+    type: string;
+    unit: string;
+    pricePerUnit: number;
+    description: string;
+    active: boolean;
+    canHaveMultiple: boolean;
+    icon: string;
+    businessModel: string | null;
+    selected: boolean;
+}
+

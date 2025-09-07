@@ -1,0 +1,22 @@
+.date_block {
+    span {
+        display: block;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    .expiry-date {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        padding: 8px 16px;
+        background-color: rgba(0, 0, 0, 0.103);
+        border-radius: 8px;
+        display: inline-block;
+    }
+}
+
+nz-select {
+    width: 100%;
+}

@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Add Customer</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="customerForm" (ngSubmit)="submitAccountForm()" class="p-4">
+        <!-- Name -->
+        <div class="mt-4 mb-2 md:mb-6">
+            <label class="block mb-2 text-sm font-medium">Customer Name</label>
+            <input type="text" autocomplete="off" formControlName="name"
+                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+        </div>
+        <!-- Phone -->
+        <div>
+            <label class="block mb-2 text-sm font-medium">Phone number</label>
+            <input type="tel" formControlName="phone"
+                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+        </div>
+        <!-- Email -->
+        <div class="mt-4 mb-2 md:mb-6">
+            <label class="block mb-2 text-sm font-medium">Email address</label>
+            <input type="email" autocomplete="off" formControlName="email"
+                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+        </div>
+
+        <div class="flex justify-end">
+
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-stroked-button type="submit" (click)="submitAccountForm()"
+        style="background-color: #a684ff; color: white;">Submit</button>
+</mat-dialog-actions>

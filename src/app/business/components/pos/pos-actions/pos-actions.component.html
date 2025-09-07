@@ -1,0 +1,98 @@
+<div id="membershipDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+
+    <div class="bg-white rounded-xl shadow-2xl max-h-[90vh] flex flex-col dialog-animate">
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <h2 class="text-lg font-semibold text-gray-800 m-0">{{data.name}}</h2>
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500">
+                <mat-icon style="color: lightcoral;">cancel</mat-icon>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-2 space-y-6" *ngIf="data.type == 'MEMBERSHIP_START_DATE_PICKER'">
+            <mat-card class="demo-inline-calendar-card">
+                <mat-calendar [(selected)]="selected" [minDate]="minDate" [maxDate]="maxDate"
+                    (selectedChange)="onDateSelected($event)">
+                </mat-calendar>
+            </mat-card>
+        </div>
+
+        <div class="p-5 sm:p-6 min-w-60 ">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold tracking-tight text-neutral-900"
+                        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">Pay
+                        Invoice
+                        <span id="pay-invoice-id" class="text-neutral-500">— {{data.invoice.invoiceNumber}}</span>
+                    </h3>
+                    <p class="mt-1 text-sm text-neutral-600">Enter the payable amount and choose a payment
+                        method.
+                    </p>
+                </div>
+                <button data-close
+                    class="ml-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100 ring-1 ring-inset ring-transparent hover:ring-neutral-200 transition-colors"
+                    aria-label="Close">
+                    <svg data-lucide="x" class="w-4 h-4"></svg>
+                </button>
+            </div>
+
+            <div class="mt-5 space-y-4">
+                <div>
+                    <label for="pay-amount" class="block text-sm font-medium text-neutral-700">Payable
+                        amount</label>
+                    <div class="mt-1 relative">
+                        <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-500">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                        </div>
+                        <input id="pay-amount" type="text" inputmode="decimal" placeholder="0.00"
+                            [value]="data.invoice.grandTotal"
+                            class="w-full rounded-md bg-white pl-7 pr-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 ring-1 ring-inset ring-neutral-200 focus:outline-none focus:ring-neutral-300"
+                            style="font-family: 'Inter', ui-sans-serif, system-ui;">
+                    </div>
+                </div>
+
+                <div>
+                    <span class="block text-sm font-medium text-neutral-700">Payment method</span>
+
+                    <div id="pay-methods"
+                        class="mt-2 inline-flex items-center gap-2 rounded-lg bg-neutral-50 ring-1 ring-inset ring-neutral-200 p-1">
+
+                        <!-- Cash -->
+                        <button type="button" (click)="selectPayment('CASH')"
+                            [class.bg-green-400]="selectedPayment === 'CASH'" class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700
+                             hover:text-neutral-900 hover:bg-green-200 transition-colors">
+                            <i class="fa-solid fa-money-bills"></i>
+                            Cash
+                        </button>
+
+                        <!-- Bank -->
+                        <!-- <button type="button" (click)="selectPayment('BANK')"
+                            [class.bg-blue-300]="selectedPayment === 'BANK'" class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700
+                            hover:text-neutral-900 hover:bg-blue-200 transition-colors">
+                            <svg data-lucide="banknote" class="w-4 h-4"></svg>
+                            Bank
+                        </button> -->
+
+                        <!-- Wallet -->
+                        <!-- <button type="button" (click)="selectPayment('WALLET')"
+                            [class.bg-pink-300]="selectedPayment === 'WALLET'" class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700
+                            hover:text-neutral-900 hover:bg-pink-200 transition-colors">
+                            <svg data-lucide="wallet-2" class="w-4 h-4"></svg>
+                            Wallet
+                        </button> -->
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-2">
+                <button id="confirm-pay" mat-raised-button style="background: greenyellow;" (click)="ProcessPayment()">
+                    Pay now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

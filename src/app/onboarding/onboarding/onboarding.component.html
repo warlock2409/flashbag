@@ -1,0 +1,149 @@
+<div class="flex justify-center px-2 md:px-4 lg:px-20 xl:px-40 py-2">
+    <div class="w-full max-w-3xl">
+        <mat-card class="example-card px-2 md:p-16" appearance="outlined">
+            <div class="p-2 md:p-4 flex justify-between" style="align-items: center;">
+                <mat-card-title class="text-end">Hi, We are Buzy Life!</mat-card-title>
+                <img src="/assets/png/logo.png" alt="" srcset="" class="w-24" (click)="getAllBusinessModels()">
+            </div>
+
+            <div *ngIf="isBusinessAccountCreated">
+                <div class="flex justify-between p-2 md:p-4">
+                    <mat-icon class="onboard_icon">storefront</mat-icon>
+                    <mat-card-title class="text-end">Do you own or manage a business?</mat-card-title>
+                </div>
+
+                <form [formGroup]="registrationForm" (ngSubmit)="submitRegistration()" class="p-4">
+                    <!-- BUSINESS DETAILS -->
+                    <div formGroupName="businessDetails" class="grid gap-2 md:gap-6 mb-4 md:grid-cols-2">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium">First name*</label>
+                            <input type="text" formControlName="firstName"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.firstName')?.touched && registrationForm.get('businessDetails.firstName')?.invalid">
+                                First name is required.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 text-sm font-medium">Last name*</label>
+                            <input type="text" formControlName="lastName"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.lastName')?.touched && registrationForm.get('businessDetails.lastName')?.invalid">
+                                Last name is required.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 text-sm font-medium">Company*</label>
+                            <input type="text" formControlName="company"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.company')?.touched && registrationForm.get('businessDetails.company')?.invalid">
+                                Company name is required.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 text-sm font-medium">Phone number*</label>
+                            <input type="tel" formControlName="phone"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.phone')?.touched && registrationForm.get('businessDetails.phone')?.invalid">
+                                Phone number is required.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block mb-2 text-sm font-medium">Unique visitors*</label>
+                            <input type="number" formControlName="visitors"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.visitors')?.touched && registrationForm.get('businessDetails.visitors')?.invalid">
+                                Unique visitors data is required.
+                            </div>
+                        </div>
+
+                        <div class="flex items-start mb-4 md:mb-6 mt-4">
+                            <input id="terms" type="checkbox" formControlName="termsAccepted"
+                                class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50" />
+                            <label for="terms" class="ms-2 text-sm font-medium">I agree to the
+                                <a href="#" class="text-blue-600 hover:underline">terms and conditions</a>.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ACCOUNT DETAILS -->
+                    <div formGroupName="accountDetails">
+                        <div class="mt-4 mb-2 md:mb-6">
+                            <label class="block mb-2 text-sm font-medium">Email address</label>
+                            <input type="email" autocomplete="off" formControlName="email"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('accountDetails.email')?.touched && registrationForm.get('accountDetails.email')?.invalid">
+                                Email required
+                            </div>
+                        </div>
+
+                        <div class="mb-2 md:mb-6">
+                            <label class="block mb-2 text-sm font-medium">Password</label>
+                            <input type="password" autocomplete="off" formControlName="password"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                        </div>
+
+                        <div class="mb-2 md:mb-6">
+                            <label class="block mb-2 text-sm font-medium">Confirm password</label>
+                            <input type="password" formControlName="confirmPassword"
+                                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                            <div *ngIf="registrationForm.get('accountDetails')?.errors?.['mismatch']">
+                                Passwords do not match.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button mat-stroked-button type="submit" 
+                            style="background-color: #a684ff; color: white;">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+
+
+            <!-- business activities -->
+            <div *ngIf="isBusinessActivityUpdated" class="px-2 md:px-10 lg:px-15 xl:px-20 py-6">
+                <div class="p-2 md:p-4">
+                    <mat-card-title class="text-end">What types of business activities does your organization
+                        offer?</mat-card-title>
+                </div>
+
+                <div class="mb-4 p-4">
+                    Select the modules that match your organization's operations. This helps us configure your workspace
+                    appropriately.
+                </div>
+
+                <div class="space-y-4 p-4">
+                    <!-- Marketing -->
+                    @for (model of businessModels; track model.id) {
+                    <div class="flex items-start space-x-3">
+                        <mat-checkbox [(ngModel)]="model.checked"></mat-checkbox>
+                        <div>
+                            <div class="font-semibold">{{model.name}}</div>
+                            <div class="text-sm text-gray-600">
+                                {{model.description}}
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <div class="flex justify-end">
+                        <button mat-stroked-button (click)="submitBusinessActivities()"
+                            style="background-color: #a684ff; color: white;">Proceed</button>
+                    </div>
+                </div>
+            </div>
+
+        </mat-card>
+    </div>
+</div>

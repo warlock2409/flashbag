@@ -5,7 +5,8 @@ import { CreateDealDialogComponent } from './create-deal-dialog/create-deal-dial
 @Component({
   selector: 'app-consignment',
   templateUrl: './consignment.component.html',
-  styleUrls: ['./consignment.component.scss']
+  styleUrls: ['./consignment.component.scss'],
+  standalone:false
 })
 export class ConsignmentComponent {
   deals = [

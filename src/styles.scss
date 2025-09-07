@@ -1,17 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
-
 @use '@angular/material' as mat;
+@import "tailwindcss";
+
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import "ng-zorro-antd/ng-zorro-antd.min.css";
 
 // Import theme
 @import 'styles/theme';
 
+
+
 // Global styles
-html, body { 
-  height: 100%; 
-  margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+::ng-deep .full-screen-dialog .mat-dialog-container {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  border-radius: 0;
+}
+
+.mat-mdc-dialog-surface {
+  overflow-x: hidden !important;
+}
+
+.mat-mdc-dialog-surface {
+  background: transparent !important;
 }
 
 // Dialog styles
@@ -23,10 +44,6 @@ html, body {
 
 .cdk-overlay-container {
   z-index: 1000;
-}
-
-.cdk-overlay-pane {
-  max-width: 95vw !important;
 }
 
 .cdk-global-overlay-wrapper {
@@ -47,44 +64,60 @@ html, body {
 }
 
 
-.flex{
+.flex {
   display: flex;
 }
 
-.align-center{
-  align-items: center;
+.align-center {
+  align-items: center !important;
 }
 
-.gap-3{
+.gap-3 {
   gap: .3rem;
 }
 
-.gap-1rem{
+.gap-1rem {
   gap: 1.2rem;
-} 
+}
 
-.wrap{
+.gap-2rem {
+  gap: 2rem;
+}
+
+.wrap {
   flex-wrap: wrap;
 }
 
+.js-e {
+  justify-content: end;
+}
 
-.js-sa{
+.js-sa {
   justify-content: space-around;
 }
 
-.js-sb{
+.js-sb {
   justify-content: space-between;
 }
 
-.js-se{
+.js-se {
   justify-content: space-evenly;
 }
 
-.js-c{
+.js-c {
   justify-content: center;
 }
-.js-c-e{
+
+.js-c-e {
   justify-content: end;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-50 {
+  width: 50%;
 }
 
 .mdc-list-item__primary-text {
@@ -97,15 +130,96 @@ html, body {
   padding: 0 16px 16px !important;
 }
 
-.text-align-center{
+.text-align-center {
   text-align: center;
 }
 
-.m-4{
+.width-100 {
+  width: 100%;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.m-4 {
   margin: .5rem;
 }
 
-.m-8{
+.m-8 {
   margin: 1rem;
 }
 
+.m-t-8 {
+  margin-top: 1rem !important;
+}
+
+.m-b-4 {
+  margin-bottom: .5rem !important;
+}
+
+.m-b-8 {
+  margin-bottom: 1rem !important;
+}
+
+.m-b-2 {
+  margin-bottom: .2rem !important;
+}
+
+.m-l-10 {
+  margin-left: 10px !important;
+}
+
+.m-r-4 {
+  margin-right: .5rem !important;
+}
+
+.p-4 {
+  padding: .5rem;
+}
+
+.parent_text {
+  font-weight: 500;
+}
+
+.child_text {
+  font-weight: 500;
+  color: grey;
+}
+
+.highLight {
+  color: blueviolet !important;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.ant-descriptions-item-content {
+  display: table-cell;
+  flex: 1;
+  color: #727373 !important;
+  font-size: 14px;
+  line-height: 1.5715;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  font-weight: 500;
+}
+
+.ant-card-type-inner .ant-card-head {
+  padding: 0 24px;
+  background: #f0e5f9b5 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.1) inset !important;
+  caret-color: #fff !important;
+  /* caret stays visible */
+}

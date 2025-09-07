@@ -50,7 +50,8 @@ import { MatDialogRef } from '@angular/material/dialog';
     button {
       min-width: 100px;
     }
-  `]
+  `],
+  standalone:false
 })
 export class CreateDealDialogComponent {
   dealForm: FormGroup;

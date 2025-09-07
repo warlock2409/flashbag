@@ -4,7 +4,8 @@ import { MatSidenavContainer } from '@angular/material/sidenav';
 @Component({
   selector: 'app-business-layout',
   templateUrl: './business-layout.component.html',
-  styleUrls: ['./business-layout.component.scss']
+  styleUrls: ['./business-layout.component.scss'],
+  standalone:false
 })
 export class BusinessLayoutComponent {
   isExpanded = false;

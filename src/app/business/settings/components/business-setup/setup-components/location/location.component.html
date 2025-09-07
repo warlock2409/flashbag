@@ -1,0 +1,188 @@
+<div>
+    <nz-card nzTitle="Locations" [nzExtra]="addTemplate">
+        <p>Manage info and preferences of locations within your business.</p>
+        <div class="grid grid-cols-1 gap-4">
+            <div *ngFor="let shop of shops"
+                class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                <!-- Left: Image -->
+                <div class="flex-shrink-0 h-full p-4">
+                    <img class="w-48 h-full object-cover border rounded-sm" [src]="shop.image" alt="{{ shop.name }}" />
+                </div>
+
+                <!-- Right: Content -->
+                <div class="flex flex-col justify-between p-5 flex-1">
+                    <div>
+                        <h3 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+                            {{ shop.name }}
+                        </h3>
+                        <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
+                            {{ shop.address }}
+                        </p>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex gap-2 justify-end mt-3">
+                        <button mat-raised-button style="background-color: #a3a5b2; color: white;"
+                            (click)="openPanel('EDIT_SHOP')">
+                            Edit
+                        </button>
+                        <button mat-raised-button style="background-color: #00b1c3; color: white;"
+                            (click)="openPanel('VIEW_SHOP')">
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-card>
+
+
+    <ng-template #action>
+        <button mat-stroked-button nz-popover [(nzPopoverVisible)]="visible" (nzPopoverVisibleChange)="change($event)"
+            nzPopoverTrigger="click" [nzPopoverContent]="contentTemplate">
+            Actions
+        </button>
+        <ng-template #contentTemplate>
+            <button (click)="openPanel('DELETE_SHOP')">View</button>
+            <button>Delete</button>
+        </ng-template>
+    </ng-template>
+
+    
+
+    <ng-template #addTemplate>
+        <a (click)="createLocation()">Create</a>
+    </ng-template>
+</div>
+
+
+<!-- Side Panel -->
+<app-side-panel [isOpen]="addShopPanel" [title]="'Location'" (closePanel)="closePanel('ADD_SHOP')"
+    [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'calc(100% - 60px)'}">
+
+    <app-shop-actions></app-shop-actions>
+
+</app-side-panel>
+
+<app-side-panel [isOpen]="editShopPanel" [title]="'Location'" (closePanel)="closePanel('EDIT_SHOP')"
+    [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'calc(50% - 60px)'}">
+
+    <div style="display: none;">
+        <div class="flex js-c m-b-8">
+            <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
+        </div>
+
+        <div *ngIf="activeSegment === 'Basic'">
+            <nz-card nzType="inner" [nzTitle]="location.Basic?.title" [nzExtra]="action" class="m-b-4">
+                <div class="flex gap-1rem">
+                    <div>
+                        <nz-avatar nzShape="square" [nzSize]="108"
+                            [nzSrc]="location.Basic?.avatarUrl"></nz-avatar>
+                    </div>
+                    <div class="w-100">
+                        <input nz-input placeholder="Location/Shop Name" class="w-100" nzSize="default" />
+                        @if (location.Basic?.rating != null) {
+                        <nz-rate [ngModel]="location.Basic?.rating" nzAllowHalf></nz-rate>
+                        <span>{{location.Basic?.reviews}}</span>
+                        }
+                    </div>
+                </div>
+            </nz-card>
+
+            <nz-card nzType="inner" nzTitle="Contact details" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="parent_text">Location email address</p>
+                    <input nz-input placeholder="Email" class="w-100" nzSize="default"
+                        [ngModel]="location.Basic?.contactDetails?.email" />
+                    <p class="parent_text">Location contact number</p>
+                    <input nz-input placeholder="Phone" class="w-100" nzSize="default"
+                        [ngModel]="location.Basic?.contactDetails?.phone" />
+                </div>
+            </nz-card>
+
+            <nz-card nzType="inner" nzTitle="Business types" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="parent_text">Primary Model</p>
+                    <nz-select ngModel="lucy" class="w-50">
+                        <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+                        <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+                        <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
+                    </nz-select>
+                </div>
+            </nz-card>
+        </div>
+
+        <div *ngIf="activeSegment === 'Location'">
+            <nz-card nzType="inner" nzTitle="Location" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="parent_text"> Business address</p>
+                    <input nz-input placeholder="Address 1" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="Address 2" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="City" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="State" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="Postal Code" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="Country" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="Latitude" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                    <input nz-input placeholder="Longitude" class="w-100 m-b-4" nzSize="default"
+                        [ngModel]="location.Location?.address" />
+                </div>
+            </nz-card>
+        </div>
+
+        <div *ngIf="activeSegment === 'Business Hours'">
+            <!-- <div *ngFor="let day of daysOfWeek">
+                <mat-checkbox>
+                    {{ day }}
+                </mat-checkbox>
+                <div class="flex gap-1rem m-l-10">
+                    <nz-time-picker [(ngModel)]="time" [nzMinuteStep]="15" nzUse12Hours
+                        nzFormat="h:mm a"></nz-time-picker>
+                    <nz-time-picker [(ngModel)]="time" [nzMinuteStep]="15" nzUse12Hours
+                        nzFormat="h:mm a"></nz-time-picker>
+                    <mat-icon style="transform: translateY(3px);">add</mat-icon>
+                </div>
+            </div> -->
+        </div>
+
+        <div *ngIf="activeSegment === 'Billing'">
+            <nz-card nzType="inner" nzTitle="Billing details for clients sale" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="highLight">These details will appear on the client's sale receipt for sales from this
+                        location.</p>
+                    <p class="parent_text">Company address</p>
+                    <p class="child_text">SNS College of Technology, SNS Kalvi Nagar, NH-209 Vazhiyampalayam, Coimbatore
+                        (Saravanampatti), 641035, Tamil Nadu</p>
+                </div>
+            </nz-card>
+            <nz-card nzType="inner" nzTitle="Tax defaults" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="highLight">Location tax settings for services and products.</p>
+                    <p class="parent_text">Services</p>
+                    <p class="child_text">No tax</p>
+                </div>
+            </nz-card>
+            <nz-card nzType="inner" nzTitle="Tipping" [nzExtra]="extraTemplate" class="m-b-4">
+                <div>
+                    <p class="highLight">Choose when to ask clients to tip and suggested values for online and in-store.
+                    </p>
+                    <p class="parent_text">Default values</p>
+                    <p class="child_text">10% • 18% • 25% • 35% • 45%</p>
+                    <p class="parent_text">Tip calculation method</p>
+                    <p class="child_text">Post-tax</p>
+                </div>
+            </nz-card>
+        </div>
+    </div>
+
+    <ng-template #extraTemplate>
+        <a (click)="openPanel('EDIT_SHOP')">Edit</a>
+    </ng-template>
+
+</app-side-panel>

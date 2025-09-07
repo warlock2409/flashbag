@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Super App Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  
+  <body class="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-white" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;">
+    <!-- Background -->
+    <div class="fixed inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(800px 400px at 10% 10%, rgba(99,102,241,0.18), transparent 60%), radial-gradient(800px 400px at 90% 20%, rgba(147,51,234,0.12), transparent 60%), radial-gradient(600px 300px at 50% 90%, rgba(34,197,94,0.08), transparent 60%);"></div>
+    </div>
+
+    <!-- Shell -->
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="hidden lg:flex w-64 flex-col gap-4 p-4">
+        <div class="flex items-center gap-2">
+          <div class="h-9 w-9 grid place-items-center rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md">
+            <span class="text-sm font-semibold tracking-tight">SX</span>
+          </div>
+          <div class="leading-tight">
+            <p class="text-sm font-medium tracking-tight">SuperX</p>
+            <p class="text-xs text-neutral-400">Command Center</p>
+          </div>
+        </div>
+        <nav class="mt-2 flex-1 space-y-1">
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/10 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/15 transition">
+            <i data-lucide="layout-dashboard" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Dashboard</span>
+          </a>
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/5 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/10 transition">
+            <i data-lucide="package" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Orders</span>
+          </a>
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/5 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/10 transition">
+            <i data-lucide="calendar-clock" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Rentals</span>
+          </a>
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/5 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/10 transition">
+            <i data-lucide="wrench" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Services</span>
+          </a>
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/5 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/10 transition">
+            <i data-lucide="bar-chart-3" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Analytics</span>
+          </a>
+          <a href="#" class="group flex items-center gap-3 rounded-xl px-3 py-2.5 bg-white/5 ring-1 ring-white/10 backdrop-blur-md hover:bg-white/10 transition">
+            <i data-lucide="settings" class="w-4.5 h-4.5"></i>
+            <span class="text-sm font-medium">Settings</span>
+          </a>
+        </nav>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-3">
+          <p class="text-xs text-neutral-400">Usage</p>
+          <div class="mt-2">
+            <div class="flex justify-between text-xs">
+              <span>Plan</span><span class="text-neutral-400">Pro</span>
+            </div>
+            <div class="mt-2 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+              <div class="h-full w-2/3 bg-indigo-500/70"></div>
+            </div>
+            <p class="mt-2 text-xs text-neutral-400">65% of 10k actions</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="flex-1 p-4 lg:p-6">
+        <!-- Topbar -->
+        <div class="flex items-center gap-3">
+          <div class="lg:hidden flex items-center gap-2">
+            <div class="h-9 w-9 grid place-items-center rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md">
+              <span class="text-sm font-semibold tracking-tight">SX</span>
+            </div>
+          </div>
+          <div class="flex-1 flex items-center gap-3">
+            <div class="flex-1 rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md px-3 py-2.5 flex items-center gap-2 hover:ring-white/20 transition">
+              <i data-lucide="search" class="w-4.5 h-4.5 text-neutral-300"></i>
+              <input class="w-full bg-transparent placeholder:text-neutral-400 text-sm focus:outline-none" placeholder="Search orders, rentals, services..." />
+            </div>
+            <button class="hidden md:flex items-center gap-2 rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md px-3 py-2.5 hover:bg-white/10 hover:ring-white/20 transition">
+              <i data-lucide="calendar-range" class="w-4.5 h-4.5"></i>
+              <span class="text-sm font-medium">Last 30 days</span>
+            </button>
+            <button class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-indigo-500/20 ring-1 ring-indigo-400/30 backdrop-blur-md px-3 py-2.5 hover:bg-indigo-500/30 hover:ring-indigo-400/50 transition">
+              <i data-lucide="plus" class="w-4.5 h-4.5"></i>
+              <span class="text-sm font-medium">New</span>
+            </button>
+            <button class="relative rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-2.5 hover:bg-white/10 hover:ring-white/20 transition">
+              <i data-lucide="bell" class="w-4.5 h-4.5"></i>
+              <span class="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-rose-500 ring-2 ring-neutral-950"></span>
+            </button>
+            <div class="flex items-center gap-2 rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-1.5">
+              <img class="h-8 w-8 rounded-lg object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop" alt="User" />
+              <div class="hidden md:block leading-tight pr-2">
+                <p class="text-sm font-medium tracking-tight">Jordan Lee</p>
+                <p class="text-[11px] text-neutral-400">Operations</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <section class="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- KPI -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs text-neutral-400">Total Orders</p>
+                <h3 class="mt-1 text-2xl tracking-tight font-semibold">3,482</h3>
+              </div>
+              <div class="rounded-lg bg-white/5 p-2 ring-1 ring-white/10">
+                <i data-lucide="package" class="w-5 h-5 text-indigo-300"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-2 text-xs">
+              <span class="text-emerald-400">+12.3%</span>
+              <span class="text-neutral-400">vs last month</span>
+            </div>
+            <div class="mt-4">
+              <div class="relative h-20">
+                <div class="absolute inset-0 rounded-md bg-gradient-to-t from-white/5 to-transparent"></div>
+                <div class="absolute inset-x-0 bottom-0 h-10 bg-[linear-gradient(to_top,rgba(255,255,255,0.06),transparent)] rounded-md"></div>
+              </div>
+            </div>
+          </div>
+          <!-- KPI -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs text-neutral-400">Rentals Scheduled</p>
+                <h3 class="mt-1 text-2xl tracking-tight font-semibold">214</h3>
+              </div>
+              <div class="rounded-lg bg-white/5 p-2 ring-1 ring-white/10">
+                <i data-lucide="calendar-check" class="w-5 h-5 text-emerald-300"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-2 text-xs">
+              <span class="text-emerald-400">+6.8%</span>
+              <span class="text-neutral-400">this week</span>
+            </div>
+            <div class="mt-4">
+              <div class="relative h-20">
+                <div class="absolute inset-0 rounded-md bg-gradient-to-tr from-emerald-400/10 to-transparent"></div>
+              </div>
+            </div>
+          </div>
+          <!-- KPI -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs text-neutral-400">Service Bookings</p>
+                <h3 class="mt-1 text-2xl tracking-tight font-semibold">129</h3>
+              </div>
+              <div class="rounded-lg bg-white/5 p-2 ring-1 ring-white/10">
+                <i data-lucide="wrench" class="w-5 h-5 text-sky-300"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-2 text-xs">
+              <span class="text-rose-400">-2.1%</span>
+              <span class="text-neutral-400">vs last week</span>
+            </div>
+            <div class="mt-4">
+              <div class="relative h-20">
+                <div class="absolute inset-0 rounded-md bg-gradient-to-tr from-sky-400/10 to-transparent"></div>
+              </div>
+            </div>
+          </div>
+          <!-- KPI -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs text-neutral-400">Revenue</p>
+                <h3 class="mt-1 text-2xl tracking-tight font-semibold">$84.2k</h3>
+              </div>
+              <div class="rounded-lg bg-white/5 p-2 ring-1 ring-white/10">
+                <i data-lucide="coins" class="w-5 h-5 text-amber-300"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center gap-2 text-xs">
+              <span class="text-emerald-400">+9.4%</span>
+              <span class="text-neutral-400">M-o-M</span>
+            </div>
+            <div class="mt-4">
+              <div class="relative h-20">
+                <div class="absolute inset-0 rounded-md bg-gradient-to-tr from-amber-400/10 to-transparent"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Charts + Calendar -->
+        <section class="mt-5 grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <!-- Orders Trend -->
+          <div class="xl:col-span-2 rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg tracking-tight font-semibold">Orders & Bookings Trend</h3>
+                <p class="text-xs text-neutral-400 mt-0.5">Products, rentals, and services over time</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">Week</button>
+                <button class="text-xs px-2.5 py-1.5 rounded-lg bg-indigo-500/20 ring-1 ring-indigo-400/30 hover:bg-indigo-500/30 transition">Month</button>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="relative h-64 rounded-xl bg-white/5 ring-1 ring-white/10 p-3">
+                <div class="h-full w-full rounded-lg bg-neutral-950/40">
+                  <div class="h-full w-full">
+                    <div class="h-full w-full">
+                      <div class="h-full w-full">
+                        <div class="h-full w-full">
+                          <div class="h-full w-full">
+                            <div class="h-full w-full">
+                              <div class="h-full w-full">
+                                <div class="h-full w-full">
+                                  <div class="h-full w-full">
+                                    <div class="h-full w-full">
+                                      <div class="h-full w-full">
+                                        <div class="h-full w-full">
+                                          <div class="h-full w-full">
+                                            <!-- Wrap canvas inside a div to avoid growth bug -->
+                                            <div class="h-full w-full">
+                                              <canvas id="ordersChart"></canvas>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mix -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg tracking-tight font-semibold">Category Mix</h3>
+                <p class="text-xs text-neutral-400 mt-0.5">Share by channel</p>
+              </div>
+              <button class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">All</button>
+            </div>
+            <div class="mt-2">
+              <div class="relative mx-auto h-56 w-full max-w-[340px] rounded-xl bg-white/5 ring-1 ring-white/10 p-3">
+                <div class="h-full w-full">
+                  <div class="h-full w-full">
+                    <div class="h-full w-full">
+                      <div class="h-full w-full">
+                        <div class="h-full w-full">
+                          <!-- Wrap canvas inside a div -->
+                          <div class="h-full w-full">
+                            <canvas id="mixChart"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ul class="mt-4 space-y-2 text-sm">
+                <li class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-indigo-400"></span>
+                    <span>Products</span>
+                  </div>
+                  <span class="text-neutral-300">58%</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+                    <span>Rentals</span>
+                  </div>
+                  <span class="text-neutral-300">27%</span>
+                </li>
+                <li class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-sky-400"></span>
+                    <span>Services</span>
+                  </div>
+                  <span class="text-neutral-300">15%</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lists and Calendar -->
+        <section class="mt-5 grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <!-- Recent Orders -->
+          <div class="xl:col-span-2 rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg tracking-tight font-semibold">Recent Orders</h3>
+                <p class="text-xs text-neutral-400 mt-0.5">Latest product purchases</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">Export</button>
+                <button class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">Manage</button>
+              </div>
+            </div>
+            <div class="mt-3 overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead>
+                  <tr class="text-neutral-400">
+                    <th class="text-left font-medium py-2 pr-4 border-b border-white/10">Order</th>
+                    <th class="text-left font-medium py-2 px-4 border-b border-white/10">Customer</th>
+                    <th class="text-left font-medium py-2 px-4 border-b border-white/10">Items</th>
+                    <th class="text-left font-medium py-2 px-4 border-b border-white/10">Total</th>
+                    <th class="text-left font-medium py-2 pl-4 border-b border-white/10">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-white/10">
+                  <tr class="hover:bg-white/5 transition">
+                    <td class="py-3 pr-4">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-neutral-300"></i>
+                        <span>#PO-3482</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">
+                      <div class="flex items-center gap-2">
+                        <img class="h-7 w-7 rounded-md object-cover" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=200&auto=format&fit=crop" alt="C1"/>
+                        <span>Alex Morgan</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">Keyboard, Mouse</td>
+                    <td class="py-3 px-4">$142.90</td>
+                    <td class="py-3 pl-4">
+                      <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-400/20">Paid</span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-white/5 transition">
+                    <td class="py-3 pr-4">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-neutral-300"></i>
+                        <span>#PO-3483</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">
+                      <div class="flex items-center gap-2">
+                        <img class="h-7 w-7 rounded-md object-cover" src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=200&auto=format&fit=crop" alt="C2"/>
+                        <span>Ruth Hopkins</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">Desk Lamp</td>
+                    <td class="py-3 px-4">$39.00</td>
+                    <td class="py-3 pl-4">
+                      <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 ring-1 ring-amber-400/20">Awaiting</span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-white/5 transition">
+                    <td class="py-3 pr-4">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-neutral-300"></i>
+                        <span>#PO-3484</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">
+                      <div class="flex items-center gap-2">
+                        <img class="h-7 w-7 rounded-md object-cover" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=200&auto=format&fit=crop" alt="C3"/>
+                        <span>Diego Luna</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">Monitor Stand</td>
+                    <td class="py-3 px-4">$62.50</td>
+                    <td class="py-3 pl-4">
+                      <span class="text-xs px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-300 ring-1 ring-rose-400/20">Failed</span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-white/5 transition">
+                    <td class="py-3 pr-4">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-neutral-300"></i>
+                        <span>#PO-3485</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">
+                      <div class="flex items-center gap-2">
+                        <img class="h-7 w-7 rounded-md object-cover" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=200&auto=format&fit=crop" alt="C4"/>
+                        <span>Maya Patel</span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-4">USB-C Hub</td>
+                    <td class="py-3 px-4">$24.99</td>
+                    <td class="py-3 pl-4">
+                      <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-400/20">Paid</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Schedule: Rentals + Services -->
+          <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur-md p-4 hover:ring-white/20 transition">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg tracking-tight font-semibold">Schedule</h3>
+                <p class="text-xs text-neutral-400 mt-0.5">Rentals and service bookings</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="prevMonth" class="p-2 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">
+                  <i data-lucide="chevron-left" class="w-4.5 h-4.5"></i>
+                </button>
+                <button id="nextMonth" class="p-2 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">
+                  <i data-lucide="chevron-right" class="w-4.5 h-4.5"></i>
+                </button>
+              </div>
+            </div>
+            <div class="mt-3 rounded-xl bg-white/5 ring-1 ring-white/10 p-3">
+              <div class="flex items-center justify-between">
+                <h4 id="calendarTitle" class="text-sm font-medium tracking-tight"></h4>
+                <div class="flex items-center gap-2 text-xs">
+                  <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-emerald-400"></span><span class="text-neutral-300">Rental</span></div>
+                  <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-sky-400"></span><span class="text-neutral-300">Service</span></div>
+                </div>
+              </div>
+              <div class="mt-3 grid grid-cols-7 gap-1.5 text-[11px] text-neutral-400">
+                <div class="text-center py-1">Sun</div>
+                <div class="text-center py-1">Mon</div>
+                <div class="text-center py-1">Tue</div>
+                <div class="text-center py-1">Wed</div>
+                <div class="text-center py-1">Thu</div>
+                <div class="text-center py-1">Fri</div>
+                <div class="text-center py-1">Sat</div>
+              </div>
+              <div id="calendarGrid" class="mt-1 grid grid-cols-7 gap-1.5"></div>
+            </div>
+
+            <div class="mt-4">
+              <h4 class="text-sm font-medium tracking-tight">Upcoming</h4>
+              <ul id="upcomingList" class="mt-2 space-y-2">
+                <!-- JS populates -->
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      // Icons
+      document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+      });
+
+      // Charts
+      const textColor = 'rgba(255,255,255,0.75)';
+      const gridColor = 'rgba(255,255,255,0.08)';
+
+      // Orders Trend
+      const ordersCtx = document.getElementById('ordersChart');
+      const ordersChart = new Chart(ordersCtx, {
+        type: 'line',
+        data: {
+          labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'],
+          datasets: [
+            {
+              label: 'Products',
+              data: [320, 410, 390, 520, 610, 590, 640, 720],
+              borderColor: 'rgba(99,102,241,1)',
+              backgroundColor: 'rgba(99,102,241,0.15)',
+              tension: 0.35,
+              fill: true,
+              pointRadius: 0,
+              borderWidth: 2
+            },
+            {
+              label: 'Rentals',
+              data: [110, 130, 125, 160, 180, 170, 190, 210],
+              borderColor: 'rgba(16,185,129,1)',
+              backgroundColor: 'rgba(16,185,129,0.15)',
+              tension: 0.35,
+              fill: true,
+              pointRadius: 0,
+              borderWidth: 2
+            },
+            {
+              label: 'Services',
+              data: [70, 75, 90, 80, 95, 105, 100, 115],
+              borderColor: 'rgba(56,189,248,1)',
+              backgroundColor: 'rgba(56,189,248,0.15)',
+              tension: 0.35,
+              fill: true,
+              pointRadius: 0,
+              borderWidth: 2
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: textColor, boxWidth: 8, usePointStyle: true, pointStyle: 'circle' }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(17,24,39,0.95)',
+              titleColor: '#fff',
+              bodyColor: '#e5e7eb',
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1
+            }
+          },
+          interaction: { mode: 'nearest', intersect: false },
+          scales: {
+            x: {
+              ticks: { color: textColor },
+              grid: { color: gridColor, drawBorder: false }
+            },
+            y: {
+              ticks: { color: textColor },
+              grid: { color: gridColor, drawBorder: false }
+            }
+          }
+        }
+      });
+
+      // Mix Chart
+      const mixCtx = document.getElementById('mixChart');
+      const mixChart = new Chart(mixCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Products', 'Rentals', 'Services'],
+          datasets: [{
+            data: [58, 27, 15],
+            backgroundColor: ['rgba(99,102,241,0.9)', 'rgba(16,185,129,0.9)', 'rgba(56,189,248,0.9)'],
+            borderColor: ['rgba(99,102,241,0.2)', 'rgba(16,185,129,0.2)', 'rgba(56,189,248,0.2)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          cutout: '68%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(17,24,39,0.95)',
+              titleColor: '#fff',
+              bodyColor: '#e5e7eb',
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1
+            }
+          }
+        }
+      });
+
+      // Calendar + Upcoming
+      const calendarTitle = document.getElementById('calendarTitle');
+      const calendarGrid = document.getElementById('calendarGrid');
+      const upcomingList = document.getElementById('upcomingList');
+
+      const events = [
+        { date: new Date().toISOString().slice(0,10), type: 'rental', title: 'Camera Kit - #R-212' },
+        { date: addDays(new Date(), 1).toISOString().slice(0,10), type: 'service', title: 'Install - Site A' },
+        { date: addDays(new Date(), 3).toISOString().slice(0,10), type: 'rental', title: 'Van - #R-214' },
+        { date: addDays(new Date(), 5).toISOString().slice(0,10), type: 'service', title: 'Maintenance - HQ' },
+      ];
+
+      function addDays(d, days=0) {
+        const nd = new Date(d);
+        nd.setDate(nd.getDate() + days);
+        return nd;
+      }
+
+      let current = new Date();
+
+      function renderCalendar(date) {
+        calendarGrid.innerHTML = '';
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const start = new Date(year, month, 1);
+        const end = new Date(year, month + 1, 0);
+        const startDay = start.getDay();
+        const daysInMonth = end.getDate();
+
+        calendarTitle.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+
+        // Leading blanks
+        for (let i = 0; i < startDay; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'aspect-square rounded-lg bg-transparent';
+          calendarGrid.appendChild(cell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const d = new Date(year, month, day);
+          const iso = d.toISOString().slice(0,10);
+          const cell = document.createElement('button');
+          const isToday = isSameDate(d, new Date());
+          const dayEvents = events.filter(e => e.date === iso);
+
+          cell.className = [
+            'aspect-square w-full rounded-lg',
+            'bg-white/5 ring-1 ring-white/10 hover:bg-white/10 hover:ring-white/20',
+            'transition p-1 flex flex-col'
+          ].join(' ');
+
+          cell.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] ${isToday ? 'text-white font-medium' : 'text-neutral-300'}">${day}</span>
+              ${isToday ? '<span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>' : ''}
+            </div>
+            <div class="mt-1.5 space-y-1">
+              ${dayEvents.slice(0,2).map(e => `
+                <div class="h-1.5 rounded ${e.type === 'rental' ? 'bg-emerald-400/80' : 'bg-sky-400/80'}"></div>
+              `).join('')}
+              ${dayEvents.length > 2 ? '<div class="text-[10px] text-neutral-400">+' + (dayEvents.length-2) + '</div>' : ''}
+            </div>
+          `;
+          calendarGrid.appendChild(cell);
+        }
+
+        renderUpcoming();
+      }
+
+      function renderUpcoming() {
+        const sorted = [...events].sort((a,b) => a.date.localeCompare(b.date)).slice(0,5);
+        upcomingList.innerHTML = '';
+        sorted.forEach(e => {
+          const li = document.createElement('li');
+          li.className = 'flex items-center justify-between rounded-xl bg-white/5 ring-1 ring-white/10 p-3 hover:bg-white/10 transition';
+          li.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 grid place-items-center rounded-lg ${e.type === 'rental' ? 'bg-emerald-400/15 ring-emerald-400/30' : 'bg-sky-400/15 ring-sky-400/30'} ring-1">
+                <i data-lucide="${e.type === 'rental' ? 'calendar-check' : 'wrench'}" class="w-4.5 h-4.5 ${e.type === 'rental' ? 'text-emerald-300' : 'text-sky-300'}"></i>
+              </div>
+              <div>
+                <p class="text-sm">${e.title}</p>
+                <p class="text-xs text-neutral-400">${formatShort(e.date)}</p>
+              </div>
+            </div>
+            <button class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 transition">View</button>
+          `;
+          upcomingList.appendChild(li);
+        });
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+      }
+
+      function isSameDate(a, b) {
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+      }
+
+      function formatShort(iso) {
+        const d = new Date(iso);
+        return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      }
+
+      document.getElementById('prevMonth').addEventListener('click', () => {
+        current.setMonth(current.getMonth() - 1);
+        renderCalendar(current);
+      });
+      document.getElementById('nextMonth').addEventListener('click', () => {
+        current.setMonth(current.getMonth() + 1);
+        renderCalendar(current);
+      });
+
+      renderCalendar(current);
+    </script>
+  </body>
+</html>

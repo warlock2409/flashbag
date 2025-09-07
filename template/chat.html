@@ -1,0 +1,803 @@
+<html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowChat — Connect. Collaborate. Create.</title>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<!-- Tailwind & Icons & Charts -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.font-geist { font-family: 'Geist', sans-serif; }
+</style></head>
+
+<body class="antialiased bg-black text-gray-100 selection:bg-purple-400/20 selection:text-purple-200 font-geist">
+
+<div data-us-project="K7xzrAoejHe2lHXqTJzm" class="absolute w-full h-full top-0 left-0 -z-10"></div><script type="text/javascript">!function(){if(!window.UnicornStudio){window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js",i.onload=function(){window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)},(document.head || document.body).appendChild(i)}}();</script>
+
+    <!-- Scroll progress -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-blue-400 w-0 z-[60] to-blue-400" style="width: 77.2107%;"></div>
+
+    <!-- Header -->
+    <header id="site-header" class="fixed top-0 inset-x-0 z-50 backdrop-blur-md border-b bg-black/70 border-white/5 transition-transform duration-300 will-change-transform">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16">
+            <div class="h-full flex items-center justify-between">
+                <!-- Brand -->
+                <a href="#overview" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md">
+                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.06)] to-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]" aria-hidden="true">
+                            <path d="M8 12h.01"></path>
+                            <path d="M12 12h.01"></path>
+                            <path d="M16 12h.01"></path>
+                            <path d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </span>
+                    <span class="text-lg tracking-tight">FlowChat</span>
+                </a>
+
+                <!-- Desktop nav -->
+                <div class="hidden md:flex items-center gap-1 rounded-full border border-white/10 px-2">
+                    <a data-nav-link="" href="#features" class="px-3 py-2 text-sm text-gray-300 hover:text-white transition">Features</a>
+                    <a data-nav-link="" href="#product" class="px-3 py-2 text-sm text-gray-300 hover:text-white transition">Product</a>
+                    <a data-nav-link="" href="#analytics" class="px-3 py-2 text-sm text-gray-300 hover:text-white transition">Analytics</a>
+                    <a data-nav-link="" href="#pricing" class="hover:text-white transition text-sm text-gray-300 pt-2 pr-3 pb-2 pl-3">Pricing</a>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <a href="#try" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm bg-gray-100 text-black hover:bg-gray-200 transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Sign in
+                    </a>
+                    <button id="nav-toggle" aria-expanded="false" class="md:hidden p-2 rounded-md transition-colors hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" class="lucide lucide-menu w-5 h-5"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="overview" class="relative overflow-hidden sm:pt-28 pt-24 pb-14">
+        <!-- Background -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col gap-10 lg:gap-16 text-center items-center">
+                <div class="max-w-3xl mr-auto ml-auto">
+                    <span class="text-xs uppercase tracking-wider text-blue-300/90">New: Voice messages</span>
+                    <h1 class="sm:text-5xl lg:text-6xl leading-tight text-4xl font-medium tracking-tight mt-3">
+                        Connect. Collaborate. Create without limits.
+                    </h1>
+                    <p class="mt-6 text-lg text-gray-300 max-w-xl mx-auto">
+                        FlowChat brings teams together with seamless messaging, 
+                        smart channels, and powerful collaboration tools.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 mt-8 justify-center">
+                        <a href="#try" class="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm bg-blue-400 text-black hover:bg-blue-300 transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Start chatting
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-4 h-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        </a>
+                        <a href="#product" class="inline-flex items-center gap-2 hover:bg-white/10 transition-all text-gray-100 bg-white/5 border-white/10 border rounded-full px-5 py-3 backdrop-blur-lg">
+                            Watch demo
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" class="lucide lucide-play w-4 h-4"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
+                        </a>
+                    </div>
+
+                    <div class="mt-8 flex items-center gap-6 justify-center">
+                        <div class="flex -space-x-2">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&amp;q=80" alt="" class="w-9 h-9 rounded-full border-2 border-black object-cover">
+                            <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=160&amp;q=80" alt="" class="w-9 h-9 rounded-full border-2 border-black object-cover">
+                            <img src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?w=160&amp;q=80" alt="" class="w-9 h-9 rounded-full border-2 border-black object-cover">
+                            <div class="w-9 h-9 rounded-full border-2 border-black bg-blue-400 flex items-center justify-center text-black text-xs">
+                                10k+
+                            </div>
+                        </div>
+                        <div class="">
+                            <p class="text-sm text-gray-100">10,000+ teams connected</p>
+                            <p class="text-sm text-gray-400">From startups to enterprise</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat interface preview -->
+                <div class="relative w-full max-w-4xl mt-6 mr-auto ml-auto">
+                    <div class="relative overflow-hidden text-left bg-gray-900/50 border-white/10 border rounded-2xl shadow-2xl backdrop-blur-lg">
+                        <!-- Chat header -->
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/40">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-white">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="m22 21-3-3"></path>
+                                            <circle cx="20" cy="7" r="3"></circle>
+                                        </svg>
+                                    </span>
+                                    <span class="absolute -top-0.5 -right-0.5 w-3 h-3 bg-blue-400 rounded-full border-2 border-black"></span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">Product Team</p>
+                                    <p class="text-xs text-gray-400">12 members • 3 online</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center gap-1.5 rounded-md bg-blue-400/10 px-2 py-1 text-xs text-blue-300 ring-1 ring-blue-400/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Chat content -->
+                        <div class="grid md:grid-cols-3 gap-0 h-80">
+                            <!-- Sidebar -->
+                            <div class="bg-black/20 border-white/10 border-r pt-4 pr-4 pb-4 pl-4">
+                                <div class="space-y-3">
+                                    <div class="">
+                                        <p class="text-xs text-gray-400 mb-2">CHANNELS</p>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md bg-white/5 text-sm">
+                                                <span class="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                                                general
+                                            </div>
+                                            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-gray-400 hover:text-white">
+                                                <span class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
+                                                product-updates
+                                            </div>
+                                            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-gray-400 hover:text-white">
+                                                <span class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
+                                                design
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <p class="text-xs text-gray-400 mb-2">DIRECT MESSAGES</p>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-gray-400 hover:text-white">
+                                                <div class="relative">
+                                                    <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                                    <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-blue-400 rounded-full border border-black"></div>
+                                                </div>
+                                                Sarah Chen
+                                            </div>
+                                            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-gray-400 hover:text-white">
+                                                <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                                Alex Park
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Messages -->
+                            <div class="md:col-span-2 flex flex-col">
+                                <div class="flex-1 p-4 space-y-4 overflow-y-auto">
+                                    <!-- Message 1 -->
+                                    <div class="flex items-start gap-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&amp;q=80" alt="" class="w-8 h-8 rounded-full object-cover">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-sm font-medium">Sarah Chen</span>
+                                                <span class="text-xs text-gray-400">2:34 PM</span>
+                                            </div>
+                                            <p class="text-sm text-gray-300 mt-1">Great work on the new onboarding flow! The conversion rates look promising 🚀</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Message 2 -->
+                                    <div class="flex items-start gap-3">
+                                        <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=64&amp;q=80" alt="" class="w-8 h-8 rounded-full object-cover">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-sm font-medium">Alex Park</span>
+                                                <span class="text-xs text-gray-400">2:35 PM</span>
+                                            </div>
+                                            <p class="text-sm text-gray-300 mt-1">Thanks! Should we schedule a review session for next week?</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Message 3 with file -->
+                                    <div class="flex items-start gap-3">
+                                        <img src="https://images.unsplash.com/photo-1500649297466-74794c70acfc?w=64&amp;q=80" alt="" class="w-8 h-8 rounded-full object-cover">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-baseline gap-2">
+                                                <span class="text-sm font-medium">Mike Johnson</span>
+                                                <span class="text-xs text-gray-400">2:36 PM</span>
+                                            </div>
+                                            <p class="text-sm text-gray-300 mt-1">I've attached the updated wireframes</p>
+                                            <div class="mt-2 p-3 rounded-lg border border-white/10 bg-white/5 max-w-xs">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-8 h-8 rounded bg-blue-500/20 flex items-center justify-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400">
+                                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                            <path d="m14 2 6 6"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="">
+                                                        <p class="text-xs">wireframes-v2.figma</p>
+                                                        <p class="text-xs text-gray-400">2.4 MB</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Message input -->
+                                <div class="p-4 border-t border-white/10">
+                                    <div class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
+                                        </svg>
+                                        <input type="text" placeholder="Type a message..." class="flex-1 bg-transparent text-sm placeholder:text-gray-400 focus:outline-none">
+                                        <div class="flex items-center gap-1">
+                                            <button class="p-1 rounded hover:bg-white/10 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                                </svg>
+                                            </button>
+                                            <button class="p-1.5 rounded-md bg-blue-500 hover:bg-blue-600 transition-colors">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                                                    <path d="M7 7h10v10"></path>
+                                                    <path d="M7 17 17 7"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="bg-gray-950 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between gap-6">
+                <div>
+                    <p class="text-sm uppercase tracking-wider text-blue-300/90">Features</p>
+                    <h2 class="mt-2 text-3xl lg:text-4xl tracking-tight text-white font-medium">
+                        Everything you need for seamless communication
+                    </h2>
+                </div>
+                <a href="#product" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm bg-white/5 text-gray-100 hover:bg-white/10 border border-white/10 transition-all hover:scale-[1.02]">
+                    Explore features
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-4 h-4"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </a>
+            </div>
+
+            <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="group rounded-xl border border-white/10 bg-black/40 p-5 hover:bg-black/50 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-300">
+                            <path d="M8 12h.01"></path>
+                            <path d="M12 12h.01"></path>
+                            <path d="M16 12h.01"></path>
+                            <path d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mt-4 text-lg tracking-tight">Smart messaging</h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Real-time messaging with threads, reactions, and rich formatting.
+                    </p>
+                </div>
+
+                <div class="group rounded-xl border border-white/10 bg-black/40 p-5 hover:bg-black/50 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-300">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mt-4 text-lg tracking-tight">Voice &amp; video</h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Crystal-clear calls with screen sharing and recording.
+                    </p>
+                </div>
+
+                <div class="group rounded-xl border border-white/10 bg-black/40 p-5 hover:bg-black/50 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-300">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <path d="m14 2 6 6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mt-4 text-lg tracking-tight">File sharing</h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Share any file type with drag-and-drop simplicity.
+                    </p>
+                </div>
+
+                <div class="group rounded-xl border border-white/10 bg-black/40 p-5 hover:bg-black/50 transition-colors">
+                    <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-gray-300">
+                            <path d="M12 22v-5"></path>
+                            <path d="M9 8V2"></path>
+                            <path d="M15 8V2"></path>
+                            <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mt-4 text-lg tracking-tight">Integrations</h3>
+                    <p class="mt-2 text-sm text-gray-400">
+                        Connect tools you love: GitHub, Jira, Google Drive, and more.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product -->
+    <section id="product" class="pt-16 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-5">
+                    <h2 class="text-3xl lg:text-4xl tracking-tight font-medium">
+                        Built for modern teams
+                    </h2>
+                    <p class="mt-3 text-gray-300">
+                        Experience messaging that adapts to how your team works. 
+                        Clean, fast, and designed to keep conversations flowing.
+                    </p>
+                    <ul class="mt-6 space-y-3 text-sm text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-white/5 border border-white/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </span>
+                            Organize conversations with channels and threads.
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-white/5 border border-white/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </span>
+                            Smart notifications that respect your focus.
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-white/5 border border-white/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </span>
+                            Powerful search across all your conversations.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="lg:col-span-7 rounded-2xl border border-white/10 bg-gradient-to-b from-gray-950 to-black overflow-hidden">
+                    <!-- Activity stats -->
+                    <div class="p-5">
+                        <div class="grid grid-cols-3 gap-4 mb-4">
+                            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                                <p class="text-xs text-gray-400">Messages today</p>
+                                <p class="text-lg mt-1">1,247</p>
+                            </div>
+                            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                                <p class="text-xs text-gray-400">Active users</p>
+                                <p class="text-lg mt-1">89</p>
+                            </div>
+                            <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+                                <p class="text-xs text-gray-400">Files shared</p>
+                                <p class="text-lg mt-1">34</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Message activity chart -->
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs text-gray-300">Message activity</p>
+                                <span class="text-xs text-gray-400">Last 7 days</span>
+                            </div>
+                            <div class="h-16 w-full">
+                                <div class="w-full h-full">
+                                    <canvas id="activityChart" width="1262" height="128" style="display: block; box-sizing: border-box; height: 64px; width: 631px;" class="">
+                                        <script>
+                                            (function() {
+                                                const canvas = document.currentScript.parentElement;
+                                                const ctx = canvas.getContext('2d');
+                                                if (!ctx || typeof Chart === 'undefined') return;
+                                                
+                                                const gradient = ctx.createLinearGradient(0, 0, 0, 80);
+                                                gradient.addColorStop(0, 'rgba(168,85,247,0.35)');
+                                                gradient.addColorStop(1, 'rgba(168,85,247,0.02)');
+                                                
+                                                new Chart(ctx, {
+                                                    type: 'line',
+                                                    data: {
+                                                        labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+                                                        datasets: [{
+                                                            data: [12,8,6,4,3,2,4,8,15,25,35,42,38,45,52,48,44,38,32,28,24,20,16,14],
+                                                            tension: 0.35,
+                                                            fill: true,
+                                                            backgroundColor: gradient,
+                                                            borderColor: '#a855f7',
+                                                            borderWidth: 1.5,
+                                                            pointRadius: 0
+                                                        }]
+                                                    },
+                                                    options: {
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                                                        scales: { x: { display: false }, y: { display: false } }
+                                                    }
+                                                });
+                                            })();
+                                        </script>
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Smart features -->
+                    <div class="px-5 pb-5">
+                        <div class="rounded-xl border border-white/10 bg-black/40 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 ring-1 ring-white/10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
+                                        <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                                        <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                                        <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                                        <line x1="2" y1="2" x2="22" y2="22"></line>
+                                    </svg>
+                                </span>
+                                <div>
+                                    <p class="text-sm">Smart suggestion</p>
+                                    <p class="text-xs text-gray-400">
+                                        Create #design-review channel for this discussion?
+                                    </p>
+                                </div>
+                                <button class="ml-auto text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 hover:bg-white/10" type="button">
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics -->
+    <section id="analytics" class="bg-gray-950 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-5">
+                    <p class="text-sm uppercase tracking-wider text-blue-300/90">Analytics</p>
+                    <h2 class="mt-2 text-3xl lg:text-4xl tracking-tight font-medium">
+                        Insights that matter
+                    </h2>
+                    <p class="mt-3 text-gray-300">
+                        Understand how your team communicates with actionable insights 
+                        and engagement metrics.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-7 rounded-2xl border border-white/10 bg-gradient-to-b from-gray-950 to-black p-5">
+                    <div class="flex items-center justify-between">
+                        <div class="">
+                            <p class="text-sm">Team engagement</p>
+                            <p class="text-xs text-gray-400">Messages per user per day</p>
+                        </div>
+                        <div class="inline-flex items-center gap-2 text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-emerald-300">
+                                <path d="M16 7h6v6"></path>
+                                <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            </svg>
+                            <span class="text-blue-300">+24%</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                            <div class="relative w-full h-64">
+                                <div class="w-full h-full">
+                                    <canvas id="engagementChart" width="1262" height="512" style="display: block; box-sizing: border-box; height: 256px; width: 631px;" class="">
+                                        <script>
+                                            (function() {
+                                                const canvas = document.currentScript.parentElement;
+                                                const ctx = canvas.getContext('2d');
+                                                if (!ctx || typeof Chart === 'undefined') return;
+                                                
+                                                const grad = ctx.createLinearGradient(0, 0, 0, 300);
+                                                grad.addColorStop(0, 'rgba(168,85,247,0.35)');
+                                                grad.addColorStop(1, 'rgba(168,85,247,0.02)');
+                                                
+                                                new Chart(ctx, {
+                                                    type: 'line',
+                                                    data: {
+                                                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                                                        datasets: [{
+                                                            label: 'Messages',
+                                                            data: [145, 167, 203, 189, 234, 156, 198],
+                                                            tension: 0.35,
+                                                            fill: true,
+                                                            backgroundColor: grad,
+                                                            borderColor: '#a855f7',
+                                                            borderWidth: 1.5,
+                                                            pointRadius: 0
+                                                        }]
+                                                    },
+                                                    options: {
+                                                        responsive: true,
+                                                        maintainAspectRatio: false,
+                                                        plugins: {
+                                                            legend: { display: false },
+                                                            tooltip: {
+                                                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                                                borderColor: 'rgba(255,255,255,0.08)',
+                                                                borderWidth: 1,
+                                                                padding: 10,
+                                                                titleColor: '#fff',
+                                                                bodyColor: '#d1d5db',
+                                                                displayColors: false
+                                                            }
+                                                        },
+                                                        scales: {
+                                                            x: {
+                                                                grid: { color: 'rgba(255,255,255,0.06)' },
+                                                                ticks: { color: '#a3a3a3', font: { size: 11 } }
+                                                            },
+                                                            y: {
+                                                                grid: { color: 'rgba(255,255,255,0.06)' },
+                                                                ticks: { color: '#a3a3a3', font: { size: 11 } }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            })();
+                                        </script>
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-2 gap-3">
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                            <p class="text-xs text-gray-400">Response time</p>
+                            <p class="text-lg mt-1">2.3 min</p>
+                        </div>
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                            <p class="text-xs text-gray-400">Active channels</p>
+                            <p class="text-lg mt-1">12</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between gap-6">
+                <div>
+                    <p class="text-sm uppercase tracking-wider text-blue-300/90">Pricing</p>
+                    <h2 class="mt-2 text-3xl lg:text-4xl tracking-tight font-medium">
+                        Simple plans for teams of all sizes
+                    </h2>
+                </div>
+            </div>
+
+            <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Free -->
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-gray-950 to-black p-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg tracking-tight">Free</h3>
+                        <span class="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10">Small teams</span>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-400">Perfect for getting started</p>
+                    <div class="mt-5 flex items-baseline gap-1">
+                        <span class="text-3xl font-medium">$0</span><span class="text-sm text-gray-400">forever</span>
+                    </div>
+                    <ul class="mt-5 space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            Up to 10 users
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            10GB file storage
+                        </li>
+                    </ul>
+                    <a href="#try" class="mt-6 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm bg-white/5 text-gray-100 hover:bg-white/10 border border-white/10 transition-all">Get started</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="rounded-2xl border border-blue-400/30 bg-gradient-to-b from-gray-900/80 to-black p-6 relative">
+                    <div class="absolute -top-3 right-4 px-2 py-1 rounded-full text-xs bg-blue-400 text-black">
+                        Most popular
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg tracking-tight">Pro</h3>
+                        <span class="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10">Growing teams</span>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-300">
+                        Everything in Free plus advanced features and integrations.
+                    </p>
+                    <div class="mt-5 flex items-baseline gap-1">
+                        <span class="text-3xl font-medium">$8</span><span class="text-sm text-gray-400">/user/mo</span>
+                    </div>
+                    <ul class="mt-5 space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            Unlimited users
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            100GB file storage
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            Advanced analytics
+                        </li>
+                    </ul>
+                    <a href="#try" class="mt-6 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm bg-blue-400 text-black hover:bg-blue-300 transition-all">Try Pro</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-gray-950 to-black p-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg tracking-tight">Enterprise</h3>
+                        <span class="text-xs px-2 py-1 rounded-full bg-white/5 border border-white/10">Large teams</span>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-400">
+                        Advanced security, compliance, and dedicated support.
+                    </p>
+                    <div class="mt-5 flex items-baseline gap-1">
+                        <span class="text-3xl font-medium">Custom</span>
+                    </div>
+                    <ul class="mt-5 space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            SSO &amp; SCIM
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            Data governance
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-teal-300">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            24/7 priority support
+                        </li>
+                    </ul>
+                    <a href="#try" class="mt-6 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm bg-white/5 text-gray-100 hover:bg-white/10 border border-white/10 transition-all">Contact sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-white/10 border-t">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <a href="#overview" class="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md">
+                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.06)] to-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px]" aria-hidden="true">
+                                <path d="M8 12h.01"></path>
+                                <path d="M12 12h.01"></path>
+                                <path d="M16 12h.01"></path>
+                                <path d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                        </span>
+                        <span class="text-lg tracking-tight">FlowChat</span>
+                    </a>
+                    <p class="mt-3 text-sm text-gray-400 max-w-md">
+                        Connecting teams with seamless, intelligent communication.
+                    </p>
+                </div>
+                <div class="">
+                    <h4 class="text-sm">Product</h4>
+                    <ul class="mt-3 space-y-2 text-sm text-gray-400">
+                        <li class=""><a href="#features" class="hover:text-gray-200">Features</a></li>
+                        <li><a href="#product" class="hover:text-gray-200">Product</a></li>
+                        <li><a href="#analytics" class="hover:text-gray-200">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="">
+                    <h4 class="text-sm">Company</h4>
+                    <ul class="mt-3 space-y-2 text-sm text-gray-400">
+                        <li><a href="#pricing" class="hover:text-gray-200">Pricing</a></li>
+                        <li class=""><a href="#overview" class="hover:text-gray-200">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-500">
+                    © <span id="year">2025</span> FlowChat. All rights reserved.
+                </p>
+                <div class="flex items-center gap-4 text-xs text-gray-500">
+                    <a href="#" class="hover:text-gray-300">Terms</a>
+                    <a href="#" class="hover:text-gray-300">Privacy</a>
+                    <a href="#overview" class="inline-flex items-center gap-1 hover:text-gray-300">
+                        Back to top
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
+                            <path d="m5 12 7-7 7 7"></path>
+                            <path d="M12 19V5"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide && window.lucide.createIcons) {
+                lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+            }
+        });
+
+        // Scroll progress
+        const progressEl = document.getElementById('scroll-progress');
+        function setProgress() {
+            const h = document.documentElement;
+            const st = h.scrollTop || document.body.scrollTop;
+            const sh = h.scrollHeight - h.clientHeight;
+            progressEl.style.width = (sh ? (st / sh) * 100 : 0) + '%';
+        }
+        setProgress();
+        window.addEventListener('scroll', setProgress, { passive: true });
+
+        // Header hide on scroll
+        const header = document.getElementById('site-header');
+        let lastY = window.pageYOffset;
+        window.addEventListener('scroll', () => {
+            const y = window.pageYOffset;
+            if (y > lastY && y > 80) header.classList.add('-translate-y-full');
+            else header.classList.remove('-translate-y-full');
+            lastY = y;
+        }, { passive: true });
+
+        // Smooth scroll
+        function smoothScrollTo(targetId) {
+            const el = document.querySelector(targetId);
+            if (!el) return;
+            const headerH = header?.offsetHeight || 64;
+            const top = el.getBoundingClientRect().top + window.pageYOffset - headerH + 6;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach((a) => {
+            a.addEventListener('click', (e) => {
+                const href = a.getAttribute('href');
+                const target = href && document.querySelector(href);
+                if (!href || !target) return;
+                e.preventDefault();
+                smoothScrollTo(href);
+            });
+        });
+
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear().toString();
+    </script>
+
+</body></html>
+

@@ -83,26 +83,14 @@ export class LoginComponent implements OnInit {
 
   private redirectBasedOnRole() {
     if (this.authService.isBusiness()) {
-      this.router.navigate(['/business/home']);
+      this.router.navigate(['/business/pick-organization']);
     } else {
       this.router.navigate(['/']);
     }
   }
 
   openBusinessRequest() {
-    const dialogRef = this.dialog.open(BusinessRequestDialogComponent, {
-      width: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Handle the business request submission
-        console.log('Business request:', result);
-        // Show success message
-        this.error = ''; // Clear any existing errors
-        // You might want to show a success message or redirect
-      }
-    });
+    this.router.navigate(['/onboarding']);
   }
 
   

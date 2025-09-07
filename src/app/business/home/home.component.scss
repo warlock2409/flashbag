@@ -12,3 +12,59 @@
     font-size: 1.1rem;
   }
 } 
+
+
+// Illuminate 
+@keyframes expandWidth {
+  from {
+    width: 15rem;
+    opacity: 0.5;
+  }
+
+  to {
+    width: 30rem;
+    opacity: 1;
+  }
+}
+
+@keyframes moveUp {
+  from {
+    opacity: 0.5;
+    transform: translateY(100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-200px);
+  }
+}
+
+@keyframes expandSmallWidth {
+  from {
+    width: 8rem;
+  }
+
+  to {
+    width: 16rem;
+  }
+}
+
+.animate-width {
+  animation: expandWidth 0.8s ease-in-out 0.3s forwards;
+}
+
+.animate-up {
+  animation: moveUp 0.8s ease-in-out 0.3s forwards;
+}
+
+.animate-small-width {
+  animation: expandSmallWidth 0.8s ease-in-out 0.3s forwards;
+}
+
+.conic-left {
+  background-image: conic-gradient(from 70deg at center top, rgb(147, 51, 234), transparent, transparent);
+}
+
+.conic-right {
+  background-image: conic-gradient(from 290deg at center top, transparent, transparent, rgb(147, 51, 234));
+}

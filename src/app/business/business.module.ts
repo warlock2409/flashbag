@@ -14,7 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BusinessLayoutComponent } from './business-layout/business-layout.component';
 import { ConsignmentComponent } from './consignment/consignment.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -29,6 +29,12 @@ import { SettingsComponent } from './settings/settings.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { SidePanelComponent } from '../components/shared/side-panel/side-panel.component';
 import { NgxTimelineModule } from '@frxjs/ngx-timeline';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
+import { MarketingComponent } from './marketing/marketing.component';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -38,6 +44,7 @@ import { NgxTimelineModule } from '@frxjs/ngx-timeline';
     CreateDealDialogComponent,
     OrdersComponent,
     SettingsComponent,
+    MarketingComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +69,12 @@ import { NgxTimelineModule } from '@frxjs/ngx-timeline';
     RequestDetailsDialogComponent,
     MatProgressBarModule,
     SidePanelComponent,
-    NgxTimelineModule
+    NgxTimelineModule,
+    NzAvatarModule,
+    NzSegmentedModule,
+    NzProgressModule,
+    NzToolTipModule,
+    FormsModule
   ],
 })
 export class BusinessModule { } 

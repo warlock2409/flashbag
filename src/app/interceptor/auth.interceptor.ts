@@ -6,16 +6,16 @@ import { AuthService } from '../services/auth.service';  // Adjust the import to
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-    // const updatedUrl = req.url.replace('http://localhost:8080', 'https://6694-223-184-94-31.ngrok-free.app');
+    const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:9000');
     const updatedReq = req.clone({
-        url: req.url,
+        url: updatedUrl,
         setHeaders: {
             'ngrok-skip-browser-warning': 'true',  // <--- This header skips the warning
         }
     });
 
     // Skip adding the token for login requests
-    if (updatedReq.url.includes('login')) {
+    if (updatedReq.url.includes('login') || updatedReq.url.includes('register') ) {
         return next(updatedReq);
     }
 
@@ -25,6 +25,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
     // Check if the token exists before adding it to the request
     if (!token) {
+        console.log("No Token Found");
         return next(updatedReq);
     }
 

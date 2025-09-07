@@ -1,4 +1,7 @@
 <div class="login-container">
+  <div class="mandala-design">
+    <img src="../../../assets/png/mandala1.png" alt="Mandala Design">
+  </div>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="login-header">
       <span class="login-badge">{{loginType === 'business' ? 'Business' : 'Customer'}} Login</span>
@@ -24,10 +27,6 @@
       </div>
     </div>
 
-    <!-- <div class="remember-me">
-      <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-    </div> -->
-
     <div class="form-options">
       <a href="#" class="forgot-password">Forgot password?</a>
     </div>
@@ -43,19 +42,10 @@
       <span>or</span>
     </div>
 
-    <!-- <button type="button" class="btn btn-google">
-      <img src="assets/google-icon.svg" alt="Google icon">
-      Continue with Google
-    </button>
-
-    <div style="border: 1px solid red; height: 100px; width: 100%;">
-      <div id="buttonDiv"></div>
-    </div> -->
-
 
     <button *ngIf="loginType === 'business'" type="button" class="btn btn-create-account"
       (click)="openBusinessRequest()">
-      Request Business Account
+       Create New Business
     </button>
   </form>
 </div>
