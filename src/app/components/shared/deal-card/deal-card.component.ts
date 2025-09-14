@@ -1,11 +1,11 @@
-import { Component, Input, Inject, ViewChild } from '@angular/core';
+import { Component, Input, Inject, ViewChild, DOCUMENT } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../../services/auth.service';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { DOCUMENT } from '@angular/common';
+
 import { BookingPanelComponent } from '../booking-panel/booking-panel.component';
 import { BookingPanelService } from '../../../services/booking-panel.service';
 
