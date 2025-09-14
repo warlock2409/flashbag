@@ -1,4 +1,4 @@
-import { Component, Inject, DOCUMENT } from '@angular/core';
+import { Component, Inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -229,7 +229,6 @@ export class NavbarComponent {
     private router: Router,
     private themeService: ThemeService,
     public authService: AuthService,
-    @Inject(DOCUMENT) private document: Document,
     private orderPanelService: OrderPanelService,
     private profilePanelService: ProfilePanelService,
     private settingsPanelService: SettingsPanelService,
