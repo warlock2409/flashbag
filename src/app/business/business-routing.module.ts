@@ -17,6 +17,7 @@ import { RentalDetailsComponent } from './settings/components/business-setup/set
 import { MarketingComponent } from './marketing/marketing.component';
 import { SelectOrganizationComponent } from './pages/select-organization/select-organization.component';
 import { ServiceDetailsComponent } from './settings/components/business-setup/setup-components/service-details/service-details.component';
+import { GymCheckInComponent } from './business-specific/gym-check-in/gym-check-in.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'requests',
         component: BusinessRequestsComponent
+      },
+      {
+        path: 'gym-checkin',
+        component: GymCheckInComponent
       },
       {
         path: 'settings',

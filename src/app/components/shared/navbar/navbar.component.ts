@@ -67,9 +67,10 @@ import { MatDialogModule } from '@angular/material/dialog';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 24px;
-      background: #ffffff;
-      border-bottom: 2px solid #a684ff;
+      padding: 8px 13px;
+      background: transparent;
+      color: white;
+      // border-bottom: 2px solid #a684ff;
       position: fixed;
       top: 0;
       left: 0;
@@ -220,8 +221,11 @@ export class NavbarComponent {
   isLandingPage = false;
   isLoginPage = false;
   isDarkTheme = false;
+  isHomePage = false;
   isBusinessRoute: boolean = false;
   hiddenRoutes = ['/onboarding'];
+
+
   constructor(
     private router: Router,
     private themeService: ThemeService,
@@ -241,6 +245,9 @@ export class NavbarComponent {
       this.isLoginPage = event.url.includes('/login');
       const hiddenRoutes = ['/onboarding'];
       this.hideLoginButtons = hiddenRoutes.includes(url);
+
+      // Home page check 
+      this.isHomePage = event.url.includes('/home');
     });
 
     this.themeService.isDarkTheme$.subscribe(

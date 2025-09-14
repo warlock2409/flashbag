@@ -22,7 +22,7 @@ export class GodBoxComponent {
   tabs = ['Customer'];
   selectedTab = 'Customer';
   private searchTimeout: any;
-  customers: UserDto[] = [];
+  customers: Customer[] = [];
 
   constructor(private dialogRef: MatDialogRef<GodBoxComponent>){
 
@@ -58,7 +58,7 @@ export class GodBoxComponent {
     }, 400);
   }
 
-  returnCustomer(customer: UserDto) {
+  returnCustomer(customer: Customer) {
     this.dialogRef.close(customer);
   }
 }

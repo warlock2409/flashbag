@@ -1,17 +1,24 @@
-<nav class="navbar">
+<!-- <nav class="navbar" [ngStyle]="{ 'border-bottom': !authService.isLoggedIn() ? 'none' : '2px solid #a684ff' }">
   <div class="flex items-center gap-3">
     <div
-      class="h-10 w-10 rounded-xl bg-black text-white flex items-center justify-center shadow-sm ring-1 ring-black/10">
+      class="h-10 w-10 rounded-xl bg-gradient-to-br from-black to-violet-800 text-white flex items-center justify-center shadow-sm ring-1 ring-black/10">
       <img src="../../../assets/png/logo.png" alt="" srcset="">
     </div>
-    <span class="text-lg tracking-tight font-medium text-neutral-900 ml-2">9Myle</span>
+    <span class="text-lg tracking-tight font-medium text-violet-500 ml-2">9Myle</span>
   </div>
-  <nav class="hidden md:flex items-center gap-6 text-sm text-neutral-600">
-    <a href="#" class="hover:text-neutral-900 transition-colors">Home</a>
-    <a href="#" class="hover:text-neutral-900 transition-colors">Device</a>
-    <a href="#" class="hover:text-neutral-900 transition-colors">Story</a>
-    <a href="#" class="hover:text-neutral-900 transition-colors">Support</a>
+
+  <nav *ngIf="authService.isLoggedIn()"
+    class="hidden md:flex items-center space-x-1 glass-card rounded-2xl animate-fade-in delay-400 hover-glow">
+    <button
+      class="nav-item px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white text-sm font-medium button-hover border border-white/10">Dashboard</button>
+    <button
+      class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Rooms</button>
+    <button
+      class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Devices</button>
+    <button
+      class="nav-item px-6 py-3 rounded-xl text-white/70 text-sm font-medium hover:bg-white/10 hover:text-white">Settings</button>
   </nav>
+
   <div class="flex items-center gap-3">
     <button
       class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg ring-1 ring-black/10 bg-white text-neutral-700">
@@ -23,10 +30,96 @@
         <path d="M4 6h16"></path>
       </svg>
     </button>
-    
-    <button mat-stroked-button routerLink="/login" [queryParams]="{type: 'business'}" *ngIf="!authService.isLoggedIn() && !hideLoginButtons">
+
+    <button mat-stroked-button routerLink="/login" [queryParams]="{type: 'business'}"
+      *ngIf="!authService.isLoggedIn() && !hideLoginButtons">
       Business Login
     </button>
+  </div>
+</nav> -->
+
+<nav class="fixed top-0 left-0 right-0 z-50 px-6 py-2">
+  <div class="max-w-3xl mx-auto rounded-full px-4 py-2" [ngClass]="{ '!bg-gray-100 ': !isHomePage }"
+    style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-1">
+        <div class="h-10 w-12 rounded-xl text-white flex items-center justify-center">
+          <img src="../../../assets/png/logo.png" alt="" srcset="">
+        </div>
+        <span *ngIf="!authService.isLoggedIn()" class="text-lg tracking-tight font-medium text-black"
+          [ngClass]="{ '!text-white': isHomePage }">9Myle</span>
+        <span *ngIf="authService.isLoggedIn()" class="text-lg tracking-tight font-medium text-black"
+          [ngClass]="{ '!text-white': isHomePage }">Bi Fitness</span>
+      </div>
+
+
+      <ul class="hidden md:flex items-center gap-2 text-sm font-medium !mb-0 text-gray-600"
+        [ngClass]="{ '!text-gray-300': isHomePage }">
+        @if (authService.isLoggedIn()) {
+        <button (click)="logout()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon>person_add</mat-icon>
+        </button>
+        <button (click)="logout()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon>point_of_sale</mat-icon>
+        </button>
+        <button *ngIf="authService.isLoggedIn()" (click)="logout()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon>settings_power</mat-icon>
+        </button>
+        }@else {
+        <li class=""><a href="#"
+            class="hover:text-white transition-colors duration-300 px-4 py-1 rounded-full hover:bg-white/5 font-sans">Sales
+            Machine</a>
+        </li>
+        <li class=""><a href="#"
+            class="hover:text-white transition-colors duration-300 px-4 py-1 rounded-full hover:bg-white/5 font-sans">New
+            Customer</a>
+        </li>
+        }
+
+      </ul>
+
+      <div class="flex items-center gap-4">
+
+        <button *ngIf="!authService.isLoggedIn()" routerLink="/login" [queryParams]="{type: 'business'}"
+          class="relative hover:bg-violet-300 p-2 rounded-full transition-all duration-300 border border-white/5"
+          aria-label="Bookings">
+          <i class="fa-solid fa-user"></i>
+        </button>
+
+        <button *ngIf="authService.isLoggedIn()" [ngClass]="{ '!text-gray-300': isHomePage }"
+          class="relative p-3 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell"
+            class="lucide lucide-bell w-5 h-5 group-hover:scale-110 transition-transform">
+            <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
+            <path
+              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+            </path>
+          </svg>
+          <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse group-hover:scale-125">
+          </div>
+        </button>
+
+        <div class="relative hover-scale cursor-pointer" *ngIf="authService.isLoggedIn()">
+          <img
+            src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/46ced6a9-43d9-4cb3-9d41-e60c4df9040e_320w.jpg"
+            alt="Profile"
+            class="w-10 h-10 rounded-full object-cover ring-2 ring-white/20 transition-all hover:ring-white/50 hover:ring-4">
+          <div
+            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black hover:scale-110 transition-transform">
+          </div>
+        </div>
+
+
+      </div>
+    </div>
   </div>
 </nav>
 

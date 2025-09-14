@@ -11,7 +11,6 @@ import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
 import { GodBoxComponent } from '../god-box/god-box.component';
-import { UserDto } from 'src/app/services/auth.service';
 import { InvoiceModel, ItemModel, PaymentResponse } from 'src/app/models/payment.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import Swal from 'sweetalert2';
@@ -107,7 +106,7 @@ export class PosComponent {
           next: (res: ResponseDate) => {
             priceDetails = res.data;
             if (item.basePrice != priceDetails.basePrice) {
-
+              
             }
             item.taxRate = priceDetails.taxRate;
             item.basePrice = priceDetails.basePrice;
@@ -171,7 +170,7 @@ export class PosComponent {
 
   get customerName(): string {
     if (this.selectedCustomer) {
-      return `${this.selectedCustomer.firstName!} 📧 ${this.selectedCustomer.email ? this.selectedCustomer.email! : this.selectedCustomer.phone!}`
+      return `${this.selectedCustomer.firstName!} 📧 ${this.selectedCustomer.email ? this.selectedCustomer.email! : this.selectedCustomer.contactNumber!}`
 
     } else {
       return "";
@@ -183,7 +182,7 @@ export class PosComponent {
   currentCustomer: Customer | null = null;
 
   // Selected Customer
-  selectedCustomer!: UserDto;
+  selectedCustomer!: Customer;
 
   addCustomerMannually(): void {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
@@ -266,7 +265,7 @@ export class PosComponent {
 
 
 
-  isUserDto(obj: any): obj is UserDto {
+  isUserDto(obj: any): obj is Customer {
     return obj && typeof obj.id === 'number' && typeof obj.firstName === 'string';
   }
 
@@ -301,6 +300,10 @@ export class PosComponent {
         itemName: cart.name,
         itemId: cart.id,
         quantity: cart.quantity!,
+      }
+      if(cartItem.itemType == "MEMBERSHIPS"){
+        // const timestamp = new Date("2025-09-08").getTime();
+       cartItem.startDate = cart.startDate?.getTime();
       }
       invoice.items.push(cartItem);
     });

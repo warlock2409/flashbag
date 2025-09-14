@@ -6,9 +6,15 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   template: `
+    <div class="setting_placeholder">
     <router-outlet></router-outlet>
+    </div>
   `,
-  styles: ``
+  styles: `
+  .setting_placeholder{
+    margin-top:80px;
+  }
+  `
 })
 export class SettingsPlaceholderComponent {
 

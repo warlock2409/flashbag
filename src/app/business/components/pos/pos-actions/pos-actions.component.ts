@@ -35,7 +35,7 @@ export class PosActionsComponent {
 
 
   closeDialog() {
-    throw new Error('Method not implemented.');
+    this.dialogRef.close();
   }
 
   onDateSelected(date: Date) {

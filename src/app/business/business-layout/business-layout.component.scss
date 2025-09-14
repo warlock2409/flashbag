@@ -1,13 +1,15 @@
 .sidenav-container {
-  height: calc(100vh - 66px);
+  height: 100vh;
   display: flex;
   flex-direction: row;
 
   .sidenav {
     flex-shrink: 0; // Prevent shrinking
     width: 65px; // Initial collapsed width
+   
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); // Transition on transform
     overflow: hidden;
+    background: transparent;
 
     &.expanded {
       width: 200px;
@@ -49,14 +51,14 @@
       margin: 4px 0;
       transition: all 0.3s ease;
       border-radius: 0 24px 24px 0;
-      
+
       mat-icon {
         margin-right: 8px;
         width: 24px;
         height: 24px;
         font-size: 24px;
         line-height: 24px;
-        color: #666;
+        color: #7a7a7a;
         transition: all 0.3s ease;
       }
 
@@ -67,21 +69,28 @@
         white-space: nowrap;
         transform: translateX(-10px);
         visibility: hidden;
+        color: #7a7a7a;
       }
 
       &.active {
-        background: rgba(25, 118, 210, 0.1);
+        background: rgba(210, 129, 235, 0.158);
+
         mat-icon {
-          color: #1976d2;
+          color: #a684ff;
+        }
+
+        .white_bg{
+          color: #9d39ee !important;
         }
         .nav-label {
-          color: #1976d2;
+          color: #a684ff;
           font-weight: 500;
         }
       }
 
       &:hover {
         background: rgba(0, 0, 0, 0.04);
+
         mat-icon {
           transform: scale(1.1);
         }
@@ -117,13 +126,16 @@
   }
 }
 
-
-.content {
-  padding: 10px 20px;
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+
+
 mat-sidenav-content {
-  // background: #f5f5f5;
+  // background: black;
   width: 100%;
 }
 
@@ -133,9 +145,10 @@ mat-sidenav-content {
     display: flex;
     margin-left: 6px;
   }
+
   .mat-mdc-list-item {
     padding: 0 !important;
-    
+
     .mdc-list-item__content {
       padding: 0 !important;
       padding-left: .5rem;
@@ -158,5 +171,4 @@ mat-sidenav-content {
 .content {
   // min-height: 100vh;
   overflow-y: auto;
-} 
-
+}

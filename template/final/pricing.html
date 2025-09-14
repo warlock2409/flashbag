@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Serendipity - Pricing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vanta.js and dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.birds.min.js"></script>
+  <style>
+    body {
+      min-height: 100vh;
+    }
+    #vanta-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+    .content-over-bg {
+      position: relative;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body class="font-sans text-white bg-[#181729]">
+  <div id="vanta-bg"></div>
+
+  <!-- HEADER -->
+  <header class="content-over-bg flex justify-between items-center px-8 py-6">
+    <div class="flex items-center gap-3">
+      <div class="bg-white rounded-lg w-9 h-9 flex items-center justify-center shadow-xl">
+        <svg viewBox="0 0 32 32" fill="none" class="w-7 h-7"><polygon points="16,3 29,27 3,27" fill="#cc4bf7" /></svg>
+      </div>
+      <span class="text-2xl font-extrabold tracking-wide">Serendipity</span>
+    </div>
+    <nav class="flex items-center gap-2 md:gap-5">
+      <a href="#" class="hover:text-pink-400 font-medium transition">Home</a>
+      <a href="#" class="hover:text-pink-400 font-medium transition">Browse</a>
+      <a href="#" class="hover:text-pink-400 font-medium transition">Updates</a>
+      <a href="#" class="text-pink-400 font-bold transition">Pricing</a>
+      <a href="#" class="ml-2 bg-gradient-to-tr from-purple-500 to-pink-500 px-5 py-2 rounded-xl shadow-lg font-bold text-white hover:from-pink-500 hover:to-purple-500 transition shadow-pink-400/20">Sign Up</a>
+    </nav>
+  </header>
+
+  <!-- PRICING HERO SECTION -->
+  <section class="content-over-bg flex flex-col items-center text-center mt-16 mb-10 px-4">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">Pricing</h1>
+    <p class="max-w-2xl text-lg text-white/70 mb-4">Choose the plan that suits your creative journey. Transparent, flexible, no surprises—start for free anytime!</p>
+  </section>
+
+  <!-- PRICING GRID -->
+  <section class="content-over-bg max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4 mb-12">
+    <!-- Free Plan -->
+    <div class="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-lg flex flex-col items-center border border-white/10">
+      <h2 class="text-2xl font-bold mb-2">Free</h2>
+      <p class="text-pink-400 text-3xl font-extrabold mb-2">0<span class="text-white/70 text-lg align-top">/mo</span></p>
+      <ul class="text-white/80 mb-6 text-left space-y-2">
+        <li>• 15 image generations/month</li>
+        <li>• Community gallery access</li>
+        <li>• Basic model, SDXL</li>
+        <li>• Upscale & variations</li>
+      </ul>
+      <a href="#" class="bg-gradient-to-tr from-pink-400 to-purple-500 hover:from-purple-500 hover:to-pink-400 px-6 py-2 rounded-lg text-white font-bold shadow-md transition">Get Started</a>
+    </div>
+    <!-- Pro Plan -->
+    <div class="bg-gradient-to-tr from-purple-900 via-pink-900 to-blue-800 shadow-2xl rounded-2xl p-8 flex flex-col items-center border-2 border-pink-500 relative scale-105">
+      <div class="absolute -top-6 right-6 bg-pink-500 text-white px-3 py-1 rounded-xl text-xs font-bold shadow">Popular</div>
+      <h2 class="text-2xl font-bold mb-2">Pro</h2>
+      <p class="text-pink-400 text-4xl font-extrabold mb-2">19<span class="text-white/70 text-lg align-top">/mo</span></p>
+      <ul class="text-white/90 mb-7 text-left space-y-2">
+        <li>• 500+ image generations/month</li>
+        <li>• Private images & galleries</li>
+        <li>• Priority in queue</li>
+        <li>• Advanced AI models</li>
+        <li>• 4x upscaling & batch tools</li>
+      </ul>
+      <a href="#" class="bg-gradient-to-tr from-pink-500 to-purple-500 px-6 py-2 rounded-lg text-white font-bold shadow-md hover:from-purple-500 hover:to-pink-500 transition">Subscribe</a>
+    </div>
+    <!-- Studio Plan -->
+    <div class="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-lg flex flex-col items-center border border-white/10">
+      <h2 class="text-2xl font-bold mb-2">Studio</h2>
+      <p class="text-pink-400 text-3xl font-extrabold mb-2">49<span class="text-white/70 text-lg align-top">/mo</span></p>
+      <ul class="text-white/80 mb-6 text-left space-y-2">
+        <li>• Unlimited generations</li>
+        <li>• RAW image download</li>
+        <li>• API access</li>
+        <li>• Commercial rights</li>
+        <li>• Dedicated support</li>
+      </ul>
+      <a href="#" class="bg-gradient-to-tr from-pink-400 to-purple-500 hover:from-purple-500 hover:to-pink-400 px-6 py-2 rounded-lg text-white font-bold shadow-md transition">Contact Sales</a>
+    </div>
+  </section>
+
+  <footer class="content-over-bg text-center text-white/60 text-sm pb-8">
+    &copy; 2024 Serendipity &mdash; Unleash your imagination.
+  </footer>
+
+  <script>
+    let vantaEffect = null;
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!vantaEffect) {
+        vantaEffect = VANTA.BIRDS({
+          el: "#vanta-bg",
+          mouseControls: true,
+          touchControls: true,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          backgroundAlpha: 0.85,
+          color1: 0xcc4bf7,
+          color2: 0x4167d7,
+          colorMode: "lerp",
+          birdSize: 0.7,
+          wingSpan: 14.0,
+          separation: 42,
+          quantity: 4,
+          alignment: 25.00,
+          cohesion: 7.00,
+          backgroundColor: 0x181729
+        })
+      }
+    });
+  </script>
+</body>
+</html>
+

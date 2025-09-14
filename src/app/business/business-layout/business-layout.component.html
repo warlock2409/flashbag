@@ -1,49 +1,53 @@
 <mat-sidenav-container class="sidenav-container">
 
   <mat-sidenav #sidenav mode="side" [opened]="true" [class.expanded]="isExpanded" class="sidenav">
-    <mat-toolbar>
+    <div class="h-24">
+
+    </div>
+    <mat-toolbar style="background: transparent;">
       <button mat-icon-button (click)="toggleSidenav()">
-        <mat-icon>{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        <mat-icon style="color: gray;">{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
       </button>
     </mat-toolbar>
 
-    <mat-nav-list>
+    <mat-nav-list class="glass-card">
+      
       <a mat-list-item routerLink="./home" routerLinkActive="active" class="nav-item">
         <mat-icon>home</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Home</span>
       </a>
-      <a mat-list-item routerLink="./marketing" routerLinkActive="active" class="nav-item">
+      <!-- <a mat-list-item routerLink="./marketing" routerLinkActive="active" class="nav-item">
         <mat-icon>mail</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Marketing</span>
-      </a>
+      </a> -->
       <a mat-list-item routerLink="./orders" routerLinkActive="active" class="nav-item">
-        <mat-icon>shopping_cart</mat-icon>
+        <mat-icon class="white_bg">currency_exchange</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Orders</span>
       </a>
       <a mat-list-item routerLink="./customers" routerLinkActive="active" class="nav-item">
-        <mat-icon>people</mat-icon>
+        <mat-icon class="white_bg">people</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Customers</span>
       </a>
-      <a mat-list-item routerLink="./requests" routerLinkActive="active" class="nav-item">
+      <!-- <a mat-list-item routerLink="./requests" routerLinkActive="active" class="nav-item">
         <mat-icon>business_center</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Business Requests</span>
       </a>
       <a mat-list-item routerLink="./consignment" routerLinkActive="active" class="nav-item">
         <mat-icon>local_shipping</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Consignment</span>
-      </a>
-      <a mat-list-item routerLink="./analytics" routerLinkActive="active" class="nav-item">
+      </a> -->
+      <!-- <a mat-list-item routerLink="./analytics" routerLinkActive="active" class="nav-item">
         <mat-icon>analytics</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Analytics</span>
-      </a>
+      </a> -->
       <a mat-list-item routerLink="./settings" routerLinkActive="active" class="nav-item">
-        <mat-icon>settings</mat-icon>
+        <mat-icon class="white_bg">settings</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Management</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content class="content pt-8">
+  <mat-sidenav-content class="content">
     <div>
       <router-outlet></router-outlet>
     </div>

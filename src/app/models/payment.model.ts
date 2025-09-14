@@ -1,9 +1,10 @@
 import { UserDto } from "../services/auth.service";
+import { Customer } from "./customer.model";
 
 export interface InvoiceModel {
     id?:number,
     customerId: number;
-    customer?:UserDto
+    customer?:Customer
     discount: number;
     items: ItemModel[];
     invoiceNumber?: string,
@@ -17,6 +18,7 @@ export interface ItemModel {
     itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCTS'; // restrict if you know all possible types
     itemId: number;
     quantity: number;
+    startDate?: number
 }
 
 

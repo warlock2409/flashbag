@@ -57,9 +57,9 @@ const fbLoginCallback = (response: any) => {
     <app-settings-panel></app-settings-panel>
   `,
   styles: [`
-    .main-content {
-      padding-top: 60px;
-    }
+    // .main-content {
+    //   padding-top: 60px;
+    // }
   `]
 })
 export class AppComponent implements OnInit {
