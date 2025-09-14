@@ -1,23 +1,24 @@
-<h2 mat-dialog-title style="margin: 0;">
-    <i class="fa-solid fa-circle-xmark text-red-400" (click)="closeDialog()"></i>
-    Point of sale system
-</h2>
-<mat-dialog-content class="mat-typography"
-    style="max-height: 100vh; overflow: hidden; display: flex; flex-direction: column;">
+<div class="bg-white">
+    <h2 mat-dialog-title style="margin: 0;">
+        <i class="fa-solid fa-circle-xmark text-red-400" (click)="closeDialog()"></i>
+        Point of sale system
+    </h2>
+    <mat-dialog-content class="mat-typography"
+        style="max-height: 100vh; overflow: hidden; display: flex; flex-direction: column;">
 
-    <div class="main-container flex flex-col md:flex-row gap-4 flex-1 overflow-hidden">
-        <!-- Products Section (60%) -->
-        <div class="products-section shadow-sm w-full md:w-4/5 h-[calc(100vh-95px)] overflow-y-auto "
-            style="overflow-y: auto;">
+        <div class="main-container flex flex-col md:flex-row gap-4 flex-1 overflow-hidden">
+            <!-- Products Section (60%) -->
+            <div class="products-section shadow-sm w-full md:w-4/5 h-[calc(100vh-95px)] overflow-y-auto "
+                style="overflow-y: auto;">
 
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
-                <div class="p-4 bg-gray-300 text-white">
-                    <h2 class="text-xl font-semibold flex items-center m-0">
-                        <i class="fas fa-boxes mr-2"></i> Plans & Add-On's
-                    </h2>
-                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
+                    <div class="p-4 bg-gray-300 text-white">
+                        <h2 class="text-xl font-semibold flex items-center m-0">
+                            <i class="fas fa-boxes mr-2"></i> Plans & Add-On's
+                        </h2>
+                    </div>
 
-                <!-- <div class="m-2 relative">
+                    <!-- <div class="m-2 relative">
                     <input type="text" placeholder="Search products..." class="w-full px-4 py-2 rounded text-gray-800">
                     <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
                 </div>
@@ -28,265 +29,268 @@
                     </div>
                 </div> -->
 
-                <mat-stepper #stepper>
+                    <mat-stepper #stepper>
 
-                    <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
-                        <ng-template matStepLabel>Select Plan</ng-template>
-                        <!-- Business Model -->
-                        <div>
-                            <p>Select Your Primary Business Type</p>
-                            <div class="filter-chips">
-                                <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
-                                    <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.name"
-                                        [selected]="selectedFilter === filter.name">
-                                        {{filter.name}}
-                                    </mat-chip-option>
-                                </mat-chip-listbox>
-                            </div>
-                        </div>
-
-
-                        <div class="m-4 flex justify-center flex-wrap gap-4 overflow-y-auto max-h-[70vh] pb-16">
-                            @for (plan of businessPlans; track $index) {
-                            <div
-                                class="mt-4 pricing-card bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 relative max-w-[320px]">
-                                <ng-container>
-                                    <div class="p-8">
-                                        <h1 class="text-2xl font-bold text-gray-800 mb-2">{{plan.name}}</h1>
-                                        <p class="text-gray-600 mb-6">{{plan.description}}</p>
-
-                                        <div class="mb-8">
-                                            <span class="text-4xl font-bold text-gray-800 monthly-price"> {{
-                                                plan.basePrice |
-                                                currency:'INR':'symbol':'1.0-0' }}
-                                            </span>
-                                            <span class="text-gray-500">/month</span>
-                                        </div>
-                                        <button (click)="selectPlan(plan, stepper)"
-                                            class="w-full py-3 px-6 border border-violet-300 rounded-lg text-gray-700 font-medium hover:bg-violet-100 transition">
-                                            Purchase
-                                        </button>
-                                    </div>
-
-                                    <div class="border-t border-gray-200 px-8 py-6 bg-gray-50">
-                                        <h4 class="font-semibold text-gray-800 mb-4">What's included:</h4>
-                                        <ul class="space-y-3">
-                                            @for (config of plan.planBusinessModelConfigs; track $index) {
-                                            <li *ngIf="config.checkInLimit !== null" class="flex items-center">
-                                                <i class="fas fa-check text-green-500 mr-3"></i>
-                                                <span class="text-gray-700">{{ config.checkInLimit
-                                                    }} Check-in</span>
-                                            </li>
-
-                                            <li *ngIf="config.productLimit !== null" class="flex items-center">
-                                                <i class="fas fa-check text-green-500 mr-3"></i>
-                                                <span class="text-gray-700">{{ config.productLimit
-                                                    }} Products</span>
-                                            </li>
-
-                                            <li *ngIf="config.rentalItemLimit !== null" class="flex items-center">
-                                                <i class="fas fa-check text-green-500 mr-3"></i>
-                                                <span class="text-gray-700">{{ config.rentalItemLimit
-                                                    }} Rental Items</span>
-                                            </li>
-
-                                            <li *ngIf="config.includedUtilityMessages !== null"
-                                                class="flex items-center">
-                                                <i class="fas fa-check text-green-500 mr-3"></i>
-                                                <span class="text-gray-700">
-                                                    {{ config.includedUtilityMessages }} Utility Messages
-                                                </span>
-                                            </li>
-
-                                            <li *ngIf="config.includedMarketingMessages !== null"
-                                                class="flex items-center">
-                                                <i class="fas fa-check text-green-500 mr-3"></i>
-                                                <span class="text-gray-700">
-                                                    {{ config.includedMarketingMessages }} Marketing Messages
-                                                </span>
-                                            </li>
-                                            }
-
-                                        </ul>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            }
-                        </div>
-
-                    </mat-step>
-
-                    <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-                        <!-- Add-ons section -->
-                        <ng-template matStepLabel>Select Add-ons</ng-template>
-
-                        <div class="px-8 py-6 bg-white" style="flex: 1;">
-                            <h4 class="font-semibold text-gray-800 mb-4">Available Add-ons:</h4>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                <div *ngFor="let addon of addons"
-                                    class="p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer"
-                                    (click)="toggleAddon(addon)">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <div class="flex items-center gap-1">
-                                            <input type="checkbox" name="" id="" [(ngModel)]="addon.selected"
-                                                class="w-5 h-5 accent-indigo-600 cursor-pointer">
-
-                                            <h5 class="m-0 text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                                {{ addon.type }}
-                                            </h5>
-                                        </div>
-                                        <span class="text-indigo-600 font-medium">
-                                            {{ addon.pricePerUnit| currency:'INR':'symbol':'1.0-0' }}/mo
-                                        </span>
-                                    </div>
-                                    <p class="text-gray-600 text-sm">
-                                        <i class="fas" [ngClass]="addon.icon"></i>
-                                        {{addon.description }}
-                                    </p>
+                        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+                            <ng-template matStepLabel>Select Plan</ng-template>
+                            <!-- Business Model -->
+                            <div>
+                                <p>Select Your Primary Business Type</p>
+                                <div class="filter-chips">
+                                    <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+                                        <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.name"
+                                            [selected]="selectedFilter === filter.name">
+                                            {{filter.name}}
+                                        </mat-chip-option>
+                                    </mat-chip-listbox>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flex justify-end">
-                            <button mat-flat-button (click)="stepper.previous()">Back</button>
-                            <button mat-flat-button matStepperNext>Next</button>
-                        </div>
-                    </mat-step>
+
+
+                            <div class="m-4 flex justify-center flex-wrap gap-4 overflow-y-auto max-h-[70vh] pb-16">
+                                @for (plan of businessPlans; track $index) {
+                                <div
+                                    class="mt-4 pricing-card bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 relative max-w-[320px]">
+                                    <ng-container>
+                                        <div class="p-8">
+                                            <h1 class="text-2xl font-bold text-gray-800 mb-2">{{plan.name}}</h1>
+                                            <p class="text-gray-600 mb-6">{{plan.description}}</p>
+
+                                            <div class="mb-8">
+                                                <span class="text-4xl font-bold text-gray-800 monthly-price"> {{
+                                                    plan.basePrice |
+                                                    currency:'INR':'symbol':'1.0-0' }}
+                                                </span>
+                                                <span class="text-gray-500">/month</span>
+                                            </div>
+                                            <button (click)="selectPlan(plan, stepper)"
+                                                class="w-full py-3 px-6 border border-violet-300 rounded-lg text-gray-700 font-medium hover:bg-violet-100 transition">
+                                                Purchase
+                                            </button>
+                                        </div>
+
+                                        <div class="border-t border-gray-200 px-8 py-6 bg-gray-50">
+                                            <h4 class="font-semibold text-gray-800 mb-4">What's included:</h4>
+                                            <ul class="space-y-3">
+                                                @for (config of plan.planBusinessModelConfigs; track $index) {
+                                                <li *ngIf="config.checkInLimit !== null" class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">{{ config.checkInLimit
+                                                        }} Check-in</span>
+                                                </li>
+
+                                                <li *ngIf="config.productLimit !== null" class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">{{ config.productLimit
+                                                        }} Products</span>
+                                                </li>
+
+                                                <li *ngIf="config.rentalItemLimit !== null" class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">{{ config.rentalItemLimit
+                                                        }} Rental Items</span>
+                                                </li>
+
+                                                <li *ngIf="config.includedUtilityMessages !== null"
+                                                    class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">
+                                                        {{ config.includedUtilityMessages }} Utility Messages
+                                                    </span>
+                                                </li>
+
+                                                <li *ngIf="config.includedMarketingMessages !== null"
+                                                    class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">
+                                                        {{ config.includedMarketingMessages }} Marketing Messages
+                                                    </span>
+                                                </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                }
+                            </div>
+
+                        </mat-step>
+
+                        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+                            <!-- Add-ons section -->
+                            <ng-template matStepLabel>Select Add-ons</ng-template>
+
+                            <div class="px-8 py-6 bg-white" style="flex: 1;">
+                                <h4 class="font-semibold text-gray-800 mb-4">Available Add-ons:</h4>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                    <div *ngFor="let addon of addons"
+                                        class="p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer"
+                                        (click)="toggleAddon(addon)">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div class="flex items-center gap-1">
+                                                <input type="checkbox" name="" id="" [(ngModel)]="addon.selected"
+                                                    class="w-5 h-5 accent-indigo-600 cursor-pointer">
+
+                                                <h5
+                                                    class="m-0 text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                                    {{ addon.type }}
+                                                </h5>
+                                            </div>
+                                            <span class="text-indigo-600 font-medium">
+                                                {{ addon.pricePerUnit| currency:'INR':'symbol':'1.0-0' }}/mo
+                                            </span>
+                                        </div>
+                                        <p class="text-gray-600 text-sm">
+                                            <i class="fas" [ngClass]="addon.icon"></i>
+                                            {{addon.description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button mat-flat-button (click)="stepper.previous()">Back</button>
+                                <button mat-flat-button matStepperNext>Next</button>
+                            </div>
+                        </mat-step>
 
 
 
-                    <mat-step>
-                        <ng-template matStepLabel>Done</ng-template>
-                        <p>You are now done.</p>
-                        <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button (click)="stepper.reset()">Reset</button>
-                        </div>
-                    </mat-step>
-                </mat-stepper>
-            </div>
-        </div>
-
-        <!-- Invoice Section (40%) -->
-        <div class="invoice-section w-full md:w-2/5 mb-4 bg-white rounded-lg shadow-sm overflow-hidden">
-
-            <div class="p-4 text-white flex justify-between items-center"
-                style="background: linear-gradient(90deg,#20b2aa, #008b8b);">
-                <h2 class="text-xl font-semibold flex items-center m-0">
-                    <i class="fas fa-receipt mr-2 text-yellow-300"></i> Current Invoice
-                </h2>
-                <div class="flex justify-between items-center mt-2">
-                    <span class="text-sm">#INV-<span id="invoice-number">001</span></span>
-                    <span class="text-sm" id="current-date"></span>
+                        <mat-step>
+                            <ng-template matStepLabel>Done</ng-template>
+                            <p>You are now done.</p>
+                            <div>
+                                <button mat-button matStepperPrevious>Back</button>
+                                <button mat-button (click)="stepper.reset()">Reset</button>
+                            </div>
+                        </mat-step>
+                    </mat-stepper>
                 </div>
             </div>
 
-            <div class="p-4 border-b">
-                <div class="flex justify-between mb-4 mt-2">
-                    <span class="font-medium">Customer:</span>
-                    <select class="border rounded px-2 py-1 text-sm">
-                        <option>Walk-in Customer</option>
-                        <option>John Doe</option>
-                        <option>Jane Smith</option>
-                        <option>Business Client</option>
-                    </select>
+            <!-- Invoice Section (40%) -->
+            <div class="invoice-section w-full md:w-2/5 mb-4 bg-white rounded-lg shadow-sm overflow-hidden">
+
+                <div class="p-4 text-white flex justify-between items-center"
+                    style="background: linear-gradient(90deg,#20b2aa, #008b8b);">
+                    <h2 class="text-xl font-semibold flex items-center m-0">
+                        <i class="fas fa-receipt mr-2 text-yellow-300"></i> Current Invoice
+                    </h2>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-sm">#INV-<span id="invoice-number">001</span></span>
+                        <span class="text-sm" id="current-date"></span>
+                    </div>
                 </div>
 
-                <div class="flex justify-between items-center">
-                    <span class="font-medium">Payment Method:</span>
-                    <div class="flex gap-2">
-                        <button *ngFor="let method of paymentMethods" (click)="setPaymentMethod(method.label)"
-                            [ngClass]="{
+                <div class="p-4 border-b">
+                    <div class="flex justify-between mb-4 mt-2">
+                        <span class="font-medium">Customer:</span>
+                        <select class="border rounded px-2 py-1 text-sm">
+                            <option>Walk-in Customer</option>
+                            <option>John Doe</option>
+                            <option>Jane Smith</option>
+                            <option>Business Client</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Payment Method:</span>
+                        <div class="flex gap-2">
+                            <button *ngFor="let method of paymentMethods" (click)="setPaymentMethod(method.label)"
+                                [ngClass]="{
                             'bg-green-300 text-white': selectedMethod === 'Cash' && method.label === 'Cash',
                             'bg-blue-300 text-white': selectedMethod === 'Card' && method.label === 'Card',
                             'bg-violet-300 text-white': selectedMethod === 'Transfer' && method.label === 'Transfer',
                             'bg-gray-200 text-gray-700': selectedMethod !== method.label
                             }" class="px-2 rounded">
-                            {{ method.label }}
-                        </button>
+                                {{ method.label }}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="h-[55vh] overflow-y-auto scrollbar-hide border-b flex-1">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 sticky top-0">
+                            <tr class="text-xs text-gray-500 uppercase">
+                                <th class="py-2 px-3 text-left">Item</th>
+                                <th class="py-2 px-3 text-center">Qty</th>
+                                <th class="py-2 px-3 text-right">Price</th>
+                                <th class="py-2 px-3 text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-items" class="divide-y divide-gray-200">
+                            <!-- Invoice items will be added here dynamically -->
+                            @for (item of invoiceItems; track $index) {
+                            <tr>
+                                <td class="py-2 px-3 text-sm truncated-text">
+                                    {{ item.name }}
+                                    <br>
+                                    <span *ngIf="selectedPlan">{{ getSubscriptionDateRange(selectedPlan.quantity)
+                                        }}</span>
+                                </td>
+                                <td class="py-2 px-3 text-center">
+                                    <div class="flex items-center justify-center">
+                                        <button
+                                            class="quantity-btn w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                                            (click)="onQuantityChange(item,'decrease')">
+                                            <i class="fas fa-minus text-xs"></i>
+                                        </button>
+                                        <span class="mx-2 w-8 text-center">{{ item.quantity }}</span>
+                                        <button
+                                            class="quantity-btn w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
+                                            (click)="onQuantityChange(item,'increase')">
+                                            <i class="fas fa-plus text-xs"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="py-2 px-3 text-right text-sm">₹{{ item.price.toFixed(2) }}</td>
+                                <td class="py-2 px-3 text-right font-medium">
+                                    ₹{{ (item.totalPrice).toFixed(2) }}
+                                </td>
+                            </tr>
+                            }
+
+                            <tr *ngIf="invoiceItems.length <= 0">
+                                <td colspan="4" class="py-8 text-center text-gray-400" id="empty-invoice-message">
+                                    No items added yet. Click on products to add them.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-4">
+                    <div class="flex justify-between mb-1">
+                        <span class="font-medium">Subtotal:</span>
+                        <span id="subtotal">₹{{ subtotal.toFixed(2) }}</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="font-medium">Tax (10%):</span>
+                        <span id="tax">₹{{ tax.toFixed(2) }}</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-bold border-t pt-2 mt-2">
+                        <span>Total:</span>
+                        <span id="total">₹{{ total.toFixed(2) }}</span>
                     </div>
 
+                    <div class="mt-4 flex gap-2">
+                        <button
+                            class="flex-1 py-2 bg-red-400 text-white rounded hover:bg-red-600 transition-colors duration-200"
+                            id="clear-invoice" (click)="clearInvoice()" type="button">
+                            <i class="fas fa-trash-alt mr-2"></i> Clear
+                        </button>
+                        <button
+                            class="flex-1 py-2 bg-violet-400 text-white rounded hover:bg-green-600 transition-colors duration-200"
+                            id="checkout" (click)="checkout()" type="button">
+                            <i class="fas fa-check-circle mr-2"></i> Checkout
+                        </button>
+                    </div>
                 </div>
+
             </div>
-
-            <div class="h-[55vh] overflow-y-auto scrollbar-hide border-b flex-1">
-                <table class="w-full">
-                    <thead class="bg-gray-50 sticky top-0">
-                        <tr class="text-xs text-gray-500 uppercase">
-                            <th class="py-2 px-3 text-left">Item</th>
-                            <th class="py-2 px-3 text-center">Qty</th>
-                            <th class="py-2 px-3 text-right">Price</th>
-                            <th class="py-2 px-3 text-right">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="invoice-items" class="divide-y divide-gray-200">
-                        <!-- Invoice items will be added here dynamically -->
-                        @for (item of invoiceItems; track $index) {
-                        <tr>
-                            <td class="py-2 px-3 text-sm truncated-text">
-                                {{ item.name }}
-                                <br>
-                                <span *ngIf="selectedPlan">{{ getSubscriptionDateRange(selectedPlan.quantity) }}</span>
-                            </td>
-                            <td class="py-2 px-3 text-center">
-                                <div class="flex items-center justify-center">
-                                    <button
-                                        class="quantity-btn w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
-                                        (click)="onQuantityChange(item,'decrease')" >
-                                        <i class="fas fa-minus text-xs"></i>
-                                    </button>
-                                    <span class="mx-2 w-8 text-center">{{ item.quantity }}</span>
-                                    <button
-                                        class="quantity-btn w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300"
-                                        (click)="onQuantityChange(item,'increase')">
-                                        <i class="fas fa-plus text-xs"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="py-2 px-3 text-right text-sm">₹{{ item.price.toFixed(2) }}</td>
-                            <td class="py-2 px-3 text-right font-medium">
-                                ₹{{ (item.totalPrice).toFixed(2) }}
-                            </td>
-                        </tr>
-                        }
-
-                        <tr *ngIf="invoiceItems.length <= 0">
-                            <td colspan="4" class="py-8 text-center text-gray-400" id="empty-invoice-message">
-                                No items added yet. Click on products to add them.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="p-4">
-                <div class="flex justify-between mb-1">
-                    <span class="font-medium">Subtotal:</span>
-                    <span id="subtotal">₹{{ subtotal.toFixed(2) }}</span>
-                </div>
-                <div class="flex justify-between mb-1">
-                    <span class="font-medium">Tax (10%):</span>
-                    <span id="tax">₹{{ tax.toFixed(2) }}</span>
-                </div>
-                <div class="flex justify-between text-lg font-bold border-t pt-2 mt-2">
-                    <span>Total:</span>
-                    <span id="total">₹{{ total.toFixed(2) }}</span>
-                </div>
-
-                <div class="mt-4 flex gap-2">
-                    <button
-                        class="flex-1 py-2 bg-red-400 text-white rounded hover:bg-red-600 transition-colors duration-200"
-                        id="clear-invoice" (click)="clearInvoice()" type="button">
-                        <i class="fas fa-trash-alt mr-2"></i> Clear
-                    </button>
-                    <button
-                        class="flex-1 py-2 bg-violet-400 text-white rounded hover:bg-green-600 transition-colors duration-200"
-                        id="checkout" (click)="checkout()" type="button">
-                        <i class="fas fa-check-circle mr-2"></i> Checkout
-                    </button>
-                </div>
-            </div>
-
         </div>
-    </div>
-</mat-dialog-content>
+    </mat-dialog-content>
+</div>
