@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { ActivatedRoute, Router, ɵEmptyOutletComponent } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { OrganizationModel } from 'src/app/models/organization';
 @Component({
   selector: 'app-business-details',
   standalone: true,
-  imports: [NzCardModule, NzBadgeModule, NzDescriptionsModule, CommonModule, ɵEmptyOutletComponent, MatButtonModule, MatDialogModule, MatButtonModule],
+  imports: [NzCardModule, NzBadgeModule, NzDescriptionsModule, CommonModule,MatButtonModule, MatDialogModule, MatButtonModule],
   templateUrl: './business-details.component.html',
   styleUrl: './business-details.component.scss'
 })

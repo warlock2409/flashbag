@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { SearchBarComponent } from '../search-bar/search-bar.component';
+// import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { filter } from 'rxjs/operators';
 import { ThemeService } from '../../../services/theme.service';
 import { AuthService } from '../../../services/auth.service';
@@ -27,7 +27,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     CommonModule,
     RouterModule,
     FormsModule,
-    SearchBarComponent,
     MatIconModule,
     MatMenuModule,
     MatButtonModule,

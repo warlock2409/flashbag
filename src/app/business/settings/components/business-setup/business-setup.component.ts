@@ -21,7 +21,7 @@ import { OrganizationServiceService } from 'src/app/services/organization-servic
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    AsyncPipe, MatButtonModule, MatSidenavModule,
+    MatButtonModule, MatSidenavModule,
     NzButtonModule,
     NzMenuModule,
     RouterOutlet, MatChipsModule, CommonModule
