@@ -87,4 +87,7 @@ export interface MembershipBenefit {
   serviceKey: string;
   days?: number;             // only if benefitType = DURATION_ACCESS
   discountPercent?: number;  // only if benefitType = DISCOUNT
+
+  accessDurationInDays?:number
+  id?:number
 }

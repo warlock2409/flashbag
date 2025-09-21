@@ -9,9 +9,12 @@ import { OrganizationMembershipPlan, OrganizationServiceModel } from '../models/
   providedIn: 'root'
 })
 export class OrganizationServiceService {
- 
- 
   
+
+
+
+
+
 
 
 
@@ -30,7 +33,7 @@ export class OrganizationServiceService {
   Http = inject(HttpClient);
 
   constructor() {
-    
+
   }
 
   getBusinessModel(key: string) {
@@ -118,17 +121,29 @@ export class OrganizationServiceService {
     return this.Http.post<ServiceResponse<any>>(url, requestBody);
   }
 
+  updateOrgService(payload: OrganizationServiceModel, serviceId: number) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/organization/{orgCode}/service/{serviceId}".replace("{orgCode}", orgCode!).replace("{serviceId}", serviceId.toString());
+    return this.Http.put<ServiceResponse<any>>(url, payload);
+  }
+
   getOrgService() {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/organization/{orgCode}/service".replace("{orgCode}", orgCode!);
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
+  getOrgServiceByIndustryId(industryId: any) {
+        let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/organization/{orgCode}/service/industry/{industryId}".replace("{orgCode}", orgCode!).replace("{industryId}", industryId!);
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
   getOrgShopsByActiveService(selectedServices: any[]) {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/organization/{orgCode}/shops/activeService".replace("{orgCode}", orgCode!);
-    if(selectedServices.length > 0){
-      url = url + "?serviceIds=" + selectedServices.toString();
+    if (selectedServices.length > 0) {
+      url = url + "?serviceKeys=" + selectedServices.toString();
     }
     return this.Http.get<ServiceResponse<any>>(url);
   }
@@ -141,21 +156,28 @@ export class OrganizationServiceService {
 
 
   createOrgMembership(membershipPlan: OrganizationMembershipPlan) {
-      let orgCode = localStorage.getItem("orgCode");
+    let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/organization/{orgCode}/membership".replace("{orgCode}", orgCode!);
     return this.Http.post<ServiceResponse<any>>(url, membershipPlan);
   }
 
-   getAllOrgMembership() {
+  updateOrgMembership(membershipPlan: OrganizationMembershipPlan, membershipId: number | undefined) {
+    
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/organization/{orgCode}/membership/{membershipId}".replace("{orgCode}", orgCode!).replace("{membershipId}", membershipId?.toString()!);
+    return this.Http.put<ServiceResponse<any>>(url, membershipPlan);
+  }
+
+  getAllOrgMembership() {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/organization/{orgCode}/membership".replace("{orgCode}", orgCode!);
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
-   getAllCustomerByOrg() {
+  getAllCustomerByOrg() {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/users/organization/{orgCode}/customers".replace("{orgCode}", orgCode!);
     return this.Http.get<ServiceResponse<any>>(url);
   }
-  
+
 }

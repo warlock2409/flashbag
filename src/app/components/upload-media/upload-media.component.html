@@ -1,0 +1,32 @@
+<div class="flex flex-col space-y-4">
+    <!-- Main Preview with Add Button -->
+    <div
+        class="relative w-58 h-58 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
+        <!-- Show selected image if exists -->
+        <img [src]="selected && isImage(selected) ? selected.url : placeholderUrl" alt="Main preview"
+            class="w-full h-full object-cover" />
+
+        <!-- Add Button always visible at bottom -->
+        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-md shadow cursor-pointer hover:bg-gray-100 flex items-center space-x-1"
+            (click)="fileInput.click()">
+            <i class="fas fa-plus text-gray-500"></i>
+            <span class="text-xs text-gray-700">Add Media</span>
+        </div>
+
+        <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)"
+            [attr.multiple]="multiple ? '' : null" />
+    </div>
+
+    <!-- Scrollable Thumbnail Gallery -->
+    <div class="flex space-x-2 overflow-x-auto">
+        <div *ngFor="let u of uploads" class="w-18 h-18 border rounded-lg flex-shrink-0 relative cursor-pointer"
+            [class.border-blue-500]="u === selected" (click)="selectFile(u)">
+            <img [src]="u.url" alt="thumbnail" class="w-full h-full object-cover rounded-lg" />
+            <button type="button"
+                class="absolute top-[1px] right-[1px] text-white bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                (click)="removeFile(u); $event.stopPropagation()">
+                ×
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,4 @@
+import { DocumentDto } from "../components/upload-media/upload-media.component";
 import { BusinessModel } from "./business.model";
 
 export interface ShopModel {
@@ -20,6 +21,12 @@ export interface ShopModel {
   lng?: number;
 
   checked?:boolean;
+  primaryIndustry?:any
+  documentDto?:DocumentDto;
+  active:null|boolean
+
+  // UI
+  shopCategory?:string
 }
 
 export interface AddressModel {

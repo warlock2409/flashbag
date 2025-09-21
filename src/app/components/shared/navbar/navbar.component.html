@@ -57,21 +57,25 @@
       <ul class="hidden md:flex items-center gap-2 text-sm font-medium !mb-0 text-gray-600"
         [ngClass]="{ '!text-gray-300': isHomePage }">
         @if (authService.isLoggedIn()) {
-        <button (click)="logout()"
+
+        <button (click)="addCustomer()"
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
-          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          aria-label="Account">
           <mat-icon>person_add</mat-icon>
         </button>
-        <button (click)="logout()"
+
+        <button (click)="openOrders()"
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
-          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          aria-label="Account">
           <mat-icon>point_of_sale</mat-icon>
         </button>
+
         <button *ngIf="authService.isLoggedIn()" (click)="logout()"
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
           aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
           <mat-icon>settings_power</mat-icon>
         </button>
+
         }@else {
         <!-- <li class=""><a href="#"
             class="hover:text-white transition-colors duration-300 px-4 py-1 rounded-full hover:bg-white/5 font-sans">Sales

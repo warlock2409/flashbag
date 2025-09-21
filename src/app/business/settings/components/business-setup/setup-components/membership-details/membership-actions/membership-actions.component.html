@@ -6,7 +6,7 @@
         <!-- Dialog Header -->
         <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
             <h2 class="text-lg font-semibold text-gray-800 m-0">New Membership</h2>
-            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500">
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500 cursor-pointer">
                 <mat-icon style="color: lightcoral;">cancel</mat-icon>
             </button>
         </div>
@@ -26,7 +26,8 @@
                                     Membership Name <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" placeholder="Enter membership name" class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.name">
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none"
+                                    [(ngModel)]="membershipPlan.name">
                             </div>
 
                             <div class="md:col-span-2">
@@ -34,7 +35,7 @@
                                     Industry <span class="text-red-500">*</span>
                                 </label>
                                 <select class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="membershipPlan.industryId">
+                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="membershipPlan.industryId" [disabled]="data.isUpdate">
                                     <option *ngFor="let industry of industries" [value]="industry.id">
                                         {{ industry.name }}
                                     </option>
@@ -98,7 +99,8 @@
                                     Price <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" placeholder="INR 0.00" class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.basePrice">
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none"
+                                    [(ngModel)]="membershipPlan.basePrice">
                             </div>
 
                             <!-- Billing Cycle -->
@@ -143,7 +145,8 @@
                     <div class="md:col-span-2 mb-4">
                         <h3 class="text-xl font-medium  mb-4">Short Description</h3>
                         <input type="text" placeholder="Enter short description" class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none" [(ngModel)]="membershipPlan.description">
+                                focus:border-violet-400 focus:ring-violet-400 focus:outline-none"
+                            [(ngModel)]="membershipPlan.description">
                     </div>
 
                     <!-- Terms & Conditions -->
@@ -157,9 +160,9 @@
                     <ng-template matStepLabel>Shops Mapping</ng-template>
                     <div *ngIf="shops.length > 0">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Service available shops</label>
-                        <div class="space-y-2" formArrayName="shops">
+                        <div class="space-y-2">
                             <div *ngFor="let shop of shops; let i = index" class="flex items-center gap-2">
-                                <input type="checkbox" [id]="'shop-'+i">
+                                <input type="checkbox" [id]="'shop-'+i" [(ngModel)]="shop.checked" name="shop-{{i}}">
                                 <label [for]="'shop-'+i">{{ shop.name }}</label>
                             </div>
                         </div>
@@ -173,14 +176,20 @@
         <!-- Dialog Footer -->
         <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
             <div class="space-x-3 flex gap-2">
-                <button mat-stroked-button mat-dialog-close *ngIf="stepper.selectedIndex != (stepper.steps.length - 1)">Cancel</button>
+                <button mat-stroked-button mat-dialog-close
+                    *ngIf="stepper.selectedIndex != (stepper.steps.length - 1)">Cancel</button>
                 <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
                     type="submit" (click)="validateMembershipDetails()">
                     Next
                 </button>
-                <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)" (click)="stepperPrev()">Back</button>
+                <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)"
+                    (click)="stepperPrev()">Back</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)" (click)="createMembership()">Confirm</button>
+                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && !data.isUpdate"
+                    (click)="createMembership()">Confirm</button>
+                 <button mat-raised-button style="background-color: #a684ff; color: white;"
+                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && data.isUpdate"
+                    (click)="updateMembership()">Update</button>
             </div>
         </div>
     </div>

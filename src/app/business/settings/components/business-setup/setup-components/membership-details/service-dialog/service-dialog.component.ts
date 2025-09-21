@@ -27,11 +27,12 @@ export class ServiceDialogComponent {
     private orgService: OrganizationServiceService
   ) {
     this.selected = [...data.selected];
-    this.getOrganizationService();
+    this.getOrganizationService(this.data.industryId);
+    console.log(this.data);
   }
 
   returnSelectedServices() {
-    let selectedService:OrganizationServiceModel[]= [];
+    let selectedService: OrganizationServiceModel[] = [];
     this.orgServiceMap.forEach(services => {
       services.forEach(service => {
         if (service.checked) {
@@ -63,17 +64,6 @@ export class ServiceDialogComponent {
     this.selectedTotal = total;
   }
 
-  isSelected(service: any) {
-    return this.selected.some(s => s.id === service.id);
-  }
-
-  toggleSelection(service: any) {
-    if (this.isSelected(service)) {
-      this.selected = this.selected.filter(s => s.id !== service.id);
-    } else {
-      this.selected.push(service);
-    }
-  }
 
   close() {
     this.dialogRef.close();
@@ -86,8 +76,9 @@ export class ServiceDialogComponent {
 
   orgServiceMap: Map<string, OrganizationServiceModel[]> = new Map();
 
-  getOrganizationService() {
-    this.orgService.getOrgService().subscribe({
+  getOrganizationService(industryId: any) {
+
+    this.orgService.getOrgServiceByIndustryId(industryId).subscribe({
       next: (res: ResponseDate) => {
         this.services = res.data;
         // Clear existing map before repopulating
@@ -100,11 +91,18 @@ export class ServiceDialogComponent {
             this.orgServiceMap.set(key, []);
           }
           service.checked = false;
+
+          let existingService = this.selected.find(selectedService => selectedService.serviceKey == service.serviceKey);
+          if (existingService) {
+            service.checked = true;
+          }
+
           this.orgServiceMap.get(key)!.push(service);
         });
 
         console.log(this.orgServiceMap);
       },
+
       error: (err: any) => {
 
       }

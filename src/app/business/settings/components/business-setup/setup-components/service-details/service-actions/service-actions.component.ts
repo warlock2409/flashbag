@@ -18,7 +18,7 @@ import { OrganizationServiceModel } from 'src/app/models/organization';
   styleUrl: './service-actions.component.scss'
 })
 export class ServiceActionsComponent {
-  
+
   serviceForm!: FormGroup;
 
   readonly dialogRef = inject(MatDialogRef<ServiceActionsComponent>);
@@ -31,6 +31,7 @@ export class ServiceActionsComponent {
     if (this.data?.industries) {
       this.industries = this.data.industries; // set industries from parent
     }
+
   }
 
   selectedIndustryId: any = '';
@@ -51,12 +52,88 @@ export class ServiceActionsComponent {
       description: ['', Validators.required],
       shops: this.fb.array([])
     });
+
+    if (this.data.service) {
+
+      let service = this.data.service;
+      console.log(service);
+      this.serviceForm.patchValue({
+        serviceName: service.name,
+        industryId: service.industrySegment.industryId,
+        segmentId: service.industrySegment?.id,
+        priceType: service.priceType,
+        serviceType: service.serviceType,
+        price: service.defaultPrice,
+        duration: service.defaultDuration,
+        description: service.description
+      });
+
+      // Service industry
+      let industry = this.industries.find(
+        industry => industry.id == service.industrySegment.industryId
+      );
+      this.selectedSegment = industry.industrySegments;
+      this.serviceForm.get('industryId')?.disable();
+      this.serviceForm.get('segmentId')?.disable();
+      // Load shops 
+      this.loadShopsByIndustry(industry.id);
+
+     
+    }
   }
 
   get shopFormArray(): FormArray {
     return this.serviceForm.get('shops') as FormArray;
   }
 
+  updateService() {
+    if (this.serviceForm.valid) {
+      const formValue = this.serviceForm.value;
+
+      // Get checked shopIds
+      const shopIds = this.shops
+        .map((shop, i) => formValue.shops[i] ? shop.id : undefined)
+        .filter((id): id is number => id !== undefined);
+
+      let service = this.data.service;
+
+      const payload: OrganizationServiceModel = {
+        name: formValue.serviceName,
+        description: formValue.description,
+        isAddon: formValue.isAddon,
+        deleted: formValue.deleted,
+        defaultPrice: formValue.price,
+        defaultDuration: formValue.duration,
+        priceType: formValue.priceType,
+        serviceType: formValue.serviceType,
+        industrySegment: { id: service.industrySegment?.id },
+        shopIds: shopIds ?? []
+      };
+
+      console.log('Payload:', payload);
+
+
+      this.orgService.updateOrgService(payload, this.data.service.id).subscribe({
+        next: (res: ResponseDate) => {
+          this.dialogRef.close(res.data);
+        },
+        error: (err: any) => {
+
+        }
+      })
+    } else {
+      // 👇 Mark all controls as touched so validation messages show
+      this.serviceForm.markAllAsTouched();
+
+      // 👇 Optional: log invalid controls
+      Object.keys(this.serviceForm.controls).forEach(key => {
+        const control = this.serviceForm.get(key);
+        if (control?.invalid) {
+          console.warn(`${key} is invalid:`, control.errors);
+        }
+      });
+    }
+  }
   createService() {
     if (this.serviceForm.valid) {
       const formValue = this.serviceForm.value;
@@ -122,7 +199,9 @@ export class ServiceActionsComponent {
       next: (res: ResponseDate) => {
         this.shops = res.data.map((shop: ShopModel) => ({
           ...shop,
-          checked: true
+          checked: this.data.service
+            ? this.data.service.shopIds.includes(shop.id)  // edit: only select specific shops
+            : true                              // create: select all by default
         }));
         // clear existing formArray
         this.shopFormArray.clear();
@@ -130,8 +209,6 @@ export class ServiceActionsComponent {
         this.shops.forEach(shop =>
           this.shopFormArray.push(this.fb.control(shop.checked))
         );
-        console.log(this.shops);
-
       },
       error: (err: any) => {
 

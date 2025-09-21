@@ -7,6 +7,7 @@ import { DealCardComponent } from '../shared/deal-card/deal-card.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
 import { VideoReelComponent } from '../shared/video-reel/video-reel.component';
+import { UploadMediaComponent } from '../upload-media/upload-media.component';
 
 @Component({
   selector: 'app-landing',
@@ -21,7 +22,8 @@ import { VideoReelComponent } from '../shared/video-reel/video-reel.component';
     DealCardComponent,
     NavbarComponent,
     SidePanelComponent,
-    VideoReelComponent
+    VideoReelComponent,
+    UploadMediaComponent
   ]
 })
 export class LandingComponent {

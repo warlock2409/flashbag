@@ -1,291 +1,271 @@
-<mat-stepper orientation="vertical" [linear]="isLinear" #stepper style="margin: auto;width: 700px;"
-    (selectionChange)="onStepChange($event)">
-    <!-- Shop Basic -->
-    <mat-step [stepControl]="shopBasic">
-        <form [formGroup]="shopBasic" class="max-w-[600px]">
-            <ng-template matStepLabel>Basic</ng-template>
-            <!-- Location Details -->
-            <nz-card nzType="inner" nzTitle="Location Details" class="m-b-4 m-t-8">
-                <div class="flex gap-1rem">
-                    <div>
-                        <nz-avatar nzShape="square" [nzSize]="108"
-                            nzSrc="https://scontent.fcjb3-2.fna.fbcdn.net/o1/v/t0/f2/m340/AQMxq0IOO3n8Ka_K7aqX2U4AGKtAmFEoEQCOdmXJpNmAUSaoWNxghHiJupovfOa491ClX8EACjuvNV9T7BBygg-7YeGHw4XHIhqF1xqV59vPQ83hXBgJJtOv6J5xXnzweZeKsd-1YpdKTPixyC2kHtlg-MI7dg.jpeg?_nc_ht=scontent.fcjb3-2.fna.fbcdn.net&_nc_gid=ta6xDRQeGGfFV0XbsK6DJg&_nc_cat=102&_nc_oc=AdkjmE2beVZCUXaXC2NJNslgCHZn-Fs18ule9a4Ooz8Rqdj6uwJo57MKTe73SJVyYcAzJ9anRg37fgKh03ONbEuj&ccb=9-4&oh=00_AfNsAZlmg43LJ4gfXwCnKNYRv3NV_38eb2SRg_BnpfZSqw&oe=68472329&_nc_sid=5b3566">
-                        </nz-avatar>
-                    </div>
-                    <div class="w-100">
-                        <p class="parent_text flex justify-between items-end">
-                            Shop Name
-                            <mat-icon style="color: #1976d2;" matTooltipPosition="above"
-                                matTooltip="This is the name customers will see when they visit your shop, search online, or receive invoices.">
-                                info
-                            </mat-icon>
-                        </p>
-                        <input nz-input placeholder="Location/Shop Name" class="w-100" nzSize="default"
-                            formControlName="shopName" />
-                        <!-- @if (location.Basic?.rating != null) {
-                        <nz-rate [ngModel]="location.Basic?.rating" nzAllowHalf></nz-rate>
-                        <span>{{ location.Basic?.reviews }}</span>
-                        } -->
-                    </div>
-                </div>
-            </nz-card>
+<!-- Dialog Overlay -->
+<div id="membershipDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
 
-            <!-- Contact Details -->
-            <nz-card nzType="inner" nzTitle="Contact details" class="m-b-4">
-                <div>
-                    <p class="parent_text flex justify-between items-end">Location email address
-                        <mat-icon style="color: #1976d2;" matTooltipPosition="above"
-                            matTooltip="This email will be used for customer inquiries, booking notifications, and receipts.">
-                            info
-                        </mat-icon>
-                    </p>
-                    <input nz-input placeholder="Email" class="w-100" nzSize="default" formControlName="email" />
-                    <br />
-                    <p class="parent_text flex justify-between items-end" style="margin-top: .5rem;">
-                        Location contact number
-                        <mat-icon style="color: #1976d2;" matTooltipPosition="above"
-                            matTooltip="This phone number will be shared with customers for calls, messages, and booking confirmations.">
-                            info
-                        </mat-icon>
-                    </p>
-                    <input nz-input placeholder="Phone" class="w-100" nzSize="default" formControlName="phone" />
-                </div>
-            </nz-card>
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col dialog-animate">
 
-            <!-- Business Types -->
-            <nz-card nzType="inner" nzTitle="Business types" class="m-b-4" [formGroup]="shopBasic">
-                <div class="flex">
-                    <div class="mb-4 flex-1">
-                        <p class="parent_text flex items-end gap-1">
-                            <mat-icon
-                                matTooltip="Your main business category or service type. This defines how your shop will be listed and helps customers find you easily."
-                                matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
-                                info
-                            </mat-icon>
-                            Primary Business
-                        </p>
-                        <nz-select class="w-3/4" formControlName="primaryModel">
-                            <nz-option *ngFor="let model of businessModels" [nzValue]="model"
-                                [nzLabel]="model.name"></nz-option>
-                        </nz-select>
-                    </div>
-                    <div class="flex-1">
-                        <p class="parent_text flex items-end gap-1">
-                            <mat-icon
-                                matTooltip="Select the main way your business operates. This choice helps us tailor features, settings, and recommendations for your industry."
-                                matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
-                                info
-                            </mat-icon>
-                            Primary Business Industry
-                        </p>
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <h2 class="text-lg font-semibold text-gray-800 m-0" *ngIf="!data.isUpdate">Create Shop</h2>
+            <h2 class="text-lg font-semibold text-gray-800 m-0" *ngIf="data.isUpdate">Update Shop</h2>
 
-                        <nz-select class="w-3/4" formControlName="businessIndustry">
-                            <nz-option *ngFor="let industry of industries" [nzValue]="industry"
-                                [nzLabel]="industry.name">
-                            </nz-option>
-                        </nz-select>
-                    </div>
-                </div>
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500 cursor-pointer">
+                <mat-icon style="color: lightcoral;">cancel</mat-icon>
+            </button>
+        </div>
 
-                <div *ngIf="businessModels.length > 1">
-                    <p class="parent_text flex items-end gap1 justify-between ">
-                        Add Secondary Business Models
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
 
-                        <mat-icon
-                            matTooltip="Select an additional business model if your services span across multiple categories. This helps us better tailor options for your mixed operations."
-                            matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
-                            info
-                        </mat-icon>
-                    </p>
-                    <button mat-flat-button color="primary" type="button" (click)="addSecondaryModel()">Add
-                        Secondary</button>
-                </div>
+            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper style="margin: auto;width: 700px;"
+                (selectionChange)="onStepChange($event)">
+                <!-- Shop Basic -->
+                <mat-step [stepControl]="shopBasic">
+                    <form [formGroup]="shopBasic" class="max-w-[600px]">
+                        <ng-template matStepLabel>Basic</ng-template>
+                        <!-- Location Details -->
+                        <nz-card nzType="inner" nzTitle="Location Details" class="m-b-4 m-t-8">
+                            <div class="flex gap-1rem">
 
-                <div formArrayName="secondaryModels" class="mt-4">
-                    <div *ngFor="let sec of secondaryModels.controls; let i = index" [formGroupName]="i"
-                        class="flex mb-2">
+                                <app-upload-media [existingUploads]="sampleUploads" [multiple]="false"
+                                    [type]="'BUSINESS'" (uploaded)="setDocument($event)"></app-upload-media>
 
-                        <div class="flex-1">
-                            <p class="parent_text">Secondart Business</p>
-                            <nz-select class="w-3/4 mr-4" formControlName="model">
-                                <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
-                                <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
-                            </nz-select>
-                        </div>
-
-                        <div class="flex-1">
-                            <p class="parent_text">Business Industry</p>
-                            <nz-select class="w-3/4 mr-4" formControlName="type">
-                                <nz-option nzValue="retail" nzLabel="Retail"></nz-option>
-                                <nz-option nzValue="service" nzLabel="Service"></nz-option>
-                            </nz-select>
-                        </div>
-
-                        <button mat-icon-button color="warn" type="button" (click)="removeSecondaryModel(i)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </nz-card>
-
-            <div class="flex justify-end">
-                <button mat-flat-button [disabled]="shopBasic.invalid"
-                    [ngStyle]="!shopBasic.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
-                    (click)="createNewShop()">Next</button>
-            </div>
-        </form>
-    </mat-step>
-
-    <!-- Shop Address -->
-    <mat-step [stepControl]="addressGroup">
-        <form [formGroup]="addressGroup" class="max-w-[600px]">
-            <ng-template matStepLabel>Shop Address</ng-template>
-
-            <div class="mt-8">
-                <p class="parent_text m-0">Address</p>
-                <input nz-input placeholder="Address 1" class="w-100 m-b-4" nzSize="default"
-                    formControlName="address1" />
-
-                <p class="parent_text m-0">Address 2</p>
-                <input nz-input placeholder="Address 2" class="w-100 m-b-4" nzSize="default"
-                    formControlName="address2" />
-
-                <p class="parent_text m-0">City</p>
-                <input nz-input placeholder="City" class="w-100 m-b-4" nzSize="default" formControlName="city" />
-
-                <p class="parent_text m-0">State</p>
-                <input nz-input placeholder="State" class="w-100 m-b-4" nzSize="default" formControlName="state" />
-
-                <p class="parent_text m-0">Postal Code</p>
-                <input nz-input placeholder="Postal Code" class="w-100 m-b-4" nzSize="default"
-                    formControlName="postalCode" />
-
-                <p class="parent_text m-0">Country</p>
-                <input nz-input placeholder="Country" class="w-100 m-b-4" nzSize="default" formControlName="country" />
-
-                <p class="parent_text m-0">Latitude</p>
-                <input nz-input placeholder="Latitude" class="w-100 m-b-4" nzSize="default"
-                    formControlName="latitude" />
-
-                <p class="parent_text m-0">Longitude</p>
-                <input nz-input placeholder="Longitude" class="w-100 m-b-4" nzSize="default"
-                    formControlName="longitude" />
-            </div>
-
-            <div class="flex justify-end">
-                <button mat-flat-button matStepperPrevious>Back</button>
-                <button mat-flat-button [disabled]="addressGroup.invalid"
-                    [ngStyle]="!addressGroup.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
-                    (click)="addAddress()">Next</button>
-            </div>
-        </form>
-    </mat-step>
-
-    <mat-step [stepControl]="businessHoursGroup">
-        <form [formGroup]="businessHoursGroup" class="max-w-[600px]">
-            <ng-template matStepLabel>Business Hours</ng-template>
-
-            <div formArrayName="days" *ngFor="let day of days.controls; let i = index">
-                <div [formGroupName]="i">
-                    <mat-checkbox formControlName="enabled" (change)="onDayToggle(i,$event)">
-                        {{ day.value.day }}
-                    </mat-checkbox>
-
-                    <div *ngIf="day.get('enabled')?.value" class="ml-10">
-                        <div formArrayName="sessions" class="m-b-8"
-                            *ngFor="let session of getSessions(i).controls; let j = index">
-                            <div [formGroupName]="j" class="flex gap-4 items-center">
-                                <input type="time" formControlName="start" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
-                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" step="900" min="09:00" max="18:00" />
-
-                                <input type="time" formControlName="end" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
-                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" step="900" min="09:00" max="18:00" />
-
-                                <mat-icon class="cursor-pointer" (click)="removeSession(i,j)">delete</mat-icon>
+                                <div class="w-100">
+                                    <p class="parent_text flex justify-between items-end">
+                                        Shop Name
+                                        <mat-icon style="color: #1976d2;" matTooltipPosition="above"
+                                            matTooltip="This is the name customers will see when they visit your shop, search online, or receive invoices.">
+                                            info
+                                        </mat-icon>
+                                    </p>
+                                    <input nz-input placeholder="Location/Shop Name" class="w-100" nzSize="default"
+                                        formControlName="shopName" />
+                                </div>
                             </div>
+                        </nz-card>
+
+                        <!-- Contact Details -->
+                        <nz-card nzType="inner" nzTitle="Contact details" class="m-b-4">
+                            <div>
+                                <p class="parent_text flex justify-between items-end">Location email address
+                                    <mat-icon style="color: #1976d2;" matTooltipPosition="above"
+                                        matTooltip="This email will be used for customer inquiries, booking notifications, and receipts.">
+                                        info
+                                    </mat-icon>
+                                </p>
+                                <input nz-input placeholder="Email" class="w-100" nzSize="default"
+                                    formControlName="email" />
+                                <br />
+                                <p class="parent_text flex justify-between items-end" style="margin-top: .5rem;">
+                                    Location contact number
+                                    <mat-icon style="color: #1976d2;" matTooltipPosition="above"
+                                        matTooltip="This phone number will be shared with customers for calls, messages, and booking confirmations.">
+                                        info
+                                    </mat-icon>
+                                </p>
+                                <input nz-input placeholder="Phone" class="w-100" nzSize="default"
+                                    formControlName="phone" />
+                            </div>
+                        </nz-card>
+
+                        <!-- Business Types -->
+                        <nz-card nzType="inner" nzTitle="Business types" class="m-b-4" [formGroup]="shopBasic">
+                            <div class="flex">
+                                <div class="mb-4 flex-1">
+                                    <p class="parent_text flex items-end gap-1">
+                                        <mat-icon
+                                            matTooltip="Your main business category or service type. This defines how your shop will be listed and helps customers find you easily."
+                                            matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
+                                            info
+                                        </mat-icon>
+                                        Primary Business
+                                    </p>
+                                    <nz-select class="w-3/4" formControlName="primaryModel" [nzDisabled]="data.isUpdate">
+                                        <nz-option *ngFor="let model of businessModels" [nzValue]="model"
+                                            [nzLabel]="model.name"></nz-option>
+                                    </nz-select>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="parent_text flex items-end gap-1">
+                                        <mat-icon
+                                            matTooltip="Select the main way your business operates. This choice helps us tailor features, settings, and recommendations for your industry."
+                                            matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
+                                            info
+                                        </mat-icon>
+                                        Primary Business Industry
+                                    </p>
+
+                                    <nz-select class="w-3/4" formControlName="businessIndustry" [nzDisabled]="data.isUpdate">
+                                        <nz-option *ngFor="let industry of industries" [nzValue]="industry"
+                                            [nzLabel]="industry.name">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+
+                            <div *ngIf="businessModels.length > 1">
+                                <p class="parent_text flex items-end gap1 justify-between ">
+                                    Add Secondary Business Models
+
+                                    <mat-icon
+                                        matTooltip="Select an additional business model if your services span across multiple categories. This helps us better tailor options for your mixed operations."
+                                        matTooltipPosition="above" style="color: #1976d2; cursor: pointer;">
+                                        info
+                                    </mat-icon>
+                                </p>
+                                <button mat-flat-button color="primary" type="button" (click)="addSecondaryModel()">Add
+                                    Secondary</button>
+                            </div>
+
+                            <div formArrayName="secondaryModels" class="mt-4">
+                                <div *ngFor="let sec of secondaryModels.controls; let i = index" [formGroupName]="i"
+                                    class="flex mb-2">
+
+                                    <div class="flex-1">
+                                        <p class="parent_text">Secondart Business</p>
+                                        <nz-select class="w-3/4 mr-4" formControlName="model">
+                                            <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+                                            <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+                                        </nz-select>
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <p class="parent_text">Business Industry</p>
+                                        <nz-select class="w-3/4 mr-4" formControlName="type">
+                                            <nz-option nzValue="retail" nzLabel="Retail"></nz-option>
+                                            <nz-option nzValue="service" nzLabel="Service"></nz-option>
+                                        </nz-select>
+                                    </div>
+
+                                    <button mat-icon-button color="warn" type="button"
+                                        (click)="removeSecondaryModel(i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </nz-card>
+
+                        <div class="flex justify-end mt-8">
+                            <button mat-flat-button [disabled]="shopBasic.invalid" 
+                                [ngStyle]="!shopBasic.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
+                                (click)="createNewShop()">Next</button>
                         </div>
-                        <mat-icon (click)="addSession(i)" matTooltip="Add Session" matTooltipPosition="right"
-                            class="cursor-pointer">more_time</mat-icon>
-                    </div>
+                    </form>
+                </mat-step>
 
-                    <div class="text-red-500 ml-10 m-t-4" *ngIf="validateNoOverlap(i)">
-                        Overlapping time slots detected!
-                    </div>
-                </div>
+                <!-- Shop Address -->
+                <mat-step [stepControl]="addressGroup">
+                    <form [formGroup]="addressGroup" class="max-w-[600px]">
+                        <ng-template matStepLabel>Shop Address</ng-template>
 
-            </div>
+                        <div class="mt-8">
+                            <p class="parent_text m-0">Address</p>
+                            <input nz-input placeholder="Address 1" class="w-100 m-b-4" nzSize="default"
+                                formControlName="address1" />
 
-            <div class="flex justify-end mt-4">
-                <button mat-flat-button matStepperPrevious>Back</button>
-                <button mat-flat-button matStepperNext [disabled]="businessHoursGroup.invalid"
-                    [ngStyle]="!businessHoursGroup.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
-                    (click)="addShopHours()">Next</button>
-            </div>
-        </form>
-    </mat-step>
+                            <p class="parent_text m-0">Address 2</p>
+                            <input nz-input placeholder="Address 2" class="w-100 m-b-4" nzSize="default"
+                                formControlName="address2" />
 
+                            <p class="parent_text m-0">City</p>
+                            <input nz-input placeholder="City" class="w-100 m-b-4" nzSize="default"
+                                formControlName="city" />
 
+                            <p class="parent_text m-0">State</p>
+                            <input nz-input placeholder="State" class="w-100 m-b-4" nzSize="default"
+                                formControlName="state" />
 
+                            <p class="parent_text m-0">Postal Code</p>
+                            <input nz-input placeholder="Postal Code" class="w-100 m-b-4" nzSize="default"
+                                formControlName="postalCode" />
 
-    <mat-step [stepControl]="taxDefaults">
-        <form [formGroup]="taxDefaults" class="max-w-[600px]">
-            <ng-template matStepLabel>Billing Information</ng-template>
+                            <p class="parent_text m-0">Country</p>
+                            <input nz-input placeholder="Country" class="w-100 m-b-4" nzSize="default"
+                                formControlName="country" />
 
-            <ng-container formArrayName="models">
-                <div *ngFor="let modelGroup of taxModels.controls; let i = index" [formGroupName]="i">
+                            <p class="parent_text m-0">Latitude</p>
+                            <input nz-input placeholder="Latitude" class="w-100 m-b-4" nzSize="default"
+                                formControlName="latitude" />
 
-                    <nz-card nzType="inner" [nzTitle]="'Tax defaults - ' + modelGroup.get('businessModelType')?.value">
-                        <p class="parent_text">Tax Rate (%)</p>
-                        <input nz-input type="number" formControlName="taxRate" placeholder="Enter tax rate %"
-                            class="w-full m-b-4" />
-                        <div *ngIf="modelGroup.get('taxRate')?.invalid && modelGroup.get('taxRate')?.touched"
-                            class="text-red-500 text-sm">
-                            Please enter a valid tax between 0 and 100.
+                            <p class="parent_text m-0">Longitude</p>
+                            <input nz-input placeholder="Longitude" class="w-100 m-b-4" nzSize="default"
+                                formControlName="longitude" />
                         </div>
-                    </nz-card>
 
-                </div>
-            </ng-container>
+                        <div class="flex justify-end mt-8">
+                            <button mat-flat-button matStepperPrevious>Back</button>
+                            <button mat-flat-button [disabled]="addressGroup.invalid"
+                                [ngStyle]="!addressGroup.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
+                                (click)="addAddress()">{{currentShopAddress?.id ? "Update":"Next"}}</button>
 
-            <div class="flex justify-end">
-                <button mat-flat-button matStepperPrevious>Back</button>
-                <button mat-flat-button matStepperNext [disabled]="taxDefaults.invalid"
-                    [ngStyle]="!taxDefaults.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
-                    (click)="addTaxInformation()">Next</button>
-            </div>
-        </form>
-    </mat-step>
+                        </div>
+                    </form>
+                </mat-step>
 
+                <mat-step [stepControl]="businessHoursGroup">
+                    <form [formGroup]="businessHoursGroup" class="max-w-[600px]">
+                        <ng-template matStepLabel>Business Hours</ng-template>
 
+                        <div formArrayName="days" *ngFor="let day of days.controls; let i = index">
+                            <div [formGroupName]="i">
+                                <mat-checkbox formControlName="enabled" (change)="onDayToggle(i,$event)">
+                                    {{ day.value.day }}
+                                </mat-checkbox>
 
+                                <div *ngIf="day.get('enabled')?.value" class="ml-10">
+                                    <button mat-stroked-button color="primary" class="cursor-pointer"
+                                        (click)="addSession(i)">
+                                      <i class="fa-solid fa-plus"></i> Add Session
+                                    </button>
+                                    <button mat-stroked-button color="secondary" class="cursor-pointer"  style="margin-left: 13px;"
+                                        (click)="copyHoursToAll(i)">
+                                       <i class="fa-solid fa-check-double"></i> Copy to All
+                                    </button>
 
-    <mat-step>
-        <ng-template matStepLabel>Confirmation</ng-template>
-        <div>
-            <div id="tax-lottie" style="width:300px;height:300px;margin:auto"></div>
-            <div>
-                <h2 style="color: #7e78d2;">🚀 Your shop is ready to go live!</h2>
-                <p> You’ve used <strong>1</strong> branch from your plan — 5 branches still available for you to grow
-                    even bigger!</p>
+                                    <div formArrayName="sessions" class="m-t-8"
+                                        *ngFor="let session of getSessions(i).controls; let j = index">
+                                        <div [formGroupName]="j" class="flex gap-4 items-center" *ngIf="session.get('operation')?.value !== 'DELETE'">
+                                            <input type="time" formControlName="start" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
+                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
+                                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                step="900" min="09:00" max="18:00" />
 
-                <h2 style="color: #7e78d2;">⚠️ Not enough branch credits</h2>
-                <p>Recharge your plan or purchase an add-on to continue launching new branches.</p>
+                                            <input type="time" formControlName="end" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
+                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
+                                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                                step="900" min="09:00" max="18:00" />
+
+                                            <mat-icon class="cursor-pointer"
+                                                (click)="removeSession(i,j)">delete</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-red-500 ml-10 m-t-4" *ngIf="validateNoOverlap(i)">
+                                    Overlapping time slots detected!
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="flex justify-end mt-8">
+                            <button mat-flat-button matStepperPrevious>Back</button>
+                            <button mat-flat-button matStepperNext [disabled]="businessHoursGroup.invalid"
+                                [ngStyle]="!businessHoursGroup.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
+                                (click)="addShopHours()">{{currentShopAddress?.id ? "Update":"Next"}}</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+            </mat-stepper>
+        </div>
+
+        <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
+            <div class="space-x-3 flex gap-2">
+                <button mat-stroked-button mat-dialog-close>Cancel</button>
+
+                <button mat-raised-button style="background-color: #a684ff; color: white;"
+                    *ngIf="currentShop?.active != null" (click)="updateShopStatus()">{{currentShop.active ? "Deactivate"
+                    : "Activate"}}</button>
             </div>
         </div>
-        <div class="flex justify-end">
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()" style="background-color: #a684ff; color: white;">Activate
-                Shop</button>
-        </div>
-    </mat-step>
-</mat-stepper>
-
-<ng-template #extraTemplate>
-    <a>Edit</a>
-</ng-template>
-
-<ng-template #addTemplate>
-    <a>Create</a>
-</ng-template>
+    </div>
+</div>

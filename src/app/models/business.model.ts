@@ -57,3 +57,11 @@ export interface PlanAddOn {
     selected: boolean;
 }
 
+
+
+export enum OperationType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+  NONE = 'NONE' // untouched
+}

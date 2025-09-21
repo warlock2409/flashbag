@@ -34,6 +34,8 @@ import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
 import { MarketingComponent } from './marketing/marketing.component';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { AttendanceChartComponent } from "./components/charts/attendance-chart/attendance-chart.component";
+
 
 @NgModule({
   declarations: [
@@ -74,7 +76,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzSegmentedModule,
     NzProgressModule,
     NzToolTipModule,
-    FormsModule
-  ],
+    FormsModule,
+    AttendanceChartComponent
+],
 })
 export class BusinessModule { } 

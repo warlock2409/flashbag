@@ -10,7 +10,7 @@ import { Industry } from 'src/app/models/business.model';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ResponseDate } from 'src/app/app.component';
-import { OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/models/organization';
+import { MembershipBenefit, OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/models/organization';
 
 @Component({
   selector: 'app-membership-actions',
@@ -20,6 +20,7 @@ import { OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/mo
   styleUrl: './membership-actions.component.scss'
 })
 export class MembershipActionsComponent {
+
 
   readonly dialogRef = inject(MatDialogRef<MembershipActionsComponent>);
   readonly data = inject<any>(MAT_DIALOG_DATA);
@@ -32,7 +33,7 @@ export class MembershipActionsComponent {
   benefitType = 'DURATION_ACCESS';
   days = '0';
 
-  initializePlan(): void {
+  initializePlan(existingPlan: OrganizationMembershipPlan): void {
     this.membershipPlan = {
       name: '',
       basePrice: 0,
@@ -42,6 +43,33 @@ export class MembershipActionsComponent {
       benefits: [],
       shopIds: []
     };
+    if (existingPlan) {
+      console.log(existingPlan);
+
+      this.membershipPlan = {
+        id:existingPlan.id,
+        name: existingPlan.name ?? '',
+        basePrice: existingPlan.basePrice ?? 0,
+        description: existingPlan.description ?? '',
+        challengeBased: existingPlan.challengeBased ?? false,
+        industryId: existingPlan.industryId ?? 0,
+        benefits: existingPlan.benefits ? [...existingPlan.benefits] : [],
+        shopIds: existingPlan.shopIds ? [...existingPlan.shopIds] : []
+      };
+
+      let durationBenefit = existingPlan.benefits
+        .filter(benefit => benefit.benefitType === 'DURATION_ACCESS')
+        .reduce((max, current) =>
+          current.accessDurationInDays! > (max?.accessDurationInDays ?? 0) ? current : max,
+          null as any
+        );
+
+      if (durationBenefit) {
+        this.days = durationBenefit.accessDurationInDays ? durationBenefit.accessDurationInDays?.toString() : "0";
+      }
+
+      this.selectedServices = existingPlan.benefits;
+    }
   }
 
 
@@ -69,22 +97,24 @@ export class MembershipActionsComponent {
 
   ngOnInit() {
     this.getOrgIndustry();
-    this.initializePlan();
+    this.initializePlan(this.data.existingPlan);
   }
 
   loadShopsByActiveService() {
-    let serviceIds = this.selectedServices.map(service => service.id);
-    this.orgService.getOrgShopsByActiveService(serviceIds).subscribe({
+    let serviceKey = this.selectedServices.map(service => service.serviceKey);
+
+    this.orgService.getOrgShopsByActiveService(serviceKey).subscribe({
       next: (res: ResponseDate) => {
         this.shops = res.data.map((shop: ShopModel) => ({
           ...shop,
-          checked: true
+          checked: this.membershipPlan?.shopIds?.includes(shop.id!) ?? false
         }));
       },
       error: (err: any) => {
 
       }
     })
+
   }
 
 
@@ -99,16 +129,23 @@ export class MembershipActionsComponent {
     })
   }
 
-  selectedServices: OrganizationServiceModel[] = [];
+  selectedServices: OrganizationServiceModel[] | MembershipBenefit[] = [];
 
   openServiceDialog() {
+    console.log(this.membershipPlan);
+    if(!this.membershipPlan.industryId){
+      return;
+    }
+
     const dialogRef = this.dialog.open(ServiceDialogComponent, {
       width: '600px',
-      data: { selected: this.selectedServices }
+      data: { selected: this.selectedServices, isUpdate: this.data.isUpdate , industryId:this.membershipPlan.industryId}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        console.log(result, "openServiceDialog");
+
         this.selectedServices = result;
       }
     });
@@ -132,14 +169,33 @@ export class MembershipActionsComponent {
     this.membershipPlan.shopIds = this.shops.filter(shop => shop.checked).map(shop => shop.id!);
 
     console.log(this.membershipPlan);
-    
+
     this.orgService.createOrgMembership(this.membershipPlan).subscribe({
-      next:(res:ResponseDate)=>{
+      next: (res: ResponseDate) => {
         this.dialogRef.close(res.data);
       },
-      error:(err:any)=>{
+      error: (err: any) => {
       }
     })
+  }
 
+  updateMembership() {
+    this.membershipPlan.benefits = this.selectedServices.map(service => ({
+      benefitType: this.benefitType,     // from variable
+      days: Number(this.days),                 // from variable
+      serviceKey: service.serviceKey!     // from selected service
+    }));
+
+    this.membershipPlan.shopIds = this.shops.filter(shop => shop.checked).map(shop => shop.id!);
+
+    console.log(this.membershipPlan);
+
+    this.orgService.updateOrgMembership(this.membershipPlan,this.membershipPlan.id).subscribe({
+      next: (res: ResponseDate) => {
+        this.dialogRef.close(res.data);
+      },
+      error: (err: any) => {
+      }
+    })
   }
 }

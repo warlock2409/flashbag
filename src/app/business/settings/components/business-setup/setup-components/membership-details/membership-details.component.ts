@@ -43,6 +43,7 @@ export class MembershipDetailsComponent {
 
 
 
+
   isPanelOpen: boolean = false;
   loading: boolean = true;
   options = ['Details', 'Trend'];
@@ -51,6 +52,7 @@ export class MembershipDetailsComponent {
 
   inputValue: string | null = null;
   textValue: string | null = null;
+  isLoading = false;
 
   // Select 
   optionList: Option[] = [
@@ -159,12 +161,14 @@ export class MembershipDetailsComponent {
   }
 
   getOrgMemberships() {
+    this.isLoading = true;
     this.orgService.getAllOrgMembership().subscribe({
       next: (res: ResponseDate) => {
+        this.isLoading = false;
         this.setMembership(res.data);
       },
       error: (err: any) => {
-
+        this.isLoading = false;
       }
     })
   }
@@ -186,6 +190,21 @@ export class MembershipDetailsComponent {
   openMembershipAction() {
     const dialogRef = this.dialog.open(MembershipActionsComponent, {
       data: {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        let updatedMemberships = this.memberships.filter(membership => membership.id != result.id);
+        updatedMemberships.push(result);
+        this.setMembership(updatedMemberships);
+      }
+    });
+  }
+
+  openEditMembership(membershipPlan: OrganizationMembershipPlan) {
+    const dialogRef = this.dialog.open(MembershipActionsComponent, {
+      data: {existingPlan:membershipPlan, isUpdate:true},
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -24,9 +24,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ResponseDate } from 'src/app/app.component';
-import { BusinessModel, Industry } from 'src/app/models/business.model';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ShopActionsComponent } from "./location-action/shop-actions/shop-actions.component";
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-location',
   standalone: true,
@@ -53,7 +53,7 @@ export class LocationComponent {
     this.i18n.setLocale(en_US);
   }
 
-  fallback = 'https://cdn.shopify.com/s/files/1/0599/3624/3866/t/57/assets/c1c5f02bf58e--Novo-CasestudySQ3-dfc7cc.jpg?v=1687361498';
+  fallback = 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHY4eXlkdHhxZWQwNHozb2Z0cHEwZG42OWpsMWw1NWQ2NzZsZWRtdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Xf7dN80WrC7PsoM6H6/giphy.gif';
   visible: boolean = false;
   editShopPanel: boolean = false;
   addShopPanel: boolean = false;
@@ -61,7 +61,8 @@ export class LocationComponent {
   activeSegment: string | number = 'Basic'
   // Dummy 
 
-
+  dialog = inject(MatDialog);
+  isLoading = false;
   ngOnInit(): void {
     console.log("*Locations*");
 
@@ -76,19 +77,23 @@ export class LocationComponent {
 
 
   getLocations() {
+    this.isLoading = true;
     this.orgApiService.getLocations().subscribe({
       next: (res: ResponseDate) => {
-        console.log(res);
+        this.isLoading = false;
         this.shops = res.data.map((shop: ShopModel) => ({
-          name: shop.name,
           code: shop.code,
           address: this.formatAddress(shop.addressDto),
-          image: this.fallback, // adjust according to your API
-          extraTemplate: 'extraTemplate' // or 'action' depending on logic
+          image: shop.documentDto?.attachments?.length && shop.documentDto.attachments[0]?.url
+            ? `https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/${shop.documentDto.attachments[0].url}`
+            : this.fallback,
+          ...shop
         }));
+        console.log(this.shops);
+
       },
       error: (err: any) => {
-
+        this.isLoading = false;
       }
     })
   }
@@ -116,6 +121,8 @@ export class LocationComponent {
   }
 
   closePanel(actionType: string): void {
+    console.log(actionType);
+
     if (actionType == 'ADD_SHOP') {
       this.addShopPanel = false;
     } else {
@@ -123,7 +130,7 @@ export class LocationComponent {
     }
   }
 
-  openPanel(actionType:string) {
+  openPanel(actionType: string) {
     if (actionType == 'ADD_SHOP') {
       this.addShopPanel = true;
     } else {
@@ -134,7 +141,24 @@ export class LocationComponent {
   location: SegmentData = {};
 
   createLocation() {
-    this.addShopPanel = true;
+    const dialogRef = this.dialog.open(ShopActionsComponent, {
+      data: { isUpdate: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed with:', result);
+    });
+  }
+
+  editLocation(ShopModel: ShopModel) {
+    const dialogRef = this.dialog.open(ShopActionsComponent, {
+      data: { isUpdate: true, shop: ShopModel }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed with:', result);
+      this.getLocations();
+    });
   }
 
   getNewLocation() {

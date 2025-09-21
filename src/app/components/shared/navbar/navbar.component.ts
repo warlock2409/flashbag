@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,8 @@ import { SettingsPanelService } from '../../../services/settings-panel.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PosComponent } from 'src/app/business/components/pos/pos.component';
+import { AddCustomerComponent } from 'src/app/business/components/add-customer/add-customer.component';
 
 
 @Injectable()
@@ -291,9 +293,26 @@ export class NavbarComponent {
   }
 
   openOrders() {
-    console.log('Opening orders panel');
-    this.orderPanelService.openPanel();
+    const dialogRef = this.dialog.open(PosComponent, {
+      width: '100%',
+      maxWidth: '100vw', // override default 80vw
+      height: '100%',
+      panelClass: 'full-screen-dialog',
+      disableClose: true,
+    });
   }
+
+  addCustomer() {
+    const dialogRef = this.dialog.open(AddCustomerComponent, {
+      data: {}, minWidth: "360px"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
+
+
 
   logout() {
     this.authService.logout();

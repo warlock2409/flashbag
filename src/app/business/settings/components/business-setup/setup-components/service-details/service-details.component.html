@@ -1,99 +1,123 @@
 <div>
-    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-800">Manage Services</h2>
-            <p class="text-gray-600">Create and map services to your industry-specific shops</p>
-        </div>
-        <button mat-stroked-button (click)="openServiceAction()">
-            <i class="fas fa-plus"></i>
-            Add Service
-        </button>
-    </div>
 
-    <!-- Filter -->
-    <div class="bg-white rounded-lg shadow p-4 mb-6">
-        <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
-            <div class="mb-4 md:mb-0 md:w-1/3">
-                <label for="industry-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter by
-                    Industry</label>
-                <select id="industry-filter"
-                    class="w-full rounded-md bg-violet-100 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
-                    [(ngModel)]="selectedIndustryId" (change)="onIndustryChange($event)">
 
-                    <option value="">All Industries</option>
-                    <option *ngFor="let industry of industries" [value]="industry.id">
-                        {{ industry.name }}
-                    </option>
-                </select>
+
+
+    <div>
+        <nz-card nzTitle="Manage Services" [nzExtra]="extraTemplate">
+            <p>Create and map services to your industry-specific shops</p>
+
+            @if (isLoading) {
+            <div role="status"
+                class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
+                <div
+                    class="flex items-center justify-center w-full h-48 bg-gray-300 rounded-sm sm:w-96 dark:bg-gray-700">
+                    <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                        <path
+                            d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                    </svg>
+                </div>
+                <div class="w-full">
+                    <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[480px] mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[440px] mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[460px] mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+                </div>
+                <span class="sr-only">Loading...</span>
             </div>
-            <div class="mb-4 md:mb-0 md:w-1/3">
-                <label for="shop-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter by Shop</label>
-                <select id="industry-filter"
-                    class="w-full rounded-md bg-violet-100 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
-                    [(ngModel)]="selectedShopId">
+            }@else {
 
-                    <option value="">All Shops</option>
-                    <option value="" disabled *ngIf="shops.length == 0">
-                        Select an industry to load shops
-                    </option>
-                    <option *ngFor="let shop of shops" [value]="shop.id">
-                        {{ shop.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="md:w-1/3 flex items-end">
-                <button mat-stroked-button> <i class="fas fa-filter mr-2"></i> Apply Filter</button>
-            </div>
-        </div>
-    </div>
+            <!-- Filter -->
+            <div class="bg-white rounded-lg shadow p-4 mb-6">
+                <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
+                    <div class="mb-4 md:mb-0 md:w-1/3">
+                        <label for="industry-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter by
+                            Industry</label>
+                        <select id="industry-filter"
+                            class="w-full rounded-md bg-violet-100 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
+                            [(ngModel)]="selectedIndustryId" (change)="onIndustryChange($event)">
 
-    <!-- Services -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
-        <!-- Service Card 1 -->
-        @for (service of services; track $index) {
-
-        <div class="service-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300 flex flex-col">
-
-            <!-- Header -->
-            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 class="font-semibold text-lg text-gray-800 m-0">{{service.name}}</h3>
-                <span class="industry-tag text-xs font-medium px-2 py-1 rounded-full text-blue-800 bg-blue-100">
-                    {{service.industrySegment?.name}}
-                </span>
-            </div>
-
-            <!-- Body -->
-            <div class="p-4 flex-1">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <span class="text-sm text-gray-500">Price:</span>
-                        <span class="font-medium ml-1">{{service.defaultPrice}}</span>
+                            <option value="">All Industries</option>
+                            <option *ngFor="let industry of industries" [value]="industry.id">
+                                {{ industry.name }}
+                            </option>
+                        </select>
                     </div>
-                    <div>
-                        <span class="text-sm text-gray-500">Duration:</span>
-                        <span class="font-medium ml-1">{{service.defaultDuration}} Min</span>
+                    <div class="mb-4 md:mb-0 md:w-1/3">
+                        <label for="shop-filter" class="block text-sm font-medium text-gray-700 mb-1">Filter by
+                            Shop</label>
+                        <select id="industry-filter"
+                            class="w-full rounded-md bg-violet-100 border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-4"
+                            [(ngModel)]="selectedShopId">
+
+                            <option value="">All Shops</option>
+                            <option value="" disabled *ngIf="shops.length == 0">
+                                Select an industry to load shops
+                            </option>
+                            <option *ngFor="let shop of shops" [value]="shop.id">
+                                {{ shop.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="md:w-1/3 flex items-end">
+                        <button mat-stroked-button> <i class="fas fa-filter mr-2"></i> Apply Filter</button>
                     </div>
                 </div>
-                <p class="text-gray-600 mb-4 line-clamp-4" style="margin-top: 6px;">
-                    {{service.description}}
-                </p>
             </div>
 
-            <!-- Footer (always at bottom) -->
-            <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-between mt-auto">
-                <span class="text-sm text-gray-600">Mapped to {{service.shopIds.length}} shops</span>
-                <div class="flex space-x-2 gap-4">
-                    <button class="text-indigo-600 hover:text-indigo-800">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="text-red-600 hover:text-red-800" (click)="deleteService(service.serviceKey!)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
+            <div class="service-grid">
+                @for (service of services; track $index) {
+                <nz-card [nzTitle]="service.name" [nzExtra]="editTemplate" class="m-b-4 service-card"
+                    [nzBodyStyle]="{ padding: '8px' }">
+                    <div class="flex gap-1rem">
+                        <div>
+                            <nz-avatar nzShape="square" style="border-radius: 3px;width: 150px;height: 110px;"
+                                nzSrc="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZW5oNG15ejk3dHN0NWxybDFuejI0czdlaDhhdnY4a2RscTRjaHNvMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oz8xwkewgvaFB75Nm/giphy.gif"></nz-avatar>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom:0"></h4>
+                            <!-- <p class="child_text">{{service.description}}</p> -->
+                            <span
+                                class="industry-tag text-xs font-medium px-2 py-1 rounded-full text-blue-800 bg-blue-100">
+                                {{service.industrySegment?.name}}
+                            </span>
+                            <div class="flex gap-1rem wrap mt-4">
+
+                                <div class="date_block">
+                                    <span class="child_text">Duration</span>
+                                    <div class="expiry-date">{{service.defaultDuration}} Min</div>
+                                </div>
+                                <div class="date_block">
+                                    <span class="child_text">Price</span>
+                                    <div class="expiry-date">{{service.defaultPrice | currency:'INR'}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #editTemplate>
+                        <button mat-stroked-button 
+                            (click)="openEditService(service)">
+                            Edit
+                        </button>
+                    </ng-template>
+                </nz-card>
+                }
             </div>
-        </div>
+            }
+        </nz-card>
 
-        }
 
+
+
+        <ng-template #extraTemplate>
+            <button mat-stroked-button (click)="openServiceAction()">
+                <i class="fas fa-plus"></i>
+                Create Service
+            </button>
+        </ng-template>
     </div>
+
 </div>

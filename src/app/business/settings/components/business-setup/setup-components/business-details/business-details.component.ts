@@ -11,10 +11,11 @@ import { OrganizationServiceService } from 'src/app/services/organization-servic
 import { ResponseDate } from 'src/app/app.component';
 import { ShopModel } from 'src/app/models/shop.model';
 import { OrganizationModel } from 'src/app/models/organization';
+import { UploadMediaComponent } from "src/app/components/upload-media/upload-media.component";
 @Component({
   selector: 'app-business-details',
   standalone: true,
-  imports: [NzCardModule, NzBadgeModule, NzDescriptionsModule, CommonModule,MatButtonModule, MatDialogModule, MatButtonModule],
+  imports: [NzCardModule, NzBadgeModule, NzDescriptionsModule, CommonModule, MatButtonModule, MatDialogModule, MatButtonModule, UploadMediaComponent],
   templateUrl: './business-details.component.html',
   styleUrl: './business-details.component.scss'
 })

@@ -116,7 +116,7 @@
                     <div class="space-y-2" formArrayName="shops">
                         <div *ngFor="let shop of shops; let i = index">
                             <input type="checkbox" [formControlName]="i" [id]="'shop-'+i">
-                            <label [for]="'shop-'+i">{{ shop.name }}</label>
+                            <label [for]="'shop-'+i" class="ml-2">{{ shop.name }}</label>
                         </div>
                     </div>
                 </div>
@@ -128,7 +128,9 @@
             <div class="space-x-3 flex gap-2">
                 <button mat-stroked-button mat-dialog-close (click)="closeDialog()">Cancel</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    (click)="createService()">Confirm</button>
+                    (click)="createService()" *ngIf="!data.isUpdate">Confirm</button>
+                <button mat-raised-button style="background-color: #a684ff; color: white;"
+                    (click)="updateService()" *ngIf="data.isUpdate">Update</button>
             </div>
         </div>
 

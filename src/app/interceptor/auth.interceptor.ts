@@ -6,6 +6,8 @@ import { AuthService } from '../services/auth.service';  // Adjust the import to
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+    console.log(req);
+    
     const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:9000');
     const updatedReq = req.clone({
         url: updatedUrl,
@@ -15,7 +17,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     });
 
     // Skip adding the token for login requests
-    if (updatedReq.url.includes('login') || updatedReq.url.includes('register') ) {
+    if (updatedReq.url.includes('login') || updatedReq.url.includes('register') || updatedReq.url.includes('cloudflarestorage.com')) {
         return next(updatedReq);
     }
 
