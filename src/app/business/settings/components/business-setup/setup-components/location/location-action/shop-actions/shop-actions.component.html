@@ -207,7 +207,7 @@
                         <div formArrayName="days" *ngFor="let day of days.controls; let i = index">
                             <div [formGroupName]="i">
                                 <mat-checkbox formControlName="enabled" (change)="onDayToggle(i,$event)">
-                                    {{ day.value.day }}
+                                    {{ day.value.day | titlecase }}
                                 </mat-checkbox>
 
                                 <div *ngIf="day.get('enabled')?.value" class="ml-10">
@@ -263,8 +263,8 @@
                 <button mat-stroked-button mat-dialog-close>Cancel</button>
 
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    *ngIf="currentShop?.active != null" (click)="updateShopStatus()">{{currentShop.active ? "Deactivate"
-                    : "Activate"}}</button>
+                    *ngIf="currentShop?.active != null" (click)="updateShopStatus()">{{currentShop.active ? "Go Offline"
+                    : "Go Online"}}</button>
             </div>
         </div>
     </div>

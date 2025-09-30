@@ -70,6 +70,7 @@ export class HomeComponent {
 
         if (this.shops.length > 0) {
           this.selectedShop = this.shops[0];
+          localStorage.setItem("shopCode",this.selectedShop.code!);
           console.log(this.selectedShop);
           this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
         }

@@ -81,14 +81,24 @@ export class LocationComponent {
     this.orgApiService.getLocations().subscribe({
       next: (res: ResponseDate) => {
         this.isLoading = false;
-        this.shops = res.data.map((shop: ShopModel) => ({
-          code: shop.code,
-          address: this.formatAddress(shop.addressDto),
-          image: shop.documentDto?.attachments?.length && shop.documentDto.attachments[0]?.url
-            ? `https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/${shop.documentDto.attachments[0].url}`
-            : this.fallback,
-          ...shop
-        }));
+
+        this.shops = res.data.map((shop: ShopModel) => {
+          // Make sure attachments exist
+          const attachments = shop.documentDto?.attachments ?? [];
+          // Sort attachments by displayOrder (nulls at the end)
+          attachments.sort((a: any, b: any) => {
+            if (a.displayOrder == null && b.displayOrder == null) return 0;
+            if (a.displayOrder == null) return 1;  // push nulls to bottom
+            if (b.displayOrder == null) return -1;
+            return a.displayOrder - b.displayOrder;
+          });
+          return {
+            code: shop.code,
+            address: this.formatAddress(shop.addressDto),
+            image: attachments.length && attachments[0].url ? attachments[0].url : this.fallback,
+            ...shop
+          };
+        });
         console.log(this.shops);
 
       },
@@ -147,6 +157,7 @@ export class LocationComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog closed with:', result);
+      this.getLocations();
     });
   }
 

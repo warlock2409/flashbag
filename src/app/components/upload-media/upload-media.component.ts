@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ResponseDate } from 'src/app/app.component';
 
@@ -11,6 +11,7 @@ export interface DocumentDto {
 }
 export interface UploadFile {
   // Backend fields
+  id?:number;
   url?: string;
   filename: string;
   contentType: string;
@@ -32,6 +33,17 @@ export interface UploadFile {
 })
 export class UploadMediaComponent {
 
+  makeItLogo(selectedImage: UploadFile | undefined) {
+    this.http.get<{ url: string }>(`http://localhost:9000/document/${selectedImage?.documentId}/attachment/${selectedImage?.id}/makeItLogo`)
+      .subscribe({
+        next: (data) => {
+        },
+        error: (err: any) => {
+
+        }
+      })
+  }
+
   constructor(private http: HttpClient) { }
 
   @Input() multiple = true;
@@ -39,7 +51,7 @@ export class UploadMediaComponent {
   @Input() type!: string;
   @Output() uploaded = new EventEmitter<DocumentDto>();
 
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.existingUploads) {
       const prefix = "https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/";
 
@@ -53,6 +65,11 @@ export class UploadMediaComponent {
           ...attachment,
           url: newUrl
         };
+      }).sort((a, b) => {
+        if (a.displayOrder == null && b.displayOrder == null) return 0;
+        if (a.displayOrder == null) return 1;  // push nulls to bottom
+        if (b.displayOrder == null) return -1;
+        return a.displayOrder - b.displayOrder;
       });
 
       this.uploads = [...this.existingUploads.attachments];
@@ -61,6 +78,10 @@ export class UploadMediaComponent {
       console.log(this.selected);
 
     }
+  }
+
+  ngOnInit() {
+
   }
 
 
@@ -95,6 +116,8 @@ export class UploadMediaComponent {
       this.uploadToR2(upload);
     }
   }
+
+
 
   uploadToR2(upload: UploadFile) {
     // Replace with your R2 upload + presign logic

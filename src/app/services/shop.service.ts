@@ -20,7 +20,7 @@ export class ShopService {
   Http = inject(HttpClient);
 
   constructor() {
-    localStorage.setItem('shopCode', 'BIFITN888');
+    // localStorage.setItem('shopCode', 'BIFITN888');
   }
 
   getAllShopMembership() {

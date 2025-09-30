@@ -80,7 +80,15 @@ export class ShopActionsComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.i18n.setLocale(en_US);
-    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const daysOfWeek: string[] = [
+      'MONDAY',
+      'TUESDAY',
+      'WEDNESDAY',
+      'THURSDAY',
+      'FRIDAY',
+      'SATURDAY',
+      'SUNDAY'
+    ];
     daysOfWeek.forEach(day => this.days.push(this.newDay(day)));
     this.getOrgBusinessModel();
 
@@ -141,8 +149,6 @@ export class ShopActionsComponent {
     this.industries = modelObj.industryDtoList!;
     const industryObj = this.industries.find(i => i.id === data.primaryIndustry.id);
 
-
-
     this.shopBasic.patchValue({
       shopName: data.name,
       email: data.email,
@@ -151,7 +157,7 @@ export class ShopActionsComponent {
       businessIndustry: industryObj
     });
 
-    this.sampleUploads = data.documentDto;
+    this.sampleUploads = {...data.documentDto};
 
 
     let addressDto = data.addressDto;
@@ -210,7 +216,7 @@ export class ShopActionsComponent {
   }
 
   createNewShop() {
-    
+
     if (this.shopBasic.invalid) {
       this.shopBasic.markAllAsTouched();
       return;

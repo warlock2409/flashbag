@@ -12,9 +12,18 @@
             <i class="fas fa-plus text-gray-500"></i>
             <span class="text-xs text-gray-700">Add Media</span>
         </div>
+        <div
+            class="absolute top-1 left-1 bg-white px-3 py-1 rounded-md shadow cursor-pointer hover:bg-gray-100 flex items-center gap-1">
+            <input type="radio" name="makeLogo" [value]="selected?.id" [checked]="selected?.displayOrder === 1"
+                (change)="makeItLogo(selected)" />
+            <label for="makeLogo" class="text-sm text-gray-700 cursor-pointer">
+                Make it Logo
+            </label>
+        </div>
 
         <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)"
             [attr.multiple]="multiple ? '' : null" />
+
     </div>
 
     <!-- Scrollable Thumbnail Gallery -->
