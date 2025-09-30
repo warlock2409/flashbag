@@ -1,97 +1,124 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Chart, ChartConfiguration, ChartDataset, ChartOptions, ChartType, registerables } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, ChartDataset, ChartOptions, ChartType, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-attendance-chart',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './attendance-chart.component.html',
   styleUrl: './attendance-chart.component.scss'
 })
 export class AttendanceChartComponent {
   @Input() attendanceData: { hour: number; todayMembers: number; meanMembers: number }[] = [];
 
-  @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
-  private chart!: Chart<'bar'>;
+  // @ViewChild('chartCanvas') chartRef!: ElementRef<HTMLCanvasElement>;
+  // chart!: Chart;
 
-  ngAfterViewInit() {
-    this.createChart();
+  constructor() {
+    // Chart.register(...registerables); // Register Chart.js components
+    console.log(this.attendanceData, "*attendance-chart");
+
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['attendanceData'] && this.chart) {
-      this.updateChart();
-    }
-  }
+  @ViewChild('chartCanvas') chartRef!: ElementRef<HTMLCanvasElement>;
+  chart!: Chart;
 
-  private createChart() {
-    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+  ngAfterViewInit(): void {
+    const ctx = this.chartRef.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    this.chart = new Chart(ctx, {
-      type: 'bar', // base chart type
-      data: this.getChartData(),
-      options: this.getChartOptions(),
-    });
-  }
+    // Create gradients
+    const primaryGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    primaryGradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+    primaryGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
 
-  private updateChart() {
-    this.chart.data = this.getChartData();
-    this.chart.update();
-  }
+    const secondaryGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    secondaryGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+    secondaryGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
-  private getChartData() {
-    const labels = this.attendanceData.map(d => d.hour.toString());
-    const todayMembers = this.attendanceData.map(d => d.todayMembers);
-    const meanMembers = this.attendanceData.map(d => d.meanMembers);
-
-    const datasets: ChartDataset<'bar', number[]>[] = [
-      {
-        label: 'Today Check-In',
-        data: todayMembers,
-        backgroundColor: 'rgba(5, 233, 114, 1)',
-        borderWidth: 1,
-        borderRadius: 0,
-      },
-      {
-        label: 'Average Check-In',
-        data: meanMembers,
-        backgroundColor: 'rgba(81, 162, 255, 1)',
-        borderWidth: 1,
-        borderRadius: 1,
-      },
-    ];
-
-    return { labels, datasets };
-  }
-
-  private getChartOptions(): ChartOptions<'bar'> {
-    return {
-      responsive: true,
-      plugins: {
-        legend: {display:false },
-        title: { display: false,},
-        tooltip: {
-          callbacks: {
-            label: function (context) {
-              return `${context.dataset.label}: ${context.parsed.y}`;
-            },
-          },
+    const data = {
+      labels: this.attendanceData.map(d => {
+        const hour = d.hour;
+        if (hour === 0) return '12AM';
+        if (hour < 12) return `${hour}AM`;
+        if (hour === 12) return '12PM';
+        return `${hour - 12}PM`;
+      }),
+      datasets: [
+        {
+          label: 'Today',
+          data: this.attendanceData.map(d => d.todayMembers),
+          borderColor: '#3B82F6',
+          backgroundColor: primaryGradient,
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBorderWidth: 2,
+          pointHoverBorderColor: '#3B82F6',
+          pointHoverBackgroundColor: '#ffffff',
         },
+        {
+          label: 'Yesterday',
+          data: this.attendanceData.map(d => d.meanMembers),
+          borderColor: 'rgba(255, 255, 255, 0.3)',
+          backgroundColor: secondaryGradient,
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderDash: [5, 5],
+        }
+      ] as ChartDataset<'line'>[]
+    };
+
+    const options: ChartOptions<'line'> = {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          borderWidth: 1,
+          cornerRadius: 12,
+          displayColors: false,
+          callbacks: {
+            title: () => '', // no title
+            label: (context) => `${context.parsed.y} members`
+          }
+        }
       },
       scales: {
         x: {
-          title: { display: false, text: 'Hour of Day' },
-          stacked: false, // side-by-side bars
+          display: true,
+          grid: { display: false },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            font: { size: 10 }
+          }
         },
         y: {
-          title: { display: false, text: 'Members Count' },
-          beginAtZero: true,
-          stacked: false,
-        },
+          display: false,
+          grid: { display: false }
+        }
       },
+      elements: { line: { borderCapStyle: 'round', borderJoinStyle: 'round' } }
     };
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data,
+      options
+    });
   }
+
+
 }

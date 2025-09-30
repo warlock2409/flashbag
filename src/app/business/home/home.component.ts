@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { PosComponent } from '../components/pos/pos.component';
 import { MatDialog } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ResponseDate } from 'src/app/app.component';
@@ -20,6 +20,8 @@ export class HomeComponent {
   dialog = inject(MatDialog);
   dashboardService = inject(DashboardService);
   orgApiService = inject(OrganizationServiceService);
+  private sub!: Subscription;
+
 
   shopCategory = new Map<string, string>([
     ['Fitness & Gyms', 'Gym'],
@@ -30,10 +32,15 @@ export class HomeComponent {
   ])
 
   constructor() {
-    this.getLocations();
-    this.getCurrentUser();
-    this.loadGymDashboard();
+    this.initialize();
   }
+
+  private async initialize() {
+    await this.getLocations();
+    await this.getCurrentUser();
+    await this.loadGymDashboard();
+  }
+
 
   isLoading = false;
   shops: ShopModel[] = [];
@@ -46,13 +53,22 @@ export class HomeComponent {
   checkIns: any;
   renewalTrends: any;
 
-  hourlyComparision: any[]= [];
+  hourlyComparision: any[] = [];
 
   getCurrentUser() {
     let user = localStorage.getItem('currentUser');
     if (user)
       this.currentUser = JSON.parse(user);
   }
+
+  async subscribeAbly(code: string | undefined) {
+    // await this.ablyService.init();
+
+    // this.sub = this.ablyService.messages$.subscribe((msg) => {
+    //   console.log(msg);
+    // });  
+  }
+
 
   getLocations() {
     this.isLoading = true;
@@ -72,6 +88,8 @@ export class HomeComponent {
           this.selectedShop = this.shops[0];
           localStorage.setItem("shopCode",this.selectedShop.code!);
           console.log(this.selectedShop);
+          this.subscribeAbly(this.selectedShop.code);
+          localStorage.setItem("shopCode", this.selectedShop.code!);
           this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
         }
       },
