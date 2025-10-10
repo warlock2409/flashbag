@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
   providedIn: 'root'
 })
 export class SweatAlertService {
+  
 
   constructor() { }
 
@@ -25,6 +26,14 @@ export class SweatAlertService {
       title: message,
       showConfirmButton: false,
       timer: 1500
+    });
+  }
+
+  errorHtml(errors: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Form',
+      html: errors
     });
   }
 }

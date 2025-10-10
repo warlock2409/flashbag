@@ -31,6 +31,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@uppy/core/dist/style.min.css",
+              "node_modules/@uppy/dashboard/dist/style.min.css",
+              "node_modules/@uppy/image-editor/dist/style.min.css",
               "src/styles/theme.scss",
               "src/styles.scss",
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
@@ -108,12 +111,9 @@
     "analytics": false
   },
   "schematics": {
-    "@schematics/angular:component": {
-    },
-    "@schematics/angular:directive": {
-    },
-    "@schematics/angular:service": {
-    },
+    "@schematics/angular:component": {},
+    "@schematics/angular:directive": {},
+    "@schematics/angular:service": {},
     "@schematics/angular:guard": {
       "typeSeparator": "."
     },

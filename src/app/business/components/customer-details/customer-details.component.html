@@ -1,0 +1,927 @@
+<div class="min-h-screen antialiased text-neutral-900 mt-16" style="font-family: 'Inter', ui-sans-serif, system-ui;">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Top Bar -->
+        <header class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-9 w-9 rounded-md bg-neutral-100 ring-1 ring-inset ring-neutral-200 grid place-items-center">
+                    <span class="text-sm font-semibold tracking-tight" style="letter-spacing: -0.02em;">WS</span>
+                </div>
+                <div>
+                    <h1 class="m-0! text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900"
+                        style="letter-spacing: -0.02em;">
+                        Customer Details
+                    </h1>
+                    <p class="text-xs text-neutral-600 m-0!">
+                        Manage profile, memberships, billing, orders and bookings
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <section class="mt-6 rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+            <div class="border-b md:border-b-0 md:border-r border-neutral-200">
+                <div class="p-6">
+                    <h2 class="m-0! text-lg font-semibold tracking-tight text-neutral-900"
+                        style="letter-spacing: -0.02em;">
+                        Customer Profile</h2>
+                    <!-- Avatar + Basic -->
+                    <div class="mt-4 flex items-center gap-4">
+                        <div>
+                            <app-upload-media [existingUploads]="sampleUploads" [multiple]="false" [type]="'BUSINESS'"
+                                (uploaded)="setDocument($event)" class="flex-none w-50"
+                                [placeholderUrl]="placeHolderUrl"></app-upload-media>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+                            <div>
+                                <label for="ex-name" class="text-sm font-medium text-neutral-900">Full name</label>
+                                <input id="ex-name" type="text" placeholder="e.g., Casey Nguyen"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <div>
+                                <label for="cust-email" class="text-sm font-medium text-neutral-900">Email</label>
+                                <input id="cust-email" type="email" placeholder="name@company.com"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <div>
+                                <label for="cust-phone" class="text-sm font-medium text-neutral-900">Phone</label>
+                                <input id="cust-phone" type="tel" placeholder="+1 (555) 123-4567"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <div>
+                                <label for="cust-type" class="text-sm font-medium text-neutral-900">Customer
+                                    type</label>
+                                <div class="relative mt-1">
+                                    <select id="ex-equipment"
+                                        class="w-full appearance-none rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-neutral-300">
+                                        <option value="Individual">Individual</option>
+                                        <option value="Business">Business</option>
+                                    </select>
+                                    <svg data-lucide="chevron-down"
+                                        class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"></svg>
+                                </div>
+                            </div>
+                            <!-- Status + Address -->
+                            <div>
+                                <label class="text-sm font-medium text-neutral-900">Status</label>
+                                <div class="relative mt-1">
+                                    <select id="ex-difficulty"
+                                        class="w-full appearance-none rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-neutral-300">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Prospect">Prospect</option>
+                                    </select>
+                                    <svg data-lucide="chevron-down"
+                                        class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"></svg>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="cust-address" class="text-sm font-medium text-neutral-900">Address</label>
+                                <input id="cust-address" type="text" placeholder="Street address"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <!-- Tags -->
+                            <!-- <div class="col-span-2 ">
+                                <div class="flex items-center justify-between">
+                                    <label class="text-sm font-medium text-neutral-900">Tags</label>
+                                    <span class="text-xs text-neutral-600">Press Enter to add</span>
+                                </div>
+                                <div class="mt-1 rounded-md bg-white ring-1 ring-inset ring-neutral-200 p-2">
+                                    <div id="ex-tags-chips" class="flex flex-wrap gap-2"></div>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <svg data-lucide="tag" class="w-4 h-4 text-neutral-500"></svg>
+                                        <input id="ex-tags-input" type="text" placeholder="e.g., VIP"
+                                            class="flex-1 bg-transparent text-sm focus:outline-none placeholder:text-neutral-400">
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-5 flex items-center gap-2 justify-end">
+                        <button mat-stroked-button>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="pt-2">
+            <mat-accordion class="mt-4">
+                <!-- Subscribed Memberships (chips) -->
+                <mat-expansion-panel hideToggle>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title> Subscribed memberships </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="mt-4">
+                        <div class="flex items-center justify-between">
+
+                        </div>
+                        <div id="bp-chips" class="mt-2 flex flex-wrap gap-2">
+                            <!-- Membership chips injected -->
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <!-- Since / Lifetime Orders / Lifetime Spend -->
+                <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title> Customer metrics </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="mt-4">
+                        <div class="mt-1 grid grid-cols-3 gap-3">
+                            <div>
+                                <div class="text-xs text-neutral-600">Since (year)</div>
+                                <input id="ex-sets" type="number" min="1900" max="2100" value="2022"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <div>
+                                <div class="text-xs text-neutral-600">Lifetime orders</div>
+                                <input id="ex-reps" type="number" min="0" max="100000" value="0"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                            </div>
+                            <div>
+                                <div class="text-xs text-neutral-600">Lifetime spend ($)</div>
+                                <input id="ex-rest" type="number" min="0" max="10000000" value="0"
+                                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+        </div>
+
+
+        <!-- Main Content -->
+        <section class="mt-4 rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+            <div>
+                <div class="p-6 space-y-6">
+                    <!-- Filter Chips -->
+                    <section class="rounded-lg ring-1 ring-inset ring-neutral-200 p-3">
+                        <div class="flex flex-wrap items-center gap-2" id="filter-chips">
+                            <!-- Injected chips -->
+                            <mat-chip-listbox class="flex flex-wrap gap-2" [value]="selectedFilter"
+                                (change)="onFilterChange($event.value)" aria-label="Filter records">
+                                <mat-chip-option *ngFor="let category of categories" [value]="category"
+                                    [selected]="selectedFilter === category" class="flex items-center gap-1">
+                                    <i [ngClass]="getIcon(category)" class="mr-1"></i>
+                                    {{ category }} ({{ 1 }})
+                                </mat-chip-option>
+                            </mat-chip-listbox>
+                        </div>
+                    </section>
+
+                    <!-- Records List -->
+                    <section class="rounded-lg ring-1 ring-inset ring-neutral-200">
+                        <div class="flex items-center justify-between px-4 py-3 border-b border-neutral-200">
+                            <div class="inline-flex items-center gap-2 text-sm text-neutral-700">
+                                <i class="fa-solid fa-star"></i>
+                                <span>Records</span>
+                            </div>
+
+                            <div class="md:ml-auto w-full md:w-72">
+                                <div class="relative">
+
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 "></i>
+                                    <input id="search-input" type="text"
+                                        placeholder="Search invoices, orders, services..."
+                                        class="w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 pl-9 pr-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="lib-empty" class="p-6 text-sm text-neutral-600">
+                            No records yet. Add memberships, invoices, orders or bookings.
+                        </div>
+                        <div id="lib-list" class="divide-y divide-neutral-200">
+                            <div *ngFor="let recordGroup of filteredRecords">
+                                <div
+                                    class="px-4 py-2 bg-neutral-50 text-sm text-neutral-700 flex items-center justify-between">
+                                    <div class="inline-flex items-center gap-2">
+                                        <i [ngClass]="getIcon(recordGroup.type)" class="mr-1"></i>
+                                        <span class="font-medium">{{ recordGroup.type }}</span>
+                                    </div>
+                                    <nz-pagination [(nzPageIndex)]="current" [nzTotal]="50"
+                                        [nzSize]="'small'"></nz-pagination>
+                                </div>
+
+                                <div *ngFor="let item of recordGroup.items"
+                                    class="px-4 py-3 flex justify-between gap-3 border-b border-neutral-200">
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-medium text-neutral-900">{{ item.name}} </h4>
+                                        <p class="text-[11px] text-neutral-600">
+                                            {{ item.status }} • {{ item.startDate }}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <button mat-icon-button color="accent" (click)="editRecord(item)">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button mat-icon-button color="warn"
+                                            (click)="deleteRecord(item, recordGroup.type)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mobile Tip -->
+        <section class="mt-6 md:hidden">
+            <div class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4">
+                <div class="text-xs text-neutral-600">Tip: Tap an item to edit, long-press to delete.</div>
+            </div>
+        </section>
+
+        <!-- Toast -->
+        <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden">
+            <div class="rounded-md bg-neutral-900 text-white text-sm px-3 py-2 shadow/50 shadow-black/50">
+                Saved
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Icon init
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        });
+
+        // Elements
+        const exportBtn = document.getElementById('export-json');
+        const importBtn = document.getElementById('import-json');
+        const importFile = document.getElementById('import-file');
+        const clearAllBtn = document.getElementById('clear-all');
+
+        const totalCount = document.getElementById('total-count');
+        const activeFilterLabel = document.getElementById('active-filter-label');
+        const searchInput = document.getElementById('search-input');
+
+        const filterChips = document.getElementById('filter-chips');
+        const libList = document.getElementById('lib-list');
+        const libEmpty = document.getElementById('lib-empty');
+        const toast = document.getElementById('toast');
+
+        // Profile form elements (reusing ids where possible)
+        const avatar = document.getElementById('avatar');
+        const avatarImg = document.getElementById('avatar-img');
+        const avatarInitials = document.getElementById('avatar-initials');
+        const avatarChange = document.getElementById('avatar-change');
+        const avatarFile = document.getElementById('avatar-file');
+
+        const nameInput = document.getElementById('ex-name');          // Full name
+        const emailInput = document.getElementById('cust-email');      // Email
+        const phoneInput = document.getElementById('cust-phone');      // Phone
+        const typeSelect = document.getElementById('ex-equipment');    // Customer type
+        const statusSelect = document.getElementById('ex-difficulty'); // Status
+        const addressInput = document.getElementById('cust-address');  // Address
+
+        const sinceInput = document.getElementById('ex-sets');         // Since (year)
+        const lifetimeOrdersInput = document.getElementById('ex-reps');// Lifetime orders
+        const lifetimeSpendInput = document.getElementById('ex-rest'); // Lifetime spend
+
+        const tagsInput = document.getElementById('ex-tags-input');
+        const tagsChips = document.getElementById('ex-tags-chips');
+
+        const saveBtn = document.getElementById('save-ex');
+        const resetBtn = document.getElementById('reset-ex');
+
+        // Memberships chips area (reuse bp-chips + clear button as "Add")
+        const membershipsChips = document.getElementById('bp-chips');
+        const addMembershipBtn = document.getElementById('clear-bodypart');
+
+        // State
+        let ACTIVE_FILTER = 'All';
+        let SEARCH = '';
+        let TAGS = [];
+
+        const KEY = 'customer_v1';
+
+        function uid() {
+            return Math.random().toString(36).slice(2, 10);
+        }
+
+        function showToast(msg = 'Saved') {
+            toast.querySelector('div').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 1400);
+        }
+
+        function loadCustomer() {
+            try {
+                const raw = localStorage.getItem(KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch { return null; }
+        }
+        function saveCustomer(data) {
+            localStorage.setItem(KEY, JSON.stringify(data));
+        }
+
+        function seedIfEmpty() {
+            if (loadCustomer()) return;
+            const seed = {
+                id: uid(),
+                profile: {
+                    name: 'Casey Nguyen',
+                    email: 'casey.nguyen@example.com',
+                    phone: '+1 (555) 010-7788',
+                    type: 'Individual',
+                    status: 'Active',
+                    address: '100 Main St, San Francisco, CA',
+                    since: 2022,
+                    lifetimeOrders: 12,
+                    lifetimeSpend: 2480,
+                    avatar: '',
+                    tags: ['VIP', 'Newsletter'],
+                    notes: 'Prefers morning appointments.'
+                },
+                memberships: [
+                    { id: uid(), name: 'Premium Fitness', status: 'Active', startedAt: '2023-01-15', renewsAt: '2026-01-15', price: 49.00 },
+                    { id: uid(), name: 'Yoga Add-on', status: 'Paused', startedAt: '2023-09-01', renewsAt: '2024-09-01', price: 15.00 }
+                ],
+                invoices: [
+                    { id: uid(), number: 'INV-1045', date: '2025-08-18', amount: 129.00, status: 'Paid' },
+                    { id: uid(), number: 'INV-1091', date: '2025-09-05', amount: 49.00, status: 'Due' }
+                ],
+                orders: [
+                    { id: uid(), number: 'ORD-4823', date: '2025-07-21', items: [{ name: 'Protein Powder', qty: 1, price: 39.00 }, { name: 'Shaker Bottle', qty: 1, price: 12.00 }], total: 51.00, status: 'Fulfilled' },
+                    { id: uid(), number: 'ORD-4972', date: '2025-09-20', items: [{ name: 'Resistance Bands', qty: 1, price: 22.00 }], total: 22.00, status: 'Processing' }
+                ],
+                services: [
+                    { id: uid(), title: 'Personal Training', date: '2025-10-12', time: '09:00', staff: 'A. Patel', status: 'Scheduled' }
+                ],
+                rentals: [
+                    { id: uid(), item: 'Spin Bike', startDate: '2025-10-01', endDate: '2025-10-15', status: 'Booked' }
+                ]
+            };
+            saveCustomer(seed);
+        }
+
+        function getCustomer() {
+            const c = loadCustomer();
+            if (!c) seedIfEmpty();
+            return loadCustomer();
+        }
+
+        function renderAvatar(profile) {
+            if (profile.avatar) {
+                avatarImg.src = profile.avatar;
+                avatarImg.classList.remove('hidden');
+                avatarInitials.classList.add('hidden');
+            } else {
+                const initials = (profile.name || 'CU').split(' ').map(s => s[0]).slice(0, 2).join('').toUpperCase();
+                avatarInitials.textContent = initials;
+                avatarImg.classList.add('hidden');
+                avatarInitials.classList.remove('hidden');
+            }
+        }
+
+        function renderTags() {
+            tagsChips.innerHTML = '';
+            TAGS.forEach(t => {
+                const span = document.createElement('span');
+                span.className = 'inline-flex items-center gap-1.5 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-2.5 py-1 text-xs text-neutral-700';
+                span.innerHTML = `<svg data-lucide="tag" class="w-3.5 h-3.5"></svg>${t}<button class="ml-1 text-neutral-400 hover:text-neutral-700" aria-label="Remove tag"><svg data-lucide="x" class="w-3.5 h-3.5"></svg></button>`;
+                span.querySelector('button').addEventListener('click', () => {
+                    TAGS = TAGS.filter(x => x !== t);
+                    renderTags();
+                });
+                tagsChips.appendChild(span);
+            });
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        function renderMembershipChips(memberships) {
+            membershipsChips.innerHTML = '';
+            if (!memberships.length) {
+                membershipsChips.innerHTML = '<span class="text-xs text-neutral-600">No memberships yet.</span>';
+                return;
+            }
+            memberships.forEach(m => {
+                const chip = document.createElement('span');
+                const statusStyles = m.status === 'Active'
+                    ? 'bg-emerald-50 ring-emerald-200 text-emerald-700'
+                    : m.status === 'Paused'
+                        ? 'bg-amber-50 ring-amber-200 text-amber-700'
+                        : 'bg-neutral-50 ring-neutral-200 text-neutral-700';
+                chip.className = `inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm ring-1 ring-inset ${statusStyles}`;
+                chip.innerHTML = `<svg data-lucide="badge-check" class="w-3.5 h-3.5"></svg>${m.name}<span class="text-[11px] opacity-70">(${m.status})</span>`;
+                membershipsChips.appendChild(chip);
+            });
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        function populateProfileForm(profile) {
+            nameInput.value = profile.name || '';
+            emailInput.value = profile.email || '';
+            phoneInput.value = profile.phone || '';
+            typeSelect.value = profile.type || 'Individual';
+            statusSelect.value = profile.status || 'Active';
+            addressInput.value = profile.address || '';
+            sinceInput.value = profile.since || new Date().getFullYear();
+            lifetimeOrdersInput.value = profile.lifetimeOrders || 0;
+            lifetimeSpendInput.value = profile.lifetimeSpend || 0;
+            TAGS = Array.isArray(profile.tags) ? profile.tags.slice(0) : [];
+            renderTags();
+            renderAvatar(profile);
+        }
+
+        function collectProfileForm() {
+            return {
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                phone: phoneInput.value.trim(),
+                type: typeSelect.value,
+                status: statusSelect.value,
+                address: addressInput.value.trim(),
+                since: Math.max(1900, Number(sinceInput.value || new Date().getFullYear())),
+                lifetimeOrders: Math.max(0, Number(lifetimeOrdersInput.value || 0)),
+                lifetimeSpend: Math.max(0, Number(lifetimeSpendInput.value || 0)),
+                avatar: getCustomer().profile.avatar || '',
+                tags: TAGS.slice(0),
+                notes: document.getElementById('ex-notes').value.trim()
+            };
+        }
+
+        function outstandingBalance(invoices) {
+            return invoices
+                .filter(i => i.status === 'Due' || i.status === 'Overdue')
+                .reduce((s, i) => s + Number(i.amount || 0), 0);
+        }
+
+        function renderFilterChips() {
+            const c = getCustomer();
+            const counts = {
+                Memberships: c.memberships.length,
+                Invoices: c.invoices.length,
+                Orders: c.orders.length,
+                Services: c.services.length,
+                Rentals: c.rentals.length
+            };
+            filterChips.innerHTML = '';
+            const parts = ['All', 'Memberships', 'Invoices', 'Orders', 'Services', 'Rentals'];
+            parts.forEach(part => {
+                const count = part === 'All'
+                    ? counts.Memberships + counts.Invoices + counts.Orders + counts.Services + counts.Rentals
+                    : counts[part];
+                const active = ACTIVE_FILTER === part;
+                const icon = part === 'All' ? 'sparkles' :
+                    part === 'Memberships' ? 'badge-check' :
+                        part === 'Invoices' ? 'receipt' :
+                            part === 'Orders' ? 'shopping-bag' :
+                                part === 'Services' ? 'calendar-clock' : 'key-round';
+                const chip = document.createElement('button');
+                chip.className = 'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm ring-1 ring-inset ' + (active ? 'bg-neutral-900 text-white ring-neutral-900' : 'bg-neutral-50 text-neutral-700 ring-neutral-200 hover:bg-neutral-100');
+                chip.innerHTML = `<svg data-lucide="${icon}" class="w-3.5 h-3.5 ${active ? 'text-white' : 'text-neutral-700'}"></svg>${part}<span class="text-[11px] ${active ? 'text-white/80' : 'text-neutral-500'}">(${count})</span>`;
+                chip.addEventListener('click', () => {
+                    ACTIVE_FILTER = part;
+                    activeFilterLabel.textContent = part === 'All' ? 'All categories' : part;
+                    renderRecords();
+                });
+                filterChips.appendChild(chip);
+            });
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        function recordHeader(title, count, icon, onAdd) {
+            const header = document.createElement('div');
+            header.className = 'px-4 py-2 bg-neutral-50 text-sm text-neutral-700 flex items-center justify-between';
+            header.innerHTML = `<div class="inline-flex items-center gap-2">
+        <svg data-lucide="${icon}" class="w-3.5 h-3.5"></svg>
+        <span class="font-medium">${title}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-neutral-600">${count}</span>
+        <button class="inline-flex items-center gap-1 rounded-md bg-white px-2 py-1 text-xs font-medium text-neutral-700 ring-1 ring-inset ring-neutral-200 hover:bg-neutral-50" ${onAdd ? '' : 'disabled'}>
+          <svg data-lucide="plus" class="w-3.5 h-3.5"></svg>
+          Add
+        </button>
+      </div>`;
+            if (onAdd) {
+                header.querySelector('button').addEventListener('click', onAdd);
+            }
+            return header;
+        }
+
+        function itemRow(leftHtml, actions = {}) {
+            const wrap = document.createElement('div');
+            wrap.className = 'px-4 py-3 flex items-start justify-between gap-3';
+            const left = document.createElement('div');
+            left.className = 'min-w-0';
+            left.innerHTML = leftHtml;
+
+            const right = document.createElement('div');
+            right.className = 'shrink-0 flex items-center gap-1';
+            const editBtn = document.createElement('button');
+            editBtn.className = 'inline-flex items-center justify-center h-8 w-8 rounded-md text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 ring-1 ring-inset ring-transparent hover:ring-neutral-200 transition';
+            editBtn.innerHTML = '<svg data-lucide="pencil-line" class="w-4 h-4"></svg>';
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'inline-flex items-center justify-center h-8 w-8 rounded-md text-neutral-600 hover:text-red-600 hover:bg-red-50 ring-1 ring-inset ring-transparent hover:ring-red-200 transition';
+            delBtn.innerHTML = '<svg data-lucide="trash-2" class="w-4 h-4"></svg>';
+
+            if (actions.onEdit) editBtn.addEventListener('click', actions.onEdit);
+            if (actions.onDelete) delBtn.addEventListener('click', actions.onDelete);
+
+            right.append(editBtn, delBtn);
+            wrap.append(left, right);
+
+            // Long-press for delete on mobile
+            let pressTimer;
+            wrap.addEventListener('touchstart', () => {
+                pressTimer = setTimeout(() => { if (actions.onDelete) actions.onDelete(); }, 700);
+            });
+            wrap.addEventListener('touchend', () => clearTimeout(pressTimer));
+
+            const row = document.createElement('div');
+            row.appendChild(wrap);
+            return row;
+        }
+
+        function renderRecords() {
+            const c = getCustomer();
+            const countsAll = c.memberships.length + c.invoices.length + c.orders.length + c.services.length + c.rentals.length;
+            totalCount.textContent = countsAll.toString();
+
+            const q = (SEARCH || '').trim().toLowerCase();
+
+            function matches(str) {
+                return !q || (str || '').toLowerCase().includes(q);
+            }
+
+            libList.innerHTML = '';
+            libEmpty.classList.add('hidden');
+
+            const sections = [];
+
+            // Memberships
+            if (ACTIVE_FILTER === 'All' || ACTIVE_FILTER === 'Memberships') {
+                const group = document.createElement('div');
+                group.appendChild(recordHeader('Memberships', c.memberships.length, 'badge-check', () => {
+                    const name = prompt('Membership name?');
+                    if (!name) return;
+                    const price = parseFloat(prompt('Monthly price ($)?') || '0') || 0;
+                    const status = prompt('Status (Active/Paused/Cancelled)?', 'Active') || 'Active';
+                    const started = prompt('Start date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+                    const renews = prompt('Renews at (YYYY-MM-DD)?', '');
+                    c.memberships.push({ id: uid(), name, status, startedAt: started, renewsAt: renews, price });
+                    saveCustomer(c); renderMembershipChips(c.memberships); renderFilterChips(); renderRecords(); showToast('Membership added');
+                }));
+                c.memberships
+                    .filter(m => matches([m.name, m.status].join(' ')))
+                    .forEach(m => {
+                        const left = `
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200">
+                  <svg data-lucide="badge-check" class="w-3.5 h-3.5 text-neutral-700"></svg>
+                </span>
+                <h4 class="text-sm font-medium text-neutral-900 truncate">${m.name}</h4>
+                <span class="text-[11px] text-neutral-600">• ${m.status}</span>
+              </div>
+              <div class="mt-1 text-xs text-neutral-600">
+                Started ${m.startedAt || '-'} ${m.renewsAt ? '• Renews ' + m.renewsAt : ''} • $${Number(m.price || 0).toFixed(2)}/mo
+              </div>
+            `;
+                        group.appendChild(itemRow(left, {
+                            onEdit: () => {
+                                const status = prompt('Update status (Active/Paused/Cancelled):', m.status) || m.status;
+                                m.status = status;
+                                saveCustomer(c); renderMembershipChips(c.memberships); renderRecords(); showToast('Membership updated');
+                            },
+                            onDelete: () => {
+                                if (!confirm('Remove membership?')) return;
+                                c.memberships = c.memberships.filter(x => x.id !== m.id);
+                                saveCustomer(c); renderMembershipChips(c.memberships); renderFilterChips(); renderRecords(); showToast('Membership removed');
+                            }
+                        }));
+                    });
+                sections.push(group);
+            }
+
+            // Invoices
+            if (ACTIVE_FILTER === 'All' || ACTIVE_FILTER === 'Invoices') {
+                const group = document.createElement('div');
+                group.appendChild(recordHeader('Invoices', c.invoices.length, 'receipt', () => {
+                    const number = prompt('Invoice number?', 'INV-' + Math.floor(Math.random() * 9000 + 1000));
+                    if (!number) return;
+                    const date = prompt('Invoice date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+                    const amount = parseFloat(prompt('Amount ($)?', '0') || '0') || 0;
+                    const status = prompt('Status (Paid/Due/Overdue)?', 'Paid') || 'Paid';
+                    c.invoices.push({ id: uid(), number, date, amount, status });
+                    saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Invoice added');
+                }));
+                c.invoices
+                    .filter(i => matches([i.number, i.status, i.date, i.amount].join(' ')))
+                    .forEach(i => {
+                        const left = `
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200">
+                  <svg data-lucide="receipt" class="w-3.5 h-3.5 text-neutral-700"></svg>
+                </span>
+                <h4 class="text-sm font-medium text-neutral-900 truncate">${i.number}</h4>
+                <span class="text-[11px] text-neutral-600">• ${i.status}</span>
+              </div>
+              <div class="mt-1 text-xs text-neutral-600">
+                ${i.date} • $${Number(i.amount || 0).toFixed(2)}
+              </div>
+            `;
+                        group.appendChild(itemRow(left, {
+                            onEdit: () => {
+                                const status = prompt('Update status (Paid/Due/Overdue):', i.status) || i.status;
+                                i.status = status;
+                                saveCustomer(c); renderRecords(); showToast('Invoice updated');
+                            },
+                            onDelete: () => {
+                                if (!confirm('Delete invoice?')) return;
+                                c.invoices = c.invoices.filter(x => x.id !== i.id);
+                                saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Invoice deleted');
+                            }
+                        }));
+                    });
+                sections.push(group);
+            }
+
+            // Orders
+            if (ACTIVE_FILTER === 'All' || ACTIVE_FILTER === 'Orders') {
+                const group = document.createElement('div');
+                group.appendChild(recordHeader('Product Orders', c.orders.length, 'shopping-bag', () => {
+                    const number = prompt('Order number?', 'ORD-' + Math.floor(Math.random() * 9000 + 1000));
+                    if (!number) return;
+                    const date = prompt('Order date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+                    const total = parseFloat(prompt('Total ($)?', '0') || '0') || 0;
+                    const status = prompt('Status (Processing/Fulfilled/Cancelled)?', 'Processing') || 'Processing';
+                    c.orders.push({ id: uid(), number, date, items: [], total, status });
+                    saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Order added');
+                }));
+                c.orders
+                    .filter(o => matches([o.number, o.status, o.date, o.total].join(' ')))
+                    .forEach(o => {
+                        const left = `
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200">
+                  <svg data-lucide="shopping-bag" class="w-3.5 h-3.5 text-neutral-700"></svg>
+                </span>
+                <h4 class="text-sm font-medium text-neutral-900 truncate">${o.number}</h4>
+                <span class="text-[11px] text-neutral-600">• ${o.status}</span>
+              </div>
+              <div class="mt-1 text-xs text-neutral-600">
+                ${o.date} • $${Number(o.total || 0).toFixed(2)}
+              </div>
+            `;
+                        group.appendChild(itemRow(left, {
+                            onEdit: () => {
+                                const status = prompt('Update status (Processing/Fulfilled/Cancelled):', o.status) || o.status;
+                                o.status = status;
+                                saveCustomer(c); renderRecords(); showToast('Order updated');
+                            },
+                            onDelete: () => {
+                                if (!confirm('Delete order?')) return;
+                                c.orders = c.orders.filter(x => x.id !== o.id);
+                                saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Order deleted');
+                            }
+                        }));
+                    });
+                sections.push(group);
+            }
+
+            // Services (Scheduling)
+            if (ACTIVE_FILTER === 'All' || ACTIVE_FILTER === 'Services') {
+                const group = document.createElement('div');
+                group.appendChild(recordHeader('Service Scheduling', c.services.length, 'calendar-clock', () => {
+                    const title = prompt('Service title?', 'Consultation');
+                    if (!title) return;
+                    const date = prompt('Date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+                    const time = prompt('Time (HH:mm)?', '09:00');
+                    const staff = prompt('Staff?', '');
+                    c.services.push({ id: uid(), title, date, time, staff, status: 'Scheduled' });
+                    saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Service scheduled');
+                }));
+                c.services
+                    .filter(s => matches([s.title, s.date, s.time, s.staff, s.status].join(' ')))
+                    .forEach(s => {
+                        const left = `
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200">
+                  <svg data-lucide="calendar-clock" class="w-3.5 h-3.5 text-neutral-700"></svg>
+                </span>
+                <h4 class="text-sm font-medium text-neutral-900 truncate">${s.title}</h4>
+                <span class="text-[11px] text-neutral-600">• ${s.status}</span>
+              </div>
+              <div class="mt-1 text-xs text-neutral-600">
+                ${s.date} at ${s.time}${s.staff ? ' • ' + s.staff : ''}
+              </div>
+            `;
+                        group.appendChild(itemRow(left, {
+                            onEdit: () => {
+                                const status = prompt('Update status (Scheduled/Completed/Cancelled):', s.status) || s.status;
+                                s.status = status;
+                                saveCustomer(c); renderRecords(); showToast('Service updated');
+                            },
+                            onDelete: () => {
+                                if (!confirm('Delete service?')) return;
+                                c.services = c.services.filter(x => x.id !== s.id);
+                                saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Service deleted');
+                            }
+                        }));
+                    });
+                sections.push(group);
+            }
+
+            // Rentals (Booking)
+            if (ACTIVE_FILTER === 'All' || ACTIVE_FILTER === 'Rentals') {
+                const group = document.createElement('div');
+                group.appendChild(recordHeader('Rental Booking', c.rentals.length, 'key-round', () => {
+                    const item = prompt('Item to rent?', 'Locker 12');
+                    if (!item) return;
+                    const startDate = prompt('Start date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+                    const endDate = prompt('End date (YYYY-MM-DD)?', '');
+                    c.rentals.push({ id: uid(), item, startDate, endDate, status: 'Booked' });
+                    saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Rental booked');
+                }));
+                c.rentals
+                    .filter(r => matches([r.item, r.status, r.startDate, r.endDate].join(' ')))
+                    .forEach(r => {
+                        const left = `
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200">
+                  <svg data-lucide="key-round" class="w-3.5 h-3.5 text-neutral-700"></svg>
+                </span>
+                <h4 class="text-sm font-medium text-neutral-900 truncate">${r.item}</h4>
+                <span class="text-[11px] text-neutral-600">• ${r.status}</span>
+              </div>
+              <div class="mt-1 text-xs text-neutral-600">
+                ${r.startDate || '-'} ${r.endDate ? '→ ' + r.endDate : ''}
+              </div>
+            `;
+                        group.appendChild(itemRow(left, {
+                            onEdit: () => {
+                                const status = prompt('Update status (Booked/Returned/Overdue):', r.status) || r.status;
+                                r.status = status;
+                                saveCustomer(c); renderRecords(); showToast('Rental updated');
+                            },
+                            onDelete: () => {
+                                if (!confirm('Delete rental?')) return;
+                                c.rentals = c.rentals.filter(x => x.id !== r.id);
+                                saveCustomer(c); renderFilterChips(); renderRecords(); showToast('Rental deleted');
+                            }
+                        }));
+                    });
+                sections.push(group);
+            }
+
+            // If no sections or all are empty with filter/search
+            const visibleCount = sections.reduce((sum, group) => sum + group.querySelectorAll('.px-4.py-3').length, 0);
+            if (visibleCount === 0) {
+                libEmpty.classList.remove('hidden');
+            }
+            sections.forEach(s => libList.appendChild(s));
+
+            // Icons refresh
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        }
+
+        // Events
+        avatarChange.addEventListener('click', () => avatarFile.click());
+        avatarFile.addEventListener('change', async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const c = getCustomer();
+                c.profile.avatar = reader.result;
+                saveCustomer(c);
+                renderAvatar(c.profile);
+                showToast('Avatar updated');
+            };
+            reader.readAsDataURL(file);
+            avatarFile.value = '';
+        });
+
+        addMembershipBtn.addEventListener('click', () => {
+            const c = getCustomer();
+            const name = prompt('Membership name?');
+            if (!name) return;
+            const price = parseFloat(prompt('Monthly price ($)?', '0') || '0') || 0;
+            const status = prompt('Status (Active/Paused/Cancelled)?', 'Active') || 'Active';
+            const started = prompt('Start date (YYYY-MM-DD)?', new Date().toISOString().slice(0, 10));
+            const renews = prompt('Renews at (YYYY-MM-DD)?', '');
+            c.memberships.push({ id: uid(), name, status, startedAt: started, renewsAt: renews, price });
+            saveCustomer(c);
+            renderMembershipChips(c.memberships);
+            renderFilterChips();
+            renderRecords();
+            showToast('Membership added');
+        });
+
+        tagsInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                const val = tagsInput.value.trim().replace(/,$/, '');
+                if (val && !TAGS.includes(val)) {
+                    TAGS.push(val);
+                    renderTags();
+                }
+                tagsInput.value = '';
+            }
+        });
+
+        document.getElementById('reset-ex').addEventListener('click', (e) => {
+            e.preventDefault();
+            const c = getCustomer();
+            populateProfileForm(c.profile);
+            showToast('Reset');
+        });
+
+        document.getElementById('save-ex').addEventListener('click', (e) => {
+            e.preventDefault();
+            const c = getCustomer();
+            c.profile = collectProfileForm();
+            saveCustomer(c);
+            renderMembershipChips(c.memberships);
+            renderFilterChips();
+            renderRecords();
+            showToast('Saved');
+        });
+
+        searchInput.addEventListener('input', () => {
+            SEARCH = searchInput.value || '';
+            renderRecords();
+        });
+
+        exportBtn?.addEventListener('click', () => {
+            const data = JSON.stringify(getCustomer(), null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'customer.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        importBtn?.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile?.addEventListener('change', async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                if (data && typeof data === 'object') {
+                    saveCustomer(data);
+                    const c = getCustomer();
+                    populateProfileForm(c.profile);
+                    renderMembershipChips(c.memberships);
+                    renderFilterChips();
+                    renderRecords();
+                    showToast('Imported');
+                } else {
+                    showToast('Invalid file');
+                }
+            } catch {
+                showToast('Import failed');
+            } finally {
+                importFile.value = '';
+            }
+        });
+
+        clearAllBtn.addEventListener('click', () => {
+            if (!confirm('Clear all customer data?')) return;
+            localStorage.removeItem(KEY);
+            seedIfEmpty();
+            const c = getCustomer();
+            populateProfileForm(c.profile);
+            renderMembershipChips(c.memberships);
+            renderFilterChips();
+            renderRecords();
+            showToast('Cleared');
+        });
+
+        // Init
+        (function init() {
+            seedIfEmpty();
+            const c = getCustomer();
+            populateProfileForm(c.profile);
+            renderMembershipChips(c.memberships);
+            renderFilterChips();
+            renderRecords();
+            // Show top-line helpful summary in controls tooltip title
+            const balance = outstandingBalance(c.invoices);
+            totalCount.title = `Outstanding balance: $${balance.toFixed(2)}`;
+            if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+        })();
+    </script>
+</div>

@@ -218,6 +218,7 @@ import { AddCustomerComponent } from 'src/app/business/components/add-customer/a
   `]
 })
 export class NavbarComponent {
+
   hideLoginButtons = false; // Hide in onboard route
   isLandingPage = false;
   isLoginPage = false;
@@ -301,7 +302,10 @@ export class NavbarComponent {
       disableClose: true,
     });
   }
-
+  openCheckIn() {
+    // Navigate to the gym check-in page
+    this.router.navigate(['/business/gym-checkin']);
+  }
   addCustomer() {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
       data: {}, minWidth: "360px"

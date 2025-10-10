@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { map, delay, tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface User {
   id: string;
@@ -59,7 +60,7 @@ export class AuthService {
 
   isAuthenticated$ = this.isAuthenticated.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
     this.currentUser = this.currentUserSubject.asObservable();
 
@@ -124,6 +125,8 @@ export class AuthService {
     this.currentUserSubject.next(null);
     localStorage.removeItem('currentUser');
     this.isAuthenticated.next(false);
+
+     this.router.navigate(['/login'], { queryParams: { type: 'business' } });
   }
 
   isSeller(): boolean {

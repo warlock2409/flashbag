@@ -75,9 +75,7 @@ export class PointOfSaleComponent {
   onFilterChange(modelName: any) {
     // Find Business Model by id
     let model = this.modelFilters.find(model => model.name == modelName);
-    // Get Business plan by for business model;
-    if (model)
-      this.getBusinessPlan(model.id);
+   
   }
 
   getBusinessModels() {
@@ -86,7 +84,7 @@ export class PointOfSaleComponent {
         console.log(res);
         this.modelFilters = res.data;
         this.selectedFilter = this.modelFilters[0].name;
-        this.getBusinessPlan(this.modelFilters[0].id)
+        this.getBusinessPlan()
       },
       error: (err: any) => {
 
@@ -94,8 +92,8 @@ export class PointOfSaleComponent {
     })
   }
 
-  getBusinessPlan(modelId: number) {
-    this.masterService.getPlansByBusinessModel(modelId).subscribe({
+  getBusinessPlan() {
+    this.masterService.getPlansByOrganization().subscribe({
       next: (res: ResponseDate) => {
         this.businessPlans = res.data.sort((a: Plan, b: Plan) => a.basePrice - b.basePrice);
       },

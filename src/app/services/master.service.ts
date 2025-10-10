@@ -44,8 +44,9 @@ export class MasterService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
-  getPlansByBusinessModel(modelId: number) {
-    let url = `http://localhost:8080/plan/businessModel/${modelId}`;
+  getPlansByOrganization() {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = `http://localhost:8080/plan/businessModel/organization/${orgCode}`;
     return this.Http.get<ServiceResponse<any>>(url);
   }
 

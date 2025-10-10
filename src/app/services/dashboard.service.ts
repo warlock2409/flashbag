@@ -18,11 +18,11 @@ export class DashboardService {
     return this.http.get<ResponseDate>(url);
   }
 
-  getCheckIns() {
+  getMembershipSummary() {
     const shopCode = localStorage.getItem("shopCode");
     if (!shopCode) throw new Error("shop code not found");
 
-    const url = `http://localhost:8080/dashboard/shop/${shopCode}/memberships/checkIn`;
+    const url = `http://localhost:8080/dashboard/shop/${shopCode}/memberships/summary`;
     return this.http.get<ResponseDate>(url);
   }
 

@@ -20,10 +20,42 @@ export class AttendanceChartComponent {
     // Chart.register(...registerables); // Register Chart.js components
     console.log(this.attendanceData, "*attendance-chart");
 
+
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['attendanceData'] && !changes['attendanceData'].firstChange) {
+      this.updateChart();
+    }
   }
 
   @ViewChild('chartCanvas') chartRef!: ElementRef<HTMLCanvasElement>;
   chart!: Chart;
+
+  updateChart() {
+    if (!this.chart) return;
+
+    // Filter out early hours if needed (e.g., 0-4 AM)
+    const filteredData = this.attendanceData;
+    console.log(this.attendanceData);
+
+    // Update labels
+    this.chart.data.labels = filteredData.map(d => {
+    const hour = d.hour;
+    if (hour === 0) return '12AM';
+    if (hour < 12) return `${hour}AM`;
+    if (hour === 12) return '12PM';
+    return `${hour - 12}PM`;
+  });
+
+    // Update datasets
+    this.chart.data.datasets[0].data = filteredData.map(d => d.todayMembers);
+    this.chart.data.datasets[1].data = filteredData.map(d => d.meanMembers);
+
+    // Trigger chart update
+    this.chart.update();
+  }
 
   ngAfterViewInit(): void {
     const ctx = this.chartRef.nativeElement.getContext('2d');
@@ -37,7 +69,8 @@ export class AttendanceChartComponent {
     const secondaryGradient = ctx.createLinearGradient(0, 0, 0, 300);
     secondaryGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
     secondaryGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
+    console.log(this.attendanceData);
+    
     const data = {
       labels: this.attendanceData.map(d => {
         const hour = d.hour;
@@ -46,6 +79,7 @@ export class AttendanceChartComponent {
         if (hour === 12) return '12PM';
         return `${hour - 12}PM`;
       }),
+
       datasets: [
         {
           label: 'Today',

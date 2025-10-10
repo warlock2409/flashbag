@@ -7,11 +7,12 @@ import { GymCheckinActionsComponent } from './gym-checkin-actions/gym-checkin-ac
 import { MatIconModule } from '@angular/material/icon';
 import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
 @Component({
   selector: 'app-gym-check-in',
   standalone: true,
-  imports: [FormsModule, CommonModule,MatIconModule],
+  imports: [FormsModule, CommonModule, MatIconModule],
   templateUrl: './gym-check-in.component.html',
   styleUrl: './gym-check-in.component.scss'
 })
@@ -24,7 +25,7 @@ export class GymCheckInComponent {
   qrCodeDataUrl: string | null = null;
 
   @ViewChild('qrCanvas') qrCanvas!: ElementRef<HTMLCanvasElement>;
-  constructor() {
+  constructor(private swalService: SweatAlertService) {
 
   }
 
@@ -45,8 +46,58 @@ export class GymCheckInComponent {
     obliques: 'gray'
   };
 
-  openCheckInDialog() {
+  openCheckInDialog(checkinInfo: any) {
+    let data = {
+      "customerDTO": {
+        "id": null,
+        "firstName": "Rajaraman Sekar",
+        "lastName": null,
+        "email": "buzylifeapp@gmail.com",
+        "contactNumber": "8531837909",
+        "introduced": false,
+        "active": false,
+        "membershipName": null,
+        "totalSpent": null,
+        "expiry": null,
+        "lastSpendDate": null
+      },
+      "streak": 1,
+      "remainingDays": 111,
+      "weeklyAttendance": {
+        "2025-10-06": {
+          "checkInAt": null,
+          "checkOutAt": null
+        },
+        "2025-10-07": {
+          "checkInAt": null,
+          "checkOutAt": null
+        },
+        "2025-10-08": {
+          "checkInAt": null,
+          "checkOutAt": null
+        },
+        "2025-10-09": {
+          "checkInAt": "2025-10-09T00:01:04.294+00:00",
+          "checkOutAt": "2025-10-09T00:11:06.531+00:00"
+        },
+        "2025-10-10": {
+          "checkInAt": null,
+          "checkOutAt": null
+        },
+        "2025-10-11": {
+          "checkInAt": null,
+          "checkOutAt": null
+        },
+        "2025-10-12": {
+          "checkInAt": null,
+          "checkOutAt": null
+        }
+      },
+      "membershipPlanName": "FitStart",
+      "isCheckIn": false
+    }
     const dialogRef = this.dialog.open(GymCheckinActionsComponent, {
+      data: data
     });
 
     dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
@@ -72,19 +123,22 @@ export class GymCheckInComponent {
     }
   }
 
-  submitCheckIn(code:string){
+  submitCheckIn(code: string) {
     console.log(code);
     this.shopService.PostMembershipCheckIn(code).subscribe({
-      next:(res:ResponseDate)=>{
+      next: (res: ResponseDate) => {
         console.log(res);
-        this.openCheckInDialog();
-      },
-      error:(err:any)=>{
 
+        this.openCheckInDialog(res.data);
+      },
+      error: (err: any) => {
+        if (err.status === 400) {
+          this.swalService.error(err.error.message);
+        } else {
+          this.swalService.error("Something Went Wrong!");
+        }
       }
     })
   }
-
-
 
 }

@@ -1,0 +1,151 @@
+<!-- Left: Create Form -->
+<div id="membershipDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col dialog-animate">
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 m-0"> Create Exercise</h2>
+                <label for="">Pick a body part, add details, then save to your library.</label>
+            </div>
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500 cursor-pointer">
+                <i class="fa-solid fa-circle-xmark text-xl" style="color: lightcoral;"></i>
+            </button>
+        </div>
+        <mat-progress-bar mode="indeterminate" *ngIf="buffer"></mat-progress-bar>
+        <form [formGroup]="exerciseForm" class="flex-1 overflow-y-auto pb-2 px-6">
+            <!-- Body Part Chips -->
+            <div class="mt-4">
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-medium text-neutral-900">Body part</label>
+                </div>
+                <div id="bp-chips" class="mt-2 flex flex-wrap gap-2">
+                    <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+                        <mat-chip-option *ngFor="let filter of data.bodyFilter" [value]="filter.key"
+                            [selected]="selectedFilter === filter.key">
+                            {{filter.name}}
+                        </mat-chip-option>
+                    </mat-chip-listbox>
+                </div>
+            </div>
+
+            <!-- Exercise Name -->
+            <div class="mt-4">
+                <label for="ex-name" class="text-sm font-medium text-neutral-900">Exercise name</label>
+                <input id="ex-name" type="text" placeholder="e.g., Bench Press" formControlName="name"
+                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+            </div>
+
+            <!-- Equipment + Difficulty -->
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="text-sm font-medium text-neutral-900">Equipment</label>
+                    <div class="relative mt-1">
+                        <select id="ex-equipment" formControlName="equipment"
+                            class="w-full appearance-none rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-neutral-300">
+                            <option value="None">None / Bodyweight</option>
+                            <option value="Barbell">Barbell</option>
+                            <option value="Dumbbell">Dumbbell</option>
+                            <option value="Machine">Machine</option>
+                            <option value="Cable">Cable</option>
+                            <option value="Kettlebell">Kettlebell</option>
+                            <option value="Bands">Bands</option>
+                        </select>
+                        <svg data-lucide="chevron-down"
+                            class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"></svg>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-neutral-900">Difficulty</label>
+                    <div class="relative mt-1">
+                        <select id="ex-difficulty" formControlName="mode"
+                            class="w-full appearance-none rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-neutral-300">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                        <svg data-lucide="chevron-down"
+                            class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sets/Reps/Rest -->
+            <div class="mt-4" formArrayName="sets">
+                <label class="text-sm font-medium text-neutral-900 flex justify-between items-center mb-2">
+                    Prescription
+                    <i class="fa-solid fa-square-plus text-[limegreen] text-xl cursor-pointer" (click)="addSet()"></i>
+                </label>
+
+                <div *ngFor="let set of sets.controls; let i = index" [formGroupName]="i"
+                    class="mt-1 grid grid-cols-3 gap-3 relative pr-8">
+
+                    <!-- Weight -->
+                    <div>
+                        <div class="text-xs text-neutral-600">Weight</div>
+                        <input type="number" formControlName="weight" min="1" max="150"
+                            class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                    </div>
+
+                    <!-- Reps -->
+                    <div>
+                        <div class="text-xs text-neutral-600">Reps</div>
+                        <input type="number" formControlName="reps" min="1" max="50"
+                            class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                    </div>
+
+                    <!-- Rest -->
+                    <div>
+                        <div class="text-xs text-neutral-600">Rest (sec)</div>
+                        <input type="number" formControlName="rest" min="0" max="600"
+                            class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm focus:outline-none focus:ring-neutral-300">
+                    </div>
+
+                    <!-- Remove button -->
+                    <button type="button" class="absolute top-6 right-0 text-red-500 hover:text-red-700 cursor-pointer"
+                        (click)="removeSet(i)">
+                        <i class="fa-solid fa-circle-xmark text-xl text-[lightcoral]"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="mt-4 text-center">
+                <button mat-stroked-button (click)="generateAiContent()">✨Auto Generate</button>
+            </div>
+            <!-- Tags -->
+            <div>
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-medium text-neutral-900">Tag</label>
+                </div>
+                <div class="mt-1 rounded-md bg-white ring-1 ring-inset ring-neutral-200 p-2">
+                    <div id="ex-tags-chips" class="flex flex-wrap gap-2"></div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <input id="ex-tags-input" type="text" placeholder="e.g., strength" formControlName="tag"
+                            class="flex-1 bg-transparent text-sm focus:outline-none placeholder:text-neutral-400">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="mt-4">
+                <label class="text-sm font-medium text-neutral-900">Description</label>
+                <textarea id="ex-notes" rows="4" placeholder="Cues, variations, tempo..." formControlName="description"
+                    class="mt-1 w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300"></textarea>
+            </div>
+
+            <div class="mt-4">
+                <app-upload-media (uploaded)="setDocument($event)" [existingUploads]="existingUploads"></app-upload-media>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
+            <div class="space-x-3 flex gap-2">
+                <button mat-stroked-button mat-dialog-close>Cancel</button>
+                <button type="button" mat-raised-button style="background-color: #a684ff; color: white;"
+                    (click)="submit()">{{data.isEdit ? 'Update' : 'Create'}}</button>
+            </div>
+        </div>
+
+    </div>
+</div>

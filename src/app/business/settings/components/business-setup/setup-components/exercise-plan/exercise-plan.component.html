@@ -1,0 +1,148 @@
+<div class="min-h-screen antialiased text-neutral-900">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <!-- Top Bar -->
+        <header class="flex items-center justify-between gap-4">
+            <div class="flex items-start gap-3">
+                <div
+                    class="h-9 w-9 rounded-md bg-violet-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
+                    <span class="text-sm font-semibold tracking-tight"
+                        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">EX</span>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900"
+                        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;margin: 0;">
+                        Exercises
+                    </h1>
+                    <p class="text-xs text-neutral-600">
+                        Create exercises by body part and manage your library
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button mat-stroked-button (click)="openExerciseAction()">
+                    <i class="fa-solid fa-plus"></i>
+                    Create Exercise
+                </button>
+            </div>
+        </header>
+
+        <section class="mt-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+            <div
+                class="flex w-full md:w-auto items-center justify-between rounded-lg ring-1 ring-inset ring-neutral-200 p-2 pr-3">
+                <div class="inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm text-neutral-700">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <span class="text-neutral-700">Total Exercises</span>
+                    <span id="total-count" class="ml-1 font-medium text-neutral-900">{{totalExercise}}</span>
+                </div>
+                <div class="inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm text-neutral-600">
+                    <svg data-lucide="filter" class="w-4 h-4"></svg>
+                    <span id="active-filter-label">{{selectedFilter == "" ? "All Body Parts" : selectedFilter}}</span>
+                </div>
+            </div>
+            <div class="md:ml-auto w-full md:w-64">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 "></i>
+                    <input id="search-input" type="text" placeholder="Search exercises..." [formControl]="searchControl"
+                        class="w-full rounded-md ring-1 ring-inset ring-neutral-200 pl-9 pr-2 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-neutral-300">
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="mt-6 rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+            <div class="grid grid-cols-12">
+                <!-- Right: Library -->
+                <div class="col-span-12 md:col-span-12">
+                    <div class="p-6 space-y-6">
+                        <!-- Filter Chips -->
+                        <section class="rounded-lg ring-1 ring-inset ring-neutral-200 p-3">
+                            <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+                                <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.key"
+                                    [selected]="selectedFilter === filter.key">
+                                    {{filter.name}}
+                                </mat-chip-option>
+                            </mat-chip-listbox>
+                        </section>
+
+                        <!-- Library List -->
+                        <section class="rounded-lg ring-1 ring-inset ring-neutral-100">
+                            <div class="flex items-center justify-between px-4 py-3">
+                                <div class="inline-flex items-center gap-2 text-sm text-neutral-700">
+                                    <span class="text-2xl">🏋🏻‍♂️</span>
+                                    <span>Exercise Library</span>
+                                </div>
+                                <div class="text-xs text-neutral-600">Grouped by body part</div>
+                            </div>
+                            <div id="lib-empty" class="p-6 text-sm text-neutral-600" *ngIf="!byPart">
+                                No exercises yet. Create your first one on the left.
+                            </div>
+
+                            <div id="lib-list" class="divide-y divide-neutral-100">
+                                <!-- Loop over body parts -->
+                                <div *ngFor="let bp of bodyParts">
+                                    <!-- Header -->
+                                    <div *ngIf="isValidPart(bp)"
+                                        class="px-4 py-2 bg-neutral-50 text-sm text-neutral-700 flex items-center justify-between mx-1">
+                                        <div class="inline-flex items-center gap-2">
+                                            <span class="font-medium">{{ bp | titlecase}}</span>
+                                        </div>
+                                        <span class="text-xs text-neutral-600">{{ byPart[bp]?.length }}</span>
+                                    </div>
+
+                                    <!-- Exercises under this body part -->
+                                    <div *ngFor="let item of byPart[bp]" class="px-4 py-2 mt-1"
+                                        style="border-bottom: 1px solid rgba(128, 128, 128, 0.247);">
+                                        <div class="flex items-center gap-2 justify-between">
+                                            <h4 class="text-sm font-medium text-neutral-900 truncate m-0! flex gap-4">
+                                                <span>
+                                                    <i class="fa-solid fa-photo-film" *ngIf="item.documentDto"></i>
+                                                    {{ item.name}}
+                                                </span>
+                                                <span class="text-[12px] text-neutral-600">
+                                                    • {{ item.mode}}
+                                                </span>
+                                            </h4>
+
+                                            <div class="flex gap-4">
+                                                <button mat-raised-button
+                                                    style="background-color: #00b1c3; color: white;"
+                                                    (click)="editExercise(item)">
+                                                    Edit
+                                                </button>
+                                                <button mat-raised-button
+                                                    style="background-color: coral; color: white;"
+                                                    (click)="deleteExercise(item)">
+                                                    Delete
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        <div class="mt-1 text-sm text-neutral-600">
+                                            @for (itemSet of item.sets; track $index) {
+                                            <p>
+                                                • {{ itemSet.weight }} kg x {{ itemSet.reps }} reps • {{ itemSet.rest
+                                                }}s
+                                                rest
+                                            </p>
+                                            }
+                                        </div>
+                                        <div class="mt-2 flex flex-wrap gap-1.5">
+                                            <span *ngFor="let t of item.tags"
+                                                class="inline-flex items-center gap-1 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-2 py-0.5 text-[11px] text-neutral-700">
+                                                <i class="fa-solid fa-tag"></i>
+                                                {{ t }}
+                                            </span>
+                                        </div>
+                                        <p *ngIf="item.notes" class="mt-2! text-xs text-neutral-600">{{ item.notes }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

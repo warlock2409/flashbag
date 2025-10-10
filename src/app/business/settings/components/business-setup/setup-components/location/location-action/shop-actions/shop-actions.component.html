@@ -24,9 +24,10 @@
                         <!-- Location Details -->
                         <nz-card nzType="inner" nzTitle="Location Details" class="m-b-4 m-t-8">
                             <div class="flex gap-1rem">
-
+                                <!-- Media Upload -->
                                 <app-upload-media [existingUploads]="sampleUploads" [multiple]="false"
-                                    [type]="'BUSINESS'" (uploaded)="setDocument($event)"></app-upload-media>
+                                    [type]="'BUSINESS'" (uploaded)="setDocument($event)"
+                                    class="flex-none w-50"></app-upload-media>
 
                                 <div class="w-100">
                                     <p class="parent_text flex justify-between items-end">
@@ -78,7 +79,8 @@
                                         </mat-icon>
                                         Primary Business
                                     </p>
-                                    <nz-select class="w-3/4" formControlName="primaryModel" [nzDisabled]="data.isUpdate">
+                                    <nz-select class="w-3/4" formControlName="primaryModel"
+                                        [nzDisabled]="data.isUpdate">
                                         <nz-option *ngFor="let model of businessModels" [nzValue]="model"
                                             [nzLabel]="model.name"></nz-option>
                                     </nz-select>
@@ -93,7 +95,8 @@
                                         Primary Business Industry
                                     </p>
 
-                                    <nz-select class="w-3/4" formControlName="businessIndustry" [nzDisabled]="data.isUpdate">
+                                    <nz-select class="w-3/4" formControlName="businessIndustry"
+                                        [nzDisabled]="data.isUpdate">
                                         <nz-option *ngFor="let industry of industries" [nzValue]="industry"
                                             [nzLabel]="industry.name">
                                         </nz-option>
@@ -144,7 +147,7 @@
                         </nz-card>
 
                         <div class="flex justify-end mt-8">
-                            <button mat-flat-button [disabled]="shopBasic.invalid" 
+                            <button mat-flat-button [disabled]="shopBasic.invalid"
                                 [ngStyle]="!shopBasic.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
                                 (click)="createNewShop()">Next</button>
                         </div>
@@ -213,16 +216,17 @@
                                 <div *ngIf="day.get('enabled')?.value" class="ml-10">
                                     <button mat-stroked-button color="primary" class="cursor-pointer"
                                         (click)="addSession(i)">
-                                      <i class="fa-solid fa-plus"></i> Add Session
+                                        <i class="fa-solid fa-plus"></i> Add Session
                                     </button>
-                                    <button mat-stroked-button color="secondary" class="cursor-pointer"  style="margin-left: 13px;"
-                                        (click)="copyHoursToAll(i)">
-                                       <i class="fa-solid fa-check-double"></i> Copy to All
+                                    <button mat-stroked-button color="secondary" class="cursor-pointer"
+                                        style="margin-left: 13px;" (click)="copyHoursToAll(i)">
+                                        <i class="fa-solid fa-check-double"></i> Copy to All
                                     </button>
 
                                     <div formArrayName="sessions" class="m-t-8"
                                         *ngFor="let session of getSessions(i).controls; let j = index">
-                                        <div [formGroupName]="j" class="flex gap-4 items-center" *ngIf="session.get('operation')?.value !== 'DELETE'">
+                                        <div [formGroupName]="j" class="flex gap-4 items-center"
+                                            *ngIf="session.get('operation')?.value !== 'DELETE'">
                                             <input type="time" formControlName="start" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
                                                 focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
                                                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"

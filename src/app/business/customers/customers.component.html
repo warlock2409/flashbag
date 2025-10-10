@@ -34,7 +34,7 @@
     </header>
 
     <!-- Controls -->
-    <section class="mt-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+    <section class="mt-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
 
       <!-- Search -->
       <div class="relative flex-1">
@@ -71,16 +71,18 @@
       </div>
     </section>
 
+    <mat-paginator [length]="totalElements" [pageSize]="1" aria-label="Select page" class="mt-2"  (page)="onPageChange($event)">
+    </mat-paginator>
     <!-- Table (Desktop) -->
-    <section class="mt-6 hidden md:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+    <section class="mt-2 hidden md:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
       <div
         class="grid grid-cols-12 px-4 sm:px-6 py-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200">
         <div class="col-span-2">Customer</div>
-        <div class="col-span-3">Company</div>
-        <div class="col-span-2">Joined</div>
-        <div class="col-span-2">Last Seen</div>
-        <div class="col-span-2 text-right">Spend</div>
-        <div class="col-span-1 text-right">Status</div>
+        <div class="col-span-3">Contact</div>
+        <div class="col-span-1">Last Spend</div>
+        <div class="col-span-2 text-right">Total Spend</div>
+        <div class="col-span-2 text-right">Membership</div>
+        <div class="col-span-2 text-right">Expiry</div>
       </div>
 
       <div id="table-body" class="divide-y divide-neutral-100">
@@ -89,28 +91,31 @@
         <div data-role="row" data-customer-id="1021" data-status="active"
           class="grid grid-cols-12 px-4 sm:px-6 py-4 hover:bg-neutral-50 transition-colors">
           <div class="col-span-2 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
+            <i class="fa-solid fa-user text-violet-500" *ngIf="!customer.introduced"></i>
+            <i class="fa-solid fa-user-tag text-green-600" *ngIf="customer.introduced"></i>
             <span class="font-medium text-neutral-900">{{customer.firstName}}</span>
           </div>
-          <div class="col-span-3 text-neutral-700">{{customer.email}}</div>
-          <div class="col-span-2 text-neutral-500">Jul 02, 2025</div>
-          <div class="col-span-2 text-neutral-500">Sep 08, 2025</div>
-          <div class="col-span-2 text-right text-neutral-900">$12,480.00</div>
-          <div class="col-span-1 flex items-center justify-end">
-             <span *ngIf="!customer.active"
-              class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">InActive</span>
-            <span *ngIf="customer.active"
-              class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
+          <div class="col-span-3 text-neutral-700">
+            {{customer.email}}
+            <br>
+            {{customer.contactNumber}}
+          </div>
+          <div class="col-span-1 text-neutral-500">
+            {{ customer?.lastSpendDate || '— — —' }}
+          </div>
+          <div class="col-span-2 text-right text-neutral-900">{{customer.totalSpent | currency:'INR' }}</div>
+          <div class="col-span-2 text-right text-neutral-900">{{customer.membershipName}}</div>
+
+          <div class="col-span-2 text-end">
+            <span *ngIf="!customer.membershipExpiry"
+              class="inline-flex items-center rounded-full bg-yellow-500/15 px-2 py-0.5 text-xs text-black-700 ring-1 ring-inset ring-yellow-500/20">— — —</span>
+            <span *ngIf="customer.membershipExpiry && isExpired(customer.membershipExpiry)"
+              class="inline-flex items-center rounded-full bg-red-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">{{customer.membershipExpiry}}</span>
+            <span *ngIf="customer.membershipExpiry && !isExpired(customer.membershipExpiry)"
+              class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">{{customer.membershipExpiry}}</span>
           </div>
         </div>
         }
-
-
       </div>
     </section>
 
@@ -187,7 +192,7 @@
           </div>
         </div>
         <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$3,200.00</div>
+          <div class="text-neutral-900 font-medium">3,200.00</div>
           <button
             class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
             View
@@ -413,7 +418,8 @@
     </section>
 
     <!-- Empty state -->
-    <div id="empty" class="hidden mt-14 flex flex-col items-center justify-center text-center" *ngIf="customers.length == 0">
+    <div id="empty" class="hidden mt-14 flex flex-col items-center justify-center text-center"
+      *ngIf="customers.length == 0">
       <div class="h-12 w-12 rounded-lg bg-neutral-50 ring-1 ring-inset ring-neutral-200 grid place-items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="inbox"
@@ -433,236 +439,5 @@
       </p>
     </div>
   </div>
-
-  <!-- Pay Modal (kept; not used for customers) -->
-  <div id="pay-modal" class="fixed inset-0 z-50 hidden">
-    <div id="pay-backdrop" class="absolute inset-0 bg-neutral-950/50 backdrop-blur-sm opacity-0 transition-opacity">
-    </div>
-    <div class="relative z-10 flex min-h-full items-end sm:items-center justify-center p-4">
-      <div id="pay-panel"
-        class="w-full max-w-md rounded-xl bg-white ring-1 ring-neutral-200 shadow-xl opacity-0 translate-y-2 sm:translate-y-0 sm:scale-95 transition-all">
-        <div class="p-5 sm:p-6">
-          <div class="flex items-start justify-between">
-            <div>
-              <h3 class="text-lg font-semibold tracking-tight text-neutral-900"
-                style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">Pay Invoice <span
-                  id="pay-invoice-id" class="text-neutral-500">—</span></h3>
-              <p class="mt-1 text-sm text-neutral-600">Enter the payable amount and choose a payment method.</p>
-            </div>
-            <button data-close=""
-              class="ml-3 inline-flex h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-800 hover:bg-neutral-100 ring-1 ring-inset ring-transparent hover:ring-neutral-200 transition-colors"
-              aria-label="Close">
-              <svg data-lucide="x" class="w-4 h-4"></svg>
-            </button>
-          </div>
-
-          <div class="mt-5 space-y-4">
-            <div>
-              <label for="pay-amount" class="block text-sm font-medium text-neutral-700">Payable amount</label>
-              <div class="mt-1 relative">
-                <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-500">$</div>
-                <input id="pay-amount" type="text" inputmode="decimal" placeholder="0.00"
-                  class="w-full rounded-md bg-white pl-7 pr-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 ring-1 ring-inset ring-neutral-200 focus:outline-none focus:ring-neutral-300"
-                  style="font-family: 'Inter', ui-sans-serif, system-ui;">
-              </div>
-            </div>
-
-            <div>
-              <span class="block text-sm font-medium text-neutral-700">Payment method</span>
-              <div id="pay-methods"
-                class="mt-2 inline-flex items-center gap-2 rounded-lg bg-neutral-50 ring-1 ring-inset ring-neutral-200 p-1">
-                <button type="button" data-method="card" aria-pressed="true"
-                  class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-white ring-1 ring-inset ring-transparent aria-pressed:bg-white aria-pressed:text-neutral-900 aria-pressed:ring-neutral-200 transition-colors">
-                  <svg data-lucide="credit-card" class="w-4 h-4"></svg>
-                  Card
-                </button>
-                <button type="button" data-method="bank" aria-pressed="false"
-                  class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-white ring-1 ring-inset ring-transparent aria-pressed:bg-white aria-pressed:text-neutral-900 aria-pressed:ring-neutral-200 transition-colors">
-                  <svg data-lucide="banknote" class="w-4 h-4"></svg>
-                  Bank
-                </button>
-                <button type="button" data-method="wallet" aria-pressed="false"
-                  class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-neutral-700 hover:text-neutral-900 hover:bg-white ring-1 ring-inset ring-transparent aria-pressed:bg-white aria-pressed:text-neutral-900 aria-pressed:ring-neutral-200 transition-colors">
-                  <svg data-lucide="wallet-2" class="w-4 h-4"></svg>
-                  Wallet
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-6 flex items-center justify-end gap-2">
-            <button data-close=""
-              class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm text-neutral-700 ring-1 ring-inset ring-neutral-200 hover:bg-neutral-50 hover:text-neutral-900 transition-colors">
-              Cancel
-            </button>
-            <button id="confirm-pay"
-              class="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-3.5 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors">
-              <svg data-lucide="lock" class="w-4 h-4"></svg>
-              Pay now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Initialize icons with 1.5 stroke width
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) {
-        window.lucide.createIcons({
-          attrs: { 'stroke-width': 1.5 },
-        });
-      }
-    });
-
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const searchInput = document.getElementById('search');
-    const emptyState = document.getElementById('empty');
-    const countActiveEl = document.getElementById('count-active');
-    const countInactiveEl = document.getElementById('count-inactive');
-
-    // Helper: map rows by id, and cards by id
-    const rows = Array.from(document.querySelectorAll('[data-role="row"]'));
-    const cards = Array.from(document.querySelectorAll('[data-role="card"]'));
-    const cardById = new Map(cards.map((c) => [c.dataset.customerId, c]));
-
-    function recalcCounts() {
-      const active = rows.filter((r) => r.dataset.status === 'active').length;
-      const inactive = rows.filter((r) => r.dataset.status === 'inactive').length;
-      countActiveEl.textContent = `(${active})`;
-      countInactiveEl.textContent = `(${inactive})`;
-    }
-
-    function applyFilter() {
-      const activeBtn = document.querySelector('.filter-btn[aria-selected="true"]');
-      const statusFilter = activeBtn?.dataset.filter || 'active';
-      const q = searchInput.value.trim().toLowerCase();
-
-      let anyVisible = false;
-
-      rows.forEach((row) => {
-        const id = row.dataset.customerId;
-        const status = row.dataset.status;
-        const company = row.querySelector(':scope > div:nth-child(2)')?.textContent?.toLowerCase() || '';
-        const name = row.querySelector(':scope > div:nth-child(1) span')?.textContent?.toLowerCase() || '';
-        const matchStatus = status === statusFilter;
-        const matchQuery = !q || company.includes(q) || name.includes(q);
-
-        const show = matchStatus && matchQuery;
-
-        row.classList.toggle('hidden', !show);
-
-        const card = cardById.get(id);
-        if (card) card.classList.toggle('hidden', !show);
-
-        if (show) anyVisible = true;
-      });
-
-      emptyState.classList.toggle('hidden', anyVisible);
-    }
-
-    // Segmented control behavior
-    filterButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach((b) => b.setAttribute('aria-selected', 'false'));
-        btn.setAttribute('aria-selected', 'true');
-        applyFilter();
-      });
-    });
-
-    // Live search
-    searchInput.addEventListener('input', applyFilter);
-
-    // Initialize counts and default view
-    recalcCounts();
-    document.querySelector('.filter-btn[data-filter="active"]')?.setAttribute('aria-selected', 'true');
-    applyFilter();
-
-    // --- Pay Button + Modal (kept; no buttons added for customers) ---
-    function createPayButton(size = 'sm') {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = [
-        'pay-btn',
-        'inline-flex items-center gap-1.5 rounded-md',
-        size === 'xs' ? 'px-2 py-1 text-xs' : 'px-2.5 py-1.5 text-xs',
-        'text-neutral-700 ring-1 ring-inset ring-neutral-200',
-        'hover:bg-neutral-50 hover:text-neutral-900 transition-colors'
-      ].join(' ');
-      btn.innerHTML = '<svg data-lucide="credit-card" class="w-3.5 h-3.5"></svg><span>Pay</span>';
-      return btn;
-    }
-
-    function openPayModal({ invoiceId, amount }) {
-      const modal = document.getElementById('pay-modal');
-      const backdrop = document.getElementById('pay-backdrop');
-      const panel = document.getElementById('pay-panel');
-      const idEl = document.getElementById('pay-invoice-id');
-      const amtEl = document.getElementById('pay-amount');
-
-      idEl.textContent = invoiceId ? `#${invoiceId}` : '—';
-      const cleaned = (amount || '').replace(/[^0-9.]/g, '');
-      amtEl.value = cleaned || '';
-
-      document.querySelectorAll('#pay-methods [data-method]').forEach((b, i) => {
-        b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-      });
-
-      modal.classList.remove('hidden');
-      requestAnimationFrame(() => {
-        backdrop.classList.add('opacity-100');
-        panel.classList.remove('opacity-0', 'translate-y-2', 'sm:scale-95');
-        panel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
-      });
-
-      if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
-    }
-
-    function closePayModal() {
-      const modal = document.getElementById('pay-modal');
-      const backdrop = document.getElementById('pay-backdrop');
-      const panel = document.getElementById('pay-panel');
-
-      backdrop.classList.remove('opacity-100');
-      panel.classList.add('opacity-0', 'translate-y-2', 'sm:scale-95');
-
-      const onEnd = () => {
-        modal.classList.add('hidden');
-        panel.removeEventListener('transitionend', onEnd);
-      };
-      panel.addEventListener('transitionend', onEnd, { once: true });
-    }
-
-    function addPayButtons() {
-      // No pay buttons added because customer statuses are 'active'/'inactive'
-    }
-
-    (function setupPayModal() {
-      const modal = document.getElementById('pay-modal');
-      const methods = document.querySelectorAll('#pay-methods [data-method]');
-      const closeBtns = modal.querySelectorAll('[data-close]');
-
-      methods.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          methods.forEach((b) => b.setAttribute('aria-pressed', 'false'));
-          btn.setAttribute('aria-pressed', 'true');
-        });
-      });
-
-      closeBtns.forEach((b) => b.addEventListener('click', closePayModal));
-      document.getElementById('pay-backdrop').addEventListener('click', closePayModal);
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closePayModal();
-      });
-
-      document.getElementById('confirm-pay').addEventListener('click', () => {
-        closePayModal();
-      });
-    })();
-
-    addPayButtons();
-  </script>
-
 
 </div>

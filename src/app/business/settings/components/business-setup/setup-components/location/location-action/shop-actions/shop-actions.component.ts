@@ -29,6 +29,7 @@ import { OrganizationServiceService } from 'src/app/services/organization-servic
 import { DocumentDto, UploadFile, UploadMediaComponent } from "src/app/components/upload-media/upload-media.component";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
+import { UppyUploadComponent } from "src/app/components/uppy-upload/uppy-upload.component";
 declare const lottie: any;
 
 export interface SessionForm {
@@ -52,8 +53,9 @@ export interface SessionForm {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule, MatSelectModule, MatTooltipModule,
-    UploadMediaComponent
-  ],
+    UploadMediaComponent,
+    UppyUploadComponent
+],
   templateUrl: './shop-actions.component.html',
   styleUrl: './shop-actions.component.scss'
 })

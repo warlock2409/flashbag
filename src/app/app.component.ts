@@ -113,6 +113,8 @@ export interface ResponseDate {
   message: string;
   status: number;
   data: any;
+  totalElements?:number;
+  pageSize?:number;
 }
 
 export interface ServiceResponse<T> { data: any, message: string, status: number }

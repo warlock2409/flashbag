@@ -18,12 +18,13 @@ import { MarketingComponent } from './marketing/marketing.component';
 import { SelectOrganizationComponent } from './pages/select-organization/select-organization.component';
 import { ServiceDetailsComponent } from './settings/components/business-setup/setup-components/service-details/service-details.component';
 import { GymCheckInComponent } from './business-specific/gym-check-in/gym-check-in.component';
+import { ExercisePlanComponent } from './settings/components/business-setup/setup-components/exercise-plan/exercise-plan.component';
 
 const routes: Routes = [
   {
     path: '',
     component: BusinessLayoutComponent,
-    canActivate: [BusinessGuard],
+    canActivateChild: [BusinessGuard],
     children: [
       {
         path: '',
@@ -93,6 +94,10 @@ const routes: Routes = [
               {
                 path: "rental",
                 component: RentalDetailsComponent
+              },
+              {
+                path: "exercisePlan",
+                component: ExercisePlanComponent
               }
             ]
           }

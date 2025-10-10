@@ -74,7 +74,7 @@ export class ShopService {
 
   PostMembershipCheckIn(code:string) {
     let shopCode = localStorage.getItem("shopCode");
-    let url = "http://localhost:8080/api/membership/shop/{shopCode}/customer/{code}".replace("{shopCode}", shopCode!).replace("{code}", code!);
+    let url = "http://localhost:8080/api/membership/shop/{shopCode}/customer/{code}/system/attendance".replace("{shopCode}", shopCode!).replace("{code}", code!);
     return this.Http.post<ServiceResponse<any>>(url,{});
   }
 

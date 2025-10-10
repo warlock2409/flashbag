@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { PosComponent } from '../components/pos/pos.component';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { ShopModel } from 'src/app/models/shop.model';
+import { MembershipSummary, ShopModel, WaitListDto } from 'src/app/models/shop.model';
 import { ResponseDate } from 'src/app/app.component';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,12 @@ import { OrganizationServiceService } from 'src/app/services/organization-servic
   standalone: false
 })
 export class HomeComponent {
-  onShopChange(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
+
+  timeZone = 'Asia/Kolkata';
   dialog = inject(MatDialog);
   dashboardService = inject(DashboardService);
   orgApiService = inject(OrganizationServiceService);
+  swallService = inject(SweatAlertService);
   private sub!: Subscription;
 
 
@@ -37,9 +38,12 @@ export class HomeComponent {
 
   private async initialize() {
     await this.getLocations();
-    await this.getCurrentUser();
-    await this.loadGymDashboard();
+    this.getCurrentUser();
+    this.loadGymDashboard();
+    this.getTrailSessions();
   }
+
+
 
 
   isLoading = false;
@@ -49,11 +53,11 @@ export class HomeComponent {
   currentUser: any;
 
   // Service Model
-  activeMemberships: any;
-  checkIns: any;
+  membershipSummary!: MembershipSummary;
   renewalTrends: any;
-
   hourlyComparision: any[] = [];
+  trailListCustomer: WaitListDto[] = [];
+  checkInPercentage = "0";
 
   getCurrentUser() {
     let user = localStorage.getItem('currentUser');
@@ -61,12 +65,28 @@ export class HomeComponent {
       this.currentUser = JSON.parse(user);
   }
 
-  async subscribeAbly(code: string | undefined) {
-    // await this.ablyService.init();
+  getTrailSessions() {
+    this.orgApiService.getTrailSessions().subscribe({
+      next: (res: any) => {
+        this.trailListCustomer = res.data
+      },
+      error: (err: any) => {
 
-    // this.sub = this.ablyService.messages$.subscribe((msg) => {
-    //   console.log(msg);
-    // });  
+      }
+    })
+  }
+
+
+
+  changeTrailStatus(waitList: WaitListDto, status: string) {
+    this.orgApiService.updateTrailSessionStatus(waitList, status).subscribe({
+      next: (res: any) => {
+        this.swallService.success("Trail Session Updated");
+      },
+      error: (err: any) => {
+
+      }
+    })
   }
 
 
@@ -86,9 +106,8 @@ export class HomeComponent {
 
         if (this.shops.length > 0) {
           this.selectedShop = this.shops[0];
-          localStorage.setItem("shopCode",this.selectedShop.code!);
+          localStorage.setItem("shopCode", this.selectedShop.code!);
           console.log(this.selectedShop);
-          this.subscribeAbly(this.selectedShop.code);
           localStorage.setItem("shopCode", this.selectedShop.code!);
           this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
         }
@@ -114,6 +133,26 @@ export class HomeComponent {
       .join(', ');
   }
 
+  // 🔹 Converts to timezone-specific Date
+  private toTimeZoneDate(date: any): Date | null {
+    if (!date) return null;
+    return moment.tz(date, this.timeZone).toDate();
+  }
+
+  // 🔹 Calculates remaining days (timezone-aware)
+  private getRemainingDays(endDate: Date): number {
+    if (!endDate) return 0;
+
+    // Parse the UTC date first
+    const end = moment.utc(endDate);          // treat input as UTC
+    const now = moment.tz(this.timeZone);    // current time in app timezone
+
+    const diffDays = end.tz(this.timeZone).diff(now, 'days'); // convert endDate to same timezone
+    return Math.max(diffDays, 0);
+  }
+
+
+
   loadDashboard(orgId: number, businessType: string) {
     if (businessType === 'gym') {
       this.loadGymDashboard();
@@ -126,36 +165,56 @@ export class HomeComponent {
 
   loadGymDashboard() {
     forkJoin({
-      activeMemberships: this.dashboardService.getActiveMemberships(),
-      checkIns: this.dashboardService.getCheckIns(),
+      membershipSummary: this.dashboardService.getMembershipSummary(),
       hourlyComparision: this.dashboardService.getHourlyCheckIns(),
       // renewalTrends: this.dashboardService.getRenewalTrends()
     }).subscribe({
       next: (res) => {
-        this.activeMemberships = res.activeMemberships.data;
-        this.checkIns = res.checkIns.data;
-        this.hourlyComparision = res.hourlyComparision.filter(d => d.hour > 4);
+        this.membershipSummary = res.membershipSummary.data;
+        this.hourlyComparision = res.hourlyComparision.filter(d => d.hour >= 4);
+        this.checkInPercentage = this.getCurrentHourComparison(this.hourlyComparision);
+
+        if (this.membershipSummary?.expiringMemberships?.length) {
+          this.membershipSummary.expiringMemberships = this.membershipSummary.expiringMemberships.map((m: any) => {
+            const start = this.toTimeZoneDate(m.startDate);
+            const end = this.toTimeZoneDate(m.endDate);
+            const remainingDays = this.getRemainingDays(end!);
+            return {
+              ...m,
+              startDate: start,
+              endDate: end,
+              remainingDays,
+            };
+          });
+        }
       },
       error: (err) => console.error(err)
     });
   }
 
+  getCurrentHourComparison(attendanceData: any[]): string {
+    const now = new Date();
+    const currentHour = now.getHours(); // 0-23
+
+    // Find the data entry for the current hour
+    const currentData = attendanceData.find(d => currentHour >= d.hour && currentHour < d.hour + 2);
+
+    if (!currentData) {
+      return '-';
+    }
+
+    const today = currentData.todayMembers;
+    const mean = currentData.meanMembers;
+
+    if (mean === 0) return '0%';
+
+    const diffPercentage = ((mean - today) / mean) * 100;
+
+    return `${diffPercentage.toFixed(1)}% less than average`;
+  }
+
   // Chart js 
 
-  chartData = [
-    { hour: 2, todayMembers: 3, meanMembers: 5 },
-    { hour: 1, todayMembers: 3, meanMembers: 5 },
-    { hour: 3, todayMembers: 3, meanMembers: 5 },
-    { hour: 4, todayMembers: 3, meanMembers: 5 },
-    { hour: 5, todayMembers: 3, meanMembers: 5 },
-    { hour: 12, todayMembers: 3, meanMembers: 5 },
 
-    { hour: 6, todayMembers: 3, meanMembers: 5 },
-    { hour: 7, todayMembers: 10, meanMembers: 8 },
-    { hour: 8, todayMembers: 7, meanMembers: 6 },
-    { hour: 9, todayMembers: 12, meanMembers: 9 },
-    { hour: 10, todayMembers: 12, meanMembers: 9 },
-    { hour: 11, todayMembers: 12, meanMembers: 9 },
-  ];
 
 } 

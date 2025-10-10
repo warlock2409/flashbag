@@ -3,16 +3,29 @@
     <div
         class="relative w-58 h-58 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
         <!-- Show selected image if exists -->
-        <img [src]="selected && isImage(selected) ? selected.url : placeholderUrl" alt="Main preview"
-            class="w-full h-full object-cover" />
+        <!-- <img [src]="selected && isImage(selected) ? selected.url : placeholderUrl" alt="Main preview"
+            class="w-full h-full object-cover" /> -->
+
+        <ng-container *ngIf="selected; else placeholder">
+            <!-- Image preview -->
+            <img *ngIf="isImage(selected)" [src]="selected.url" alt="Main preview" class="w-full h-full object-cover" />
+
+            <!-- Video preview -->
+            <video *ngIf="isVideo(selected)" [src]="selected.url" controls class="w-full h-full object-cover"></video>
+        </ng-container>
+
+        <!-- Placeholder when nothing selected -->
+        <ng-template #placeholder>
+            <img [src]="placeholderUrl" alt="Placeholder" class="w-full h-full object-cover" />
+        </ng-template>
 
         <!-- Add Button always visible at bottom -->
         <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-3 py-1 rounded-md shadow cursor-pointer hover:bg-gray-100 flex items-center space-x-1"
-            (click)="fileInput.click()">
+            (click)="openUppy()">
             <i class="fas fa-plus text-gray-500"></i>
             <span class="text-xs text-gray-700">Add Media</span>
         </div>
-        <div
+        <div *ngIf="enableLogo"
             class="absolute top-1 left-1 bg-white px-3 py-1 rounded-md shadow cursor-pointer hover:bg-gray-100 flex items-center gap-1">
             <input type="radio" name="makeLogo" [value]="selected?.id" [checked]="selected?.displayOrder === 1"
                 (change)="makeItLogo(selected)" />
@@ -20,17 +33,29 @@
                 Make it Logo
             </label>
         </div>
-
-        <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)"
-            [attr.multiple]="multiple ? '' : null" />
-
     </div>
 
     <!-- Scrollable Thumbnail Gallery -->
     <div class="flex space-x-2 overflow-x-auto">
         <div *ngFor="let u of uploads" class="w-18 h-18 border rounded-lg flex-shrink-0 relative cursor-pointer"
             [class.border-blue-500]="u === selected" (click)="selectFile(u)">
-            <img [src]="u.url" alt="thumbnail" class="w-full h-full object-cover rounded-lg" />
+            <!-- Image Preview -->
+            <ng-container *ngIf="isImage(u); else videoThumb">
+                <img [src]="u.url" alt="thumbnail" class="w-full h-full object-cover rounded-lg" />
+            </ng-container>
+
+            <!-- Video Thumbnail -->
+            <ng-template #videoThumb>
+                <div class="w-full h-full bg-black rounded-lg flex items-center justify-center relative">
+                    <video [src]="u.url" muted
+                        class="absolute w-full h-full object-cover rounded-lg opacity-60"></video>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-play text-white text-lg opacity-80"></i>
+                    </div>
+                </div>
+            </ng-template>
+
+            <!-- Remove Button -->
             <button type="button"
                 class="absolute top-[1px] right-[1px] text-white bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-xs"
                 (click)="removeFile(u); $event.stopPropagation()">
@@ -38,4 +63,5 @@
             </button>
         </div>
     </div>
+
 </div>

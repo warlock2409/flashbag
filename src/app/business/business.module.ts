@@ -35,7 +35,7 @@ import { MarketingComponent } from './marketing/marketing.component';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { AttendanceChartComponent } from "./components/charts/attendance-chart/attendance-chart.component";
-
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import { AttendanceChartComponent } from "./components/charts/attendance-chart/a
     NzProgressModule,
     NzToolTipModule,
     FormsModule,
-    AttendanceChartComponent
+    AttendanceChartComponent,MatPaginatorModule
 ],
 })
 export class BusinessModule { } 

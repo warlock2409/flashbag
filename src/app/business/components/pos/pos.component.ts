@@ -106,7 +106,7 @@ export class PosComponent {
           next: (res: ResponseDate) => {
             priceDetails = res.data;
             if (item.basePrice != priceDetails.basePrice) {
-              
+
             }
             item.taxRate = priceDetails.taxRate;
             item.basePrice = priceDetails.basePrice;
@@ -169,12 +169,12 @@ export class PosComponent {
   }
 
   get customerName(): string {
-    if (this.selectedCustomer) {
-      return `${this.selectedCustomer.firstName!} 📧 ${this.selectedCustomer.email ? this.selectedCustomer.email! : this.selectedCustomer.contactNumber!}`
+    const c = this.selectedCustomer;
+    if (!c) return "";
 
-    } else {
-      return "";
-    }
+    const name = c.firstName?.trim() || "(Online Customer)";
+    const contact = c.email || c.contactNumber || "(No Contact)";
+    return `${name} 📧 ${contact}`;
   }
   // Customer management
   showNewCustomerForm: boolean = false;
@@ -257,6 +257,8 @@ export class PosComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+
       if (this.isUserDto(result)) {
         this.selectedCustomer = result;
       }
@@ -266,7 +268,7 @@ export class PosComponent {
 
 
   isUserDto(obj: any): obj is Customer {
-    return obj && typeof obj.id === 'number' && typeof obj.firstName === 'string';
+    return obj && typeof obj.id === 'number' && (typeof obj.firstName === 'string' || typeof obj.email === 'string' || typeof obj.contactNumber === 'number');
   }
 
   // Invoice
@@ -301,9 +303,9 @@ export class PosComponent {
         itemId: cart.id,
         quantity: cart.quantity!,
       }
-      if(cartItem.itemType == "MEMBERSHIPS"){
+      if (cartItem.itemType == "MEMBERSHIPS") {
         // const timestamp = new Date("2025-09-08").getTime();
-       cartItem.startDate = cart.startDate?.getTime();
+        cartItem.startDate = cart.startDate?.getTime();
       }
       invoice.items.push(cartItem);
     });
@@ -336,9 +338,8 @@ export class PosComponent {
       cancelButtonText: "Keep Open"
     }).then((result) => {
       if (result.isConfirmed) {
-        // Fire some confetti when proceeding to payment
-        // Swal.fire("Payment initiated!", "", "success");
-        // Add payment logic here
+        this.handleAction("Issue Invoice", this.invoice);
+        this.handleAction("Record Payment", this.invoice);
       } else {
         // Swal.fire("Action cancelled", "", "warning");
         this.dialogRef.close();
@@ -419,7 +420,7 @@ export class PosComponent {
     DRAFT: ['Update Invoice', 'Issue Invoice', 'Cancel Invoice'],
     ISSUED: ['Record Payment', 'Cancel Invoice'],
     PARTIALLY_PAID: ['Record Payment', 'Cancel Invoice'],
-    PAID: ['Download Invoice', 'Refund'],
+    PAID: [], // 'Download Invoice', 'Refund'
     CANCELLED: []
   };
 
@@ -488,7 +489,14 @@ export class PosComponent {
 
 
   cancelInvoice(invoice: any, status: string) {
-    console.log('Cancelling invoice', invoice);
+    this.shopService.updateInvoiceStatus(invoice.id, status).subscribe({
+      next: (res: ResponseDate) => {
+        this.invoice = res.data;
+      },
+      error: (err: any) => {
+
+      }
+    })
   }
 
   recordPayment(invoice: any) {

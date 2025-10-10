@@ -34,18 +34,6 @@
                         <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
                             <ng-template matStepLabel>Select Plan</ng-template>
                             <!-- Business Model -->
-                            <div>
-                                <p>Select Your Primary Business Type</p>
-                                <div class="filter-chips">
-                                    <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
-                                        <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.name"
-                                            [selected]="selectedFilter === filter.name">
-                                            {{filter.name}}
-                                        </mat-chip-option>
-                                    </mat-chip-listbox>
-                                </div>
-                            </div>
-
 
                             <div class="m-4 flex justify-center flex-wrap gap-4 overflow-y-auto max-h-[70vh] pb-16">
                                 @for (plan of businessPlans; track $index) {
@@ -71,7 +59,20 @@
 
                                         <div class="border-t border-gray-200 px-8 py-6 bg-gray-50">
                                             <h4 class="font-semibold text-gray-800 mb-4">What's included:</h4>
-                                            <ul class="space-y-3">
+                                            <ul class="space-y-3" *ngIf="plan">
+                                                <li *ngIf="plan.branchLimit" class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">{{ plan.branchLimit
+                                                        }} Business Branch</span>
+                                                </li>
+                                                <li *ngIf="plan.staffLimit" class="flex items-center">
+                                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                                    <span class="text-gray-700">{{ plan.staffLimit
+                                                        }} Staff</span>
+                                                </li>
+                                            </ul>
+
+                                            <ul class="space-y-3" *ngIf="plan.planBusinessModelConfigs">
                                                 @for (config of plan.planBusinessModelConfigs; track $index) {
                                                 <li *ngIf="config.checkInLimit !== null" class="flex items-center">
                                                     <i class="fas fa-check text-green-500 mr-3"></i>
@@ -107,7 +108,6 @@
                                                     </span>
                                                 </li>
                                                 }
-
                                             </ul>
                                         </div>
                                     </ng-container>
@@ -119,6 +119,41 @@
 
                         <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
                             <!-- Add-ons section -->
+                            <ng-template matStepLabel>Select Business Model</ng-template>
+
+                            <div>
+                                <p>Select Your Primary Business Type</p>
+                                <div class="filter-chips">
+                                    <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
+                                        <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.name"
+                                            [selected]="selectedFilter === filter.name">
+                                            {{filter.name}}
+                                        </mat-chip-option>
+                                    </mat-chip-listbox>
+                                </div>
+                                <div class="m-24">
+                                    <div *ngIf="selectedFilter == 'Service'">
+                                        <p>Businesses that provide professional services to customers rather than
+                                            physical
+                                            products.</p>
+                                        <p>Offering expertise, care, or experiences tailored to meet client needs.</p>
+                                        <p>Focusing on delivering value through services, convenience, and quality
+                                            experiences.</p>
+                                        <p>Companies that help clients solve problems or enhance their lives through
+                                            specialized services.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button mat-flat-button (click)="stepper.previous()">Back</button>
+                                <button mat-flat-button matStepperNext>Next</button>
+                            </div>
+                        </mat-step>
+
+
+
+                        <mat-step>
                             <ng-template matStepLabel>Select Add-ons</ng-template>
 
                             <div class="px-8 py-6 bg-white" style="flex: 1;">
@@ -149,17 +184,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-end">
-                                <button mat-flat-button (click)="stepper.previous()">Back</button>
-                                <button mat-flat-button matStepperNext>Next</button>
-                            </div>
-                        </mat-step>
-
-
-
-                        <mat-step>
-                            <ng-template matStepLabel>Done</ng-template>
-                            <p>You are now done.</p>
                             <div>
                                 <button mat-button matStepperPrevious>Back</button>
                                 <button mat-button (click)="stepper.reset()">Reset</button>
