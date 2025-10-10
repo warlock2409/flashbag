@@ -8,9 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "resolutions": {
-    "lightningcss": ">=1.0.0 <2.0.0"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.2.15",
@@ -67,5 +64,11 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "resolutions": {
+    "lightningcss": ">=1.0.0 <2.0.0"
   }
 }
