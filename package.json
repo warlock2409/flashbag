@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "LIGHTNINGCSS_NO_NATIVE=1 ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -39,6 +39,7 @@
     "ng-zorro-antd": "^19.3.1",
     "ng2-charts": "^8.0.0",
     "ngx-uploadx": "^7.0.1",
+    "nvm": "^0.0.4",
     "postcss": "^8.5.6",
     "qrcode": "^1.5.4",
     "qrcode-art": "^0.0.1-beta",
