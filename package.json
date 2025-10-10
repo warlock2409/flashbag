@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "LIGHTNINGCSS_NO_NATIVE=1 ng build",
+    "build": "set LIGHTNINGCSS_NO_NATIVE=1 ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
