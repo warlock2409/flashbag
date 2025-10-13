@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SweatAlertService {
-  
 
-  constructor() { }
+
+  constructor(private notification: NzNotificationService) { }
+
+
+  createNotification(type: string, title: string, message: string): void {
+    this.notification.create(
+      type,
+      title,
+      message
+    );
+  }
 
   success(message: string) {
     Swal.fire({

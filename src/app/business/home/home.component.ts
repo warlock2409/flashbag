@@ -7,6 +7,7 @@ import { ResponseDate } from 'src/app/app.component';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import * as moment from 'moment-timezone';
+import { AblyService } from 'src/app/services/ably.service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ export class HomeComponent {
     // add more mappings here
   ])
 
-  constructor() {
+  constructor(private ablyService: AblyService,) {
     this.initialize();
   }
 
@@ -107,8 +108,9 @@ export class HomeComponent {
         if (this.shops.length > 0) {
           this.selectedShop = this.shops[0];
           localStorage.setItem("shopCode", this.selectedShop.code!);
-          console.log(this.selectedShop);
-          localStorage.setItem("shopCode", this.selectedShop.code!);
+          this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
+          this.ablyService.setShopCode(this.selectedShop.code!);
+
           this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
         }
       },
