@@ -65,3 +65,13 @@ export enum OperationType {
   DELETE = 'DELETE',
   NONE = 'NONE' // untouched
 }
+
+export interface BusinessNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  timestamp: Date;
+  read: boolean;
+  data?: any;
+}
