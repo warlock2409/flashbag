@@ -19,13 +19,13 @@ export class SweatAlertService {
     });
   }
 
-  error(message: string) {
+  error(message: string, timer=1500) {
     Swal.fire({
       position: "top-end",
       icon: "error",
       title: message,
       showConfirmButton: false,
-      timer: 1500
+      timer: timer
     });
   }
 
@@ -36,4 +36,6 @@ export class SweatAlertService {
       html: errors
     });
   }
+
+
 }

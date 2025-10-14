@@ -1,3 +1,12 @@
+<div class="overlay" *ngIf="!shopCode" style="color: white;">
+  <h1 class="text-white!">
+    “Get closer than ever to your customers.”
+  </h1>
+  <h3 class="text-white!">
+    Start by creating your shop to build lasting connections with your customers.
+  </h3>
+</div>
+
 <div class="min-h-screen antialiased text-neutral-900 bg-white">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
     <!-- Top Bar -->
@@ -71,7 +80,8 @@
       </div>
     </section>
 
-    <mat-paginator [length]="totalElements" [pageSize]="1" aria-label="Select page" class="mt-2"  (page)="onPageChange($event)">
+    <mat-paginator [length]="totalElements" [pageSize]="1" aria-label="Select page" class="mt-2"
+      (page)="onPageChange($event)">
     </mat-paginator>
     <!-- Table (Desktop) -->
     <section class="mt-2 hidden md:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
@@ -108,7 +118,8 @@
 
           <div class="col-span-2 text-end">
             <span *ngIf="!customer.membershipExpiry"
-              class="inline-flex items-center rounded-full bg-yellow-500/15 px-2 py-0.5 text-xs text-black-700 ring-1 ring-inset ring-yellow-500/20">— — —</span>
+              class="inline-flex items-center rounded-full bg-yellow-500/15 px-2 py-0.5 text-xs text-black-700 ring-1 ring-inset ring-yellow-500/20">—
+              — —</span>
             <span *ngIf="customer.membershipExpiry && isExpired(customer.membershipExpiry)"
               class="inline-flex items-center rounded-full bg-red-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">{{customer.membershipExpiry}}</span>
             <span *ngIf="customer.membershipExpiry && !isExpired(customer.membershipExpiry)"

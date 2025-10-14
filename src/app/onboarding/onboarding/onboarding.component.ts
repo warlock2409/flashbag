@@ -73,6 +73,7 @@ export class OnboardingComponent {
         }
       }, error: (err: any) => {
         console.log(err);
+        this.sweatAlert.error(err.error.message + "\n Try Login or Different Organization Name",5000);
       }
     })
   }

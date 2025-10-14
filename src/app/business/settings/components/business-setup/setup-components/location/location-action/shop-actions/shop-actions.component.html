@@ -12,7 +12,40 @@
                 <mat-icon style="color: lightcoral;">cancel</mat-icon>
             </button>
         </div>
+        @if (this.businessModels.length == 0) {
+        <ng-container>
+            <div class="px-2 md:px-10 lg:px-15 xl:px-20 py-6">
+                <div class="p-2 md:p-4">
+                    <mat-card-title class="text-end">What types of business activities does your organization
+                        offer?</mat-card-title>
+                </div>
 
+                <div class="mb-4 p-4">
+                    Select the modules that match your organization's operations. This helps us configure your workspace
+                    appropriately.
+                </div>
+
+                <div class="space-y-4 p-4">
+                    <!-- Marketing -->
+                    @for (model of allBusinessModels; track model.id) {
+                    <div class="flex items-start space-x-3">
+                        <mat-checkbox [(ngModel)]="model.checked"></mat-checkbox>
+                        <div>
+                            <div class="font-semibold">{{model.name}}</div>
+                            <div class="text-sm text-gray-600">
+                                {{model.description}}
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <div class="flex justify-end">
+                        <button mat-stroked-button (click)="submitBusinessActivities()"
+                            style="background-color: #a684ff; color: white;">Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        } @else{
         <div class="flex-1 overflow-y-auto p-6 space-y-6">
 
             <mat-stepper orientation="vertical" [linear]="isLinear" #stepper style="margin: auto;width: 700px;"
@@ -271,5 +304,8 @@
                     : "Go Online"}}</button>
             </div>
         </div>
+        }
+
+
     </div>
 </div>

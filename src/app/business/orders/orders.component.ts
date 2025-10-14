@@ -38,6 +38,7 @@ export class OrdersComponent {
   invoiceList: InvoiceModel[] = []
   private searchTimeout: any;
   searchQuery = '';
+  shopCode!:any;
 
   // filters DRAFT, ISSUED, PARTIALLY_PAID, PAID, CANCELLED
   // ============================================================
@@ -95,9 +96,12 @@ export class OrdersComponent {
   }
 
   ngOnInit() {
+    this.shopCode = localStorage.getItem("shopCode");
     // Get all Invoices by default Type open
-    this.getAllInvoicesByShop();
-    this.getInvoiceStatusCount();
+    if (this.shopCode) {
+      this.getAllInvoicesByShop();
+      this.getInvoiceStatusCount();
+    }
   }
 
   ngOnDestroy() {
@@ -163,7 +167,7 @@ export class OrdersComponent {
       height: '100%',
       panelClass: 'full-screen-dialog',
       disableClose: true,
-      data: { existingInvoice: invoice}
+      data: { existingInvoice: invoice }
     });
 
     dialogRef.afterClosed().subscribe(result => {

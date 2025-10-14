@@ -30,7 +30,8 @@ export class GymCheckInComponent {
   }
 
   generateQRCode() {
-    QRCode.toCanvas(this.qrCanvas.nativeElement, 'Hello World', { width: 400 })
+    let shopCode = localStorage.getItem("shopCode");
+    QRCode.toCanvas(this.qrCanvas.nativeElement, shopCode, { width: 400 })
       .catch((err: any) => console.error(err));
   }
 

@@ -20,6 +20,8 @@ export interface UploadFileData {
   styleUrl: './uppy-upload.component.scss'
 })
 export class UppyUploadComponent {
+  baseUrl= "https://raijin.onrender.com/";
+
 
   @ViewChild('uppyDashboard', { static: true }) uppyDashboard!: ElementRef;
   uppy!: Uppy;
@@ -54,7 +56,7 @@ export class UppyUploadComponent {
         try {
           // 1️⃣ Get presigned URL
           const presign: any = await firstValueFrom(
-            this.http.get<{ url: string }>(`http://localhost:9000/presign?fileName=${file.name}`)
+            this.http.get<{ url: string }>(`${this.baseUrl}presign?fileName=${file.name}`)
           );
           const presignedUrl = presign.url;
 

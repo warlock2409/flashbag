@@ -55,6 +55,9 @@ export class ShopService {
 
   getAllInvoicesByShop(selectTab: string, searchQuery: string = "") {
     let shopCode = localStorage.getItem("shopCode");
+    if (shopCode) {
+      throw new Error('Shop Not Found');
+    }
     let url = "http://localhost:8080/api/invoices/shop/{shopCode}".replace("{shopCode}", shopCode!);
     if (selectTab) {
       url = url + "?invoiceStatus=" + selectTab;
@@ -72,10 +75,10 @@ export class ShopService {
   }
 
 
-  PostMembershipCheckIn(code:string) {
+  PostMembershipCheckIn(code: string) {
     let shopCode = localStorage.getItem("shopCode");
     let url = "http://localhost:8080/api/membership/shop/{shopCode}/customer/{code}/system/attendance".replace("{shopCode}", shopCode!).replace("{code}", code!);
-    return this.Http.post<ServiceResponse<any>>(url,{});
+    return this.Http.post<ServiceResponse<any>>(url, {});
   }
 
 }

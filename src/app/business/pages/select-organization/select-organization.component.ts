@@ -16,6 +16,9 @@ export class SelectOrganizationComponent {
     const storageCurrentUser = localStorage.getItem('currentUser');
     if (storageCurrentUser) {
       this.user = JSON.parse(storageCurrentUser);
+      if(this.user.organizationDto ?.length == 1){
+        this.organizationSelected(this.user.organizationDto[0]);
+      }
     }
   }
 
@@ -23,4 +26,5 @@ export class SelectOrganizationComponent {
     localStorage.setItem('orgCode', org.code!);
     this.router.navigate(['/business/home']);
   }
+
 }

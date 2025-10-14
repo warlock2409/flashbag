@@ -23,13 +23,16 @@ export class CustomersComponent {
   totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
+  shopCode;
 
   constructor(public dialog: MatDialog, private timeZoneHelper: TimeZoneHelperService) {
-    this.getCustomerByOrg();
+    this.shopCode = localStorage.getItem("shopCode");
+    if (this.shopCode)
+      this.getCustomerByOrg();
   }
 
   getCustomerByOrg() {
-    this.orgService.getAllCustomerByOrg(this.pageIndex,this.pageSize).subscribe({
+    this.orgService.getAllCustomerByOrg(this.pageIndex, this.pageSize).subscribe({
       next: (res: ResponseDate) => {
         this.customers = res.data.map((customer: any) => {
           if (customer.expiry) {

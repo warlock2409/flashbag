@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { ResponseDate, ServiceResponse } from '../app.component';
 import { CreateOrganizationPlanDto } from '../business/components/point-of-sale/point-of-sale.component';
 
+
+
 @Injectable({
   providedIn: 'root'
 })

@@ -18,20 +18,54 @@
     <div class="sparkle"></div>
   </div>
 
+  <div class="relative z-50 p-6 animate-slide-right delay-200 " *ngIf="!this.selectedShop">
+    <h1 class="!text-white">
+      You’ve just taken the first step toward building something extraordinary.
+      Let’s start by creating your shop
+    </h1>
+    <div
+      class="w-108 glass-card glass-card-hover rounded-2xl p-6 animate-scale-in delay-500 transition-all duration-500 group relative overflow-hidden card-hover-gradient cursor-pointer"
+      style="--hover-gradient: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%)">
+      <div class="relative z-10">
+        <div class="flex items-start justify-between mb-6">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg animate-pulse-glow hover-scale cursor-pointer">
+            <i class="fa-solid fa-store text-xl text-white icon-hover"></i>
+          </div>
+          <div class="flex items-center space-x-2 group-hover:scale-110 transition-transform">
+            <span
+              class="text-xs text-green-400 bg-green-500/20 px-2 py-1 rounded-full font-medium hover:bg-violet-500/30 transition-colors">Set
+              Up</span>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="mb-0! text-lg text-white font-medium group-hover:text-white/80 transition-colors">
+            Create your first shop
+          </p>
+          <span>Add your business location and base settings.</span>
+          <div class="flex justify-end mt-8">
+            <button (click)="createShop()"
+              class="text-sm text-blue-400 cursor-pointer hover:text-blue-300 transition-all bg-violet-500/50 px-4 py-2 rounded-xl hover:bg-violet-500 hover:scale-105 button-hover">Create
+              Shop
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Enhanced Header -->
-  <header class="relative z-50 p-6 animate-slide-right delay-200">
+  <header class="relative z-50 p-6 animate-slide-right delay-200" *ngIf="selectedShop">
     <div class="flex items-center justify-between max-w-7xl mx-auto">
       <div class="flex items-start space-x-4 animate-scale-in delay-300">
         <div class="relative">
           <div
             class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg animate-pulse-glow hover-scale cursor-pointer">
-
-
             <i class="fa-solid fa-store text-xl text-white icon-hover"></i>
           </div>
         </div>
         <div>
-          <h1 *ngIf="selectedShop"
+          <h1
             class="!m-0 !text-2xl !font-bold !tracking-tight !bg-gradient-to-r !from-white !to-white/80 !bg-clip-text !text-transparent !text-hover cursor-pointer">
             {{selectedShop.name}}
           </h1>
@@ -43,8 +77,10 @@
     </div>
   </header>
 
+
+
   <!-- Enhanced Main Content -->
-  <main class="relative z-40 px-6 pb-6">
+  <main class="relative z-40 px-6 pb-6" *ngIf="selectedShop">
     <div class="max-w-7xl mx-auto">
       <!-- Enhanced Welcome Section -->
       <div class="mb-12 animate-slide-up delay-300">
@@ -346,7 +382,8 @@
                   </div>
                   <div>
                     <span
-                      class="font-medium text-md hover:text-purple-300 transition-colors cursor-pointer">{{trail.serviceName}} - {{trail.customerDto?.firstName
+                      class="font-medium text-md hover:text-purple-300 transition-colors cursor-pointer">{{trail.serviceName}}
+                      - {{trail.customerDto?.firstName
                       ?? "Online Customer"}}</span>
                     <p class="text-xs text-white/60 m-0" *ngIf="trail.customerDto?.email">
                       <span class="number-digit" style="--digit-delay: 1s">{{trail.customerDto?.email}}</span>

@@ -7,6 +7,7 @@ import { ResponseDate } from 'src/app/app.component';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import * as moment from 'moment-timezone';
+import { ShopActionsComponent } from '../settings/components/business-setup/setup-components/location/location-action/shop-actions/shop-actions.component';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ import * as moment from 'moment-timezone';
   standalone: false
 })
 export class HomeComponent {
+
 
   timeZone = 'Asia/Kolkata';
   dialog = inject(MatDialog);
@@ -76,8 +78,6 @@ export class HomeComponent {
     })
   }
 
-
-
   changeTrailStatus(waitList: WaitListDto, status: string) {
     this.orgApiService.updateTrailSessionStatus(waitList, status).subscribe({
       next: (res: any) => {
@@ -107,15 +107,26 @@ export class HomeComponent {
         if (this.shops.length > 0) {
           this.selectedShop = this.shops[0];
           localStorage.setItem("shopCode", this.selectedShop.code!);
-          console.log(this.selectedShop);
-          localStorage.setItem("shopCode", this.selectedShop.code!);
           this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
+        } else {
+
         }
       },
       error: (err: any) => {
         this.isLoading = false;
       }
     })
+  }
+
+  createShop() {
+    const dialogRef = this.dialog.open(ShopActionsComponent, {
+      data: { isUpdate: false }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed with:', result);
+      this.getLocations();
+    });
   }
 
   formatAddress(address: any): string {

@@ -274,7 +274,6 @@ export class NavbarComponent {
   getInitials(): string {
     const email = this.getUserEmail();
     if (!email) return 'U';
-
     // Split email and get first letter of each part before @
     const nameParts = email.split('@')[0].split('.');
     return nameParts.map(part => part[0].toUpperCase()).join('');
@@ -302,6 +301,7 @@ export class NavbarComponent {
       disableClose: true,
     });
   }
+
   openCheckIn() {
     // Navigate to the gym check-in page
     this.router.navigate(['/business/gym-checkin']);
@@ -321,6 +321,7 @@ export class NavbarComponent {
   logout() {
     this.authService.logout();
     this.router.navigate(['/']);
+    localStorage.clear();
   }
 
   openProfile() {

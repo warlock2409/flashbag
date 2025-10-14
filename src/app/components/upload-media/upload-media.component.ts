@@ -38,6 +38,8 @@ export interface UploadFile {
 })
 export class UploadMediaComponent {
 
+  baseUrl= "https://raijin.onrender.com/";
+
 
   constructor(private http: HttpClient, public dialog: MatDialog, private swalService: SweatAlertService) { }
 
@@ -143,7 +145,7 @@ export class UploadMediaComponent {
 
   uploadToR2(upload: UploadFile) {
     // Replace with your R2 upload + presign logic
-    this.http.get<{ url: string }>(`http://localhost:9000/presign?fileName=${upload.filename}`)
+    this.http.get<{ url: string }>(`${this.baseUrl}presign?fileName=${upload.filename}`)
       .subscribe({
         next: (data) => {
           const presignedUrl = data.url;
@@ -176,7 +178,7 @@ export class UploadMediaComponent {
   }
 
   UpdateDocumentAttachment(document: DocumentDto) {
-    let url = `http://localhost:9000/document`;
+    let url = `${this.baseUrl}document`;
 
     const userJson = localStorage.getItem('currentUser');
     if (!userJson) throw new Error("User not found in localStorage");
@@ -209,7 +211,7 @@ export class UploadMediaComponent {
     this.uploads = this.uploads.filter(u => u !== upload);
     let documentId = upload.documentId;
     let attachmentId = upload.id;
-    let url = `http://localhost:9000/document/${documentId}/attachment/${attachmentId}`
+    let url = `${this.baseUrl}document/${documentId}/attachment/${attachmentId}`
     this.http.delete(url).subscribe({
       next: () => {
         console.log(`Deleted attachment ${attachmentId} from document ${documentId}`);
@@ -226,7 +228,7 @@ export class UploadMediaComponent {
   }
 
   makeItLogo(selectedImage: UploadFile | undefined) {
-    this.http.get<{ url: string }>(`http://localhost:9000/document/${selectedImage?.documentId}/attachment/${selectedImage?.id}/makeItLogo`)
+    this.http.get<{ url: string }>(`${this.baseUrl}document/${selectedImage?.documentId}/attachment/${selectedImage?.id}/makeItLogo`)
       .subscribe({
         next: (data) => {
         },
