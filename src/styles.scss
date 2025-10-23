@@ -8,9 +8,18 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import "ng-zorro-antd/ng-zorro-antd.min.css";
 
-
-
-
+// Add xs breakpoint for Tailwind
+@layer utilities {
+  @variants responsive {
+    .xs\:grid-cols-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    
+    .xs\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
 
 // Global styles
 html,
@@ -122,24 +131,6 @@ body {
 
 .w-50 {
   width: 50%;
-}
-
-.mdc-list-item__primary-text {
-  display: flex;
-  margin-left: 16px !important;
-  width: 100% !important;
-}
-
-.mat-expansion-panel-body {
-  padding: 0 16px 16px !important;
-}
-
-.text-align-center {
-  text-align: center;
-}
-
-.width-100 {
-  width: 100%;
 }
 
 .m-0 {
@@ -267,5 +258,193 @@ input:-webkit-autofill:active {
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+// Responsive helper classes
+.hide-mobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @media (max-width: 1024px) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  
+  @media (max-width: 768px) {
+    display: block !important;
+  }
+}
+
+.show-tablet {
+  display: none !important;
+  
+  @media (max-width: 1024px) {
+    display: block !important;
+  }
+}
+
+.responsive-flex {
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.responsive-flex-row {
+  flex-direction: row;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.responsive-full-width {
+  width: auto;
+  
+  @media (max-width: 768px) {
+    width: 100% !important;
+  }
+}
+
+.responsive-padding {
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+}
+
+.responsive-margin {
+  margin: 20px;
+  
+  @media (max-width: 768px) {
+    margin: 10px;
+  }
+}
+
+// Global responsive spacing for navbar
+.navbar-spacing {
+  padding-top: 100px !important;
+  
+  @media (max-width: 1024px) {
+    padding-top: 100px !important;
+  }
+  
+  @media (max-width: 768px) {
+    padding-top: 90px !important;
+  }
+}
+
+// Responsive utility classes for consistent spacing
+.responsive-pt-large {
+  padding-top: 100px;
+  
+  @media (max-width: 768px) {
+    padding-top: 90px;
+  }
+}
+
+.responsive-pt-medium {
+  padding-top: 80px;
+  
+  @media (max-width: 768px) {
+    padding-top: 70px;
+  }
+}
+
+.responsive-pt-small {
+  padding-top: 60px;
+  
+  @media (max-width: 768px) {
+    padding-top: 50px;
+  }
+}
+
+// Responsive typography adjustments
+.responsive-text-large {
+  font-size: 1.5rem;
+  
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.125rem;
+  }
+}
+
+.responsive-text-medium {
+  font-size: 1rem;
+  
+  @media (max-width: 480px) {
+    font-size: 0.875rem;
+  }
+}
+
+.responsive-text-small {
+  font-size: 0.875rem;
+  
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
+}
+
+// Responsive button adjustments
+.responsive-button {
+  padding: 8px 16px;
+  
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 4px 8px;
+    font-size: 0.8125rem;
+  }
+}
+
+// Responsive card adjustments
+.responsive-card {
+  border-radius: 12px;
+  
+  @media (max-width: 768px) {
+    border-radius: 8px;
+  }
+}
+
+// Utility class for horizontal scrolling filters
+.horizontal-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  // Hide scrollbar but keep functionality
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scroll-fade {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 1;
   }
 }

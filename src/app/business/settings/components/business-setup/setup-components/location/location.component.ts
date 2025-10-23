@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzImageModule } from 'ng-zorro-antd/image';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -27,6 +27,7 @@ import { ResponseDate } from 'src/app/app.component';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ShopActionsComponent } from "./location-action/shop-actions/shop-actions.component";
 import { MatDialog } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-location',
   standalone: true,
@@ -46,11 +47,21 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './location.component.scss'
 })
 export class LocationComponent {
-
+  isMobileView = false;
   shops: ShopModel[] = [];
 
   constructor(private i18n: NzI18nService, private route: ActivatedRoute, private orgApiService: OrganizationServiceService) {
     this.i18n.setLocale(en_US);
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
   }
 
   fallback = 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHY4eXlkdHhxZWQwNHozb2Z0cHEwZG42OWpsMWw1NWQ2NzZsZWRtdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Xf7dN80WrC7PsoM6H6/giphy.gif';
@@ -73,8 +84,6 @@ export class LocationComponent {
     //     this.getLocations(this.selectedModel);
     // });
   }
-
-
 
   getLocations() {
     this.isLoading = true;
@@ -122,8 +131,6 @@ export class LocationComponent {
       .filter(Boolean) // remove null/undefined
       .join(', ');
   }
-
-
 
   handleValueChange(e: string | number): void {
     console.log(e);
@@ -255,7 +262,4 @@ export interface SegmentData {
       method: string;
     };
   };
-
-
 }
-

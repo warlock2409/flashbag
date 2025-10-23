@@ -1,4 +1,4 @@
-<div>
+<div class="location-container">
 
     <nz-card nzTitle="Manage Locations" [nzExtra]="addTemplate">
         <p>Manage info and preferences of locations within your business.</p>
@@ -25,37 +25,33 @@
         </div>
 
         }@else {
-        <div class="grid grid-cols-1 gap-4">
-            <div *ngFor="let shop of shops"
-                class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
-                <!-- Left: Image -->
-                <div class="flex-shrink-0 h-full p-4">
-                    <img class="w-48 h-45 object-cover border rounded-sm" [src]="shop.image" alt="{{ shop.name }}" />
+        <div class="locations-container">
+            <div *ngFor="let shop of shops" class="location-card">
+                <!-- Image -->
+                <div class="location-image-container">
+                    <img class="location-image" [src]="shop.image" alt="{{ shop.name }}" />
                 </div>
 
-                <!-- Right: Content -->
-                <div class="flex flex-col justify-between p-5 flex-1">
-                    <div>
-                        <h3 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white flex justify-between items-center">
+                <!-- Content -->
+                <div class="location-content">
+                    <div class="location-header">
+                        <h3 class="location-name">
                             {{ shop.name }}
-                            <span
-                                class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-indigo-900 dark:text-indigo-300">{{shop.primaryIndustry.name}}</span>
                         </h3>
-                        <p class="mb-3 text-sm font-normal text-gray-700 dark:text-gray-400">
-                            {{ shop.address }}
-                        </p>
+                        <span class="location-industry-tag">
+                            {{shop.primaryIndustry.name}}
+                        </span>
                     </div>
+                    <p class="location-address">
+                        {{ shop.address }}
+                    </p>
 
                     <!-- Buttons -->
-                    <div class="flex gap-2 justify-end mt-3">
-                        <button mat-raised-button style="background-color: #00b1c3; color: white;" 
+                    <div class="location-actions">
+                        <button mat-raised-button class="edit-button" 
                             (click)="editLocation(shop)">
                             Edit
                         </button>
-                        <!-- <button mat-raised-button style="background-color: #a3a5b2; color: white;"
-                            (click)="openPanel('VIEW_SHOP')">
-                            View
-                        </button> -->
                     </div>
                 </div>
             </div>
@@ -63,7 +59,6 @@
         }
 
     </nz-card>
-
 
     <ng-template #action>
         <button mat-stroked-button nz-popover [(nzPopoverVisible)]="visible" (nzPopoverVisibleChange)="change($event)"
@@ -75,8 +70,6 @@
             <button>Delete</button>
         </ng-template>
     </ng-template>
-
-
 
     <ng-template #addTemplate>
         <a (click)="createLocation()">Create</a>

@@ -48,7 +48,6 @@ export class BusinessLayoutComponent {
       this.sidenavContainer.updateContentMargins();
     }, 0);
     this.notification.createNotification("success", "New Waitlist", "A new waitlist has been created.");
-    this.ablyService.publish('BIFITN549', 'waitlistCreated', { message: 'New waitlist created' });
     console.log('Publishing to Ably');
   }
 

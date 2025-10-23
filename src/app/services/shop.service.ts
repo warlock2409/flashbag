@@ -55,7 +55,7 @@ export class ShopService {
 
   getAllInvoicesByShop(selectTab: string, searchQuery: string = "") {
     let shopCode = localStorage.getItem("shopCode");
-    if (shopCode) {
+    if (!shopCode) {
       throw new Error('Shop Not Found');
     }
     let url = "http://localhost:8080/api/invoices/shop/{shopCode}".replace("{shopCode}", shopCode!);

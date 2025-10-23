@@ -1,3 +1,143 @@
 .filter-chips {
-    margin: 20px 0;
+  margin: 20px 0;
+}
+
+.setup-container {
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    max-width: 95%;
   }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+}
+
+.filter-chips-container {
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 5px;
+
+    ::ng-deep .mat-mdc-chip-set {
+      min-width: max-content;
+    }
+  }
+}
+
+// Added class for breadcrumb spacing adjustment
+.breadcrump-spacing {
+  @media (max-width: 768px) {
+    margin-top: -10px; // Pull breadcrumb higher on mobile with negative margin
+    margin-bottom: 5px;
+  }
+}
+
+.content-container {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0;
+  }
+}
+
+.mobile-menu-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    top: -45px;
+    left: 0px;
+  }
+}
+
+.sidebar-menu {
+  width: 230px;
+  min-width: 230px;
+
+  @media (max-width: 1024px) {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: unset;
+    position: relative;
+    z-index: 10;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-top: 5px;
+
+    &.mobile-menu-open {
+      display: block;
+    }
+  }
+}
+
+.main-content {
+  flex: 1;
+  width: 1000px;
+  max-width: 1000px;
+
+  @media (max-width: 1200px) {
+    width: calc(100% - 250px);
+    max-width: calc(100% - 250px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 5px;
+  }
+}
+
+.footer {
+  height: 5rem;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    height: 3rem;
+  }
+}
+
+// Responsive menu adjustments
+::ng-deep .ant-menu {
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+// Add overlay effect for mobile menu
+@media (max-width: 768px) {
+  .sidebar-menu.mobile-menu-open~.main-content::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 5;
+  }
+}

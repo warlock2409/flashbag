@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
+import { MatIconModule } from '@angular/material/icon';
+
 @Component({
   selector: 'app-business-setup',
   standalone: true,
@@ -21,17 +23,42 @@ import { OrganizationServiceService } from 'src/app/services/organization-servic
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatButtonModule, MatSidenavModule,
+    MatButtonModule, 
+    MatSidenavModule,
+    MatIconModule,
     NzButtonModule,
     NzMenuModule,
-    RouterOutlet, MatChipsModule, CommonModule
+    RouterOutlet, 
+    MatChipsModule, 
+    CommonModule
 
   ],
   templateUrl: './business-setup.component.html',
   styleUrl: './business-setup.component.scss'
 })
 export class BusinessSetupComponent {
+  isMobileView = false;
+  isMenuOpen = false;
+
   constructor(private router: Router, private route: ActivatedRoute, private organizationService: OrganizationServiceService) {
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
+    // Close menu by default on mobile
+    if (this.isMobileView) {
+      this.isMenuOpen = false;
+    }
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   isActive(path: string): boolean {
@@ -43,13 +70,11 @@ export class BusinessSetupComponent {
   filters: any[] = [];
 
   ngOnInit() {
-
     // GET ORG BUSINESS MODEL 
     this.getOrganizationBusinessModel();
   }
 
   getOrganizationBusinessModel() {
-
     // let key = localStorage.getItem("orgCode")
 
     // this.organizationService.getBusinessModel(key == null ? " " : key).subscribe({
@@ -68,8 +93,6 @@ export class BusinessSetupComponent {
 
   showFiller = true;
 
-
-
   navigateTo(path: string, ...params: [string, any][]): void {
     const queryParams = params.reduce((acc, [key, value]) => {
       acc[key] = value;
@@ -80,6 +103,11 @@ export class BusinessSetupComponent {
       relativeTo: this.route,
       queryParams
     });
+    
+    // Close menu after navigation on mobile
+    if (this.isMobileView) {
+      this.isMenuOpen = false;
+    }
   }
 
   onFilterChange(filter: string) {
@@ -89,5 +117,4 @@ export class BusinessSetupComponent {
       this.router.navigate(['./locations'], { relativeTo: this.route, queryParams: { model: filter } });
     }
   }
-
 }
