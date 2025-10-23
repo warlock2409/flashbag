@@ -35,7 +35,8 @@
                                     Industry <span class="text-red-500">*</span>
                                 </label>
                                 <select class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="membershipPlan.industryId" [disabled]="data.isUpdate">
+                                focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="membershipPlan.industryId"
+                                    [disabled]="data.isUpdate">
                                     <option *ngFor="let industry of industries" [value]="industry.id">
                                         {{ industry.name }}
                                     </option>
@@ -87,8 +88,11 @@
                                 focus:border-violet-400 focus:ring-violet-400" [(ngModel)]="days">
                                     <option value="7">7 Days</option>
                                     <option value="30">1 Months</option>
+                                    <option value="90">3 Months</option>
                                     <option value="120">4 Months</option>
+                                    <option value="180">6 Months</option>
                                     <option value="240">8 Months</option>
+                                    <option value="270">9 Months</option>
                                     <option value="360">12 Months</option>
                                 </select>
                             </div>
@@ -178,16 +182,18 @@
             <div class="space-x-3 flex gap-2">
                 <button mat-stroked-button mat-dialog-close
                     *ngIf="stepper.selectedIndex != (stepper.steps.length - 1)">Cancel</button>
+
                 <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
                     type="submit" (click)="validateMembershipDetails()">
                     Next
                 </button>
+
                 <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)"
                     (click)="stepperPrev()">Back</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
                     *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && !data.isUpdate"
                     (click)="createMembership()">Confirm</button>
-                 <button mat-raised-button style="background-color: #a684ff; color: white;"
+                <button mat-raised-button style="background-color: #a684ff; color: white;"
                     *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && data.isUpdate"
                     (click)="updateMembership()">Update</button>
             </div>

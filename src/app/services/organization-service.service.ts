@@ -4,11 +4,13 @@ import { ServiceResponse } from '../app.component';
 import { Customer } from '../models/customer.model';
 import { AddressModel, ShopHoursModel, ShopModel, WaitListDto } from '../models/shop.model';
 import { OrganizationMembershipPlan, OrganizationServiceModel } from '../models/organization';
+import { S } from 'node_modules/@angular/cdk/scrolling-module.d-ud2XrbF8';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationServiceService {
+
 
 
 
@@ -43,10 +45,10 @@ export class OrganizationServiceService {
 
   }
 
-  generateContent(prompt: string, maxOutputTokens:number) {
+  generateContent(prompt: string, maxOutputTokens: number) {
     let data = {
-      maxOutputTokens:maxOutputTokens,
-      prompt:prompt
+      maxOutputTokens: maxOutputTokens,
+      prompt: prompt
     }
     let url = "http://localhost:8080/api/llm/prompt/toGenerate";
     return this.Http.post<ServiceResponse<any>>(url, data);
@@ -123,6 +125,18 @@ export class OrganizationServiceService {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/shop/organization/{orgCode}".replace("{orgCode}", orgCode!);
     return this.Http.post<ServiceResponse<any>>(url, shop);
+  }
+
+  toggleVisibility(shopCode: string) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/shop/organization/{orgCode}/shop/visibility/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode);
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  updateShop(shop: ShopModel, shopCode: string) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/shop/organization/{orgCode}/shop/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode);
+    return this.Http.put<ServiceResponse<any>>(url, shop);
   }
 
   addShopAddress(addressDto: AddressModel, code: string) {

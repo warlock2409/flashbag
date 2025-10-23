@@ -13,9 +13,9 @@
                     }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Currency">{{ details?.currency
                     }}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Added on">
+                <!-- <nz-descriptions-item nzTitle="Added on">
                     2018-04-24 18:00:00
-                </nz-descriptions-item>
+                </nz-descriptions-item> -->
 
                 }@else {
                 <nz-descriptions-item nzTitle="Business name">BI Fitness</nz-descriptions-item>
@@ -102,10 +102,11 @@
                 </ul>
             </div> -->
             <p class="text-gray-600 mb-4">Payment Status: {{ details.organizationPlan.paymentStatus }}</p>
-            <button (click)="buyPlan()"
+
+            <!-- <button (click)="buyPlan()" *ngIf="details?.organizationPlan.paymentStatus != 'REQUESTED'"
                 class="cursor w-full py-3 px-6 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-violet-100 transition">
                 Manage Plan
-            </button>
+            </button> -->
         </div>
     </div>
 

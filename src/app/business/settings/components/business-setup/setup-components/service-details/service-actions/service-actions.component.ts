@@ -19,6 +19,7 @@ import { OrganizationServiceModel } from 'src/app/models/organization';
 })
 export class ServiceActionsComponent {
 
+
   serviceForm!: FormGroup;
 
   readonly dialogRef = inject(MatDialogRef<ServiceActionsComponent>);
@@ -78,7 +79,7 @@ export class ServiceActionsComponent {
       // Load shops 
       this.loadShopsByIndustry(industry.id);
 
-     
+
     }
   }
 
@@ -216,6 +217,35 @@ export class ServiceActionsComponent {
     })
   }
 
+  
+
+  generateAiContent() {
+    let service = this.serviceForm.value;
+    console.log(service);
+    return;
+    
+    let prompt = `You are a content writer .\n\nUser provides: \n - Service Name: ${service.serviceName}\n- `
+
+    // this.buffer = true;
+    // this.organizationService.generateContent(prompt, 150).subscribe({
+    //   next: (res: ResponseDate) => {
+    //     this.buffer = false;
+    //     let responseText = res.data.generatedText;
+    //     responseText = responseText.replace(/```json|```/g, '').trim();
+    //     // Parse to JSON
+    //     const parsed = JSON.parse(responseText);
+    //     this.exerciseForm.patchValue({
+    //       description: parsed.note,
+    //       tag: parsed.tag
+    //     })
+    //     console.log(parsed.note); // "The bench press is a fundamental compound exercise..."
+    //     console.log(parsed.tag);
+    //   },
+    //   error: (err: any) => {
+    //     this.buffer = false;
+    //   }
+    // })
+  }
 
 
 }

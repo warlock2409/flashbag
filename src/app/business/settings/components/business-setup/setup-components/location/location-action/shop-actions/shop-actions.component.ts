@@ -66,8 +66,16 @@ export interface SessionForm {
 })
 export class ShopActionsComponent {
 
-  updateShopStatus() {
-    throw new Error('Method not implemented.');
+  updateShopStatus(shopCode:string) {
+    this.orgApiService.toggleVisibility(shopCode).subscribe({
+      next:(res:ResponseDate)=>{
+        this.currentShop = res.data;
+      },
+      error:(err:any)=>{
+
+      }
+    })
+
   }
 
 
@@ -76,6 +84,7 @@ export class ShopActionsComponent {
   }
 
   isLinear = false;
+  loading = false;
   @ViewChild('stepper') stepper!: MatStepper;
   private _formBuilder = inject(FormBuilder);
   newDocument: DocumentDto | null = null;
@@ -98,7 +107,6 @@ export class ShopActionsComponent {
     ];
     daysOfWeek.forEach(day => this.days.push(this.newDay(day)));
     this.getOrgBusinessModel();
-
   }
 
   ngOnInit(): void {
@@ -115,18 +123,20 @@ export class ShopActionsComponent {
   }
 
   getOrgBusinessModel() {
+    this.loading = true;
     this.orgApiService.getActiveBusinessModels().subscribe({
       next: (res: ResponseDate) => {
         this.businessModels = res.data;
-        if(this.businessModels.length == 0){
+        if (this.businessModels.length == 0) {
           this.getAllBusinessModels();
         }
         if (this.data.shop != null) {
           this.loadShopBasic(this.data.shop);
         }
+        this.loading = false;
       },
       error: (err: any) => {
-
+        this.loading = false;
       }
     })
   }
@@ -136,7 +146,7 @@ export class ShopActionsComponent {
       .filter((model: any) => model.checked)
       .map((model: any) => model.id);
 
-    let orgCode = localStorage.getItem("orgCode");  
+    let orgCode = localStorage.getItem("orgCode");
 
     this.masterService.addOrRemoveModel(selectedModelIds, orgCode).subscribe({
       next: (res: ResponseDate) => {
@@ -200,7 +210,7 @@ export class ShopActionsComponent {
       businessIndustry: industryObj
     });
 
-    this.sampleUploads = { ...data.documentDto };
+    this.sampleUploads = data.documentDto ? { ...data.documentDto } : null;
 
 
     let addressDto = data.addressDto;
@@ -254,12 +264,14 @@ export class ShopActionsComponent {
   }
 
   setDocument($event: DocumentDto) {
-    console.log($event);
     this.newDocument = $event;
+    console.log("Document received");
+    this.createNewShop();
   }
 
   createNewShop() {
-
+    console.log("Create/Update Shop");
+    
     if (this.shopBasic.invalid) {
       this.shopBasic.markAllAsTouched();
       return;
@@ -280,6 +292,23 @@ export class ShopActionsComponent {
 
     if (this.newDocument != null) {
       shop.documentDto = { id: this.newDocument.id, type: this.newDocument.type, attachments: [] };
+    }
+
+    if (this.currentShop?.code) {
+      console.log("Old Shop");
+      shop.code = this.currentShop.code;
+      this.orgApiService.updateShop(shop, this.currentShop.code)
+        .subscribe({
+          next: (res: ResponseDate) => {
+            console.log("Shop Updated successfully", res);
+            this.currentShop = res.data;
+            this.goNext();
+          },
+          error: (err: any) => {
+            console.error("Failed to create shop", err);
+          }
+        });
+      return;
     }
 
     // Call API
@@ -380,6 +409,10 @@ export class ShopActionsComponent {
   }
 
   patchBusinessHours(data: any[]): void {
+    if (!data || data.length === 0) {
+      // do nothing — keep default 7 days
+      return;
+    }
     // Explicitly create FormArray<FormGroup>
     const daysFormArray = new FormArray<FormGroup>([]);
 

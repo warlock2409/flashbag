@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
+import { AblyService } from 'src/app/services/ably.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-gym-check-in',
@@ -17,6 +19,8 @@ import { SweatAlertService } from 'src/app/services/sweat-alert.service';
   styleUrl: './gym-check-in.component.scss'
 })
 export class GymCheckInComponent {
+
+  private subscription!: Subscription;
   dialog = inject(MatDialog);
   shopService = inject(ShopService);
   highlightedPart = 'quads'
@@ -25,8 +29,14 @@ export class GymCheckInComponent {
   qrCodeDataUrl: string | null = null;
 
   @ViewChild('qrCanvas') qrCanvas!: ElementRef<HTMLCanvasElement>;
-  constructor(private swalService: SweatAlertService) {
+  constructor(private swalService: SweatAlertService, private ablyService: AblyService) {
+  }
 
+  ngOnInit() {
+    this.subscription = this.ablyService.onMessage('gym-checkin').subscribe(msg => {
+      console.log('GymCheckIn', msg.data);
+      this.openCheckInDialog(msg.data);
+    });
   }
 
   generateQRCode() {
@@ -129,7 +139,6 @@ export class GymCheckInComponent {
     this.shopService.PostMembershipCheckIn(code).subscribe({
       next: (res: ResponseDate) => {
         console.log(res);
-
         this.openCheckInDialog(res.data);
       },
       error: (err: any) => {

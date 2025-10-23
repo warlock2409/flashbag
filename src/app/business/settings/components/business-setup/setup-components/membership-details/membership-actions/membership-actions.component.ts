@@ -47,7 +47,7 @@ export class MembershipActionsComponent {
       console.log(existingPlan);
 
       this.membershipPlan = {
-        id:existingPlan.id,
+        id: existingPlan.id,
         name: existingPlan.name ?? '',
         basePrice: existingPlan.basePrice ?? 0,
         description: existingPlan.description ?? '',
@@ -82,6 +82,15 @@ export class MembershipActionsComponent {
   closeDialog() {
     this.dialogRef.close();
   }
+
+  isLastButOneStep(): boolean {
+    let result = false;
+    setTimeout(() => {
+      result = this.stepper.selectedIndex === (this.stepper.steps.length - 2);
+    });
+    return result;
+  }
+
 
   validateMembershipDetails() {
     if (this.selectedServices.length < 1) {
@@ -133,13 +142,13 @@ export class MembershipActionsComponent {
 
   openServiceDialog() {
     console.log(this.membershipPlan);
-    if(!this.membershipPlan.industryId){
+    if (!this.membershipPlan.industryId) {
       return;
     }
 
     const dialogRef = this.dialog.open(ServiceDialogComponent, {
       width: '600px',
-      data: { selected: this.selectedServices, isUpdate: this.data.isUpdate , industryId:this.membershipPlan.industryId}
+      data: { selected: this.selectedServices, isUpdate: this.data.isUpdate, industryId: this.membershipPlan.industryId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -190,7 +199,7 @@ export class MembershipActionsComponent {
 
     console.log(this.membershipPlan);
 
-    this.orgService.updateOrgMembership(this.membershipPlan,this.membershipPlan.id).subscribe({
+    this.orgService.updateOrgMembership(this.membershipPlan, this.membershipPlan.id).subscribe({
       next: (res: ResponseDate) => {
         this.dialogRef.close(res.data);
       },

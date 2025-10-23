@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Realtime, InboundMessage, RealtimeChannel } from 'ably';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -13,13 +13,24 @@ export class AblyService {
     private shopCodeSubject = new BehaviorSubject<string | null>(null);
     shopCode$ = this.shopCodeSubject.asObservable();
 
-    // Subject for received Ably messages
-    private ablyMessageSubject = new Subject<any>();
-    ablyMessages$ = this.ablyMessageSubject.asObservable();
-
     /** Called when home component sets shop code */
     async setShopCode(shopCode: string) {
         this.shopCodeSubject.next(shopCode);
+    }
+
+    // Subject for received Ably messages
+    private ablyMessageSubject = new Subject<any>();
+    private ablyMessages$ = this.ablyMessageSubject.asObservable();
+
+    sendMessage(type: string, data: any) {
+        this.ablyMessageSubject.next({ type, data });
+    }
+
+    // Subscribe only to messages of a specific type
+    onMessage(type: string): Observable<any> {
+        return this.ablyMessages$.pipe(
+            filter(msg => msg.type === type),
+        );
     }
 
     constructor() { }

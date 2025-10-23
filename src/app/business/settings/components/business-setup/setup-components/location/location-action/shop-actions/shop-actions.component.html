@@ -12,7 +12,7 @@
                 <mat-icon style="color: lightcoral;">cancel</mat-icon>
             </button>
         </div>
-        @if (this.businessModels.length == 0) {
+        @if (this.businessModels.length == 0 && !loading) {
         <ng-container>
             <div class="px-2 md:px-10 lg:px-15 xl:px-20 py-6">
                 <div class="p-2 md:p-4">
@@ -182,7 +182,7 @@
                         <div class="flex justify-end mt-8">
                             <button mat-flat-button [disabled]="shopBasic.invalid"
                                 [ngStyle]="!shopBasic.invalid ? {'background-color': '#a684ff', 'color': 'white'} : {}"
-                                (click)="createNewShop()">Next</button>
+                                (click)="createNewShop()">{{currentShop != null ? "Update":"Next"}}</button>
                         </div>
                     </form>
                 </mat-step>
@@ -261,12 +261,12 @@
                                         <div [formGroupName]="j" class="flex gap-4 items-center"
                                             *ngIf="session.get('operation')?.value !== 'DELETE'">
                                             <input type="time" formControlName="start" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
+                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 
                                                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                 step="900" min="09:00" max="18:00" />
 
                                             <input type="time" formControlName="end" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 dark:bg-gray-700 
+                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 
                                                 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                                 step="900" min="09:00" max="18:00" />
 
@@ -300,7 +300,7 @@
                 <button mat-stroked-button mat-dialog-close>Cancel</button>
 
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    *ngIf="currentShop?.active != null" (click)="updateShopStatus()">{{currentShop.active ? "Go Offline"
+                    *ngIf="currentShop?.active != null" (click)="updateShopStatus(currentShop.code!)">{{currentShop.active ? "Go Offline"
                     : "Go Online"}}</button>
             </div>
         </div>

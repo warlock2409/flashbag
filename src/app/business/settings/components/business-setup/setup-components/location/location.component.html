@@ -27,7 +27,7 @@
         }@else {
         <div class="grid grid-cols-1 gap-4">
             <div *ngFor="let shop of shops"
-                class="flex bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                class="flex bg-white border border-gray-200 rounded-lg shadow-sm  overflow-hidden">
                 <!-- Left: Image -->
                 <div class="flex-shrink-0 h-full p-4">
                     <img class="w-48 h-45 object-cover border rounded-sm" [src]="shop.image" alt="{{ shop.name }}" />
@@ -52,10 +52,6 @@
                             (click)="editLocation(shop)">
                             Edit
                         </button>
-                        <!-- <button mat-raised-button style="background-color: #a3a5b2; color: white;"
-                            (click)="openPanel('VIEW_SHOP')">
-                            View
-                        </button> -->
                     </div>
                 </div>
             </div>

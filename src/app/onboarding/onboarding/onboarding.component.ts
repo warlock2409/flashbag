@@ -20,12 +20,14 @@ import { Router } from '@angular/router';
   styleUrl: './onboarding.component.scss'
 })
 export class OnboardingComponent {
+  
 
   registrationForm !: FormGroup;
 
   isBusinessAccountCreated = true;
   isBusinessActivityUpdated = false;
   businessModels: any = [];
+  loding = false;
 
   organization: any = null;
 
@@ -38,7 +40,7 @@ export class OnboardingComponent {
         lastName: ['', Validators.required],
         company: ['', Validators.required],
         phone: ['', Validators.required],
-        visitors: [0, [Validators.required, Validators.min(0)]],
+        visitors: ['', [Validators.required, Validators.min(0)]],
         termsAccepted: [false, Validators.requiredTrue]
       }),
       accountDetails: this.fb.group({
@@ -62,18 +64,21 @@ export class OnboardingComponent {
     }
 
     let staffDto = this.getOrganizationNewUser();
-
+    this.loding = true;
     this.authService.registerOrganization(staffDto).subscribe({
       next: (res: ResponseDate) => {
         if (res.status == 200) {
           this.organization = res.data.organizationDto;
+          localStorage.setItem('orgCode', this.organization.code);
           this.getAllBusinessModels();
           this.isBusinessAccountCreated = false;
           this.isBusinessActivityUpdated = true;
+          this.loding = false;
         }
       }, error: (err: any) => {
         console.log(err);
-        this.sweatAlert.error(err.error.message + "\n Try Login or Different Organization Name",5000);
+        this.loding = false;
+        this.sweatAlert.error(err.error.message + "\n Try Login or Different Organization Name", 5000);
       }
     })
   }
@@ -83,14 +88,18 @@ export class OnboardingComponent {
       .filter((model: any) => model.checked)
       .map((model: any) => model.id);
 
+    this.loding = true;
+
+
     this.orgService.addOrRemoveModel(selectedModelIds, this.organization.code).subscribe({
       next: (res: ResponseDate) => {
         this.authService.isAuthenticated.next(true);
-
+        this.loding = false;
         if (this.authService.isBusiness()) {
           this.router.navigate(['/business/home']);
         }
       }, error: (err: any) => {
+        this.loding = false;
       }
     })
   }
@@ -134,6 +143,10 @@ export class OnboardingComponent {
 
     return staffDto;
 
+  }
+
+  openTerms() {
+    window.open('assets/terms.html', '_blank');
   }
 
 }

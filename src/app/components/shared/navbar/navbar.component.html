@@ -47,10 +47,8 @@
         <div class="h-10 w-12 rounded-xl text-white flex items-center justify-center">
           <img src="../../../assets/png/logo.png" alt="" srcset="">
         </div>
-        <span *ngIf="!authService.isLoggedIn()" class="text-lg tracking-tight font-medium text-black"
+        <span class="text-lg tracking-tight font-medium text-black"
           [ngClass]="{ '!text-white': isHomePage }">9Myle</span>
-        <span *ngIf="authService.isLoggedIn()" class="text-lg tracking-tight font-medium text-black"
-          [ngClass]="{ '!text-white': isHomePage }">Bi Fitness</span>
       </div>
 
 

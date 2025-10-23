@@ -70,7 +70,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Price ($)
+                            Price (INR)
                         </label>
                         <input formControlName="price" type="number" min="0" step="0.01"
                             class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400">
@@ -100,7 +100,9 @@
                             class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400">
                     </div>
                 </div>
-
+                <!-- <div class="mt-4 text-center">
+                    <button mat-stroked-button (click)="generateAiContent()">✨Auto Generate</button>
+                </div> -->
                 <!-- Description -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -127,10 +129,10 @@
         <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
             <div class="space-x-3 flex gap-2">
                 <button mat-stroked-button mat-dialog-close (click)="closeDialog()">Cancel</button>
-                <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    (click)="createService()" *ngIf="!data.isUpdate">Confirm</button>
-                <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    (click)="updateService()" *ngIf="data.isUpdate">Update</button>
+                <button mat-raised-button style="background-color: #a684ff; color: white;" (click)="createService()"
+                    *ngIf="!data.isUpdate">Confirm</button>
+                <button mat-raised-button style="background-color: #a684ff; color: white;" (click)="updateService()"
+                    *ngIf="data.isUpdate">Update</button>
             </div>
         </div>
 

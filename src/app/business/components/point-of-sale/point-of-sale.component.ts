@@ -235,7 +235,7 @@ export class PointOfSaleComponent {
   }
 
   get tax(): number {
-    return this.subtotal * 0.10;  // 10% tax
+    return this.subtotal * 0;  // 10% tax
   }
 
   get total(): number {

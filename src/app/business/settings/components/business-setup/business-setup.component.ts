@@ -12,6 +12,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
+import { ResponseDate } from 'src/app/app.component';
 @Component({
   selector: 'app-business-setup',
   standalone: true,
@@ -41,29 +42,24 @@ export class BusinessSetupComponent {
   buffer = false;
   selectedFilter = '';
   filters: any[] = [];
+  // Organization;
+  details!: any;
 
   ngOnInit() {
-
     // GET ORG BUSINESS MODEL 
-    this.getOrganizationBusinessModel();
+    this.getOrganizationDetails();
   }
 
-  getOrganizationBusinessModel() {
+  getOrganizationDetails() {
+    this.organizationService.getOrganizationDetails().subscribe({
+      next: (res: ResponseDate) => {
+        console.log(res);
+        this.details = res.data;
+      },
+      error: (err: any) => {
 
-    // let key = localStorage.getItem("orgCode")
-
-    // this.organizationService.getBusinessModel(key == null ? " " : key).subscribe({
-    //   next: (res: any) => {
-    //     console.log(res);
-    //     this.filters = res.data.businessModels;
-    //     if (this.filters.length > 0) {
-    //       this.onFilterChange(this.filters[0].name)
-    //     }
-    //   },
-    //   error: () => {
-
-    //   }
-    // })
+      }
+    })
   }
 
   showFiller = true;
