@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject } from '@angular/core';
+import { Component, HostListener, Inject, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -23,24 +23,41 @@ import confetti from 'canvas-confetti';
   templateUrl: './pos.component.html',
   styleUrl: './pos.component.scss'
 })
-export class PosComponent {
+export class PosComponent implements OnInit {
 
-
+  // Responsive properties
+  isMobile: boolean = false;
+  isTablet: boolean = false;
+  isCartVisible: boolean = true;
 
   closeDialog() {
     this.dialogRef.close();
-
   }
 
+  // Toggle cart visibility for mobile/tablet
+  toggleCartVisibility() {
+    this.isCartVisible = !this.isCartVisible;
+  }
 
+  // Check screen size on resize
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
 
-
-
-
-
-
-
-
+  // Check screen size on init
+  checkScreenSize() {
+    const width = window.innerWidth;
+    this.isMobile = width < 768;
+    this.isTablet = width >= 768 && width < 1024;
+    
+    // On mobile/tablet, hide cart by default
+    if (this.isMobile || this.isTablet) {
+      this.isCartVisible = false;
+    } else {
+      this.isCartVisible = true;
+    }
+  }
 
   // <-- --> 
   // Categories
@@ -56,7 +73,6 @@ export class PosComponent {
   private _snackBar = inject(NzMessageService);
   // Mobile menu
   showMobileMenu: boolean = true;
-
 
   get activeCategoryName(): string {
     const category = this.categories.find(c => c.id === this.activeCategory);
@@ -234,10 +250,7 @@ export class PosComponent {
   }
 
   constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }) {
-
-
     console.log(this.invoice);
-
   }
 
   placeHolderImg = 'https://seanl80.sg-host.com/wp-content/uploads/woocommerce-placeholder-600x600.png'
@@ -264,8 +277,6 @@ export class PosComponent {
       }
     });
   }
-
-
 
   isUserDto(obj: any): obj is Customer {
     return obj && typeof obj.id === 'number' && (typeof obj.firstName === 'string' || typeof obj.email === 'string' || typeof obj.contactNumber === 'number');
@@ -368,18 +379,18 @@ export class PosComponent {
   }
 
   ngOnInit(): void {
+    // Check screen size on component initialization
+    this.checkScreenSize();
+    
     if (this.activeCategory == "memberships") {
       this.getMembershipByShop();
     }
 
     if (this.data && this.data.existingInvoice) {
-
       this.invoice = this.data.existingInvoice;
       this.cart = this.invoice.items.map(i => this.normalizeInvoiceItem(i));
       this.selectedCustomer = this.invoice.customer!;
     }
-
-
   }
 
   private normalizeInvoiceItem(dbItem: any): Item {
@@ -412,7 +423,6 @@ export class PosComponent {
       }
     })
   }
-
 
   // 🛠️ Helper Methods → Utility functions, formatters, mappers
 
@@ -487,7 +497,6 @@ export class PosComponent {
     })
   }
 
-
   cancelInvoice(invoice: any, status: string) {
     this.shopService.updateInvoiceStatus(invoice.id, status).subscribe({
       next: (res: ResponseDate) => {
@@ -523,5 +532,4 @@ export class PosComponent {
   refundInvoice(invoice: any) {
     console.log('Refunding invoice', invoice);
   }
-
 }

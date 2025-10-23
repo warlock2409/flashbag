@@ -58,13 +58,9 @@ export class BusinessLayoutComponent {
     setTimeout(() => {
       this.sidenavContainer.updateContentMargins();
     }, 0);
+    this.notification.createNotification("success", "New Waitlist", "A new waitlist has been created.");
+    console.log('Publishing to Ably');
   }
-
-  ngOnDestroy() {
-    console.log("ngOnDestroy Layout");
-
-  }
-
 
 }
 

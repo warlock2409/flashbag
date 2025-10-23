@@ -1,161 +1,442 @@
 .settings-container {
-    max-width: 1200px;
-    margin: 80px auto;
-    padding: 24px;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 24px;
+  
+  // Responsive padding for navbar spacing
+  &.responsive-padding-top {
+    padding-top: 100px;
+    
+    @media (max-width: 1024px) {
+      padding-top: 100px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 10px;
+      padding-top: 90px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 8px;
+      padding-top: 85px;
+    }
+  }
 }
 
 h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 0.2em;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.2em;
+  
+  // Responsive title sizing
+  &.responsive-title {
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .subtitle {
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 32px;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+  
+  // Responsive subtitle sizing
+  &.responsive-subtitle {
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+  }
 }
 
 .tabs {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 36px;
-}
-
-.tab {
-    background: none;
-    border: none;
-    font-size: 1rem;
-    padding: 10px 24px;
-    border-radius: 24px;
-    cursor: pointer;
-    color: #222;
-    transition: background 0.2s;
-}
-
-.tab.active,
-.tab:hover {
-    background: #222;
-    color: #fff;
-}
-
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 32px;
-}
-
-.settings-card {
-    cursor: pointer;
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    padding: 28px 24px;
-    transition: box-shadow 0.2s;
-}
-
-.settings-card:hover {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-}
-
-mat-icon {
-    //   font-size: 2.4rem;
-    margin-top: 4px;
-    overflow:visible !important;
-}
-
-.tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 36px;
+  
+  // Responsive tabs
+  &.responsive-tabs {
     position: sticky;
-    top: 80px; // <-- Set this to your top nav height
+    top: 80px;
     background: #f5f5f5;
     z-index: 10;
     padding-top: 8px;
     padding-bottom: 8px;
+    
+    @media (max-width: 768px) {
+      gap: 12px;
+      margin-bottom: 28px;
+      top: 90px;
+      padding: 6px 0;
+    }
+    
+    @media (max-width: 480px) {
+      gap: 8px;
+      margin-bottom: 24px;
+      top: 85px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      
+      // Hide scrollbar but keep functionality
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
+}
+
+.tab {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  padding: 10px 24px;
+  border-radius: 24px;
+  cursor: pointer;
+  color: #222;
+  transition: background 0.2s;
+  
+  // Responsive tab buttons
+  &.responsive-tab {
+    @media (max-width: 768px) {
+      padding: 8px 20px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+  }
+}
+
+.tab.active,
+.tab:hover {
+  background: #222;
+  color: #fff;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  
+  // Responsive card grid
+  &.responsive-card-grid {
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+}
+
+.settings-card {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 28px 24px;
+  transition: box-shadow 0.2s;
+  
+  // Responsive settings card
+  &.responsive-settings-card {
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+      gap: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 20px 16px;
+      gap: 14px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 18px 14px;
+      gap: 12px;
+      border-radius: 12px;
+    }
+  }
+}
+
+.settings-card:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+}
+
+mat-icon {
+  // font-size: 2.4rem;
+  margin-top: 4px;
+  overflow: visible !important;
+  
+  // Responsive icon sizing
+  &.responsive-icon {
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.6rem;
+    }
+  }
 }
 
 .settings-card h2 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0 0 6px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  
+  // Responsive card title
+  &.responsive-card-title {
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      margin: 0 0 4px 0;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
 }
 
 .settings-card p {
-    color: #555;
-    margin: 0;
-    font-size: 1rem;
+  color: #555;
+  margin: 0;
+  font-size: 1rem;
+  
+  // Responsive card description
+  &.responsive-card-desc {
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.85rem;
+    }
+  }
 }
 
 .section {
-    max-width: 1200px;
-    margin: 56px auto 0 auto;
+  max-width: 1200px;
+  margin: 56px auto 0 auto;
+  
+  // Responsive section
+  &.responsive-section {
+    @media (max-width: 768px) {
+      margin: 40px auto 0 auto;
+    }
+    
+    @media (max-width: 480px) {
+      margin: 32px auto 0 auto;
+    }
+  }
 }
 
 .section h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 24px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  
+  // Responsive section title
+  &.responsive-section-title {
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+  }
 }
 
 .simple-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  
+  // Responsive simple card grid
+  &.responsive-simple-card-grid {
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
 }
 
 .simple-card {
-    background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 12px;
-    padding: 28px 22px 18px 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 120px;
-    transition: box-shadow 0.2s, border-color 0.2s;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 28px 22px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  
+  // Responsive simple card
+  &.responsive-simple-card {
+    @media (max-width: 1024px) {
+      padding: 24px 20px 16px 20px;
+      min-height: 110px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 20px 18px 14px 18px;
+      min-height: 100px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 18px 16px 12px 16px;
+      min-height: 90px;
+      border-radius: 10px;
+    }
+  }
 }
 
 .simple-card:hover {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-    border-color: #bdbdbd;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-color: #bdbdbd;
 }
 
 .card-title {
-    font-size: 1.08rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #222;
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222;
+  
+  // Responsive card title
+  &.responsive-card-title {
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+    }
+  }
 }
 
 .card-desc {
-    color: #555;
-    font-size: 0.98rem;
-    margin-bottom: 18px;
+  color: #555;
+  font-size: 0.98rem;
+  margin-bottom: 18px;
+  
+  // Responsive card description
+  &.responsive-card-desc {
+    @media (max-width: 768px) {
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+  }
 }
 
 .view-link {
-    display: inline-flex;
-    align-items: center;
-    font-weight: 500;
-    color: #222;
-    text-decoration: none;
-    font-size: 1rem;
-    margin-top: auto;
-    transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  color: #222;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-top: auto;
+  transition: color 0.2s;
+  
+  // Responsive view link
+  &.responsive-view-link {
+    @media (max-width: 768px) {
+      font-size: 0.95rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
+  }
 }
 
 .view-link mat-icon {
-    font-size: 1.1rem;
-    margin-left: 4px;
-    transition: transform 0.2s;
+  font-size: 1.1rem;
+  margin-left: 4px;
+  transition: transform 0.2s;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
 
 .view-link:hover {
-    color: #6c63ff;
+  color: #6c63ff;
 }
 
 .view-link:hover mat-icon {
-    transform: translateX(3px);
+  transform: translateX(3px);
+}
+
+// Responsive other section placeholder
+.responsive-other-placeholder {
+  height: 200px;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f9f9f9;
+  
+  @media (max-width: 768px) {
+    height: 150px;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    height: 120px;
+    font-size: 0.9rem;
+    padding: 10px;
+    text-align: center;
+  }
 }

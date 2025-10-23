@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzRateModule } from 'ng-zorro-antd/rate';
@@ -38,11 +38,29 @@ interface Option {
   styleUrl: './membership-details.component.scss'
 })
 export class MembershipDetailsComponent {
+  isMobileView = false;
 
+  constructor(private orgService: OrganizationServiceService, private dataService: DataStorageService) {
+    // Register Chart.js modules to avoid tree-shaking issues
+    Chart.register(...registerables);
+    // Fetch All Organization Membership 
+    this.industries = dataService.getIndustry();
+    if (this.industries.length < 1) {
+      this.getOrgIndustry();
+    } else {
+      this.getOrgMemberships();
+    }
+    this.checkScreenSize();
+  }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
 
-
-
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
+  }
 
   isPanelOpen: boolean = false;
   loading: boolean = true;
@@ -71,22 +89,9 @@ export class MembershipDetailsComponent {
   // 
   membershipType = "A";
 
-  constructor(private orgService: OrganizationServiceService, private dataService: DataStorageService) {
-    // Register Chart.js modules to avoid tree-shaking issues
-    Chart.register(...registerables);
-    // Fetch All Organization Membership 
-    this.industries = dataService.getIndustry();
-    if (this.industries.length < 1) {
-      this.getOrgIndustry();
-    } else {
-      this.getOrgMemberships();
-    }
-  }
-
   ngAfterViewInit(): void {
     this.createChart();
   }
-
 
   handleValueChange(e: string | number): void {
     console.log(e);
@@ -147,8 +152,6 @@ export class MembershipDetailsComponent {
   ngOnDestroy(): void {
     this.destroyChart();
   }
-
-
 
   //  Real flow 
   readonly dialog = inject(MatDialog);

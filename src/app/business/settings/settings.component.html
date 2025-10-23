@@ -1,21 +1,21 @@
-<div class="settings-container" style="transform: scale(0.9);">
-  <h1>Workspace settings</h1>
-  <p class="subtitle">Manage settings for One Piece.</p>
+<div class="settings-container responsive-padding-top">
+  <h1 class="responsive-title">Workspace settings</h1>
+  <p class="subtitle responsive-subtitle">Manage settings for One Piece.</p>
 
-  <nav class="tabs">
-    <button class="tab active" (click)="scrollToSection('settings-section')">Settings</button>
-    <button class="tab" (click)="scrollToSection('online-presence-section')">Online presence</button>
-    <button class="tab" (click)="scrollToSection('marketing-section')">Marketing</button>
-    <button class="tab" (click)="scrollToSection('other-section')">Other</button>
+  <nav class="tabs responsive-tabs">
+    <button class="tab responsive-tab active" (click)="scrollToSection('settings-section')">Settings</button>
+    <button class="tab responsive-tab" (click)="scrollToSection('online-presence-section')">Online presence</button>
+    <button class="tab responsive-tab" (click)="scrollToSection('marketing-section')">Marketing</button>
+    <button class="tab responsive-tab" (click)="scrollToSection('other-section')">Other</button>
   </nav>
 
-  <div id="settings-section" class="card-grid">
-    <div *ngFor="let card of cards.settingsCards" class="settings-card relative" [class.locked]="card.locked"
+  <div id="settings-section" class="card-grid responsive-card-grid">
+    <div *ngFor="let card of cards.settingsCards" class="settings-card relative responsive-settings-card" [class.locked]="card.locked"
       [routerLink]="!card.locked ? card.routerLink : null"  (click)="card.locked ? openLockedDialog(card) : 0">
-      <mat-icon color="primary">{{ card.icon }}</mat-icon>
+      <mat-icon color="primary" class="responsive-icon">{{ card.icon }}</mat-icon>
       <div>
-        <h2>{{ card.title }}</h2>
-        <p>{{ card.desc }}</p>
+        <h2 class="responsive-card-title">{{ card.title }}</h2>
+        <p class="responsive-card-desc">{{ card.desc }}</p>
       </div>
 
       <!-- Lock overlay for locked cards -->
@@ -26,16 +26,16 @@
   </div>
 
   <!-- Online presence section -->
-  <div id="online-presence-section" class="section">
-    <h2>Online presence</h2>
-    <div class="simple-card-grid">
-      <div *ngFor="let card of cards.onlinePresence" class="simple-card relative" [class.locked]="card.locked">
+  <div id="online-presence-section" class="section responsive-section">
+    <h2 class="responsive-section-title">Online presence</h2>
+    <div class="simple-card-grid responsive-simple-card-grid">
+      <div *ngFor="let card of cards.onlinePresence" class="simple-card relative responsive-simple-card" [class.locked]="card.locked">
         <div>
-          <div class="card-title">{{ card.title }}</div>
-          <div class="card-desc">{{ card.desc }}</div>
+          <div class="card-title responsive-card-title">{{ card.title }}</div>
+          <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
         </div>
 
-        <a *ngIf="!card.locked" class="view-link" [href]="card.routerLink">
+        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]="card.routerLink">
           View <mat-icon>arrow_forward</mat-icon>
         </a>
 
@@ -47,16 +47,16 @@
   </div>
 
   <!-- Marketing section -->
-  <div id="marketing-section" class="section">
-    <h2>Marketing</h2>
-    <div class="simple-card-grid">
-      <div *ngFor="let card of cards.marketing" class="simple-card relative" [class.locked]="card.locked">
+  <div id="marketing-section" class="section responsive-section">
+    <h2 class="responsive-section-title">Marketing</h2>
+    <div class="simple-card-grid responsive-simple-card-grid">
+      <div *ngFor="let card of cards.marketing" class="simple-card relative responsive-simple-card" [class.locked]="card.locked">
         <div>
-          <div class="card-title">{{ card.title }}</div>
-          <div class="card-desc">{{ card.desc }}</div>
+          <div class="card-title responsive-card-title">{{ card.title }}</div>
+          <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
         </div>
 
-        <a *ngIf="!card.locked" class="view-link" [href]="card.routerLink">
+        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]="card.routerLink">
           View <mat-icon>arrow_forward</mat-icon>
         </a>
 
@@ -68,9 +68,8 @@
   </div>
 
   <!-- Other section placeholder -->
-  <div id="other-section" class="section">
-    <h2>Other</h2>
-    <div style="height: 200px; color: #aaa; display: flex; align-items: center; justify-content: center;">Other settings
-      coming soon...</div>
+  <div id="other-section" class="section responsive-section">
+    <h2 class="responsive-section-title">Other</h2>
+    <div class="responsive-other-placeholder">Other settings coming soon...</div>
   </div>
 </div>

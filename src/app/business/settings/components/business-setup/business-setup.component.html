@@ -1,6 +1,6 @@
 <div class="setup-container">
 
-  <div class="flex js-sb align-center">
+  <div class="filter-chips-container breadcrump-spacing">
     <div class="filter-chips">
       <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
         <mat-chip-option *ngFor="let filter of filters" [value]="filter.name"
@@ -11,9 +11,22 @@
     </div>
   </div>
 
-  <div class="flex gap-1rem js-c">
-
-    <div style="width: 230px;">
+  <div class="content-container responsive-flex-row">
+    <!-- Mobile menu toggle button -->
+    <button 
+      *ngIf="isMobileView" 
+      mat-icon-button 
+      class="mobile-menu-toggle"
+      (click)="toggleMenu()"
+      aria-label="Toggle menu">
+      <mat-icon>{{isMenuOpen ? 'close' : 'menu'}}</mat-icon>
+    </button>
+    
+    <!-- Sidebar menu with conditional visibility -->
+    <div 
+      class="sidebar-menu" 
+      [class.mobile-menu-open]="isMenuOpen && isMobileView"
+      [class.hide-mobile]="isMobileView && !isMenuOpen">
       <ul nz-menu nzMode="inline">
         <li nz-submenu nzTitle="Organization setup" nzOpen>
           <ul>
@@ -43,14 +56,13 @@
       </ul>
     </div>
 
-    <div style="width: 1000px;">
+    <div class="main-content responsive-full-width">
       <router-outlet></router-outlet>
     </div>
-
   </div>
 
 </div>
 
-<footer style="height: 5rem; width: 100%;">
+<footer class="footer">
 
 </footer>

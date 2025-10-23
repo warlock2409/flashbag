@@ -1,4 +1,4 @@
-<div>
+<div class="membership-container">
     <nz-card nzTitle="Manage Memberships" [nzExtra]="extraTemplate">
         @if (isLoading) {
         <div role="status"
@@ -22,49 +22,50 @@
         </div>
         }@else {
         @for (membership of memberships; track $index) {
-        <nz-card [nzTitle]="membership.name" [nzExtra]="editTemplate" class="m-b-4">
-            <div class="flex gap-1rem">
-                <div>
-                    <nz-avatar nzShape="square" style="border-radius: 3px;width: 200px;height: 150px;"
+        <nz-card [nzTitle]="membership.name" [nzExtra]="editTemplate" class="membership-card">
+            <div class="membership-content">
+                <div class="membership-image-container">
+                    <nz-avatar nzShape="square" class="membership-image"
                         nzSrc="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZThvMmV2czU0b29xY2tsNGJmazdlenhubDZrbWFhZ2F0NHp1emRvbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4bjIKBOWUnVPICCzJc/giphy.gif"></nz-avatar>
                 </div>
-                <div>
-                    <h4 style="margin-bottom:0"></h4>
+                <div class="membership-details">
+                    <h4 class="membership-title"></h4>
                     <!-- <nz-rate [ngModel]="4.5" nzAllowHalf></nz-rate>
                     <span>(190)</span> -->
-                    <p class="child_text">{{membership.description}}</p>
-                    <div class="flex gap-1rem wrap">
-                        <div class="date_block">
-                            <span class="child_text">Benifits</span>
-                            <div class="expiry-date">{{membership.benefits.length}}</div>
+                    <p class="membership-description child_text">{{membership.description}}</p>
+                    <div class="membership-stats">
+                        <div class="stat-item">
+                            <span class="stat-label child_text">Benefits</span>
+                            <div class="stat-value expiry-date">{{membership.benefits.length}}</div>
                         </div>
-                        <div class="date_block">
-                            <span class="child_text">Industry</span>
-                            <div class="expiry-date">{{membership.industry}}</div>
+                        <div class="stat-item">
+                            <span class="stat-label child_text">Industry</span>
+                            <div class="stat-value expiry-date">{{membership.industry}}</div>
                         </div>
-                        <div class="date_block">
-                            <span class="child_text">Price</span>
-                            <div class="expiry-date">{{membership.basePrice | currency:'INR'}}</div>
+                        <div class="stat-item">
+                            <span class="stat-label child_text">Price</span>
+                            <div class="stat-value expiry-date">{{membership.basePrice | currency:'INR'}}</div>
                         </div>
+                    </div>
+                    
+                    <!-- Mobile view - simplified display -->
+                    <div class="mobile-membership-info">
+                        <div class="mobile-price">{{membership.basePrice | currency:'INR'}}</div>
                     </div>
                 </div>
             </div>
             <ng-template #editTemplate>
-                <button mat-stroked-button (click)="openEditMembership(membership)">
+                <button mat-stroked-button class="edit-button" (click)="openEditMembership(membership)">
                     Edit
                 </button>
             </ng-template>
         </nz-card>
         }
         }
-
-
     </nz-card>
 
-
-
     <ng-template #extraTemplate>
-        <button mat-stroked-button (click)="openMembershipAction()">
+        <button mat-stroked-button class="create-button" (click)="openMembershipAction()">
             <i class="fas fa-plus"></i>
             Create Membership
         </button>
@@ -74,46 +75,45 @@
 <!-- <app-side-panel [isOpen]="isPanelOpen" [title]="'Membership'" (closePanel)="closePanel()"
     [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'500px'}" class="p-4">
 
-    <div class="flex js-sb m-b-8">
+    <div class="panel-header">
         <h2 class="m-0">Quarterly Plan</h2>
-        <div>
+        <div class="rating-container">
             <nz-rate [ngModel]="2.5" nzAllowHalf></nz-rate>
             <span> (200)</span>
         </div>
     </div>
 
-    <div class="flex js-c m-b-8">
+    <div class="segmented-container">
         <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
     </div>
 
-    <div *ngIf="activeSegment == 'Trend'">
-        <div class="p-4 flex wrap js-sb m-b-8">
-            <div class="date_block">
-                <span class="child_text">Total Users</span>
-                <div class="expiry-date">{{1924 | number}}</div>
+    <div *ngIf="activeSegment == 'Trend'" class="trend-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label child_text">Total Users</span>
+                <div class="stat-value expiry-date">{{1924 | number}}</div>
             </div>
-            <div class="date_block">
-                <span class="child_text">Active Users</span>
-                <div class="expiry-date">{{1924 | number}}</div>
+            <div class="stat-item">
+                <span class="stat-label child_text">Active Users</span>
+                <div class="stat-value expiry-date">{{1924 | number}}</div>
             </div>
-            <div class="date_block">
-                <span class="child_text">Idle Users</span>
-                <div class="expiry-date">{{75 | number}}</div>
+            <div class="stat-item">
+                <span class="stat-label child_text">Idle Users</span>
+                <div class="stat-value expiry-date">{{75 | number}}</div>
             </div>
-            <div class="date_block">
-                <span class="child_text">Revenue</span>
-                <div class="expiry-date">{{75000 | number}}</div>
+            <div class="stat-item">
+                <span class="stat-label child_text">Revenue</span>
+                <div class="stat-value expiry-date">{{75000 | number}}</div>
             </div>
         </div>
 
-        <div>
-            <canvas id="myChart" style="width:100%; max-width:700px;"></canvas>
+        <div class="chart-container">
+            <canvas id="myChart" class="chart"></canvas>
         </div>
-
     </div>
 
-    <div *ngIf="activeSegment == 'Details'">
-        <div>
+    <div *ngIf="activeSegment == 'Details'" class="details-section">
+        <div class="form-container">
             <span>Membership name</span>
             <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-4">
                 <input type="text" nz-input [(ngModel)]="inputValue" placeholder="Membership name" />
@@ -172,23 +172,20 @@
                 }
             </ng-template>
 
-            <div class="flex js-sb">
-                <button nz-button [nzLoading]="loading" style="width: 100px;">
+            <div class="button-container">
+                <button nz-button [nzLoading]="loading" class="action-button cancel-button">
                     <nz-icon *ngIf="loading" nzType="poweroff" />
                     <span *ngIf="!loading">
                         Cancel
                     </span>
                 </button>
-                <button nz-button [nzLoading]="!loading" style="width: 100px;">
+                <button nz-button [nzLoading]="!loading" class="action-button update-button">
                     <nz-icon *ngIf="!loading" nzType="poweroff" />
                     <span *ngIf="loading">
                         Update
                     </span>
                 </button>
             </div>
-
         </div>
-
     </div>
-
-</app-side-panel> -->
+</app-side-panel>

@@ -7,448 +7,186 @@
   </h3>
 </div>
 
-<div class="min-h-screen antialiased text-neutral-900 bg-white">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
+<div class="customers-container">
+  <div class="customers-content">
     <!-- Top Bar -->
-    <header class="flex items-center justify-between gap-4">
-
-      <div class="flex items-start gap-3">
-        <div class="h-9 w-9 rounded-md bg-blue-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
-          <span class="text-sm font-semibold tracking-tight"
-            style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">CU</span>
+    <header class="header-section">
+      <div class="header-content">
+        <div class="header-icon">
+          <div class="h-9 w-9 rounded-md bg-blue-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
+            <span class="text-sm font-semibold tracking-tight"
+              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">CU</span>
+          </div>
         </div>
-        <div>
-          <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900"
-            style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;margin: 0;">
+        <div class="header-text">
+          <h1 class="header-title">
             Customers
           </h1>
-          <p class="text-xs text-neutral-600">
+          <p class="header-subtitle">
             Manage customer accounts, status, and spend
           </p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
-
-        <!-- <button mat-stroked-button>
+      <div class="header-actions">
+        <button mat-stroked-button class="action-button">
           <i class="fa-solid fa-download"></i>
-          Export
-        </button> -->
-        <button mat-stroked-button (click)="addCustomerMannually()">
-          <i class="fa-solid fa-plus"></i>
-          New Customer
+          <span class="action-text">Export</span>
         </button>
-
+        <button mat-stroked-button class="action-button" (click)="addCustomerMannually()">
+          <i class="fa-solid fa-plus"></i>
+          <span class="action-text">New Customer</span>
+        </button>
       </div>
     </header>
 
     <!-- Controls -->
-    <section class="mt-4 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-
+    <section class="controls-section">
       <!-- Search -->
-      <div class="relative flex-1">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="search"
-          class="lucide lucide-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500">
-          <path d="m21 21-4.34-4.34"></path>
-          <circle cx="11" cy="11" r="8"></circle>
-        </svg>
-        <input id="search" type="text" placeholder="Search by customer or company…"
-          class="w-full rounded-md bg-white pl-9 pr-3 py-2 text-sm text-neutral-900 placeholder-neutral-500 ring-1 ring-inset ring-neutral-200 focus:outline-none focus:ring-neutral-300"
-          style="font-family: 'Inter', ui-sans-serif, system-ui;">
+      <div class="search-container">
+        <div class="search-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="search"
+            class="search-icon">
+            <path d="m21 21-4.34-4.34"></path>
+            <circle cx="11" cy="11" r="8"></circle>
+          </svg>
+          <input id="search" type="text" placeholder="Search by customer or company…"
+            class="search-input">
+        </div>
       </div>
 
       <!-- Segmented Filter -->
-      <div class="inline-flex w-full md:w-auto items-center rounded-lg bg-white ring-1 ring-inset ring-neutral-200 p-1"
-        role="tablist">
-        <button data-filter="active"
-          class="filter-btn flex-1 md:flex-none inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors aria-selected:bg-neutral-100 aria-selected:text-neutral-900"
-          aria-selected="true">
-          <span
-            class="inline-flex h-5 min-w-[28px] items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 text-xs ring-1 ring-inset ring-emerald-500/20">•</span>
-          Active
-          <span id="count-active" class="ml-1 text-neutral-500 text-xs tabular-nums">(0)</span>
-        </button>
-        <button data-filter="inactive"
-          class="filter-btn flex-1 md:flex-none inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors aria-selected:bg-neutral-100 aria-selected:text-neutral-900"
-          aria-selected="false">
-          <span
-            class="inline-flex h-5 min-w-[28px] items-center justify-center rounded-full bg-neutral-500/15 text-neutral-600 text-xs ring-1 ring-inset ring-neutral-500/20">•</span>
-          Inactive
-          <span id="count-inactive" class="ml-1 text-neutral-500 text-xs tabular-nums">(0)</span>
-        </button>
+      <div class="filter-container">
+        <div class="filter-wrapper">
+          <button data-filter="active"
+            class="filter-btn filter-btn-active">
+            <span
+              class="filter-indicator filter-indicator-active">•</span>
+            <span class="filter-text">Active</span>
+            <span id="count-active" class="filter-count">(0)</span>
+          </button>
+          <button data-filter="inactive"
+            class="filter-btn">
+            <span
+              class="filter-indicator">•</span>
+            <span class="filter-text">Inactive</span>
+            <span id="count-inactive" class="filter-count">(0)</span>
+          </button>
+        </div>
       </div>
     </section>
 
-    <mat-paginator [length]="totalElements" [pageSize]="1" aria-label="Select page" class="mt-2"
+    <mat-paginator [length]="totalElements" [pageSize]="pageSize" aria-label="Select page" class="paginator"
       (page)="onPageChange($event)">
     </mat-paginator>
+    
     <!-- Table (Desktop) -->
-    <section class="mt-2 hidden md:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
-      <div
-        class="grid grid-cols-12 px-4 sm:px-6 py-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200">
-        <div class="col-span-2">Customer</div>
-        <div class="col-span-3">Contact</div>
-        <div class="col-span-1">Last Spend</div>
-        <div class="col-span-2 text-right">Total Spend</div>
-        <div class="col-span-2 text-right">Membership</div>
-        <div class="col-span-2 text-right">Expiry</div>
+    <section class="desktop-table-section">
+      <div class="table-header">
+        <div class="table-header-cell customer-header">Customer</div>
+        <div class="table-header-cell contact-header">Contact</div>
+        <div class="table-header-cell spend-header">Last Spend</div>
+        <div class="table-header-cell total-header">Total Spend</div>
+        <div class="table-header-cell membership-header">Membership</div>
+        <div class="table-header-cell expiry-header">Expiry</div>
       </div>
 
-      <div id="table-body" class="divide-y divide-neutral-100">
+      <div class="table-body">
         <!-- Rows -->
         @for (customer of customers; track $index) {
-        <div data-role="row" data-customer-id="1021" data-status="active"
-          class="grid grid-cols-12 px-4 sm:px-6 py-4 hover:bg-neutral-50 transition-colors">
-          <div class="col-span-2 flex items-center gap-2">
-            <i class="fa-solid fa-user text-violet-500" *ngIf="!customer.introduced"></i>
-            <i class="fa-solid fa-user-tag text-green-600" *ngIf="customer.introduced"></i>
-            <span class="font-medium text-neutral-900">{{customer.firstName}}</span>
+        <div class="table-row" [attr.data-customer-id]="customer.id" data-status="active">
+          <div class="table-cell customer-cell">
+            <i class="customer-icon introduced-icon" *ngIf="customer.introduced"></i>
+            <i class="customer-icon regular-icon" *ngIf="!customer.introduced"></i>
+            <span class="customer-name">{{customer.firstName}} {{customer.lastName}}</span>
           </div>
-          <div class="col-span-3 text-neutral-700">
-            {{customer.email}}
-            <br>
-            {{customer.contactNumber}}
+          <div class="table-cell contact-cell">
+            <div class="contact-info">{{customer.email}}</div>
+            <div class="contact-info">{{customer.contactNumber}}</div>
           </div>
-          <div class="col-span-1 text-neutral-500">
+          <div class="table-cell spend-cell">
             {{ customer?.lastSpendDate || '— — —' }}
           </div>
-          <div class="col-span-2 text-right text-neutral-900">{{customer.totalSpent | currency:'INR' }}</div>
-          <div class="col-span-2 text-right text-neutral-900">{{customer.membershipName}}</div>
-
-          <div class="col-span-2 text-end">
+          <div class="table-cell total-cell">{{customer.totalSpent | currency:'INR' }}</div>
+          <div class="table-cell membership-cell">{{customer.membershipName}}</div>
+          <div class="table-cell expiry-cell">
             <span *ngIf="!customer.membershipExpiry"
-              class="inline-flex items-center rounded-full bg-yellow-500/15 px-2 py-0.5 text-xs text-black-700 ring-1 ring-inset ring-yellow-500/20">—
-              — —</span>
+              class="expiry-badge expiry-badge-empty">— — —</span>
             <span *ngIf="customer.membershipExpiry && isExpired(customer.membershipExpiry)"
-              class="inline-flex items-center rounded-full bg-red-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">{{customer.membershipExpiry}}</span>
+              class="expiry-badge expiry-badge-expired">{{customer.membershipExpiry}}</span>
             <span *ngIf="customer.membershipExpiry && !isExpired(customer.membershipExpiry)"
-              class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">{{customer.membershipExpiry}}</span>
+              class="expiry-badge expiry-badge-active">{{customer.membershipExpiry}}</span>
           </div>
         </div>
         }
       </div>
     </section>
 
-    <!-- Cards (Mobile) -->
-    <section id="cards" class="mt-6 space-y-3 md:hidden">
+    <!-- Cards (Mobile/Tablet) -->
+    <section class="mobile-cards-section">
       <!-- Card -->
-      <article data-role="card" data-customer-id="1021" data-status="active"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
+      @for (customer of customers; track $index) {
+      <article class="customer-card" [attr.data-customer-id]="customer.id" data-status="active">
+        <div class="card-header">
+          <div class="card-header-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
+              class="card-icon">
               <path d="M20 21a8 8 0 1 0-16 0"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Alice Nguyen
+            <h3 class="card-title">
+              {{customer.firstName}} {{customer.lastName}}
             </h3>
           </div>
-          <span
-            class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
+          <span class="card-status">Active</span>
         </div>
-        <div class="mt-2 text-sm text-neutral-700">Acme Corp</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Jul 02, 2025
+        <div class="card-company">{{customer.companyName}}</div>
+        <div class="card-dates">
+          <div class="date-item">
+            <span class="date-label">Joined:</span> 
+            <span class="date-value">{{customer.joinDate | date:'MMM dd, yyyy'}}</span>
           </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Sep 08, 2025
+          <div class="date-item">
+            <span class="date-label">Last Seen:</span> 
+            <span class="date-value">{{customer.lastSeen | date:'MMM dd, yyyy'}}</span>
           </div>
         </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$12,480.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
+        <div class="card-footer">
+          <div class="card-amount">{{customer.totalSpent | currency:'INR'}}</div>
+          <button class="view-button">
             View
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
+              data-lucide="arrow-up-right" class="view-icon">
               <path d="M7 7h10v10"></path>
               <path d="M7 17 17 7"></path>
             </svg>
           </button>
         </div>
       </article>
-
-      <article data-role="card" data-customer-id="1020" data-status="active"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Daniel Lee
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Nova Systems</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Aug 12, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Sep 06, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">3,200.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
-
-      <article data-role="card" data-customer-id="1019" data-status="inactive"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors hidden">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Sofia Perez
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-500/15 px-2 py-0.5 text-xs text-neutral-700 ring-1 ring-inset ring-neutral-500/20">Inactive</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Orbit Media</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Jun 20, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Jul 14, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$0.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
-
-      <article data-role="card" data-customer-id="1018" data-status="active"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Marcus Chen
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Ether Labs</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Aug 04, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Sep 01, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$1,480.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
-
-      <article data-role="card" data-customer-id="1017" data-status="inactive"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors hidden">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Priya Sharma
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-neutral-500/15 px-2 py-0.5 text-xs text-neutral-700 ring-1 ring-inset ring-neutral-500/20">Inactive</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Polar Analytics</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Jul 19, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Aug 10, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$240.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
-
-      <article data-role="card" data-customer-id="1016" data-status="active"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Luca Rossi
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Rainforest Co</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Jun 30, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Sep 02, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$4,120.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
-
-      <article data-role="card" data-customer-id="1015" data-status="active"
-        class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="lucide lucide-user w-4 h-4 text-neutral-500">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
-              Emma Wilson
-            </h3>
-          </div>
-          <span
-            class="inline-flex items-center rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs text-emerald-700 ring-1 ring-inset ring-emerald-500/20">Active</span>
-        </div>
-        <div class="mt-2 text-sm text-neutral-700">Lumen Works</div>
-        <div class="mt-3 flex items-center justify-between text-sm">
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Joined:</span> Jun 12, 2025
-          </div>
-          <div class="text-neutral-500">
-            <span class="text-neutral-500">Last Seen:</span> Sep 05, 2025
-          </div>
-        </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="text-neutral-900 font-medium">$1,180.00</div>
-          <button
-            class="inline-flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 transition-colors">
-            View
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-              data-lucide="arrow-up-right" class="lucide lucide-arrow-up-right w-4 h-4">
-              <path d="M7 7h10v10"></path>
-              <path d="M7 17 17 7"></path>
-            </svg>
-          </button>
-        </div>
-      </article>
+      }
     </section>
 
     <!-- Empty state -->
-    <div id="empty" class="hidden mt-14 flex flex-col items-center justify-center text-center"
-      *ngIf="customers.length == 0">
-      <div class="h-12 w-12 rounded-lg bg-neutral-50 ring-1 ring-inset ring-neutral-200 grid place-items-center">
+    <div class="empty-state" *ngIf="customers.length == 0">
+      <div class="empty-icon-container">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="inbox"
-          class="lucide lucide-inbox w-6 h-6 text-neutral-500">
+          class="empty-icon">
           <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
           <path
             d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
           </path>
         </svg>
       </div>
-      <h3 class="mt-4 text-lg font-semibold tracking-tight text-neutral-900"
-        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
+      <h3 class="empty-title">
         No customers match your filters
       </h3>
-      <p class="mt-1 text-sm text-neutral-600">
+      <p class="empty-description">
         Try a different status or clear your search.
       </p>
     </div>
   </div>
-
 </div>
