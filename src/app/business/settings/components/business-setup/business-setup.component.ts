@@ -54,7 +54,7 @@ export class BusinessSetupComponent {
     this.isMobileView = window.innerWidth <= 768;
     // Close menu by default on mobile
     if (this.isMobileView) {
-      this.isMenuOpen = false;
+      this.isMenuOpen = true;
     }
   }
 

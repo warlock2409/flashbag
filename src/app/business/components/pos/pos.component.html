@@ -17,7 +17,7 @@
             <div class="flex flex-col h-full">
                 <!-- Mobile/Tablet Category Navigation -->
                 <div
-                    class="lg:hidden w-full p-2 overflow-hidden rounded-xl text-white flex-shrink-0 bg-violet-500 mb-4">
+                    class="lg:hidden w-full p-2 overflow-hidden rounded-sm text-white flex-shrink-0 bg-violet-300 mb-4">
                     <div class="flex overflow-x-auto space-x-2 py-2 hide-scrollbar">
                         <div *ngFor="let category of categories" (click)="onCategoryChange(category.id)" [ngClass]="{
                             'bg-white text-violet-600': activeCategory === category.id,
@@ -97,8 +97,8 @@
                     <!-- Single Cart Toggle for Mobile and Tablet -->
                     <div class="lg:hidden w-full mb-4">
                         <button (click)="toggleCartVisibility()"
-                            class="w-full py-3 bg-violet-500 text-white rounded-lg flex justify-between items-center px-4">
-                            <span class="font-semibold">Shopping Cart ({{ cart.length }})</span>
+                            class="w-full py-3 bg-violet-300 text-white rounded-sm flex justify-between items-center px-4">
+                            <span class="font-medium">Shopping Cart ({{ cart.length }})</span>
                             <mat-icon>{{ isCartVisible ? 'expand_less' : 'expand_more' }}</mat-icon>
                         </button>
                     </div>

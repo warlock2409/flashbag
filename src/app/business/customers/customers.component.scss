@@ -3,7 +3,7 @@
   background-color: white;
   padding: 20px;
   padding-top: 100px; // Increased top spacing to avoid navbar overlap (navbar height ~80px + some margin)
-  
+
   @media (max-width: 768px) {
     padding: 10px;
     padding-top: 90px; // Adjusted spacing on mobile
@@ -14,11 +14,11 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 0;
-  
+
   @media (max-width: 1200px) {
     max-width: 95%;
   }
-  
+
   @media (max-width: 768px) {
     padding: 12px 0;
     max-width: 100%;
@@ -29,19 +29,20 @@
   color: white;
   padding: 20px;
   margin-top: 20px; // Add spacing for overlay content too
-  
-  h1, h3 {
+
+  h1,
+  h3 {
     color: white !important;
   }
-  
+
   @media (max-width: 768px) {
     padding: 15px;
     margin-top: 10px;
-    
+
     h1 {
       font-size: 1.5rem;
     }
-    
+
     h3 {
       font-size: 1rem;
     }
@@ -55,7 +56,7 @@
   align-items: flex-start;
   gap: 20px;
   margin-bottom: 24px;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 15px;
@@ -67,7 +68,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  
+
   @media (max-width: 768px) {
     gap: 10px;
   }
@@ -84,11 +85,11 @@
   font-weight: 600;
   color: #1f2937;
   margin: 0 0 4px 0;
-  
+
   @media (max-width: 768px) {
     font-size: 1.25rem;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 1.125rem;
   }
@@ -98,7 +99,7 @@
   font-size: 0.75rem;
   color: #6b7280;
   margin: 0;
-  
+
   @media (max-width: 768px) {
     font-size: 0.625rem;
   }
@@ -107,7 +108,7 @@
 .header-actions {
   display: flex;
   gap: 12px;
-  
+
   @media (max-width: 480px) {
     width: 100%;
     gap: 8px;
@@ -119,7 +120,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  
+
   @media (max-width: 480px) {
     flex: 1;
     justify-content: center;
@@ -140,7 +141,7 @@
   flex-direction: column;
   gap: 16px;
   margin-bottom: 16px;
-  
+
   @media (min-width: 769px) {
     flex-direction: row;
     align-items: center;
@@ -175,13 +176,13 @@
   font-size: 0.875rem;
   color: #1f2937;
   background-color: white;
-  
+
   &:focus {
     outline: none;
     border-color: #d1d5db;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
-  
+
   @media (max-width: 768px) {
     padding: 8px 10px 8px 36px;
     font-size: 0.8125rem;
@@ -190,7 +191,7 @@
 
 .filter-container {
   width: 100%;
-  
+
   @media (min-width: 769px) {
     width: auto;
   }
@@ -202,7 +203,7 @@
   border-radius: 6px;
   border: 1px solid #e5e7eb;
   padding: 4px;
-  
+
   @media (max-width: 768px) {
     padding: 2px;
   }
@@ -220,12 +221,12 @@
   background: none;
   border: none;
   cursor: pointer;
-  
+
   @media (max-width: 768px) {
     padding: 6px 10px;
     font-size: 0.8125rem;
   }
-  
+
   @media (max-width: 480px) {
     justify-content: center;
     gap: 4px;
@@ -247,7 +248,7 @@
   background-color: #d1d5db;
   color: #6b7280;
   font-size: 0.75rem;
-  
+
   @media (max-width: 768px) {
     width: 16px;
     height: 16px;
@@ -256,8 +257,8 @@
 }
 
 .filter-indicator-active {
-  background-color: #dcfce7;
-  color: #16a34a;
+  background-color: #58d784;
+  color: #ffffff;
 }
 
 .filter-text {
@@ -270,7 +271,7 @@
   margin-left: 4px;
   color: #9ca3af;
   font-size: 0.75rem;
-  
+
   @media (max-width: 480px) {
     margin-left: 0;
   }
@@ -279,7 +280,7 @@
 // Paginator
 .paginator {
   margin: 16px 0;
-  
+
   @media (max-width: 768px) {
     margin: 12px 0;
   }
@@ -292,7 +293,7 @@
   border: 1px solid #e5e7eb;
   overflow: hidden;
   background-color: white;
-  
+
   @media (min-width: 1024px) {
     display: block;
   }
@@ -309,38 +310,38 @@
   text-transform: uppercase;
   color: #9ca3af;
   letter-spacing: 0.05em;
-  
+
   @media (max-width: 1200px) {
     padding: 10px 16px;
     // Adjust column widths for better alignment on smaller screens
     grid-template-columns: 2fr 3fr 1fr 2fr 2fr 2fr;
   }
-  
+
   // Ensure proper text alignment for each header cell
   .table-header-cell {
     display: flex;
     align-items: center;
-    
+
     &.customer-header {
       justify-content: flex-start;
     }
-    
+
     &.contact-header {
       justify-content: flex-start;
     }
-    
+
     &.spend-header {
       justify-content: flex-start;
     }
-    
+
     &.total-header {
       justify-content: flex-end;
     }
-    
+
     &.membership-header {
       justify-content: flex-end;
     }
-    
+
     &.expiry-header {
       justify-content: flex-end;
     }
@@ -354,11 +355,11 @@
     padding: 16px 24px;
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.2s;
-    
+
     &:hover {
       background-color: #f9fafb;
     }
-    
+
     @media (max-width: 1200px) {
       padding: 14px 16px;
       // Ensure row columns match header columns
@@ -372,7 +373,7 @@
   align-items: center;
   color: #6b7280;
   font-size: 0.875rem;
-  
+
   // Ensure proper text alignment for each cell to match headers
   &.customer-cell {
     color: #1f2937;
@@ -380,31 +381,31 @@
     gap: 8px;
     justify-content: flex-start;
   }
-  
+
   &.contact-cell {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
     justify-content: center;
   }
-  
+
   &.spend-cell {
     color: #9ca3af;
     justify-content: flex-start;
   }
-  
+
   &.total-cell {
     color: #1f2937;
     justify-content: flex-end;
     font-weight: 500;
   }
-  
+
   &.membership-cell {
     color: #1f2937;
     justify-content: flex-end;
     font-weight: 500;
   }
-  
+
   &.expiry-cell {
     justify-content: flex-end;
   }
@@ -436,7 +437,7 @@
 
 .contact-info {
   line-height: 1.4;
-  
+
   // Ensure consistent styling for contact information
   &:first-child {
     margin-bottom: 2px;
@@ -447,7 +448,8 @@
   color: #9ca3af;
 }
 
-.total-cell, .membership-cell {
+.total-cell,
+.membership-cell {
   color: #1f2937;
   justify-content: flex-end;
   font-weight: 500;
@@ -467,7 +469,7 @@
   font-weight: 500;
   min-width: 80px;
   text-align: center;
-  
+
   // Ensure proper alignment within the cell
   .expiry-cell & {
     margin-left: auto;
@@ -497,11 +499,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
+
   @media (min-width: 1024px) {
     display: none;
   }
-  
+
   @media (max-width: 768px) {
     gap: 10px;
   }
@@ -513,11 +515,11 @@
   padding: 16px;
   background-color: white;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: #f9fafb;
   }
-  
+
   @media (max-width: 768px) {
     padding: 14px;
   }
@@ -549,7 +551,7 @@
   font-weight: 600;
   color: #1f2937;
   margin: 0;
-  
+
   @media (max-width: 768px) {
     font-size: 0.9375rem;
   }
@@ -571,7 +573,7 @@
   font-size: 0.875rem;
   color: #6b7280;
   margin-bottom: 12px;
-  
+
   @media (max-width: 768px) {
     font-size: 0.8125rem;
     margin-bottom: 10px;
@@ -583,12 +585,12 @@
   flex-direction: column;
   gap: 6px;
   margin-bottom: 12px;
-  
+
   @media (min-width: 480px) {
     flex-direction: row;
     justify-content: space-between;
   }
-  
+
   @media (max-width: 768px) {
     gap: 4px;
     margin-bottom: 10px;
@@ -599,7 +601,7 @@
   display: flex;
   gap: 4px;
   font-size: 0.75rem;
-  
+
   @media (max-width: 768px) {
     font-size: 0.6875rem;
   }
@@ -623,7 +625,7 @@
   font-size: 1rem;
   font-weight: 500;
   color: #1f2937;
-  
+
   @media (max-width: 768px) {
     font-size: 0.9375rem;
   }
@@ -640,12 +642,12 @@
   font-size: 0.875rem;
   cursor: pointer;
   border-radius: 4px;
-  
+
   &:hover {
     color: #1f2937;
     background-color: #f3f4f6;
   }
-  
+
   @media (max-width: 768px) {
     padding: 4px 8px;
     font-size: 0.8125rem;
@@ -666,7 +668,7 @@
   text-align: center;
   margin-top: 56px;
   padding: 20px;
-  
+
   @media (max-width: 768px) {
     margin-top: 40px;
     padding: 15px;
@@ -696,7 +698,7 @@
   font-weight: 600;
   color: #1f2937;
   margin: 0 0 8px 0;
-  
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -706,7 +708,7 @@
   font-size: 0.875rem;
   color: #6b7280;
   margin: 0;
-  
+
   @media (max-width: 768px) {
     font-size: 0.8125rem;
   }
@@ -715,7 +717,7 @@
 // Responsive visibility classes
 .show-mobile {
   display: none;
-  
+
   @media (max-width: 1023px) {
     display: block;
   }
@@ -723,7 +725,7 @@
 
 .show-desktop {
   display: none;
-  
+
   @media (min-width: 1024px) {
     display: block;
   }
