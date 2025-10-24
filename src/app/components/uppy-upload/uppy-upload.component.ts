@@ -20,7 +20,7 @@ export interface UploadFileData {
   styleUrl: './uppy-upload.component.scss'
 })
 export class UppyUploadComponent {
-  baseUrl= "https://raijin.onrender.com/";
+  baseUrl= "https://9myle.duckdns.org/";
 
 
   @ViewChild('uppyDashboard', { static: true }) uppyDashboard!: ElementRef;

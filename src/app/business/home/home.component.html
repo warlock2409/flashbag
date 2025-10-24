@@ -18,7 +18,7 @@
     <div class="sparkle"></div>
   </div>
 
-  <div class="relative z-50 p-6 animate-slide-right delay-200 " *ngIf="!this.selectedShop">
+  <div class="relative z-50 p-6 animate-slide-right delay-200 " *ngIf="!this.selectedShop && !isLoading">
     <h1 class="!text-white">
       You’ve just taken the first step toward building something extraordinary.
       Let’s start by creating your shop
@@ -306,7 +306,7 @@
             </div>
           </div>
           <div class="h-40 mb-6 hover:scale-105 transition-transform">
-            @for (expiringMembership of membershipSummary.expiringMemberships; track $index) {
+            @for (expiringMembership of membershipSummary?.expiringMemberships; track $index) {
             <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-2">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">

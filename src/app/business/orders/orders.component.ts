@@ -98,6 +98,8 @@ export class OrdersComponent {
   ngOnInit() {
     this.shopCode = localStorage.getItem("shopCode");
     // Get all Invoices by default Type open
+    console.log("order",this.shopCode);
+    
     if (this.shopCode) {
       this.getAllInvoicesByShop();
       this.getInvoiceStatusCount();

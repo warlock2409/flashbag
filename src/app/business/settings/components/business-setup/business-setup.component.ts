@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { MatIconModule } from '@angular/material/icon';
 
+import { ResponseDate } from 'src/app/app.component';
 @Component({
   selector: 'app-business-setup',
   standalone: true,
@@ -53,7 +54,7 @@ export class BusinessSetupComponent {
     this.isMobileView = window.innerWidth <= 768;
     // Close menu by default on mobile
     if (this.isMobileView) {
-      this.isMenuOpen = false;
+      this.isMenuOpen = true;
     }
   }
 
@@ -68,27 +69,24 @@ export class BusinessSetupComponent {
   buffer = false;
   selectedFilter = '';
   filters: any[] = [];
+  // Organization;
+  details!: any;
 
   ngOnInit() {
     // GET ORG BUSINESS MODEL 
-    this.getOrganizationBusinessModel();
+    this.getOrganizationDetails();
   }
 
-  getOrganizationBusinessModel() {
-    // let key = localStorage.getItem("orgCode")
+  getOrganizationDetails() {
+    this.organizationService.getOrganizationDetails().subscribe({
+      next: (res: ResponseDate) => {
+        console.log(res);
+        this.details = res.data;
+      },
+      error: (err: any) => {
 
-    // this.organizationService.getBusinessModel(key == null ? " " : key).subscribe({
-    //   next: (res: any) => {
-    //     console.log(res);
-    //     this.filters = res.data.businessModels;
-    //     if (this.filters.length > 0) {
-    //       this.onFilterChange(this.filters[0].name)
-    //     }
-    //   },
-    //   error: () => {
-
-    //   }
-    // })
+      }
+    })
   }
 
   showFiller = true;

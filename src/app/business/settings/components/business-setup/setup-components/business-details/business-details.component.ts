@@ -20,9 +20,7 @@ import { UploadMediaComponent } from "src/app/components/upload-media/upload-med
   styleUrl: './business-details.component.scss'
 })
 export class BusinessDetailsComponent {
-  managePlan() {
-    throw new Error('Method not implemented.');
-  }
+
   dialog = inject(MatDialog);
 
   constructor(private route: ActivatedRoute, private router: Router, private organizationService: OrganizationServiceService) { }
@@ -78,6 +76,10 @@ export class BusinessDetailsComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  managePlan() {
+    throw new Error('Method not implemented.');
   }
 
   getStatusColor(status: string): string {

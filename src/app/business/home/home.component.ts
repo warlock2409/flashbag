@@ -18,7 +18,7 @@ import { ShopActionsComponent } from '../settings/components/business-setup/setu
 })
 export class HomeComponent {
 
-
+  private subscription!: Subscription;
   timeZone = 'Asia/Kolkata';
   dialog = inject(MatDialog);
   dashboardService = inject(DashboardService);
@@ -35,19 +35,35 @@ export class HomeComponent {
     // add more mappings here
   ])
 
-  constructor(private ablyService: AblyService,) {
-    this.initialize();
+  constructor(private ablyService: AblyService) {
+  }
+
+
+
+  async ngOnInit() {
+    await this.initialize();
+    this.subscription = this.ablyService.onMessage('home').subscribe(msg => {
+      console.log('Home received:', msg.data);
+      this.trailListCustomer.unshift(msg.data);
+    });
   }
 
   private async initialize() {
+    console.log("Loading Location Shops");
+
     await this.getLocations();
+    console.log("Loading Location loded");
+
     this.getCurrentUser();
+    console.log("Loading getCurrentUser Shops");
+
     this.loadGymDashboard();
+    console.log("Loading loadGymDashboard Shops");
+
     this.getTrailSessions();
+    console.log("Loading getTrailSessions Shops");
+
   }
-
-
-
 
   isLoading = false;
   shops: ShopModel[] = [];
@@ -69,14 +85,15 @@ export class HomeComponent {
   }
 
   getTrailSessions() {
-    this.orgApiService.getTrailSessions().subscribe({
-      next: (res: any) => {
-        this.trailListCustomer = res.data
-      },
-      error: (err: any) => {
+    if (localStorage.getItem("shopCode"))
+      this.orgApiService.getTrailSessions().subscribe({
+        next: (res: any) => {
+          this.trailListCustomer = res.data
+        },
+        error: (err: any) => {
 
-      }
-    })
+        }
+      })
   }
 
   changeTrailStatus(waitList: WaitListDto, status: string) {
@@ -91,36 +108,45 @@ export class HomeComponent {
   }
 
 
-  getLocations() {
+  private async getLocations(): Promise<void> {
     this.isLoading = true;
-    this.orgApiService.getLocations().subscribe({
-      next: (res: ResponseDate) => {
-        this.isLoading = false;
-        this.shops = res.data.map((shop: ShopModel) => ({
-          code: shop.code,
-          address: this.formatAddress(shop.addressDto),
-          image: shop.documentDto?.attachments?.length && shop.documentDto.attachments[0]?.url
-            ? `https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/${shop.documentDto.attachments[0].url}`
-            : this.fallback,
-          ...shop
-        }));
 
-        if (this.shops.length > 0) {
-          this.selectedShop = this.shops[0];
-          localStorage.setItem("shopCode", this.selectedShop.code!);
-          this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
-          this.ablyService.setShopCode(this.selectedShop.code!);
+    return new Promise((resolve, reject) => {
+      this.orgApiService.getLocations().subscribe({
+        next: async (res: ResponseDate) => {
+          this.isLoading = false;
 
-          this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name) ? this.shopCategory.get(this.selectedShop.primaryIndustry.name) : this.selectedShop.primaryIndustry.name
-        } else {
+          this.shops = res.data.map((shop: ShopModel) => ({
+            code: shop.code,
+            address: this.formatAddress(shop.addressDto),
+            image: shop.documentDto?.attachments?.length && shop.documentDto.attachments[0]?.url
+              ? `https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/${shop.documentDto.attachments[0].url}`
+              : this.fallback,
+            ...shop
+          }));
 
+          if (this.shops.length > 0) {
+            this.selectedShop = this.shops[0];
+            localStorage.setItem("shopCode", this.selectedShop.code!);
+            this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
+            this.ablyService.setShopCode(this.selectedShop.code!);
+            console.log("ShopCode", this.selectedShop.code!);
+
+            this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name)
+              ? this.shopCategory.get(this.selectedShop.primaryIndustry.name)
+              : this.selectedShop.primaryIndustry.name;
+          }
+
+          resolve();
+        },
+        error: (err: any) => {
+          this.isLoading = false;
+          reject(err);
         }
-      },
-      error: (err: any) => {
-        this.isLoading = false;
-      }
-    })
+      });
+    });
   }
+
 
   createShop() {
     const dialogRef = this.dialog.open(ShopActionsComponent, {
@@ -129,7 +155,7 @@ export class HomeComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog closed with:', result);
-      this.getLocations();
+      this.initialize();
     });
   }
 
@@ -179,32 +205,33 @@ export class HomeComponent {
   }
 
   loadGymDashboard() {
-    forkJoin({
-      membershipSummary: this.dashboardService.getMembershipSummary(),
-      hourlyComparision: this.dashboardService.getHourlyCheckIns(),
-      // renewalTrends: this.dashboardService.getRenewalTrends()
-    }).subscribe({
-      next: (res) => {
-        this.membershipSummary = res.membershipSummary.data;
-        this.hourlyComparision = res.hourlyComparision.filter(d => d.hour >= 4);
-        this.checkInPercentage = this.getCurrentHourComparison(this.hourlyComparision);
+    if (localStorage.getItem("shopCode"))
+      forkJoin({
+        membershipSummary: this.dashboardService.getMembershipSummary(),
+        hourlyComparision: this.dashboardService.getHourlyCheckIns(),
+        // renewalTrends: this.dashboardService.getRenewalTrends()
+      }).subscribe({
+        next: (res) => {
+          this.membershipSummary = res.membershipSummary.data;
+          this.hourlyComparision = res.hourlyComparision.filter(d => d.hour >= 4);
+          this.checkInPercentage = this.getCurrentHourComparison(this.hourlyComparision);
 
-        if (this.membershipSummary?.expiringMemberships?.length) {
-          this.membershipSummary.expiringMemberships = this.membershipSummary.expiringMemberships.map((m: any) => {
-            const start = this.toTimeZoneDate(m.startDate);
-            const end = this.toTimeZoneDate(m.endDate);
-            const remainingDays = this.getRemainingDays(end!);
-            return {
-              ...m,
-              startDate: start,
-              endDate: end,
-              remainingDays,
-            };
-          });
-        }
-      },
-      error: (err) => console.error(err)
-    });
+          if (this.membershipSummary?.expiringMemberships?.length) {
+            this.membershipSummary.expiringMemberships = this.membershipSummary.expiringMemberships.map((m: any) => {
+              const start = this.toTimeZoneDate(m.startDate);
+              const end = this.toTimeZoneDate(m.endDate);
+              const remainingDays = this.getRemainingDays(end!);
+              return {
+                ...m,
+                startDate: start,
+                endDate: end,
+                remainingDays,
+              };
+            });
+          }
+        },
+        error: (err) => console.error(err)
+      });
   }
 
   getCurrentHourComparison(attendanceData: any[]): string {

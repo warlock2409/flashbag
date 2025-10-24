@@ -1,8 +1,17 @@
-<div class="flex justify-center px-2 md:px-4 lg:px-20 xl:px-40 py-2">
+<div class="overlay" *ngIf="loding">
+    <img src="/assets/png/logo.png" alt="" srcset="" class="w-24">
+    <h1 class="text-white!">
+        “Every great business starts with a single idea.”
+    </h1>
+    <h3 class="text-white!">
+        We are setting up your business. Please wait ❤️
+    </h3>
+</div>
+<div class="flex justify-center px-2 md:px-4 lg:px-20 xl:px-40 py-2 mt-16">
     <div class="w-full max-w-3xl">
-        <mat-card class="example-card px-2 md:p-16" appearance="outlined">
+        <mat-card class="example-card px-2 md:p-8" appearance="outlined">
             <div class="p-2 md:p-4 flex justify-between" style="align-items: center;">
-                <mat-card-title class="text-end">Hi, We are Buzy Life!</mat-card-title>
+                <mat-card-title class="text-end">Hi, We are 9Myle!</mat-card-title>
                 <img src="/assets/png/logo.png" alt="" srcset="" class="w-24" (click)="getAllBusinessModels()">
             </div>
 
@@ -36,12 +45,12 @@
                         </div>
 
                         <div>
-                            <label class="block mb-2 text-sm font-medium">Company*</label>
+                            <label class="block mb-2 text-sm font-medium">Business*</label>
                             <input type="text" formControlName="company"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
                             <div class="text-red-500 text-sm mt-1"
                                 *ngIf="registrationForm.get('businessDetails.company')?.touched && registrationForm.get('businessDetails.company')?.invalid">
-                                Company name is required.
+                                Business name is required.
                             </div>
                         </div>
 
@@ -65,12 +74,16 @@
                             </div>
                         </div>
 
-                        <div class="flex items-start mb-4 md:mb-6 mt-4">
+                        <div class="flex items-start mb-4 md:mb-6 mt-8">
                             <input id="terms" type="checkbox" formControlName="termsAccepted"
                                 class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50" />
                             <label for="terms" class="ms-2 text-sm font-medium">I agree to the
-                                <a href="#" class="text-blue-600 hover:underline">terms and conditions</a>.
+                                <a class="text-blue-600 hover:underline" (click)="openTerms()">terms and conditions</a>.
                             </label>
+                            <div class="text-red-500 text-sm mt-1"
+                                *ngIf="registrationForm.get('businessDetails.termsAccepted')?.touched && registrationForm.get('businessDetails.termsAccepted')?.invalid">
+                                Agree to proceed  
+                            </div>
                         </div>
                     </div>
 
@@ -80,7 +93,7 @@
                             <label class="block mb-2 text-sm font-medium">Email address</label>
                             <input type="email" autocomplete="off" formControlName="email"
                                 class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-                            
+
                             <div class="text-red-500 text-sm mt-1"
                                 *ngIf="registrationForm.get('accountDetails.email')?.touched && registrationForm.get('accountDetails.email')?.invalid">
                                 Email required
@@ -104,7 +117,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <button mat-stroked-button type="submit" 
+                        <button mat-stroked-button type="submit"
                             style="background-color: #a684ff; color: white;">Submit</button>
                     </div>
                 </form>

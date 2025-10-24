@@ -38,7 +38,8 @@ export interface UploadFile {
 })
 export class UploadMediaComponent {
 
-  baseUrl= "https://raijin.onrender.com/";
+  baseUrl= "https://9myle.duckdns.org/";
+
 
 
   constructor(private http: HttpClient, public dialog: MatDialog, private swalService: SweatAlertService) { }
@@ -51,6 +52,10 @@ export class UploadMediaComponent {
   @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnU5NXFncHV2ZWlmYjV5eXVxeDNwZWd0emU5Ym5zNzBzcHFvaW41bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ctYt1iImGI71RwUIQO/giphy.gif";
 
   ngOnChanges(changes: SimpleChanges) {
+
+    console.log(this.existingUploads);
+    
+    
     if (this.existingUploads && Array.isArray(this.existingUploads.attachments)) {
       const prefix = "https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/";
 

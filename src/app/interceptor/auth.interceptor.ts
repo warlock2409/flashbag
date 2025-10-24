@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-    
+
     // const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:9000');
     const updatedUrl = req.url.replace('http://localhost:8080', 'https://9myle.duckdns.org');
 
