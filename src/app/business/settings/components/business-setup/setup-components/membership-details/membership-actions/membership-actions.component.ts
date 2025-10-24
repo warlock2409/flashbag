@@ -12,6 +12,12 @@ import { ShopModel } from 'src/app/models/shop.model';
 import { ResponseDate } from 'src/app/app.component';
 import { MembershipBenefit, OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/models/organization';
 
+// Interface for exercise day
+interface ExerciseDay {
+  dayNumber: number;
+  bodyParts: string[];
+}
+
 @Component({
   selector: 'app-membership-actions',
   standalone: true,
@@ -20,7 +26,6 @@ import { MembershipBenefit, OrganizationMembershipPlan, OrganizationServiceModel
   styleUrl: './membership-actions.component.scss'
 })
 export class MembershipActionsComponent {
-
 
   readonly dialogRef = inject(MatDialogRef<MembershipActionsComponent>);
   readonly data = inject<any>(MAT_DIALOG_DATA);
@@ -32,6 +37,9 @@ export class MembershipActionsComponent {
   // temp 
   benefitType = 'DURATION_ACCESS';
   days = '0';
+
+  // Exercise mapping data
+  exerciseDays: ExerciseDay[] = [];
 
   initializePlan(existingPlan: OrganizationMembershipPlan): void {
     this.membershipPlan = {
@@ -72,12 +80,9 @@ export class MembershipActionsComponent {
     }
   }
 
-
-
   constructor(private dialog: MatDialog, private orgService: OrganizationServiceService) {
 
   }
-
 
   closeDialog() {
     this.dialogRef.close();
@@ -95,9 +100,15 @@ export class MembershipActionsComponent {
     this.stepper.previous();
   }
 
+  stepperNext() {
+    this.stepper.next();
+  }
+
   ngOnInit() {
     this.getOrgIndustry();
     this.initializePlan(this.data.existingPlan);
+    // Initialize with one empty day
+    this.addDay();
   }
 
   loadShopsByActiveService() {
@@ -116,7 +127,6 @@ export class MembershipActionsComponent {
     })
 
   }
-
 
   getOrgIndustry() {
     this.orgService.getOrgIndustryByShop().subscribe({
@@ -151,8 +161,28 @@ export class MembershipActionsComponent {
     });
   }
 
+  // Exercise mapping methods
+  addDay() {
+    const newDay: ExerciseDay = {
+      dayNumber: this.exerciseDays.length + 1,
+      bodyParts: [''] // Start with one empty body part selection
+    };
+    this.exerciseDays.push(newDay);
+  }
 
+  removeDay(index: number) {
+    this.exerciseDays.splice(index, 1);
+    // Re-number the days
+    this.exerciseDays.forEach((day, i) => day.dayNumber = i + 1);
+  }
 
+  addBodyPartToDay(dayIndex: number) {
+    this.exerciseDays[dayIndex].bodyParts.push('');
+  }
+
+  removeBodyPart(dayIndex: number, bodyPartIndex: number) {
+    this.exerciseDays[dayIndex].bodyParts.splice(bodyPartIndex, 1);
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

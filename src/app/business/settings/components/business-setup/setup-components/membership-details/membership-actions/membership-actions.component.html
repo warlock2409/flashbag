@@ -168,6 +168,72 @@
                         </div>
                     </div>
                 </mat-step>
+                <!-- Exercise Mapping Step -->
+                <mat-step>
+                    <ng-template matStepLabel>Exercise Mapping</ng-template>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-medium mb-4">Exercise Mapping</h3>
+                        <p class="text-gray-600 mb-6">Create workout days and assign body parts for this membership plan.</p>
+                        
+                        <!-- Add Day Button -->
+                        <div class="mb-6">
+                            <button type="button" 
+                                class="flex items-center gap-2 bg-violet-500 hover:bg-violet-600 text-white px-4 py-2 rounded-md transition-colors"
+                                (click)="addDay()">
+                                <mat-icon>add</mat-icon>
+                                Add Day
+                            </button>
+                        </div>
+                        
+                        <!-- Days List -->
+                        <div class="space-y-6">
+                            <div *ngFor="let day of exerciseDays; let dayIndex = index" 
+                                class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="font-medium text-lg">Day {{ dayIndex + 1 }}</h4>
+                                    <button type="button" 
+                                        class="text-red-500 hover:text-red-700"
+                                        (click)="removeDay(dayIndex)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                                
+                                <!-- Body Parts for this Day -->
+                                <div class="space-y-3">
+                                    <div *ngFor="let bodyPart of day.bodyParts; let bpIndex = index" 
+                                        class="flex items-center gap-2">
+                                        <select class="flex-1 rounded-md border border-gray-300 px-3 py-2 
+                                            focus:border-violet-400 focus:ring-violet-400"
+                                            [(ngModel)]="day.bodyParts[bpIndex]">
+                                            <option value="">Select Body Part</option>
+                                            <option value="chest">Chest</option>
+                                            <option value="back">Back</option>
+                                            <option value="legs">Legs</option>
+                                            <option value="shoulders">Shoulders</option>
+                                            <option value="arms">Arms</option>
+                                            <option value="abs">Abs</option>
+                                            <option value="glutes">Glutes</option>
+                                            <option value="calves">Calves</option>
+                                            <option value="full-body">Full Body</option>
+                                        </select>
+                                        <button type="button" 
+                                            class="text-red-500 hover:text-red-700"
+                                            (click)="removeBodyPart(dayIndex, bpIndex)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                    </div>
+                                    
+                                    <button type="button" 
+                                        class="flex items-center gap-1 text-violet-500 hover:text-violet-700 text-sm"
+                                        (click)="addBodyPartToDay(dayIndex)">
+                                        <mat-icon class="text-sm">add</mat-icon>
+                                        Add Body Part
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-step>
             </mat-stepper>
         </div>
 
@@ -178,10 +244,14 @@
             <div class="space-x-3 flex gap-2">
                 <button mat-stroked-button mat-dialog-close
                     *ngIf="stepper.selectedIndex != (stepper.steps.length - 1)">Cancel</button>
-                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
+                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 3)"
                     type="submit" (click)="validateMembershipDetails()">
                     Next
                 </button>
+                <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
+                    (click)="stepperPrev()">Back</button>
+                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
+                    (click)="stepperNext()">Next</button>
                 <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)"
                     (click)="stepperPrev()">Back</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
