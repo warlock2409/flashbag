@@ -12,6 +12,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { BusinessModel, Plan, PlanAddOn } from 'src/app/models/business.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { InvoiceItem } from './InvoiceItem';
+import Swal from 'sweetalert2';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
 export interface InvoiceData {
   id: number,
@@ -68,7 +70,7 @@ export class PointOfSaleComponent {
   //Selected Plan 
   selectedPlan: InvoiceData | null = null;
 
-  constructor(private masterService: MasterService) {
+  constructor(private masterService: MasterService, private SwalService:SweatAlertService) {
     this.getBusinessModels();
   }
 
@@ -87,7 +89,8 @@ export class PointOfSaleComponent {
         this.getBusinessPlan()
       },
       error: (err: any) => {
-
+        this.SwalService.error("Something Went Wrong Try Again Later");
+        this.SwalService.alertTeam("POS","Buy Business Plan","Load Business Model",err.error.toString());
       }
     })
   }
@@ -95,7 +98,7 @@ export class PointOfSaleComponent {
   getBusinessPlan() {
     this.masterService.getPlansByOrganization().subscribe({
       next: (res: ResponseDate) => {
-        this.businessPlans = res.data.sort((a: Plan, b: Plan) => a.basePrice - b.basePrice);
+        this.businessPlans = res.data.sort((a: Plan, b: Plan) =>  b.basePrice - a.basePrice);
       },
       error: (err: any) => {
 
@@ -137,6 +140,7 @@ export class PointOfSaleComponent {
 
 
   onQuantityChange(item: InvoiceItem, operation: 'increase' | 'decrease') {
+    
     const planChanged = item.type === 'PLAN';
 
     // Update the quantity on this item
@@ -202,6 +206,7 @@ export class PointOfSaleComponent {
   selectPlan(plan: Plan, stepper: MatStepper) {
     this.firstFormGroup.patchValue({ firstCtrl: plan.toString() });
     let model = this.modelFilters.find(model => model.name == this.selectedFilter);
+
     if (model) {
       this.getAddonByPlanAndBusinessModel(plan.id, model?.id);
       stepper.next();
@@ -211,12 +216,13 @@ export class PointOfSaleComponent {
           canHaveMultiple: true,
           name: plan.name,
           price: plan.basePrice,
-          quantity: 4,
+          quantity: plan.months,
           type: "PLAN",
           totalPrice: 0 // ignored, totalPrice is getter
         },
         1
       );
+
       this.invoiceItems = this.invoiceItems.filter(item => item.type != "PLAN");
       this.selectedPlan = invoiceItem;
       this.updateSelectedPlanQuantity(invoiceItem.quantity);
@@ -264,6 +270,7 @@ export class PointOfSaleComponent {
     this.masterService.requestPurchase(requestPurchase).subscribe({
       next: (res: ResponseDate) => {
         this._snackBar.success('Check out completed');
+        this.SwalService.paymentrequest("POS",totalAmount.toString(),"Payment Request");
         this.closeDialog();
       },
       error: (err: any) => {

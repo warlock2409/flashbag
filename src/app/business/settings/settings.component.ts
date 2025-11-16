@@ -190,8 +190,6 @@ export class SettingsComponent {
 
 
   notifyTeam(feature: string, firstName: string, email: string, organization: string, intrest:boolean) {
-    console.log(feature);
-    
     const payload = {
       content: "May be New feature request received!",
       embeds: [
@@ -220,6 +218,7 @@ export class SettingsComponent {
       .then(data => console.log('Message sent:', data))
       .catch(error => console.error('Error sending message:', error));
   }
+  
 }
 
 

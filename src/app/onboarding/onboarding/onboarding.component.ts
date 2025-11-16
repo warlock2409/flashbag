@@ -39,7 +39,7 @@ export class OnboardingComponent {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
         company: ['', Validators.required],
-        phone: ['', Validators.required],
+        phone: ['', Validators.required,Validators.pattern(/^\+?\d{10,15}$/)],
         visitors: ['', [Validators.required, Validators.min(0)]],
         termsAccepted: [false, Validators.requiredTrue]
       }),

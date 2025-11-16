@@ -55,11 +55,9 @@ export class BusinessDetailsComponent {
   getOrganizationDetails() {
     this.organizationService.getOrganizationDetails().subscribe({
       next: (res: ResponseDate) => {
-        console.log(res);
         this.details = res.data;
       },
       error: (err: any) => {
-
       }
     })
   }
@@ -75,6 +73,7 @@ export class BusinessDetailsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      this.getOrganizationDetails();
     });
   }
 

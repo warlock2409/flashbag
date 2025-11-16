@@ -5,7 +5,6 @@
   
   // Responsive padding for navbar spacing
   &.responsive-padding-top {
-    padding-top: 100px;
     
     @media (max-width: 1024px) {
       padding-top: 100px;
@@ -67,7 +66,7 @@ h1 {
   // Responsive tabs
   &.responsive-tabs {
     position: sticky;
-    top: 80px;
+    top: 0px;
     background: #f5f5f5;
     z-index: 10;
     padding-top: 8px;

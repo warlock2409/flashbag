@@ -41,6 +41,7 @@
                         <span class="location-industry-tag">
                             {{shop.primaryIndustry.name}}
                         </span>
+                        <span class="w-3 h-3 rounded-full" [ngClass]="shop.active ? 'bg-green-500' : 'bg-red-500'"></span>
                     </div>
                     <p class="location-address">
                         {{ shop.address }}
@@ -48,8 +49,8 @@
 
                     <!-- Buttons -->
                     <div class="location-actions">
-                        <button mat-raised-button class="edit-button" 
-                            (click)="editLocation(shop)">
+
+                        <button mat-raised-button class="edit-button" (click)="editLocation(shop)">
                             Edit
                         </button>
                     </div>

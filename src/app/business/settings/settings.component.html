@@ -1,4 +1,5 @@
 <div class="settings-container responsive-padding-top">
+  
   <h1 class="responsive-title">Workspace settings</h1>
   <p class="subtitle responsive-subtitle">Manage settings for One Piece.</p>
 
@@ -10,8 +11,9 @@
   </nav>
 
   <div id="settings-section" class="card-grid responsive-card-grid">
-    <div *ngFor="let card of cards.settingsCards" class="settings-card relative responsive-settings-card" [class.locked]="card.locked"
-      [routerLink]="!card.locked ? card.routerLink : null"  (click)="card.locked ? openLockedDialog(card) : 0">
+    <div *ngFor="let card of cards.settingsCards" class="settings-card relative responsive-settings-card"
+      [class.locked]="card.locked" [routerLink]="!card.locked ? card.routerLink : null"
+      (click)="card.locked ? openLockedDialog(card) : 0">
       <mat-icon color="primary" class="responsive-icon">{{ card.icon }}</mat-icon>
       <div>
         <h2 class="responsive-card-title">{{ card.title }}</h2>
@@ -29,7 +31,8 @@
   <div id="online-presence-section" class="section responsive-section">
     <h2 class="responsive-section-title">Online presence</h2>
     <div class="simple-card-grid responsive-simple-card-grid">
-      <div *ngFor="let card of cards.onlinePresence" class="simple-card relative responsive-simple-card" [class.locked]="card.locked">
+      <div *ngFor="let card of cards.onlinePresence" class="simple-card relative responsive-simple-card"
+        [class.locked]="card.locked">
         <div>
           <div class="card-title responsive-card-title">{{ card.title }}</div>
           <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
@@ -50,7 +53,8 @@
   <div id="marketing-section" class="section responsive-section">
     <h2 class="responsive-section-title">Marketing</h2>
     <div class="simple-card-grid responsive-simple-card-grid">
-      <div *ngFor="let card of cards.marketing" class="simple-card relative responsive-simple-card" [class.locked]="card.locked">
+      <div *ngFor="let card of cards.marketing" class="simple-card relative responsive-simple-card"
+        [class.locked]="card.locked">
         <div>
           <div class="card-title responsive-card-title">{{ card.title }}</div>
           <div class="card-desc responsive-card-desc">{{ card.desc }}</div>

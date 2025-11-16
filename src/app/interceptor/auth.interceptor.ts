@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
     // const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:9000');
-    const updatedUrl = req.url.replace('http://localhost:8080', 'https://9myle.duckdns.org');
+    const updatedUrl = req.url.replace('http://localhost:8080', 'https://9myle.store');
 
     const updatedReq = req.clone({
         url: updatedUrl,

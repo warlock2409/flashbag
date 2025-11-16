@@ -27,6 +27,7 @@ import { ResponseDate } from 'src/app/app.component';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ShopActionsComponent } from "./location-action/shop-actions/shop-actions.component";
 import { MatDialog } from '@angular/material/dialog';
+import { NzBadgeComponent } from "ng-zorro-antd/badge";
 
 @Component({
   selector: 'app-location',
@@ -41,8 +42,9 @@ import { MatDialog } from '@angular/material/dialog';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule, MatSelectModule, MatTooltipModule,
-    ShopActionsComponent
-  ],
+    ShopActionsComponent,
+    NzBadgeComponent
+],
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
 })

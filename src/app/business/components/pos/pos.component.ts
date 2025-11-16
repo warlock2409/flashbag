@@ -50,7 +50,7 @@ export class PosComponent implements OnInit {
     const width = window.innerWidth;
     this.isMobile = width < 768;
     this.isTablet = width >= 768 && width < 1024;
-    
+
     // On mobile/tablet, hide cart by default
     if (this.isMobile || this.isTablet) {
       this.isCartVisible = false;
@@ -249,8 +249,9 @@ export class PosComponent implements OnInit {
     }
   }
 
+  shopCode: any;
   constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }) {
-    console.log(this.invoice);
+
   }
 
   placeHolderImg = 'https://seanl80.sg-host.com/wp-content/uploads/woocommerce-placeholder-600x600.png'
@@ -381,9 +382,16 @@ export class PosComponent implements OnInit {
   ngOnInit(): void {
     // Check screen size on component initialization
     this.checkScreenSize();
-    
-    if (this.activeCategory == "memberships") {
+    this.shopCode = localStorage.getItem('shopCode');
+    console.log(this.shopCode);
+
+
+    if (this.activeCategory == "memberships" && this.shopCode) {
       this.getMembershipByShop();
+    } else {
+      setTimeout(() => {
+        this.closeDialog();
+      }, 2000);
     }
 
     if (this.data && this.data.existingInvoice) {
@@ -407,6 +415,7 @@ export class PosComponent implements OnInit {
   }
 
   getMembershipByShop() {
+
     this.shopService.getAllShopMembership().subscribe({
       next: (res: ResponseDate) => {
         res.data.forEach((mem: Item) => {

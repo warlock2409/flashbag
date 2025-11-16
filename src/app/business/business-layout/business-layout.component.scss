@@ -48,9 +48,7 @@
       display: flex;
       align-items: center;
       padding: 0 16px;
-      margin: 4px 0;
       transition: all 0.3s ease;
-      border-radius: 0 24px 24px 0;
 
       mat-icon {
         margin-right: 8px;
@@ -143,7 +141,6 @@ mat-sidenav-content {
 ::ng-deep {
   .mdc-list-item__primary-text {
     display: flex;
-    margin-left: 6px;
   }
 
   .mat-mdc-list-item {

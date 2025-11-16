@@ -25,11 +25,11 @@ export interface Plan {
     name: string;
     basePrice: number;
     description: string;
-    branchLimit: number;
-    memberLimit: number;
-    staffLimit: number;
+    months:number;
+    discount:number;
     deleted: boolean;
     planBusinessModelConfigs: PlanBusinessModelConfig[];
+    planFeatureDtos:any[];
 }
 
 export interface PlanBusinessModelConfig {

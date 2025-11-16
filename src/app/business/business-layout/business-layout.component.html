@@ -1,17 +1,19 @@
 <mat-sidenav-container class="sidenav-container">
 
   <mat-sidenav #sidenav mode="side" [opened]="true" [class.expanded]="isExpanded" class="sidenav">
-    <div class="h-24">
-
+    <div class="flex items-center gap-1 justify-center mt-3 mb-3">
+      <div class="h-10 w-12 p-1 rounded-xl text-white flex items-center justify-center">
+        <img src="../../../assets/png/logo.png" alt="" srcset="" class="animate-spin">
+      </div>
     </div>
-    <mat-toolbar style="background: transparent;">
+
+    <!-- <mat-toolbar style="background: transparent;">
       <button mat-icon-button (click)="toggleSidenav()">
-        <mat-icon style="color: gray;">{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        <mat-icon style="color: rgb(207, 216, 208);">{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
       </button>
-    </mat-toolbar>
+    </mat-toolbar> -->
 
     <mat-nav-list class="glass-card">
-      
       <a mat-list-item routerLink="./home" routerLinkActive="active" class="nav-item">
         <mat-icon>home</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Home</span>

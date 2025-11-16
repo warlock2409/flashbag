@@ -20,7 +20,9 @@ export interface UploadFileData {
   styleUrl: './uppy-upload.component.scss'
 })
 export class UppyUploadComponent {
-  baseUrl= "https://9myle.duckdns.org/";
+  // baseUrl= "http://localhost:9000/";
+    baseUrl= "https://9myle.store/";
+  
 
 
   @ViewChild('uppyDashboard', { static: true }) uppyDashboard!: ElementRef;

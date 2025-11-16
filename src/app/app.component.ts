@@ -46,8 +46,6 @@ const fbLoginCallback = (response: any) => {
     MatNativeDateModule
   ],
   template: `
-   
-    <app-navbar></app-navbar>
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>

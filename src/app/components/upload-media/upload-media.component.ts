@@ -37,9 +37,8 @@ export interface UploadFile {
   standalone: true
 })
 export class UploadMediaComponent {
-
-  baseUrl= "https://9myle.duckdns.org/";
-
+  baseUrl= "https://9myle.store/";
+  // baseUrl= "http://localhost:9000/";
 
 
   constructor(private http: HttpClient, public dialog: MatDialog, private swalService: SweatAlertService) { }

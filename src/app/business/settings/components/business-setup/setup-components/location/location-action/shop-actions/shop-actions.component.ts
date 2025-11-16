@@ -66,16 +66,54 @@ export interface SessionForm {
 })
 export class ShopActionsComponent {
 
-  updateShopStatus(shopCode:string) {
-    this.orgApiService.toggleVisibility(shopCode).subscribe({
-      next:(res:ResponseDate)=>{
-        this.currentShop = res.data;
+  updateShopStatus(shopCode: string) {
+
+    this.orgApiService.getOrganizationDetails().subscribe({
+      next: (res: ResponseDate) => {
+        if (res.data && res.data.organizationPlan && res.data.organizationPlan.bucketDtos) {
+          const buckets = res.data.organizationPlan.bucketDtos;
+
+          // Find the LOCATION bucket
+          const locationBucket = buckets.find(
+            (b: any) => b.type === 'LOCATION'
+          );
+
+          if (locationBucket && !this.currentShop.active) {
+            const available = locationBucket.allocated - locationBucket.used;
+
+            if (available > 0) {
+              console.log('✅ You have free locations available:', available);
+            } else {
+              console.warn('❌ No free location slots left.');
+              this.sweatAlert.error("Upgrade Plan Make this shop online");
+              return;
+            }
+          }
+
+          this.orgApiService.toggleVisibility(shopCode).subscribe({
+            next: (res: ResponseDate) => {
+              this.currentShop = res.data;
+              this.changeLoader();
+              this.dialogRef.close();
+              if (this.currentShop.active) {
+                this.sweatAlert.success("Hurray! Your shop is now ready to receive online orders.", 2500);
+              } else {
+                this.sweatAlert.success("Your Shop is offline", 2500);
+              }
+            },
+            error: (err: any) => {
+              this.changeLoader();
+              this.dialogRef.close();
+              this.sweatAlert.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+              this.sweatAlert.alertTeam("Location", "updateShopStatus", "Error", JSON.stringify(err));
+            }
+          })
+        }
       },
-      error:(err:any)=>{
-
+      error: (err: any) => {
+        console.error('Error fetching organization details', err);
       }
-    })
-
+    });
   }
 
 
@@ -83,6 +121,7 @@ export class ShopActionsComponent {
     this.dialogRef.close();
   }
 
+  buffer = false;
   isLinear = false;
   loading = false;
   @ViewChild('stepper') stepper!: MatStepper;
@@ -177,8 +216,6 @@ export class ShopActionsComponent {
   sampleUploads: DocumentDto | null = null;
 
 
-
-
   businessModels: BusinessModel[] = [];
   allBusinessModels: any[] = [];
   industries: Industry[] = [];
@@ -271,7 +308,7 @@ export class ShopActionsComponent {
 
   createNewShop() {
     console.log("Create/Update Shop");
-    
+
     if (this.shopBasic.invalid) {
       this.shopBasic.markAllAsTouched();
       return;
@@ -297,31 +334,46 @@ export class ShopActionsComponent {
     if (this.currentShop?.code) {
       console.log("Old Shop");
       shop.code = this.currentShop.code;
+      this.buffer = true;
       this.orgApiService.updateShop(shop, this.currentShop.code)
         .subscribe({
           next: (res: ResponseDate) => {
+            this.buffer = false;
             console.log("Shop Updated successfully", res);
             this.currentShop = res.data;
             this.goNext();
           },
           error: (err: any) => {
+            this.buffer = false;
             console.error("Failed to create shop", err);
+            this.sweatAlert.error("Failed to create shop");
           }
         });
       return;
     }
 
     // Call API
+    this.changeLoader(true);
     this.orgApiService.addNewShop(shop).subscribe({
       next: (res: ResponseDate) => {
-        console.log("Shop created successfully", res);
         this.currentShop = res.data;
         this.goNext();
+        this.changeLoader();
+        this.buffer = false;
+
       },
       error: (err: any) => {
-        console.error("Failed to create shop", err);
+        this.changeLoader();
+        this.buffer = false;
+        this.dialogRef.close();
+        this.sweatAlert.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+        this.sweatAlert.alertTeam("Location", "Create Shop", "Error", JSON.stringify(err));
       }
     });
+  }
+
+  changeLoader(state: boolean = false) {
+    this.loading = state;
   }
 
   addressGroup = this._formBuilder.group({
@@ -359,17 +411,22 @@ export class ShopActionsComponent {
     console.log(addressDto);
 
 
-    if (this.currentShop.code)
+    if (this.currentShop.code) {
+      this.changeLoader(true);
       this.orgApiService.addShopAddress(addressDto, this.currentShop.code).subscribe({
         next: (res: ResponseDate) => {
-          console.log('Address added successfully', res);
           this.currentShopAddress = res.data;
           this.goNext();
+          this.changeLoader();
         },
         error: (err: any) => {
-          console.error('Error adding address', err);
+          this.changeLoader();
+          this.dialogRef.close();
+          this.sweatAlert.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+          this.sweatAlert.alertTeam("Location", "addAddress", "Error", JSON.stringify(err));
         }
       });
+    }
   }
 
 
@@ -400,9 +457,13 @@ export class ShopActionsComponent {
       next: (res: ResponseDate) => {
         console.log(res, "business hours");
         this.sweatAlert.success("Business Hours Updated");
+        this.changeLoader();
       },
       error: (err: any) => {
-
+        this.changeLoader();
+        this.dialogRef.close();
+        this.sweatAlert.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+        this.sweatAlert.alertTeam("Location", "addAddress", "Error", JSON.stringify(err));
       }
     })
 
@@ -423,13 +484,9 @@ export class ShopActionsComponent {
     this.businessHoursGroup.setControl('days', daysFormArray);
   }
 
-
-
-
   getSessions(dayIndex: number): FormArray<FormGroup> {
     return this.days.at(dayIndex).get('sessions') as FormArray<FormGroup>;
   }
-
 
   createSession(sessionOrStart?: any, end?: string | null): FormGroup<SessionForm> {
     if (typeof sessionOrStart === 'object' && sessionOrStart !== null) {
@@ -459,7 +516,6 @@ export class ShopActionsComponent {
       });
     }
   }
-
 
   createDay(day?: any): FormGroup {
     return this._formBuilder.group({
@@ -510,8 +566,6 @@ export class ShopActionsComponent {
     }
   }
 
-
-
   get days(): FormArray {
     return this.businessHoursGroup.get('days') as FormArray;
   }
@@ -531,10 +585,6 @@ export class ShopActionsComponent {
     }
   }
 
-
-
-
-
   newDay(dayName: string): FormGroup {
     return this._formBuilder.group({
       day: [dayName],
@@ -542,8 +592,6 @@ export class ShopActionsComponent {
       sessions: this._formBuilder.array([])
     });
   }
-
-
 
   newSession(): FormGroup {
     return this._formBuilder.group({
