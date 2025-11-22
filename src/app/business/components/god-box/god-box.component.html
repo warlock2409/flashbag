@@ -11,7 +11,7 @@
 
         <!-- Search Input -->
         <div class="p-4 border-gray-200">
-            <input type="text" [(ngModel)]="searchQuery" (input)="onSearchChange()" style="color: white;"
+            <input #searchInput type="text" [(ngModel)]="searchQuery" (input)="onSearchChange()" style="color: white;"
                 placeholder="Search Customer..."
                 class="w-full px-4 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 placeholder-white text-white" />
         </div>

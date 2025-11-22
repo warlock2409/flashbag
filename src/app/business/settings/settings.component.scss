@@ -11,8 +11,7 @@
     }
     
     @media (max-width: 768px) {
-      padding: 10px;
-      padding-top: 90px;
+      padding: 20px;
     }
     
     @media (max-width: 480px) {
@@ -75,14 +74,14 @@ h1 {
     @media (max-width: 768px) {
       gap: 12px;
       margin-bottom: 28px;
-      top: 90px;
+      top: 0px;
       padding: 6px 0;
     }
     
     @media (max-width: 480px) {
       gap: 8px;
       margin-bottom: 24px;
-      top: 85px;
+      top: 0px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       

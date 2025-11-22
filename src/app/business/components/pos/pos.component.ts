@@ -524,6 +524,8 @@ export class PosComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
       if (result) {
+        console.log(result);
+        
         if (result.status == "COMPLETED") {
           this.firePoppers();
           this._snackBar.success("Payment Completed");

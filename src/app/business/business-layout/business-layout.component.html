@@ -7,6 +7,7 @@
       </div>
     </div>
 
+
     <!-- <mat-toolbar style="background: transparent;">
       <button mat-icon-button (click)="toggleSidenav()">
         <mat-icon style="color: rgb(207, 216, 208);">{{ isExpanded ? 'chevron_left' : 'chevron_right' }}</mat-icon>
@@ -47,6 +48,15 @@
         <span class="nav-label" *ngIf="isExpanded">Management</span>
       </a>
     </mat-nav-list>
+
+    <div class="absolute bottom-5 right-4 ">
+      <button *ngIf="authService.isLoggedIn()" (click)="logout()"
+        class="cursor-pointer relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+        aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+        <mat-icon style="color: #FF204E">settings_power</mat-icon>
+      </button>
+    </div>
+
   </mat-sidenav>
 
   <mat-sidenav-content class="content">

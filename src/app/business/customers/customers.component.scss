@@ -1,7 +1,6 @@
 .customers-container {
   min-height: 100vh;
   background-color: white;
-  padding: 20px;
   padding-top: 100px; // Increased top spacing to avoid navbar overlap (navbar height ~80px + some margin)
 
   @media (max-width: 768px) {
@@ -13,7 +12,7 @@
 .customers-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 0;
+  // padding: 24px 0;
 
   @media (max-width: 1200px) {
     max-width: 95%;

@@ -28,12 +28,8 @@
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3 responsive-actions">
-        <button mat-stroked-button class="responsive-button">
-          <i class="fa-solid fa-download"></i>
-          <span class="responsive-button-text">Export</span>
-        </button>
         <button mat-stroked-button (click)="openNewInvoice()" class="responsive-button">
-          <i class="fa-solid fa-plus"></i>
+          <i class="fa-solid fa-plus mr-2"></i>
           <span class="responsive-button-text">New Invoice</span>
         </button>
       </div>
@@ -102,7 +98,7 @@
               <path d="M16 13H8"></path>
               <path d="M16 17H8"></path>
             </svg>
-            <span class="font-medium text-neutral-900">{{invoice.invoiceNumber}}</span>
+            <span class="font-medium text-neutral-900">{{invoice?.invoiceNumber?.split('-')?.slice(-3)?.join('-')}}</span>
           </div>
           <div class="col-span-3">
             <div class="font-medium text-neutral-800">

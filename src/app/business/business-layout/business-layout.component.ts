@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatSidenavContainer } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 import { AblyService } from 'src/app/services/ably.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import { TimeZoneHelperService } from 'src/app/services/timeZoneHelper';
 
@@ -14,9 +16,23 @@ export class BusinessLayoutComponent {
   isExpanded = false;
   currentShopCode = '';
 
-  constructor(private cdr: ChangeDetectorRef, private ablyService: AblyService, private notification: SweatAlertService, private timeZoneHelper: TimeZoneHelperService) {
+  constructor(private router: Router,private cdr: ChangeDetectorRef, private ablyService: AblyService, private notification: SweatAlertService, private timeZoneHelper: TimeZoneHelperService, public authService: AuthService) {
     console.log("Layout Component");
+  }
 
+  async logout() {
+    // Unsubscribe from all Ably channels before logout
+    const currentShopCode = this.ablyService['shopCodeSubject'].getValue();
+    if (currentShopCode) {
+      await this.ablyService.unsubscribe(currentShopCode);
+    }
+    
+    // Close the Ably connection
+    await this.ablyService.close();
+    
+    this.authService.logout();
+    this.router.navigate(['/']);
+    localStorage.clear();
   }
 
   ngOnInit() {
@@ -27,7 +43,7 @@ export class BusinessLayoutComponent {
 
       await this.ablyService.unsubscribe(shopCode);
       console.log(`Subscribe to ${shopCode}`);
-      
+
       await this.ablyService.subscribe(shopCode, (msg) => {
         let data = JSON.parse(msg.data)
         this.playNotificationSound();
@@ -63,5 +79,3 @@ export class BusinessLayoutComponent {
   }
 
 }
-
-

@@ -179,6 +179,12 @@ export class OrdersComponent {
   }
 
   updateTabCounts(apiData: [string, number][]): void {
+    // First, reset all tab counts to zero
+    this.tabs.forEach(tab => {
+      tab.count = 0;
+    });
+    
+    // Then, update with the API data
     apiData.forEach(([status, count]) => {
       const tab = this.tabs.find(t => t.value === status);
       if (tab) {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,7 @@ import { CustomerService } from 'src/app/services/customer.service';
   templateUrl: './god-box.component.html',
   styleUrl: './god-box.component.scss'
 })
-export class GodBoxComponent {
+export class GodBoxComponent implements AfterViewInit {
 
   customerService = inject(CustomerService);
   searchQuery = '';
@@ -24,8 +24,19 @@ export class GodBoxComponent {
   private searchTimeout: any;
   customers: Customer[] = [];
 
+  @ViewChild('searchInput') searchInput!: ElementRef;
+
   constructor(private dialogRef: MatDialogRef<GodBoxComponent>){
 
+  }
+
+  ngAfterViewInit() {
+    // Auto-focus the search input after the view initializes
+    setTimeout(() => {
+      if (this.searchInput) {
+        this.searchInput.nativeElement.focus();
+      }
+    }, 100);
   }
 
   closeDialog() {

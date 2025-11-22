@@ -44,7 +44,8 @@ export class HomeComponent {
     await this.initialize();
     this.subscription = this.ablyService.onMessage('home').subscribe(msg => {
       console.log('Home received:', msg.data);
-      this.trailListCustomer.unshift(msg.data);
+      // this.trailListCustomer.unshift(msg.data);
+      this.getTrailSessions();
     });
   }
 
@@ -82,6 +83,20 @@ export class HomeComponent {
     let user = localStorage.getItem('currentUser');
     if (user)
       this.currentUser = JSON.parse(user);
+  }
+
+  getGreeting(): string {
+    const currentHour = new Date().getHours();
+    
+    if (currentHour >= 5 && currentHour < 12) {
+      return 'Good morning';
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return 'Good afternoon';
+    } else if (currentHour >= 18 && currentHour < 22) {
+      return 'Good evening';
+    } else {
+      return 'Good night';
+    }
   }
 
   getTrailSessions() {
@@ -259,4 +274,4 @@ export class HomeComponent {
 
 
 
-} 
+}

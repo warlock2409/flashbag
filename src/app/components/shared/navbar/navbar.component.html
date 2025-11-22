@@ -56,7 +56,7 @@
         [ngClass]="{ '!text-gray-300': isHomePage }">
         @if (authService.isLoggedIn()) {
 
-        <button (click)="addCustomer()"
+        <!-- <button (click)="addCustomer()"
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
           aria-label="Account">
           <mat-icon>person_add</mat-icon>
@@ -72,13 +72,13 @@
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
           aria-label="Account">
           <mat-icon>point_of_sale</mat-icon>
-        </button>
+        </button> -->
 
-        <button *ngIf="authService.isLoggedIn()" (click)="logout()"
+        <!-- <button *ngIf="authService.isLoggedIn()" (click)="logout()"
           class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
           aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
           <mat-icon>settings_power</mat-icon>
-        </button>
+        </button> -->
 
         }@else {
         <!-- <li class=""><a href="#"
@@ -101,7 +101,7 @@
           <i class="fa-solid fa-user"></i>
         </button>
 
-        <button *ngIf="authService.isLoggedIn()" [ngClass]="{ '!text-gray-300': isHomePage }"
+        <!-- <button *ngIf="authService.isLoggedIn()" [ngClass]="{ '!text-gray-300': isHomePage }"
           class="relative p-3 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell"
@@ -113,9 +113,9 @@
           </svg>
           <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse group-hover:scale-125">
           </div>
-        </button>
+        </button> -->
 
-        <div class="relative hover-scale cursor-pointer" *ngIf="authService.isLoggedIn()">
+        <!-- <div class="relative hover-scale cursor-pointer" *ngIf="authService.isLoggedIn()">
           <img
             src="https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg"
             alt="Profile"
@@ -123,7 +123,19 @@
           <div
             class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black hover:scale-110 transition-transform">
           </div>
-        </div>
+        </div> -->
+
+        <button *ngIf="authService.isLoggedIn()" (click)="logout()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon>settings_power</mat-icon>
+        </button>
+
+        <button *ngIf="authService.isLoggedIn()" (click)="goToHome()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon>business_center</mat-icon>
+        </button>
 
 
       </div>

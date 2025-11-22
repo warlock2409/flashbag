@@ -1,5 +1,5 @@
 
-<div class="min-h-screen relative bg-black text-white py-24">
+<div class="min-h-screen relative bg-black text-white">
 
   <!-- Enhanced Background with Cozy Home -->
   <div class="fixed inset-0 animate-blur-in delay-100">
@@ -82,8 +82,6 @@
     </div>
   </header>
 
-
-
   <!-- Enhanced Main Content -->
   <main class="relative z-40 px-6 pb-6" *ngIf="selectedShop">
     <div class="max-w-7xl mx-auto">
@@ -92,7 +90,7 @@
         <div class="relative">
           <h1
             class="!text-7xl !md:text-7xl !lg:text-8xl !font-bold !tracking-tight !bg-gradient-to-r !from-white !via-white !to-white/60 !bg-clip-text !text-transparent !mb-6 !leading-tight cursor-default">
-            Good evening,<br><span *ngIf="currentUser">{{currentUser.firstName | lowercase | titlecase}}</span>
+            {{getGreeting()}},<br><span *ngIf="currentUser">{{currentUser.firstName | lowercase | titlecase}}</span>
           </h1>
           <div
             class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 blur-3xl -z-10 animate-pulse">
@@ -376,7 +374,7 @@
             </div>
           </div>
           <div class="h-40 mb-6 hover:scale-105 transition-transform">
-            <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5">
+            <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5" *ngIf="trailListCustomer?.length">
               @for (trail of trailListCustomer; track $index) {
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">

@@ -238,6 +238,15 @@
                             <p class="parent_text m-0">Longitude</p>
                             <input nz-input placeholder="Longitude" class="w-100 m-b-4" nzSize="default"
                                 formControlName="longitude" />
+
+                            <!-- Location Picker Button -->
+                            <div class="flex items-center gap-2 mb-4">
+                                <button mat-stroked-button type="button" (click)="openLocationPicker()" class="flex items-center gap-2">
+                                    <mat-icon>location_on</mat-icon>
+                                    <span>Select Location on Map</span>
+                                </button>
+                            </div>
+
                         </div>
 
                         <div class="flex justify-end mt-8">

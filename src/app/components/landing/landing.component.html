@@ -10,8 +10,8 @@
       <!-- Background image -->
       <div class="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Calm workspace" class="h-full w-full object-cover opacity-70">
+          src="../../../assets/png/hero.png"
+          alt="Calm workspace" class="h-full w-full object-cover opacity-40">
         <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-transparent"></div>
       </div>
 
@@ -20,7 +20,7 @@
         <!-- Floating mini-nav and newsletter on large screens -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div class="lg:col-span-7">
-            <h1 class="!text-violet-200 !tracking-tight !text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05]">
+            <h1 class="!text-violet-300 !tracking-tight !text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05]">
               Launch your shop in hours, not weeks
             </h1>
             <p class="mt-5 !text-neutral-200 text-base sm:text-lg max-w-xl">
@@ -131,7 +131,7 @@
           </button>
 
           <!-- Inline stock badge + CTA -->
-          <div class="hidden md:flex items-center gap-3">
+          <!-- <div class="hidden md:flex items-center gap-3">
             <div class="text-xs text-neutral-300">
               In stock • Ships in 2–5 business days
             </div>
@@ -145,7 +145,7 @@
                 <path d="m12 5 7 7-7 7"></path>
               </svg>
             </a>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -200,62 +200,6 @@
   <section class="sm:p-8 bg-white border-zinc-200 border rounded-3xl pt-6 pr-6 !pb-30 pl-6">
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-start">
-      <div class="flex flex-col justify-between !min-h-full">
-        <div class="">
-          <span class="text-sm text-zinc-500 font-medium">9Myle®</span>
-          <h2 class="text-[44px] sm:text-6xl lg:text-7xl leading-[0.9] font-semibold text-zinc-900 tracking-tight mt-2">
-            live in 3 steps</h2>
-
-          <div class="mt-8 hidden sm:grid grid-cols-3 gap-6 text-zinc-400">
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Create account</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Add catalog</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Go live</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div class="">
-            <p class="text-sm text-zinc-900 font-semibold tracking-tight">Join our growing team</p>
-            <p class="mt-1 text-sm text-zinc-600">One platform for products, services, and rentals</p>
-            <button
-              class="mt-8 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-zinc-900 !text-white text-sm font-medium !hover:bg-zinc-800 transition"
-              aria-label="View careers">
-              Book Demo
-              <span class="inline-flex h-2 w-2 rounded-full bg-green-400"></span>
-            </button>
-          </div>
-          <p class="text-base text-zinc-700 leading-relaxed sm:text-right">
-            You can start the <span class="font-semibold">onboarding</span><br>
-             Our team will be there to guide you along the way.
-          </p>
-        </div>
-      </div>
-
-      <!-- Right: Team grid -->
       <div class="grid grid-cols-2 gap-4 h-[320px]">
         <!-- Card 1 -->
         <article class="relative overflow-hidden h-[200px] bg-zinc-100 border-zinc-200 border rounded-2xl">
@@ -359,6 +303,65 @@
             <p class="text-white text-lg font-medium tracking-tight leading-tight">Sales partner</p>
           </div>
         </article>
+      </div>
+
+      <!-- Right: -->
+      <div class="flex flex-col justify-between !min-h-full">
+        <div class="">
+          <span class="text-sm text-zinc-500 font-medium">9Myle®</span>
+          <h2 class="text-[44px] sm:text-6xl lg:text-7xl leading-[0.9] font-semibold text-zinc-900 tracking-tight mt-2">
+            Live in 3 steps</h2>
+
+          <div class="mt-8 hidden sm:grid grid-cols-3 gap-6 text-zinc-400">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                class="lucide lucide-plus h-4 w-4">
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="text-sm font-medium">Create account</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                class="lucide lucide-plus h-4 w-4">
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="text-sm font-medium">Add catalog</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
+                class="lucide lucide-plus h-4 w-4">
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+              </svg>
+              <span class="text-sm font-medium">Go live</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+         
+
+          <p class="text-base text-zinc-700 leading-relaxed sm:text-right">
+            You can start the <span class="font-semibold">onboarding</span><br>
+             Our team will be there to guide you along the way.
+          </p>
+
+           <div class="">
+            <p class="text-md text-zinc-900 font-semibold tracking-tight">Join our growing team</p>
+            <p class="mt-1 text-sm text-zinc-600">One platform for products, services, and rentals</p>
+            <button
+              class="mt-12 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-zinc-900 !text-white text-sm font-medium !hover:bg-zinc-800 transition"
+              aria-label="View careers">
+              Book Demo
+              <span class="inline-flex h-2 w-2 rounded-full bg-green-400"></span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -887,7 +890,7 @@
   </section> -->
 
   <!-- App Download Section -->
-  <section class="app-download">
+  <!-- <section class="app-download">
     <div class="app-content">
       <h2>Download the Flashbag app dv1:10-10-2025</h2>
       <p>Book affordable beauty and wellness services with the Flashbag mobile app</p>
@@ -896,15 +899,16 @@
     <div class="app-preview">
       <img src="assets/app-preview.png" alt="App Preview">
     </div>
-  </section>
+  </section> -->
 
   <!-- Add test button and side panel -->
-  <button class="test-btn" (click)="openPanel()">Open Side Panel</button>
+  <!-- <button class="test-btn" (click)="openPanel()">Open Side Panel</button>
 
   <app-side-panel [isOpen]="isPanelOpen" [title]="'Test Panel'" (closePanel)="closePanel()">
     <div>
       <h4>Panel Content</h4>
       <p>This is a test content for the side panel.</p>
     </div>
-  </app-side-panel>
+  </app-side-panel> -->
+
 </div>

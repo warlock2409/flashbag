@@ -306,6 +306,11 @@ export class NavbarComponent {
     // Navigate to the gym check-in page
     this.router.navigate(['/business/gym-checkin']);
   }
+
+  goToHome() {
+    this.router.navigate(['/business/home']);
+  }
+  
   addCustomer() {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
       data: {}, minWidth: "360px"
