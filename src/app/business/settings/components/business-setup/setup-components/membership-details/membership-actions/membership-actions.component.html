@@ -11,12 +11,12 @@
             </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
-            <mat-stepper #stepper>
+        <div class="flex-1 overflow-y-auto p-6 space-y-6" style="min-height: 400px;">
+            <mat-stepper #stepper linear>
                 <mat-step>
                     <ng-template matStepLabel>Membership Details</ng-template>
                     <!-- Basic Information -->
-                    <div class="mb-4">
+                    <div class="mb-4 min-h-[300px]">
                         <h3 class="text-xl font-medium  ">Basic Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -162,79 +162,88 @@
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Shops Mapping</ng-template>
-                    <div *ngIf="shops.length > 0">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Service available shops</label>
-                        <div class="space-y-2">
-                            <div *ngFor="let shop of shops; let i = index" class="flex items-center gap-2">
-                                <input type="checkbox" [id]="'shop-'+i" [(ngModel)]="shop.checked" name="shop-{{i}}">
-                                <label [for]="'shop-'+i">{{ shop.name }}</label>
+                    <div class="min-h-[320px]">
+                        <div *ngIf="shops.length > 0">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Service available shops</label>
+                            <div class="space-y-2">
+                                <div *ngFor="let shop of shops; let i = index" class="flex items-center gap-2">
+                                    <input type="checkbox" [id]="'shop-'+i" [(ngModel)]="shop.checked" name="shop-{{i}}">
+                                    <label [for]="'shop-'+i">{{ shop.name }}</label>
+                                </div>
                             </div>
+                        </div>
+                        <div *ngIf="shops.length === 0" class="flex items-center justify-center h-full text-gray-500">
+                            <p>No shops available for mapping</p>
                         </div>
                     </div>
                 </mat-step>
                 <!-- Exercise Mapping Step -->
                 <mat-step>
                     <ng-template matStepLabel>Exercise Mapping</ng-template>
-                    <div class="mb-6">
-                        <h3 class="text-xl font-medium mb-4">Exercise Mapping</h3>
-                        <p class="text-gray-600 mb-6">Create workout days and assign body parts for this membership plan.</p>
-                        
+                    <div class="mb-6 min-h-[300px]">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-1">Exercise Mapping</h3>
+                        <p class="text-gray-600 text-sm mb-4">Create workout days and assign body parts for this membership plan.</p>
+
                         <!-- Add Day Button -->
-                        <div class="mb-6">
-                            <button type="button" 
-                                class="flex items-center gap-2 bg-violet-500 hover:bg-violet-600 text-white px-4 py-2 rounded-md transition-colors"
+                        <div class="mb-4">
+                            <button type="button"
+                                class="flex items-center gap-2 bg-violet-400 hover:bg-violet-500 !text-white px-3 py-2 rounded-md transition-colors text-sm"
                                 (click)="addDay()">
-                                <mat-icon>add</mat-icon>
+                                <mat-icon class="text-sm">add</mat-icon>
                                 Add Day
                             </button>
                         </div>
-                        
+
                         <!-- Days List -->
-                        <div class="space-y-6">
-                            <div *ngFor="let day of exerciseDays; let dayIndex = index" 
-                                class="border border-gray-200 rounded-lg p-4">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h4 class="font-medium text-lg">Day {{ dayIndex + 1 }}</h4>
-                                    <button type="button" 
-                                        class="text-red-500 hover:text-red-700"
-                                        (click)="removeDay(dayIndex)">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </div>
-                                
-                                <!-- Body Parts for this Day -->
-                                <div class="space-y-3">
-                                    <div *ngFor="let bodyPart of day.bodyParts; let bpIndex = index" 
-                                        class="flex items-center gap-2">
-                                        <select class="flex-1 rounded-md border border-gray-300 px-3 py-2 
-                                            focus:border-violet-400 focus:ring-violet-400"
-                                            [(ngModel)]="day.bodyParts[bpIndex]">
-                                            <option value="">Select Body Part</option>
-                                            <option value="chest">Chest</option>
-                                            <option value="back">Back</option>
-                                            <option value="legs">Legs</option>
-                                            <option value="shoulders">Shoulders</option>
-                                            <option value="arms">Arms</option>
-                                            <option value="abs">Abs</option>
-                                            <option value="glutes">Glutes</option>
-                                            <option value="calves">Calves</option>
-                                            <option value="full-body">Full Body</option>
-                                        </select>
-                                        <button type="button" 
-                                            class="text-red-500 hover:text-red-700"
-                                            (click)="removeBodyPart(dayIndex, bpIndex)">
-                                            <mat-icon>remove</mat-icon>
-                                        </button>
-                                    </div>
-                                    
-                                    <button type="button" 
-                                        class="flex items-center gap-1 text-violet-500 hover:text-violet-700 text-sm"
-                                        (click)="addBodyPartToDay(dayIndex)">
-                                        <mat-icon class="text-sm">add</mat-icon>
-                                        Add Body Part
-                                    </button>
-                                </div>
+                        <div class="space-y-4">
+                          <div *ngFor="let day of exerciseDays; let dayIndex = index"
+                              class="border border-gray-200 rounded-lg p-3 bg-white">
+                            <div class="flex justify-between items-center mb-2">
+                              <h4 class="font-medium text-gray-800">Day {{ dayIndex + 1 }}</h4>
+                              <button type="button" class="text-red-500 hover:text-red-700 p-0.5 rounded-full hover:bg-red-50"
+                                  (click)="removeDay(dayIndex)"
+                                  title="Remove day">
+                                <mat-icon class="text-base">delete</mat-icon>
+                              </button>
                             </div>
+
+                            <!-- Body Parts for this Day -->
+                            <div class="space-y-2">
+                              <div *ngFor="let bodyPart of day.taskDtoList; let bpIndex = index; trackBy: trackByIndex"
+                                  class="flex items-center gap-2 p-1.5 bg-gray-50 rounded-md hover:bg-gray-100">
+                                <div class="flex-1">
+                                  <select class="w-full rounded-md border border-gray-300 px-2 py-1.5 text-gray-700 text-sm
+                                         focus:border-violet-500 focus:ring-1 focus:ring-violet-200 focus:outline-none
+                                         hover:border-gray-400"
+                                          [value]="bodyPart.title"
+                                          (change)="onBodyPartChange(dayIndex, bpIndex, $event)"
+                                          [attr.data-day-index]="dayIndex"
+                                          [attr.data-bp-index]="bpIndex">
+                                    <option value="">Select Body Part</option>
+                                    <option *ngFor="let filter of modelFilters" 
+                                            [value]="filter.name" 
+                                            [selected]="filter.name === bodyPart.title"
+                                            [disabled]="filter.key === ''">
+                                      {{ filter.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <button type="button" class="text-red-500 hover:text-red-700 p-0.5 rounded-full hover:bg-red-50"
+                                    (click)="removeBodyPart(dayIndex, bpIndex)"
+                                    title="Remove body part">
+                                  <mat-icon class="text-base">remove_circle_outline</mat-icon>
+                                </button>
+                              </div>
+
+                              <button type="button"
+                                  class="flex items-center gap-1 text-violet-600 hover:text-violet-800 text-xs font-medium
+                                  p-1 rounded-md hover:bg-violet-50 w-full justify-center"
+                                  (click)="addBodyPartToDay(dayIndex)">
+                                <mat-icon class="text-sm">add_circle_outline</mat-icon>
+                                Add Body Part
+                              </button>
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </mat-step>

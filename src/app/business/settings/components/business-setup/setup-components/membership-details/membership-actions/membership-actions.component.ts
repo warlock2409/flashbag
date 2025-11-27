@@ -13,9 +13,23 @@ import { ResponseDate } from 'src/app/app.component';
 import { MembershipBenefit, OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/models/organization';
 
 // Interface for exercise day
-interface ExerciseDay {
-  dayNumber: number;
-  bodyParts: string[];
+export interface Todo {
+  id?: number;
+  order: number;
+  taskDtoList: BodyPart[];
+}
+
+// Interface for body part object
+interface BodyPart {
+  id?: number;
+  title: string;
+}
+
+// Interface for body filter (copied from exercise-plan.component.ts)
+interface BodyFilter {
+  key: string;
+  name: string;
+  icon: string;
 }
 
 @Component({
@@ -34,12 +48,34 @@ export class MembershipActionsComponent {
   membershipPlan!: OrganizationMembershipPlan;
   @ViewChild('stepper') stepper!: MatStepper;
 
+  // Body filters copied from exercise-plan.component.ts
+  modelFilters: BodyFilter[] = [
+    { key: "", name: "All", icon: "directions_walk" },
+    { key: "calves", name: "Calves", icon: "directions_walk" },
+    { key: "quads", name: "Quads", icon: "fitness_center" },
+    { key: "abdominals", name: "Abs", icon: "self_improvement" },
+    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
+    { key: "hands", name: "Hands", icon: "pan_tool" },
+    { key: "forearms", name: "Forearms", icon: "back_hand" },
+    { key: "biceps", name: "Biceps", icon: "arm_flex" },
+    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+    { key: "chest", name: "Chest", icon: "sports_mma" },
+    { key: "traps", name: "Traps", icon: "change_history" },
+    { key: "body", name: "Full Body", icon: "accessibility" },
+    { key: "wrist", name: "Wrists", icon: "watch" },
+    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    { key: "traps_middle", name: "Traps", icon: "height" },
+    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
+    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" }
+  ];
+
   // temp 
   benefitType = 'DURATION_ACCESS';
   days = '0';
 
   // Exercise mapping data
-  exerciseDays: ExerciseDay[] = [];
+  exerciseDays: Todo[] = [];
 
   initializePlan(existingPlan: OrganizationMembershipPlan): void {
     this.membershipPlan = {
@@ -102,7 +138,17 @@ export class MembershipActionsComponent {
       return;
     }
     this.loadShopsByActiveService();
+
+    const currentIndex = this.stepper.selectedIndex;
     this.stepper.next();
+
+    // Check if we're moving to the 3rd step (Exercise Mapping)
+    if (currentIndex === 1 && this.stepper.selectedIndex === 2) {
+      // Only call API if we're editing an existing membership
+      if (this.data.isUpdate && this.membershipPlan.id) {
+        this.onMoveToExerciseMappingStep(this.membershipPlan.id);
+      }
+    }
   }
 
   stepperPrev() {
@@ -110,13 +156,52 @@ export class MembershipActionsComponent {
   }
 
   stepperNext() {
+    const currentIndex = this.stepper.selectedIndex;
     this.stepper.next();
+
+    // Check if we're moving to the 3rd step (Exercise Mapping)
+    if (currentIndex === 1 && this.stepper.selectedIndex === 2) {
+      // Only call API if we're editing an existing membership
+      if (this.data.isUpdate && this.membershipPlan.id) {
+        this.onMoveToExerciseMappingStep(this.membershipPlan.id);
+      }
+    }
+  }
+
+  // Method to call API when moving to the 3rd stepper (Exercise Mapping)
+  onMoveToExerciseMappingStep(id: number) {
+    this.orgService.getTodos(id, 'MEMBERSHIP').subscribe({
+      next: (response: ResponseDate) => {
+        console.log('API response:', response);
+        
+        // Map the response data to exerciseDays format using only title and including IDs when they exist
+        this.exerciseDays = response.data.map((day: any) => {
+          return {
+            id: day.id ?? undefined, // Include day ID if it exists
+            order: day.order,
+            taskDtoList: day.taskDtoList.map((task: any) => {
+              return {
+                id: task.id ?? undefined, // Include task ID if it exists
+                title: task.title || 'Select Body Part'
+              };
+            })
+          };
+        });
+        
+        console.log('Mapped exerciseDays:', this.exerciseDays);
+      },
+      error: (error: any) => {
+        console.error('API error:', error);
+        // Initialize with default empty days if API fails
+        this.exerciseDays = [];
+        this.addDay();
+      }
+    });
   }
 
   ngOnInit() {
     this.getOrgIndustry();
     this.initializePlan(this.data.existingPlan);
-    // Initialize with one empty day
     this.addDay();
   }
 
@@ -172,25 +257,38 @@ export class MembershipActionsComponent {
 
   // Exercise mapping methods
   addDay() {
-    const newDay: ExerciseDay = {
-      dayNumber: this.exerciseDays.length + 1,
-      bodyParts: [''] // Start with one empty body part selection
+    const newDay: Todo = {
+      order: this.exerciseDays.length + 1,
+      taskDtoList: [{ title: 'Select Body Part' }] // Start with one empty body part selection
     };
     this.exerciseDays.push(newDay);
+  }
+
+  addBodyPartToDay(dayIndex: number) {
+    // Add a unique empty body part object for each new body part to avoid binding issues
+    this.exerciseDays[dayIndex].taskDtoList.push({ title: 'Select Body Part' });
   }
 
   removeDay(index: number) {
     this.exerciseDays.splice(index, 1);
     // Re-number the days
-    this.exerciseDays.forEach((day, i) => day.dayNumber = i + 1);
-  }
-
-  addBodyPartToDay(dayIndex: number) {
-    this.exerciseDays[dayIndex].bodyParts.push('');
+    this.exerciseDays.forEach((day, i) => day.order = i + 1);
   }
 
   removeBodyPart(dayIndex: number, bodyPartIndex: number) {
-    this.exerciseDays[dayIndex].bodyParts.splice(bodyPartIndex, 1);
+    this.exerciseDays[dayIndex].taskDtoList.splice(bodyPartIndex, 1);
+  }
+
+  // Handle body part selection change
+  onBodyPartChange(dayIndex: number, bodyPartIndex: number, event: any) {
+    const selectedTitle = event.target.value;
+    // Update the body part object
+    this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = { title: selectedTitle };
+  }
+
+  // TrackBy function to help Angular track items properly
+  trackByIndex(index: number, item: any): any {
+    return index;
   }
 
   onNoClick(): void {
@@ -210,12 +308,48 @@ export class MembershipActionsComponent {
     console.log(this.membershipPlan);
 
     this.orgService.createOrgMembership(this.membershipPlan).subscribe({
-      next: (res: ResponseDate) => {
+      next: async (res: ResponseDate) => {
+        console.log(res.data);
+        try {
+          await this.createExerciseTodo(this.exerciseDays, res.data.id);
+        } catch (error) {
+          console.error('Failed to create exercise todos', error);
+        }
         this.dialogRef.close(res.data);
       },
       error: (err: any) => {
       }
     })
+  }
+
+  createExerciseTodo(exerciseDays: Todo[], membershipId: number): Promise<void> {
+    // Transform exerciseDays to include IDs when they exist
+    const transformedDays = exerciseDays.map(day => {
+      return {
+        ...day,
+        id: day.id ?? undefined, // Include day ID if it exists
+        taskDtoList: day.taskDtoList.map(task => {
+          return {
+            ...task,
+            id: task.id ?? undefined, // Include task ID if it exists
+            title: task.title
+          };
+        })
+      };
+    });
+
+    return new Promise((resolve, reject) => {
+      this.orgService.createTodos(transformedDays, membershipId, 'MEMBERSHIP').subscribe({
+        next: (res: ResponseDate) => {
+          console.log(res.data);
+          resolve();
+        },
+        error: (err: any) => {
+          console.error('Error creating exercise todos', err);
+          reject(err);
+        }
+      });
+    });
   }
 
   updateMembership() {
@@ -230,7 +364,12 @@ export class MembershipActionsComponent {
     console.log(this.membershipPlan);
 
     this.orgService.updateOrgMembership(this.membershipPlan, this.membershipPlan.id).subscribe({
-      next: (res: ResponseDate) => {
+      next: async (res: ResponseDate) => {
+        try {
+          await this.createExerciseTodo(this.exerciseDays, res.data.id);
+        } catch (error) {
+          console.error('Failed to create exercise todos', error);
+        }
         this.dialogRef.close(res.data);
       },
       error: (err: any) => {

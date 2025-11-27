@@ -5,11 +5,14 @@ import { Customer } from '../models/customer.model';
 import { AddressModel, ShopHoursModel, ShopModel, WaitListDto } from '../models/shop.model';
 import { OrganizationMembershipPlan, OrganizationServiceModel } from '../models/organization';
 import { S } from 'node_modules/@angular/cdk/scrolling-module.d-ud2XrbF8';
+import { Todo } from '../business/settings/components/business-setup/setup-components/membership-details/membership-actions/membership-actions.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationServiceService {
+ 
+  
 
 
 
@@ -208,6 +211,16 @@ export class OrganizationServiceService {
     let orgCode = localStorage.getItem("orgCode");
     let url = "http://localhost:8080/organization/{orgCode}/membership/{membershipId}".replace("{orgCode}", orgCode!).replace("{membershipId}", membershipId?.toString()!);
     return this.Http.put<ServiceResponse<any>>(url, membershipPlan);
+  }
+
+  createTodos(todos: Todo[], refId: number, totoType: string) {
+    let url = "http://localhost:8080/api/todos/{type}/{refId}".replace("{type}", totoType).replace("{refId}", refId.toString());
+    return this.Http.post<ServiceResponse<any>>(url, todos);
+  }
+
+  getTodos(refId: number, totoType: string) {
+    let url = "http://localhost:8080/api/todos/{type}/{refId}".replace("{type}", totoType).replace("{refId}", refId.toString());
+    return this.Http.get<ServiceResponse<any>>(url);
   }
 
   getAllOrgMembership() {
