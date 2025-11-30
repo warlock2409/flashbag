@@ -15,6 +15,7 @@ export class AblyService {
 
     /** Called when home component sets shop code */
     async setShopCode(shopCode: string) {
+        console.log('AblyService: Setting shop code to', shopCode);
         this.shopCodeSubject.next(shopCode);
     }
 
@@ -23,11 +24,13 @@ export class AblyService {
     private ablyMessages$ = this.ablyMessageSubject.asObservable();
 
     sendMessage(type: string, data: any) {
+        console.log('AblyService: Sending message of type', type, 'with data:', data);
         this.ablyMessageSubject.next({ type, data });
     }
 
     // Subscribe only to messages of a specific type
     onMessage(type: string): Observable<any> {
+        console.log('AblyService: Creating subscription for message type', type);
         return this.ablyMessages$.pipe(
             filter(msg => msg.type === type),
         );
@@ -40,12 +43,14 @@ export class AblyService {
      * @param apiKey Your Ably API key
      */
     initialize(apiKey: string): void {
+        console.log('AblyService: Initializing with API key');
         if (!this.ablyClient) {
             this.ablyClient = new Realtime({ key: apiKey });
+            console.log('AblyService: Ably client initialized');
+        } else {
+            console.log('AblyService: Ably client already initialized');
         }
     }
-
-
 
     /**
      * Subscribe to a channel with a specific key
@@ -59,27 +64,33 @@ export class AblyService {
         callback: (message: InboundMessage) => void,
         eventName?: string
     ): Promise<void> {
+        console.log('AblyService: Subscribing to channel', channelName, 'with event name', eventName);
         if (!this.ablyClient) {
+            console.error('AblyService: Ably client not initialized. Call initialize() first.');
             throw new Error('Ably client not initialized. Call initialize() first.');
         }
 
         let channel = this.channels.get(channelName);
 
         if (!channel) {
+            console.log('AblyService: Getting channel', channelName);
             channel = this.ablyClient.channels.get(channelName);
             this.channels.set(channelName, channel);
         }
 
-        channel.unsubscribe();
         // Attach to the channel
+        console.log('AblyService: Attaching to channel', channelName);
         await channel.attach();
 
         // Subscribe to messages
         if (eventName) {
+            console.log('AblyService: Subscribing to event', eventName, 'on channel', channelName);
             channel.subscribe(eventName, callback);
         } else {
+            console.log('AblyService: Subscribing to all events on channel', channelName);
             channel.subscribe(callback);
         }
+        console.log('AblyService: Successfully subscribed to channel', channelName);
     }
 
     /**
@@ -93,6 +104,7 @@ export class AblyService {
         eventName?: string,
         callback?: (message: InboundMessage) => void
     ): Promise<void> {
+        console.log('AblyService: Unsubscribing from channel', channelName, 'event', eventName);
         const channel = this.channels.get(channelName);
         if (channel) {
             if (eventName && callback) {
@@ -104,6 +116,9 @@ export class AblyService {
             } else {
                 channel.unsubscribe();
             }
+            console.log('AblyService: Successfully unsubscribed from channel', channelName);
+        } else {
+            console.log('AblyService: Channel not found for unsubscription', channelName);
         }
     }
 
@@ -119,7 +134,9 @@ export class AblyService {
         eventName: string,
         data: any
     ): Promise<void> {
+        console.log('AblyService: Publishing to channel', channelName, 'event', eventName, 'data', data);
         if (!this.ablyClient) {
+            console.error('AblyService: Ably client not initialized. Call initialize() first.');
             throw new Error('Ably client not initialized. Call initialize() first.');
         }
 
@@ -130,16 +147,19 @@ export class AblyService {
         }
 
         await channel.publish(eventName, data);
+        console.log('AblyService: Successfully published to channel', channelName);
     }
 
     /**
      * Close the Ably connection
      */
     async close(): Promise<void> {
+        console.log('AblyService: Closing connection');
         if (this.ablyClient) {
             await this.ablyClient.close();
             this.ablyClient = null;
             this.channels.clear();
+            console.log('AblyService: Connection closed');
         }
     }
 }

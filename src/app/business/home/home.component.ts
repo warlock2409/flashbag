@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -16,7 +16,7 @@ import { ShopActionsComponent } from '../settings/components/business-setup/setu
   styleUrls: ['./home.component.scss'],
   standalone: false
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
 
   private subscription!: Subscription;
   timeZone = 'Asia/Kolkata';
@@ -39,14 +39,20 @@ export class HomeComponent {
   }
 
 
-
   async ngOnInit() {
+    console.log('HomeComponent ngOnInit');
     await this.initialize();
     this.subscription = this.ablyService.onMessage('home').subscribe(msg => {
       console.log('Home received:', msg.data);
       // this.trailListCustomer.unshift(msg.data);
       this.getTrailSessions();
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private async initialize() {
@@ -143,6 +149,7 @@ export class HomeComponent {
           if (this.shops.length > 0) {
             this.selectedShop = this.shops[0];
             localStorage.setItem("shopCode", this.selectedShop.code!);
+            // Initialize Ably service
             this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
             this.ablyService.setShopCode(this.selectedShop.code!);
             console.log("ShopCode", this.selectedShop.code!);
@@ -271,7 +278,6 @@ export class HomeComponent {
   }
 
   // Chart js 
-
 
 
 }

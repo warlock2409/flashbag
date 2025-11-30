@@ -50,11 +50,17 @@
     </mat-nav-list>
 
     <div class="absolute bottom-5 right-4 ">
-      <button *ngIf="authService.isLoggedIn()" (click)="logout()"
-        class="cursor-pointer relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
-        aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
-        <mat-icon style="color: #FF204E">settings_power</mat-icon>
-      </button>
+      <div class="flex flex-col">
+        <a mat-list-item routerLink="./gym-checkin" routerLinkActive="active" class="nav-item">
+          <mat-icon class="white_bg">assignment_turned_in</mat-icon>
+          <span class="nav-label" *ngIf="isExpanded">Attendance</span>
+        </a>
+        <button *ngIf="authService.isLoggedIn()" (click)="logout()"
+          class="cursor-pointer relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon style="color: #FF204E">settings_power</mat-icon>
+        </button>
+      </div>
     </div>
 
   </mat-sidenav>

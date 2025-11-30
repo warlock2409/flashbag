@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import confetti from 'canvas-confetti';
@@ -22,18 +22,10 @@ export class GymCheckinActionsComponent {
   streak: string = '5 days';
   reward: string = 'Next reward in 2 days';
 
-  attendance: any = {
-    "2025-09-29": { checkInAt: null, checkOutAt: null },
-    "2025-09-30": { checkInAt: null, checkOutAt: null },
-    "2025-10-01": { checkInAt: "2025-10-01T12:54:34.461+00:00", checkOutAt: "2025-10-01T14:11:05.979+00:00" },
-    "2025-10-02": { checkInAt: null, checkOutAt: null },
-    "2025-10-03": { checkInAt: "2025-10-03T15:09:52.420+00:00", checkOutAt: null },
-    "2025-10-04": { checkInAt: null, checkOutAt: null },
-    "2025-10-05": { checkInAt: null, checkOutAt: null }
-  };
-
+  attendance: any = {};
+  parts: string[] = ["chest"];
   getAttendanceKeys() {
-    return Object.keys(this.attendance);
+    return Object.keys(this.attendance || {});
   }
 
   getDayLabel(dateStr: string) {
@@ -53,41 +45,136 @@ export class GymCheckinActionsComponent {
 
   readonly data = inject<any>(MAT_DIALOG_DATA);
   constructor(private dialogRef: MatDialogRef<GymCheckinActionsComponent>) {
+    // Map the incoming data to component properties
     this.attendance = this.data.weeklyAttendance;
+
+    // Set member name from customer data
+    if (this.data.customerDTO) {
+      this.memberName = this.data.customerDTO.firstName || 'Gym Member';
+      if (this.data.customerDTO.lastName) {
+        this.memberName += ' ' + this.data.customerDTO.lastName;
+      }
+    }
+
+    // Set streak from data
+    if (this.data.streak !== undefined) {
+      this.streak = this.data.streak + ' days';
+    }
+
+    // Set membership info
+    if (this.data.membershipPlanName) {
+      this.membershipRemaining = this.data.membershipPlanName;
+    }
+
+    if (this.data.remainingDays !== undefined) {
+      this.membershipEnd = `Ends in ${this.data.remainingDays} days`;
+    }
+
+    // Calculate weekly sessions
+    if (this.data.weeklyAttendance) {
+      const totalDays = Object.keys(this.data.weeklyAttendance).length;
+      const attendedDays = Object.values(this.data.weeklyAttendance).filter(
+        (day: any) => day.checkInAt
+      ).length;
+      this.weeklySessions = `${attendedDays}/${totalDays}`;
+      this.weekProgressPercent = Math.round((attendedDays / totalDays) * 100);
+    }
   }
 
   ngAfterViewInit() {
     console.log(this.data);
-    const frontSVG = document.getElementById('body-front'); // front SVG
-    const backSVG = document.getElementById('body-back');   // back SVG
-
-    if (this.data) {
-
-    }
-
-
-
-    const parts = ["chest"];
-    parts.forEach(id => {
-      const group = frontSVG?.querySelector(`#${id}`); // query inside the SVG
-      if (group) {
-        group.querySelectorAll('path').forEach(path => {
-          path.setAttribute('fill', 'red');
-        });
-      }
-
-      const groupBack = backSVG?.querySelector(`#${id}`); // query inside the SVG
-      if (groupBack) {
-        groupBack.querySelectorAll('path').forEach(path => {
-          path.setAttribute('fill', 'red');
-        });
-      }
-    });
+    // Use a more robust approach with multiple attempts to ensure SVG is ready
+    this.highlightBodyParts();
 
     setTimeout(() => {
       this.closeDialog();
     }, 9000);
     this.firePoppers();
+  }
+
+  private highlightBodyParts(attempts: number = 0) {
+    const dialogs = document.querySelectorAll('mat-dialog-container');
+    const dialog = dialogs[dialogs.length - 1];   // ALWAYS use newest
+
+    const frontSVG = dialog.querySelector('#body-front');
+    const backSVG = dialog.querySelector('#body-back');
+
+    const all = dialog.querySelectorAll('g#chest');
+    console.log('Number of chest inside active dialog:', all.length);
+
+
+    // Try up to 10 times with increasing delays to find SVG elements
+    if (attempts >= 10) {
+      console.log('Failed to highlight body parts after 10 attempts');
+      return;
+    }
+
+
+    // Check if SVGs are available
+    if (!frontSVG || !backSVG) {
+      console.log(`SVGs not ready (attempt ${attempts + 1}), retrying...`);
+      setTimeout(() => this.highlightBodyParts(attempts + 1), 150 * (attempts + 1));
+      return;
+    }
+
+    // Process todoDto for body mapping if available
+    const parts: string[] = [];
+    if (this.data.todoDto && this.data.todoDto.taskDtoList) {
+      this.data.todoDto.taskDtoList.forEach((task: any) => {
+        // Use title field as per project specification, convert to lowercase for SVG matching
+        if (task.title) {
+          parts.push(task.title.toLowerCase());
+        }
+      });
+    }
+
+    // Log parts for debugging
+    console.log('Parts to highlight:', parts);
+
+    if (parts.length === 0) {
+      console.log('No parts to highlight');
+      return;
+    }
+
+    parts.forEach(id => {
+      // Try to find the group element in the front SVG
+      let group = frontSVG?.querySelector(`g[id="${id}"]`);
+      // If not found, try direct ID selector
+      if (!group) {
+        group = frontSVG?.querySelector(`#${id}`);
+      }
+
+      if (group) {
+        console.log(`Found front group for ${id}:`, group);
+        // Add a class to highlight the element
+        group.classList.add('highlighted-muscle');
+        // Directly set the style.fill to override currentColor
+        group.querySelectorAll('path').forEach(path => {
+          (path as SVGElement).style.fill = '#ef4444'; // red-500 color
+        });
+      } else {
+        console.log(`Could not find front group for ${id}`);
+      }
+
+      // Try to find the group element in the back SVG
+      let groupBack = backSVG?.querySelector(`g[id="${id}"]`);
+      // If not found, try direct ID selector
+      if (!groupBack) {
+        groupBack = backSVG?.querySelector(`#${id}`);
+      }
+
+      if (groupBack) {
+        console.log(`Found back group for ${id}:`, groupBack);
+        // Add a class to highlight the element
+        groupBack.classList.add('highlighted-muscle');
+        // Directly set the style.fill to override currentColor
+        groupBack.querySelectorAll('path').forEach(path => {
+          (path as SVGElement).style.fill = '#ef4444'; // red-500 color
+        });
+      } else {
+        console.log(`Could not find back group for ${id}`);
+      }
+    });
   }
 
   @Output() close = new EventEmitter<void>();

@@ -15,6 +15,7 @@ import { InvoiceModel, ItemModel, PaymentResponse } from 'src/app/models/payment
 import { NzMessageService } from 'ng-zorro-antd/message';
 import Swal from 'sweetalert2';
 import confetti from 'canvas-confetti';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
 @Component({
   selector: 'app-pos',
@@ -250,7 +251,7 @@ export class PosComponent implements OnInit {
   }
 
   shopCode: any;
-  constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }) {
+  constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }, private swal:SweatAlertService) {
 
   }
 
@@ -325,7 +326,6 @@ export class PosComponent implements OnInit {
     this.shopService.createInvoice(invoice).subscribe({
       next: (res: ResponseDate) => {
         this._snackBar.success("Invoice Created");
-        console.log(res.data);
         this.invoice = res.data;
         confetti({
           particleCount: 100,
@@ -335,7 +335,8 @@ export class PosComponent implements OnInit {
         this.askForPayment();
       },
       error: (err: any) => {
-
+        console.log(err.error.message);
+        this.swal.error(err.error.message);
       }
     })
   }
