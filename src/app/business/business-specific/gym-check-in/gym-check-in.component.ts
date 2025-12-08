@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [FormsModule, CommonModule, MatIconModule],
   templateUrl: './gym-check-in.component.html',
-  styleUrl: './gym-check-in.component.scss'
+  styleUrls: ['./gym-check-in.component.scss'] // Added SCSS file reference
 })
 export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -107,7 +107,15 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
   generateQRCode() {
     let shopCode = localStorage.getItem("shopCode");
     console.log('Generating QR code for shop code:', shopCode);
-    QRCode.toCanvas(this.qrCanvas.nativeElement, shopCode, { width: 400 })
+    
+    // Use larger size for desktop screens
+    const isLargeScreen = window.innerWidth >= 1024;
+    const qrSize = isLargeScreen ? 400 : 280;
+    
+    QRCode.toCanvas(this.qrCanvas.nativeElement, shopCode, { 
+      width: qrSize,
+      margin: 2
+    })
       .catch((err: any) => console.error(err));
   }
 
@@ -169,12 +177,17 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (event.key === 'Backspace') {
       // this.typedText = this.typedText.slice(0, -1);
     } else if (event.key === 'Enter') {
-      this.submitCheckIn(this.typedText);
       this.typedText = ''; // clear after submit
     }
   }
 
   submitCheckIn(code: string) {
+    // Restrict empty API calls - require at least 1 character
+    if (!code || code.trim().length < 1) {
+      console.log('Check-in code must be at least 1 character, skipping API call');
+      return;
+    }
+    
     console.log('Submitting check-in with code:', code);
     this.shopService.PostMembershipCheckIn(code).subscribe({
       next: (res: ResponseDate) => {

@@ -559,7 +559,10 @@ export class ShopActionsComponent {
   toTime(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toISOString().substring(11, 16); // "HH:mm"
+    // Get hours and minutes in local timezone instead of UTC
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`; // "HH:mm" in local timezone
   }
 
   copyHoursToAll(sourceIndex: number) {

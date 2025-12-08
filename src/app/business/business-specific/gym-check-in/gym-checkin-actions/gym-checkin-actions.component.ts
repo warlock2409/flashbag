@@ -123,7 +123,7 @@ export class GymCheckinActionsComponent {
       this.data.todoDto.taskDtoList.forEach((task: any) => {
         // Use title field as per project specification, convert to lowercase for SVG matching
         if (task.title) {
-          parts.push(task.title.toLowerCase());
+          parts.push(task.title.toLowerCase().replace(/\s+/g, "_"));
         }
       });
     }

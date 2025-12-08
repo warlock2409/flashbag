@@ -1,0 +1,71 @@
+// Tablet-specific styles for gym check-in component
+@media (min-width: 768px) and (max-width: 1023px) {
+  // Adjust padding for tablet view
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  // Modify the main content section for better tablet layout
+  section.rounded-xl {
+    // Reduce padding on tablets for better use of screen space
+    .p-6 {
+      padding: 1.5rem;
+    }
+  }
+
+  // Adjust QR panel for tablet
+  #qr-panel {
+    h2 {
+      font-size: 1.25rem; // Reduced from default lg size
+    }
+
+    .rounded-xl {
+      padding: 1.5rem;
+    }
+
+    canvas {
+      max-width: 300px; // Increased size for tablet - bigger QR code
+    }
+  }
+
+  // Advertisement section adjustments
+  .advertisement-block {
+    padding: 1.5rem;
+
+    img {
+      max-height: 350px;
+      object-fit: cover;
+    }
+  }
+
+  // Adjust input field height for better touch targets
+  input[type="text"] {
+    min-height: 44px; // Minimum touch target size
+  }
+}
+
+// Large tablet and desktop adjustments
+@media (min-width: 1024px) {
+  #qr-panel {
+    canvas {
+      max-width: 400px; // Larger size for desktop screens
+    }
+  }
+}
+
+// Small tablet adjustments
+@media (min-width: 768px) and (max-width: 850px) {
+  #qr-panel {
+    canvas {
+      max-width: 250px; // Medium size for small tablets
+    }
+  }
+}
+
+// Hide mobile-only elements on tablet
+@media (min-width: 768px) {
+  #qr-panel-m {
+    display: none;
+  }
+}
