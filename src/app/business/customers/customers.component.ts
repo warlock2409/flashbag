@@ -24,6 +24,8 @@ export class CustomersComponent {
   pageSize = 10;
   pageIndex = 0;
   shopCode;
+  searchQuery = '';
+  activeFilter = 'all'; // 'all', 'active', or 'inactive'
 
   constructor(public dialog: MatDialog, private timeZoneHelper: TimeZoneHelperService) {
     this.shopCode = localStorage.getItem("shopCode");
@@ -32,7 +34,15 @@ export class CustomersComponent {
   }
 
   getCustomerByOrg() {
-    this.orgService.getAllCustomerByOrg(this.pageIndex, this.pageSize).subscribe({
+    // Convert activeFilter to memStatus parameter
+    let memStatus: boolean | undefined = undefined;
+    if (this.activeFilter === 'active') {
+      memStatus = true;
+    } else if (this.activeFilter === 'inactive') {
+      memStatus = false;
+    }
+    
+    this.orgService.getAllCustomerByOrg(this.pageIndex, this.pageSize, this.searchQuery, memStatus).subscribe({
       next: (res: ResponseDate) => {
         this.customers = res.data.map((customer: any) => {
           if (customer.expiry) {
@@ -43,15 +53,28 @@ export class CustomersComponent {
           }
           return customer;
         });
-        this.totalElements = res.totalElements!
-        this.pageSize = res.pageSize!
+        this.totalElements = res.totalElements || res.data.length;
+        this.pageSize = res.pageSize || this.pageSize;
         console.log(this.customers);
-
       },
       error: (err: any) => {
-
+        console.error('Error fetching customers:', err);
       }
-    })
+    });
+  }
+
+  onSearchChange(event: any) {
+    this.searchQuery = event.target.value;
+    // Reset to first page when searching
+    this.pageIndex = 0;
+    this.getCustomerByOrg();
+  }
+
+  onFilterChange(filter: string) {
+    this.activeFilter = filter;
+    // Reset to first page when changing filter
+    this.pageIndex = 0;
+    this.getCustomerByOrg();
   }
 
   onPageChange(event: PageEvent) {
@@ -79,5 +102,4 @@ export class CustomersComponent {
       this.getCustomerByOrg();
     });
   }
-
-} 
+}

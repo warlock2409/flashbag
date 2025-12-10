@@ -537,14 +537,14 @@ mat-divider {
 
 // Comprehensive responsive styles for the orders component
 .responsive-padding-top {
-  padding-top: 100px; // Default desktop spacing for navbar
+  padding-top: 70px; // Default desktop spacing for navbar
   
   @media (max-width: 1024px) {
-    padding-top: 100px; // Tablet spacing
+    padding-top: 30px; // Tablet spacing
   }
   
   @media (max-width: 768px) {
-    padding-top: 90px; // Mobile spacing
+    padding-top: 12px; // Mobile spacing
   }
 }
 

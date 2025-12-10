@@ -44,7 +44,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     return next(clonedRequest).pipe(
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
-                console.warn('Unauthorized! Logging out...');
                 Swal.fire({
                     position: "top-end",
                     icon: "warning",

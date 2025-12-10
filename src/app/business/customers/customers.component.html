@@ -47,24 +47,31 @@
             <path d="m21 21-4.34-4.34"></path>
             <circle cx="11" cy="11" r="8"></circle>
           </svg>
-          <input id="search" type="text" placeholder="Search by customer or company…"
-            class="search-input">
+          <input id="search" type="text" placeholder="Search by customer or company…" [(ngModel)]="searchQuery"
+            (input)="onSearchChange($event)" class="search-input">
         </div>
       </div>
 
       <!-- Segmented Filter -->
       <div class="filter-container">
         <div class="filter-wrapper">
-          <button data-filter="active"
-            class="filter-btn filter-btn-active">
-            <span
+          <button data-filter="all" [class.filter-btn-active]="activeFilter === 'all'"
+            class="filter-btn" (click)="onFilterChange('all')">
+            <span [class.filter-indicator-active]="activeFilter === 'all'"
+              class="filter-indicator">•</span>
+            <span class="filter-text">All</span>
+            <span id="count-all" class="filter-count">(0)</span>
+          </button>
+          <button data-filter="active" [class.filter-btn-active]="activeFilter === 'active'"
+            class="filter-btn" (click)="onFilterChange('active')">
+            <span [class.filter-indicator-active]="activeFilter === 'active'"
               class="filter-indicator filter-indicator-active">•</span>
             <span class="filter-text">Active</span>
             <span id="count-active" class="filter-count">(0)</span>
           </button>
-          <button data-filter="inactive"
-            class="filter-btn">
-            <span
+          <button data-filter="inactive" [class.filter-btn-active]="activeFilter === 'inactive'"
+            class="filter-btn" (click)="onFilterChange('inactive')">
+            <span [class.filter-indicator-active]="activeFilter === 'inactive'"
               class="filter-indicator">•</span>
             <span class="filter-text">Inactive</span>
             <span id="count-inactive" class="filter-count">(0)</span>
@@ -109,8 +116,10 @@
           <div class="table-cell expiry-cell">
             <span *ngIf="!customer.membershipExpiry"
               class="expiry-badge expiry-badge-empty">— — —</span>
+
             <span *ngIf="customer.membershipExpiry && isExpired(customer.membershipExpiry)"
               class="expiry-badge expiry-badge-expired">{{customer.membershipExpiry}}</span>
+              
             <span *ngIf="customer.membershipExpiry && !isExpired(customer.membershipExpiry)"
               class="expiry-badge expiry-badge-active">{{customer.membershipExpiry}}</span>
           </div>
@@ -139,14 +148,14 @@
           <span class="card-status">Active</span>
         </div>
         <div class="card-company">{{customer.companyName}}</div>
-        <div class="card-dates">
-          <div class="date-item">
-            <span class="date-label">Joined:</span> 
-            <span class="date-value">{{customer.joinDate | date:'MMM dd, yyyy'}}</span>
+        <div class="card-contact">
+          <div class="contact-item" *ngIf="customer.email">
+            <span class="contact-label">Email:</span> 
+            <span class="contact-value">{{customer.email}}</span>
           </div>
-          <div class="date-item">
-            <span class="date-label">Last Seen:</span> 
-            <span class="date-value">{{customer.lastSeen | date:'MMM dd, yyyy'}}</span>
+          <div class="contact-item" *ngIf="customer.contactNumber">
+            <span class="contact-label">Phone:</span> 
+            <span class="contact-value">{{customer.contactNumber}}</span>
           </div>
         </div>
         <div class="card-footer">

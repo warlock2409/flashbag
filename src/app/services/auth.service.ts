@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { map, delay, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AblyService } from './ably.service';
 
 export interface User {
   id: string;
@@ -60,7 +61,7 @@ export class AuthService {
 
   isAuthenticated$ = this.isAuthenticated.asObservable();
 
-  constructor(private http: HttpClient,private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private ablyService: AblyService) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
     this.currentUser = this.currentUserSubject.asObservable();
 
@@ -121,12 +122,20 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
+    // Unsubscribe from all Ably channels before logout
+    const currentShopCode = this.ablyService['shopCodeSubject'].getValue();
+    console.log(`Unsubscribe from ${currentShopCode}`);
+    if (currentShopCode) {
+      await this.ablyService.unsubscribe(currentShopCode);
+    }
+    // Close the Ably connection
+    await this.ablyService.close();
     this.currentUserSubject.next(null);
     localStorage.removeItem('currentUser');
     this.isAuthenticated.next(false);
-
-     this.router.navigate(['/login'], { queryParams: { type: 'business' } });
+    this.router.navigate(['/login'], { queryParams: { type: 'business' } });
+    localStorage.clear();
   }
 
   isSeller(): boolean {

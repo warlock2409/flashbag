@@ -17,20 +17,9 @@ export class BusinessLayoutComponent {
   currentShopCode = '';
 
   constructor(private router: Router,private cdr: ChangeDetectorRef, private ablyService: AblyService, private notification: SweatAlertService, private timeZoneHelper: TimeZoneHelperService, public authService: AuthService) {
-    console.log("BusinessLayoutComponent constructor");
   }
 
   async logout() {
-    // Unsubscribe from all Ably channels before logout
-    const currentShopCode = this.ablyService['shopCodeSubject'].getValue();
-    console.log(`Unsubscribe from ${currentShopCode}`);
-    if (currentShopCode) {
-      await this.ablyService.unsubscribe(currentShopCode);
-    }
-    
-    // Close the Ably connection
-    await this.ablyService.close();
-    
     this.authService.logout();
     this.router.navigate(['/']);
     localStorage.clear();

@@ -229,9 +229,15 @@ export class OrganizationServiceService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
-  getAllCustomerByOrg(page: number = 0, size: number = 10) {
+  getAllCustomerByOrg(page: number = 0, size: number = 10, search?: string, memStatus?: boolean) {
     const orgCode = localStorage.getItem("orgCode");
-    const url = `http://localhost:8080/users/organization/${orgCode}/customers?page=${page}&size=${size}`;
+    let url = `http://localhost:8080/users/organization/${orgCode}/customers?page=${page}&size=${size}`;
+    if (search) {
+      url += `&query=${encodeURIComponent(search)}`;
+    }
+    if (memStatus !== undefined) {
+      url += `&memStatus=${memStatus}`;
+    }
     return this.Http.get<ServiceResponse<any>>(url);
   }
 

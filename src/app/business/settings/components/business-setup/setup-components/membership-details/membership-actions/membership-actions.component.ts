@@ -62,7 +62,6 @@ export class MembershipActionsComponent {
     { key: "chest", name: "Chest", icon: "sports_mma" },
     { key: "traps", name: "Traps", icon: "change_history" },
     { key: "body", name: "Full Body", icon: "accessibility" },
-    { key: "wrist", name: "Wrists", icon: "watch" },
     { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
     { key: "lats", name: "Lats", icon: "sports_kabaddi" },
     { key: "traps_middle", name: "Traps", icon: "height" },

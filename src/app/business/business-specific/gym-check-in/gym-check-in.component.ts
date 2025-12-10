@@ -177,6 +177,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (event.key === 'Backspace') {
       // this.typedText = this.typedText.slice(0, -1);
     } else if (event.key === 'Enter') {
+      this.submitCheckIn(this.typedText);
       this.typedText = ''; // clear after submit
     }
   }

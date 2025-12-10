@@ -9,6 +9,7 @@ import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import * as moment from 'moment-timezone';
 import { AblyService } from 'src/app/services/ably.service';
 import { ShopActionsComponent } from '../settings/components/business-setup/setup-components/location/location-action/shop-actions/shop-actions.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -35,7 +36,7 @@ export class HomeComponent implements OnDestroy {
     // add more mappings here
   ])
 
-  constructor(private ablyService: AblyService) {
+  constructor(private ablyService: AblyService,private authService:AuthService) {
   }
 
 
@@ -152,7 +153,6 @@ export class HomeComponent implements OnDestroy {
             // Initialize Ably service
             this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
             this.ablyService.setShopCode(this.selectedShop.code!);
-            console.log("ShopCode", this.selectedShop.code!);
 
             this.selectedShop.shopCategory = this.shopCategory.get(this.selectedShop.primaryIndustry.name)
               ? this.shopCategory.get(this.selectedShop.primaryIndustry.name)
@@ -163,6 +163,8 @@ export class HomeComponent implements OnDestroy {
         },
         error: (err: any) => {
           this.isLoading = false;
+          this.swallService.error("Something went wrong, please try again later");
+          this.authService.logout();
           reject(err);
         }
       });
