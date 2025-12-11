@@ -10,7 +10,7 @@
       <!-- Background image -->
       <div class="absolute inset-0">
         <img
-          src="../../../assets/png/hero.png"
+          src="../../../assets/img/gymbg.jpg"
           alt="Calm workspace" class="h-full w-full object-cover opacity-40">
         <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-transparent"></div>
       </div>
@@ -84,7 +84,7 @@
                   Privacy-first
                 </span>
               </div>
-              <form class="mt-3">
+              <form class="mt-3" (ngSubmit)="onSubmit()" #leadForm="ngForm">
                 <div class="flex gap-2">
                   <div class="relative flex-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -94,11 +94,12 @@
                       <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
                       <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                     </svg>
-                    <input type="email" placeholder="your@dream.com"
+                    <input type="email" placeholder="your@dream.com" [(ngModel)]="email" name="email" required
                       class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400">
                   </div>
                   <button type="submit"
-                    class="rounded-xl bg-neutral-900 !text-white px-4 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors">
+                    class="rounded-xl bg-neutral-900 !text-white px-4 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors"
+                    [disabled]="!leadForm.form.valid">
                     Connect
                   </button>
                 </div>

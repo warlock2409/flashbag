@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
@@ -8,7 +9,7 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
 import { VideoReelComponent } from '../shared/video-reel/video-reel.component';
 import { UploadMediaComponent } from '../upload-media/upload-media.component';
-
+import { SweatAlertService } from '../../services/sweat-alert.service';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -16,6 +17,7 @@ import { UploadMediaComponent } from '../upload-media/upload-media.component';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     ProductCardComponent,
     SearchBarComponent,
@@ -24,10 +26,11 @@ import { UploadMediaComponent } from '../upload-media/upload-media.component';
     SidePanelComponent,
     VideoReelComponent,
     UploadMediaComponent
-  ]
-})
+  ]})
 export class LandingComponent {
   private placeholderImage = 'https://www.istockphoto.com/resources/images/PhotoFTLP/1035146258.jpg';
+  
+  email: string = '';
 
   categories = [
     { id: 'deals', label: 'Flashbag Deals', active: true },
@@ -38,7 +41,7 @@ export class LandingComponent {
 
   activeCategory = 'deals';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sweatAlertService: SweatAlertService) {}
 
   setActiveCategory(categoryId: string) {
     this.activeCategory = categoryId;
@@ -186,4 +189,23 @@ export class LandingComponent {
   navigateToProduct(productId: string) {
     this.router.navigate(['/product', productId]);
   }
-} 
+  
+  async onSubmit() {
+    if (this.email && this.isValidEmail(this.email)) {
+      const success = await this.sweatAlertService.sendLead(this.email);
+      if (success) {
+        this.sweatAlertService.success('Thank you for connecting with us!');
+        this.email = ''; // Clear the email field
+      } else {
+        this.sweatAlertService.error('Failed to submit your request. Please try again.');
+      }
+    } else {
+      this.sweatAlertService.error('Please enter a valid email address.');
+    }
+  }
+  
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+}
