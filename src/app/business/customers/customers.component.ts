@@ -58,7 +58,7 @@ export class CustomersComponent {
         console.log(this.customers);
       },
       error: (err: any) => {
-        console.error('Error fetching customers:', err);
+        this._snackBar.error('Error fetching customers');
       }
     });
   }
@@ -95,11 +95,29 @@ export class CustomersComponent {
 
   addCustomerMannually(): void {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
-      data: {}, minWidth: "360px"
+      data: {}, 
+      minWidth: "400px",
+      maxWidth: "500px"
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.getCustomerByOrg();
+    });
+  }
+
+  importCustomers(): void {
+    // Open the add customer dialog with export mode
+    const dialogRef = this.dialog.open(AddCustomerComponent, {
+      data: { mode: 'export' }, 
+      minWidth: "600px",  // Increased width for export mode
+      maxWidth: "800px",  // Increased max width for export mode
+      width: "70vw"       // Use viewport width for responsive sizing
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getCustomerByOrg();
+      }
     });
   }
 }

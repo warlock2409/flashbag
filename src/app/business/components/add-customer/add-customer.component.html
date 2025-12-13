@@ -1,34 +1,85 @@
-<h2 mat-dialog-title class="bg-white" style="margin: 0;">Add Customer</h2>
+<h2 mat-dialog-title class="bg-white" style="margin: 0;">{{ isExportCustomerMode ? 'Import Customer' : 'Add Customer' }}</h2>
 
 <mat-dialog-content class="mat-typography bg-white">
     <form [formGroup]="customerForm" (ngSubmit)="submitAccountForm()" class="p-4">
-        <!-- Name -->
-        <div class="mt-4 mb-2 md:mb-6">
-            <label class="block mb-2 text-sm font-medium">Customer Name</label>
-            <input type="text" autocomplete="off" formControlName="name"
-                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-        </div>
-        <!-- Phone -->
-        <div>
-            <label class="block mb-2 text-sm font-medium">Phone number</label>
-            <input type="tel" formControlName="phone"
-                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-        </div>
-        <!-- Email -->
-        <div class="mt-4 mb-2 md:mb-6">
-            <label class="block mb-2 text-sm font-medium">Email address</label>
-            <input type="email" autocomplete="off" formControlName="email"
-                class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
-        </div>
+        <!-- Grid layout for export mode, stacked for regular mode -->
+        <div [class.grid-cols-1]="!isExportCustomerMode" [class.grid-cols-2]="isExportCustomerMode" 
+             [class.grid]="isExportCustomerMode" [class.space-y-4]="!isExportCustomerMode" 
+             [class.gap-6]="isExportCustomerMode">
+            
+            <!-- Left column / Full width in regular mode -->
+            <div [class.col-span-1]="isExportCustomerMode">
+                <!-- Name -->
+                <div class="form-field">
+                    <label class="block mb-2 text-sm font-medium">Customer Name</label>
+                    <input type="text" autocomplete="off" formControlName="name"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                </div>
+                
+                <!-- Membership Dropdown - Placed parallel to name in export mode -->
+                <div class="form-field" *ngIf="isExportCustomerMode">
+                    <label class="block mb-2 text-sm font-medium">Membership</label>
+                    <mat-select formControlName="membershipId" placeholder="Select Membership" class="w-full">
+                        <mat-option *ngFor="let membership of memberships" [value]="membership.id" [title]="membership.name">
+                            <div class="membership-option">
+                                <span class="membership-price">₹{{ membership.basePrice }} - </span>
+                                <span class="membership-name"> {{ membership.name }}</span>
+                            </div>
+                        </mat-option>
+                    </mat-select>
+                </div>
+                
+                <!-- Phone with Country Code -->
+                <div class="form-field">
+                    <label class="block mb-2 text-sm font-medium">Phone number</label>
+                    <div class="flex items-center">
+                        <!-- Country Code Selector -->
+                        <mat-select formControlName="countryCode" class="!w-18 mr-2">
+                            <mat-option value="+91">+91</mat-option>
+                            <mat-option value="+1">+1</mat-option>
+                            <mat-option value="+44">+44</mat-option>
+                            <mat-option value="+61">+61</mat-option>
+                            <mat-option value="+81">+81</mat-option>
+                        </mat-select>
+                        
+                        <!-- Phone Number Input -->
+                        <input type="tel" formControlName="phone"
+                            class="bg-gray-50 border border-gray-300 text-sm rounded-lg block flex-grow p-2.5" 
+                            placeholder="Phone number" />
+                    </div>
+                </div>
+                
+                <!-- Email -->
+                <div class="form-field">
+                    <label class="block mb-2 text-sm font-medium">Email address</label>
+                    <input type="email" autocomplete="off" formControlName="email"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                </div>
 
-        <div class="flex justify-end">
-
+                <!-- Start Date -->
+                <div class="form-field" *ngIf="isExportCustomerMode">
+                    <label class="block mb-2 text-sm font-medium">Start Date</label>
+                    <input type="date" formControlName="startDate"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+                </div>
+            </div>
+            
+            <!-- Right column - Only in export mode -->
+            <div [class.col-span-1]="isExportCustomerMode" *ngIf="isExportCustomerMode">
+                <!-- Media Upload - Moved to bottom -->
+                <div class="form-field">
+                    <label class="block mb-2 text-sm font-medium">Customer Media</label>
+                    <app-upload-media [existingUploads]="sampleUploads" [multiple]="false"
+                        [type]="'CUSTOMER'" (uploaded)="setDocument($event)"
+                        class="flex-none w-50"></app-upload-media>
+                </div>
+            </div>
         </div>
     </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="bg-white">
+<mat-dialog-actions align="end" class="bg-white button-container">
     <button mat-stroked-button mat-dialog-close>Cancel</button>
     <button mat-stroked-button type="submit" (click)="submitAccountForm()"
-        style="background-color: #a684ff; color: white;">Submit</button>
+        style="background-color: #a684ff; color: white;">{{ isExportCustomerMode ? 'Import' : 'Submit' }}</button>
 </mat-dialog-actions>
