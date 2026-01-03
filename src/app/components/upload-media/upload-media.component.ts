@@ -37,7 +37,7 @@ export interface UploadFile {
   standalone: true
 })
 export class UploadMediaComponent {
-  baseUrl= "https://9myle.store/";
+  baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
   // baseUrl= "http://localhost:9000/";
 
 

@@ -78,10 +78,10 @@ export interface OrganizationMembershipPlan {
   industryId: number;
   benefits: MembershipBenefit[];
   shopIds: number[];
+  mode?: 'Beginner' | 'Intermediate' | 'Advanced';
 
   industry?:string;
 }
-
 export interface MembershipBenefit {
   benefitType: string; // add more if needed
   serviceKey: string;

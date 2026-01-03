@@ -259,8 +259,8 @@ export class OrganizationServiceService {
   }
 
   getExercise(
-    name?: string,
     category?: string,
+    name?: string,
     mode?: string,
     page?: number,
     size?: number

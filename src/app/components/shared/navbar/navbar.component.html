@@ -39,16 +39,16 @@
 </nav> -->
 
 <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-2">
-  <div class="max-w-2xl mx-auto rounded-full px-4 py-2" [ngClass]="{ '!bg-gray-100 ': !isHomePage }"
-    style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+  <div class="max-w-2xl mx-auto rounded-full px-4 py-2" 
+    style="background: rgba(201, 6, 240, 0.158); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
 
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-1">
         <div class="h-10 w-12 rounded-xl text-white flex items-center justify-center">
           <img src="../../../assets/png/logo.png" alt="" srcset="">
         </div>
-        <span class="text-lg tracking-tight font-medium text-black"
-          [ngClass]="{ '!text-white': isHomePage }">9Myle</span>
+        <span class="text-lg tracking-tight font-medium text-black !text-white"
+          >9Myle</span>
       </div>
 
 
@@ -93,51 +93,25 @@
 
       </ul>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
 
         <button *ngIf="!authService.isLoggedIn()" routerLink="/login" [queryParams]="{type: 'business'}"
-          class="relative hover:bg-violet-300 p-2 rounded-full transition-all duration-300 border border-white/5"
+          class="relative hover:bg-violet-300 p-2 rounded-full transition-all duration-300 border border-white/40"
           aria-label="Bookings">
-          <i class="fa-solid fa-user"></i>
+          <i class="fa-solid fa-user text-white"></i>
         </button>
 
-        <!-- <button *ngIf="authService.isLoggedIn()" [ngClass]="{ '!text-gray-300': isHomePage }"
-          class="relative p-3 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell"
-            class="lucide lucide-bell w-5 h-5 group-hover:scale-110 transition-transform">
-            <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
-            <path
-              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
-            </path>
-          </svg>
-          <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse group-hover:scale-125">
-          </div>
-        </button> -->
-
-        <!-- <div class="relative hover-scale cursor-pointer" *ngIf="authService.isLoggedIn()">
-          <img
-            src="https://t4.ftcdn.net/jpg/02/24/86/95/360_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg"
-            alt="Profile"
-            class="w-10 h-10 rounded-full object-cover ring-2 ring-white/20 transition-all hover:ring-white/50 hover:ring-4">
-          <div
-            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black hover:scale-110 transition-transform">
-          </div>
-        </div> -->
+         <button *ngIf="authService.isLoggedIn()" (click)="goToHome()"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group border border-white/1"
+          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
+          <mat-icon style="color: whitesmoke;">business_center</mat-icon>
+        </button>
 
         <button *ngIf="authService.isLoggedIn()" (click)="logout()"
-          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
+          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group border border-white/1"
           aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
-          <mat-icon>settings_power</mat-icon>
+          <mat-icon style="color: orangered;">settings_power</mat-icon>
         </button>
-
-        <button *ngIf="authService.isLoggedIn()" (click)="goToHome()"
-          class="relative p-1 rounded-xl glass-card hover-lift hover:bg-white/15 hover:shadow-lg hover:shadow-blue-500/20 group"
-          aria-label="Account" routerLink="/login" [queryParams]="{type: 'business'}">
-          <mat-icon>business_center</mat-icon>
-        </button>
-
-
       </div>
     </div>
   </div>

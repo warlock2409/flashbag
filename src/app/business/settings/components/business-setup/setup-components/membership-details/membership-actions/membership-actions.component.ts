@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ServiceDialogComponent } from '../service-dialog/service-dialog.component';
+import { ExerciseSelectionDialogComponent } from '../exercise-selection-dialog/exercise-selection-dialog.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
@@ -23,6 +24,7 @@ export interface Todo {
 interface BodyPart {
   id?: number;
   title: string;
+  selectedExercises?: any[]; // Added to store selected exercises for each body part
 }
 
 // Interface for body filter (copied from exercise-plan.component.ts)
@@ -35,13 +37,22 @@ interface BodyFilter {
 @Component({
   selector: 'app-membership-actions',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule, MatDialogModule, CommonModule, FormsModule, MatStepperModule],
+  imports: [MatIconModule, MatButtonModule, MatDialogModule, CommonModule, FormsModule, MatStepperModule, ExerciseSelectionDialogComponent],
   templateUrl: './membership-actions.component.html',
   styleUrl: './membership-actions.component.scss'
 })
 export class MembershipActionsComponent {
 
   readonly dialogRef = inject(MatDialogRef<MembershipActionsComponent>);
+
+  // Simple UUID v4 generator
+  private generateUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0;
+      const v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
   readonly data = inject<any>(MAT_DIALOG_DATA);
   industries: Industry[] = [];
   shops: ShopModel[] = [];
@@ -50,24 +61,39 @@ export class MembershipActionsComponent {
 
   // Body filters copied from exercise-plan.component.ts
   modelFilters: BodyFilter[] = [
-    { key: "", name: "All", icon: "directions_walk" },
-    { key: "calves", name: "Calves", icon: "directions_walk" },
-    { key: "quads", name: "Quads", icon: "fitness_center" },
-    { key: "abdominals", name: "Abs", icon: "self_improvement" },
-    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
-    { key: "hands", name: "Hands", icon: "pan_tool" },
-    { key: "forearms", name: "Forearms", icon: "back_hand" },
-    { key: "biceps", name: "Biceps", icon: "arm_flex" },
-    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
-    { key: "chest", name: "Chest", icon: "sports_mma" },
-    { key: "traps", name: "Traps", icon: "change_history" },
-    { key: "body", name: "Full Body", icon: "accessibility" },
-    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
-    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
-    { key: "traps_middle", name: "Traps", icon: "height" },
-    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
-    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" }
-  ];
+  { key: "", name: "All", icon: "directions_walk" },
+
+  // Upper back / neck
+  { key: "traps", name: "Traps", icon: "change_history" },
+  { key: "traps_middle", name: "Middle Traps", icon: "height" },
+
+  // Shoulders
+  { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+  { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
+
+  // Chest & back
+  { key: "chest", name: "Chest", icon: "sports_mma" },
+  { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+
+  // Arms
+  { key: "biceps", name: "Biceps", icon: "arm_flex" },
+  { key: "forearms", name: "Forearms", icon: "back_hand" },
+  { key: "hands", name: "Hands", icon: "pan_tool" },
+
+  // Core
+  { key: "abdominals", name: "Abs", icon: "self_improvement" },
+  { key: "obliques", name: "Obliques", icon: "accessibility_new" },
+  { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
+
+  // Legs
+  { key: "quads", name: "Quads", icon: "fitness_center" },
+  { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+  { key: "calves", name: "Calves", icon: "directions_walk" },
+
+  // Full body
+  { key: "body", name: "Full Body", icon: "accessibility" },
+];
+
 
   // temp 
   benefitType = 'DURATION_ACCESS';
@@ -84,11 +110,12 @@ export class MembershipActionsComponent {
       challengeBased: false,
       industryId: 0,
       benefits: [],
-      shopIds: []
+      shopIds: [],
+      mode: 'Beginner'
     };
+
     if (existingPlan) {
       console.log(existingPlan);
-
       this.membershipPlan = {
         id: existingPlan.id,
         name: existingPlan.name ?? '',
@@ -97,7 +124,8 @@ export class MembershipActionsComponent {
         challengeBased: existingPlan.challengeBased ?? false,
         industryId: existingPlan.industryId ?? 0,
         benefits: existingPlan.benefits ? [...existingPlan.benefits] : [],
-        shopIds: existingPlan.shopIds ? [...existingPlan.shopIds] : []
+        shopIds: existingPlan.shopIds ? [...existingPlan.shopIds] : [],
+        mode: existingPlan.mode ?? 'Beginner'
       };
 
       let durationBenefit = existingPlan.benefits
@@ -181,7 +209,8 @@ export class MembershipActionsComponent {
             taskDtoList: day.taskDtoList.map((task: any) => {
               return {
                 id: task.id ?? undefined, // Include task ID if it exists
-                title: task.title || 'Select Body Part'
+                title: task.title || 'Select Body Part',
+                selectedExercises: task.selectedExercises || []
               };
             })
           };
@@ -258,14 +287,14 @@ export class MembershipActionsComponent {
   addDay() {
     const newDay: Todo = {
       order: this.exerciseDays.length + 1,
-      taskDtoList: [{ title: 'Select Body Part' }] // Start with one empty body part selection
+      taskDtoList: [{ title: 'Select Body Part', selectedExercises: [] }] // Start with one empty body part selection
     };
     this.exerciseDays.push(newDay);
   }
 
   addBodyPartToDay(dayIndex: number) {
     // Add a unique empty body part object for each new body part to avoid binding issues
-    this.exerciseDays[dayIndex].taskDtoList.push({ title: 'Select Body Part' });
+    this.exerciseDays[dayIndex].taskDtoList.push({ title: 'Select Body Part', selectedExercises: [] });
   }
 
   removeDay(index: number) {
@@ -280,10 +309,43 @@ export class MembershipActionsComponent {
 
   // Handle body part selection change
   onBodyPartChange(dayIndex: number, bodyPartIndex: number, event: any) {
-    const selectedTitle = event.target.value;
+    const selectedTitle = event.target ? event.target.value : event.value;
+    // Preserve selected exercises if they exist
+    const existingExercises = this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex].selectedExercises || [];
     // Update the body part object
-    this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = { title: selectedTitle };
+    this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = { 
+      title: selectedTitle, 
+      selectedExercises: existingExercises
+    };
   }
+
+  // Open exercise selection dialog for a body part
+  openExerciseSelectionDialog(dayIndex: number, bodyPartIndex: number) {
+    const bodyPart = this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex];
+    
+    if (!bodyPart.title || bodyPart.title === 'Select Body Part') {
+      return;
+    }
+    
+    const dialogRef = this.dialog.open(ExerciseSelectionDialogComponent, {
+      width: '600px',
+      data: { 
+        category: bodyPart.title,
+        mode: this.membershipPlan.mode,
+        selectedExercises: bodyPart.selectedExercises || []
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Update the selected exercises for this body part
+        this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex].selectedExercises = result;
+        console.log('Selected exercises:', result);
+      }
+    });
+  }
+
+
 
   // TrackBy function to help Angular track items properly
   trackByIndex(index: number, item: any): any {
@@ -326,12 +388,22 @@ export class MembershipActionsComponent {
     const transformedDays = exerciseDays.map(day => {
       return {
         ...day,
+        // Add clientKey for new days (days without ID)
+        clientKey: day.id ? undefined : this.generateUUID(),
         id: day.id ?? undefined, // Include day ID if it exists
         taskDtoList: day.taskDtoList.map(task => {
           return {
             ...task,
             id: task.id ?? undefined, // Include task ID if it exists
-            title: task.title
+            // Add clientKey for new tasks (tasks without ID)
+            clientKey: task.id ? undefined : this.generateUUID(),
+            title: task.title,
+            // Include only essential exercise data if they exist
+            selectedExercises: task.selectedExercises ? task.selectedExercises.map(ex => ({
+              exerciseId: ex.id,
+              name: ex.name,
+              order: ex.order
+            })) : []
           };
         })
       };

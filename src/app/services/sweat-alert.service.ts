@@ -32,7 +32,7 @@ export class SweatAlertService {
     });
   }
 
-  error(message: string, timer = 1500) {
+  error(message: string, timer = 3500) {
     Swal.fire({
       position: "top-end",
       icon: "error",
@@ -84,6 +84,49 @@ export class SweatAlertService {
       return true;
     } catch (err: any) {
       console.error('Error sending lead to Discord:', err);
+      return false;
+    }
+  }
+  
+  async sendLeadWithDetails(leadData: { name: string, gym: string, email: string, phone: string, city: string, locations: number }) {
+    const payload = {
+      content: `New Lead Submission`,
+      embeds: [
+        {
+          title: "Lead Information",
+          description: `A new lead has expressed interest in our services.`,
+          color: 0x7C3AED,
+          fields: [
+            { name: "Name", value: leadData.name, inline: false },
+            { name: "Gym Name", value: leadData.gym, inline: false },
+            { name: "Email", value: leadData.email, inline: false },
+            { name: "Phone", value: leadData.phone, inline: false },
+            { name: "City", value: leadData.city, inline: false },
+            { name: "Locations", value: leadData.locations.toString(), inline: false },
+            { name: "Timestamp", value: new Date().toISOString(), inline: false }
+          ],
+          timestamp: new Date().toISOString()
+        }
+      ]
+    };
+
+    try {
+      const response = await fetch(this.leadHook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Webhook failed: ${text}`);
+      }
+
+      console.log('Lead with details sent successfully');
+      this.success('Our team will be in touch soon!');
+      return true;
+    } catch (err: any) {
+      console.error('Error sending lead with details to Discord:', err);
       return false;
     }
   }

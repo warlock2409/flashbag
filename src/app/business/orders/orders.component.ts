@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ResponseDate } from 'src/app/app.component';
 import { ShopService } from 'src/app/services/shop.service';
 import { InvoiceItem } from '../components/point-of-sale/InvoiceItem';
 import { InvoiceModel } from 'src/app/models/payment.model';
 import { MatDialog } from '@angular/material/dialog';
 import { PosComponent } from '../components/pos/pos.component';
-
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 
 export interface Booking {
   vehicleId: number;
@@ -22,7 +22,7 @@ export interface Booking {
   styleUrls: ['./orders.component.scss'],
   standalone: false
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnInit {
 
 
 
@@ -30,6 +30,7 @@ export class OrdersComponent {
 
   shopService = inject(ShopService)
   dialog = inject(MatDialog);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
   // 🔹 Properties & State → All class-level variables
@@ -38,8 +39,11 @@ export class OrdersComponent {
   invoiceList: InvoiceModel[] = []
   private searchTimeout: any;
   searchQuery = '';
-  shopCode!:any;
-
+  shopCode!: any;
+  totalElements = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  loading = false;
   // filters DRAFT, ISSUED, PARTIALLY_PAID, PAID, CANCELLED
   // ============================================================
   // 🔹 FILTER TABS CONFIGURATION
@@ -85,11 +89,14 @@ export class OrdersComponent {
 
   selectTab(tab: string) {
     this.selectedTab = tab;
+    // Reset to first page when changing tabs
+    this.pageIndex = 0;
+    // Also reset the paginator component to first page
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
     this.getAllInvoicesByShop();
-  }
-
-
-  // ⚡️ Lifecycle Hooks → ngOnInit, ngOnDestroy, etc.
+  }  // ⚡️ Lifecycle Hooks → ngOnInit, ngOnDestroy, etc.
 
   constructor() {
 
@@ -98,11 +105,14 @@ export class OrdersComponent {
   ngOnInit() {
     this.shopCode = localStorage.getItem("shopCode");
     // Get all Invoices by default Type open
-    console.log("order",this.shopCode);
-    
+    console.log("order", this.shopCode);
+
     if (this.shopCode) {
       this.getAllInvoicesByShop();
       this.getInvoiceStatusCount();
+    } else {
+      // If there's no shop code, we don't need to show loading
+      this.loading = false;
     }
   }
 
@@ -114,16 +124,33 @@ export class OrdersComponent {
   // 🌐 API Calls → All service calls / backend integrations
 
   getAllInvoicesByShop() {
-    this.shopService.getAllInvoicesByShop(this.selectedTab, this.searchQuery).subscribe({
+    // Show loading spinner
+    this.loading = true;
+    
+    // Update the service call to pass pagination parameters
+    this.shopService.getAllInvoicesByShop(this.selectedTab, this.searchQuery, this.pageIndex, this.pageSize).subscribe({
       next: (res: ResponseDate) => {
-        this.invoiceList = res.data.content;
+        // Handle paginated response
+        this.invoiceList = res.data.content || res.data;
+
+        // Set pagination properties if they exist in the response
+        if (res.data.totalElements !== undefined) {
+          this.totalElements = res.data.totalElements;
+        }
+        if (res.data.size !== undefined) {
+          this.pageSize = res.data.size;
+        }
+        
+        // Hide loading spinner
+        this.loading = false;
       },
       error: (err: any) => {
-
+        console.error('Error fetching invoices:', err);
+        // Hide loading spinner even on error
+        this.loading = false;
       }
     })
   }
-
   getInvoiceStatusCount() {
     this.shopService.getInvoiceStatusCount().subscribe({
       next: (res: ResponseDate) => {
@@ -131,7 +158,7 @@ export class OrdersComponent {
         this.updateTabCounts(res.data)
       },
       error: (err: any) => {
-
+        console.error('Error fetching invoice status count:', err);
       }
     })
   }
@@ -183,7 +210,7 @@ export class OrdersComponent {
     this.tabs.forEach(tab => {
       tab.count = 0;
     });
-    
+
     // Then, update with the API data
     apiData.forEach(([status, count]) => {
       const tab = this.tabs.find(t => t.value === status);
@@ -200,6 +227,8 @@ export class OrdersComponent {
     }
     // Set new timeout (debounce 400ms)
     this.searchTimeout = setTimeout(() => {
+      // Reset to first page when searching
+      this.pageIndex = 0;
       if (this.searchQuery.trim()) {
         this.getAllInvoicesByShop();
       } else {
@@ -208,5 +237,9 @@ export class OrdersComponent {
     }, 400);
   }
 
-
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getAllInvoicesByShop();
+  }
 } 

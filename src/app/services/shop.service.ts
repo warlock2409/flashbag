@@ -53,18 +53,33 @@ export class ShopService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
-  getAllInvoicesByShop(selectTab: string, searchQuery: string = "") {
+  getAllInvoicesByShop(selectTab: string, searchQuery: string = "", page: number = 0, size: number = 10) {
     let shopCode = localStorage.getItem("shopCode");
     if (!shopCode) {
       throw new Error('Shop Not Found');
     }
     let url = "http://localhost:8080/api/invoices/shop/{shopCode}".replace("{shopCode}", shopCode!);
+    
+    // Build query parameters
+    const params = new URLSearchParams();
+    
     if (selectTab) {
-      url = url + "?invoiceStatus=" + selectTab;
+      params.append('invoiceStatus', selectTab);
     }
+    
     if (searchQuery.length > 0) {
-      url = url + "&search=" + searchQuery;
+      params.append('search', searchQuery);
     }
+    
+    // Add pagination parameters
+    params.append('page', page.toString());
+    params.append('size', size.toString());
+    
+    // Append query parameters to URL
+    if (params.toString()) {
+      url = url + "?" + params.toString();
+    }
+    
     return this.Http.get<ServiceResponse<any>>(url);
   }
 

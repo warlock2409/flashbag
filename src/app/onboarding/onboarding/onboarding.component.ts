@@ -128,14 +128,14 @@ export class OnboardingComponent {
       userDto: {
         firstName: formValue.businessDetails.firstName,
         lastName: formValue.businessDetails.lastName,
-        email: formValue.accountDetails.email,
+        email: formValue.accountDetails.email.toLowerCase(),
         phone: formValue.businessDetails.phone,
         password: formValue.accountDetails.password,
       },
       organizationDto: {
         name: formValue.businessDetails.company,
         visitors: formValue.businessDetails.visitors,
-        email: formValue.accountDetails.email,
+        email: formValue.accountDetails.email.toLowerCase(),
         termAccepted: formValue.businessDetails.termsAccepted,
         status: 'PENDING',
       }

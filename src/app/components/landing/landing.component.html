@@ -1,915 +1,591 @@
-<main class="max-w-7xl sm:px-6 sm:py-10 flex flex-col gap-12 mr-auto ml-auto pt-8 pr-4 pb-8 pl-4">
-  <!-- Feature cards -->
-  
+<main
+  class="sm:px-6 sm:py-10 flex flex-col gap-12 mr-auto ml-auto font-sans antialiased bg-slate-950 [font-family:Inter,_ui-sans-serif,system-ui]">
+
   <app-navbar></app-navbar>
 
-  
-
-  <section class="mt-6">
-    <div class="relative overflow-hidden rounded-3xl ring-1 ring-black/10 bg-neutral-900">
-      <!-- Background image -->
-      <div class="absolute inset-0">
-        <img
-          src="../../../assets/img/gymbg.jpg"
-          alt="Calm workspace" class="h-full w-full object-cover opacity-40">
-        <div class="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-transparent"></div>
+  <div class="text-slate-200">
+    <!-- Top gradient aura -->
+    <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" style="z-index: 1;">
+      <div
+        class="absolute left-1/2 top-[-20%] h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-violet-500/10 blur-3xl"
+        style=""></div>
+      <div class="absolute right-[-10%] top-1/3 h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/10 blur-3xl" style="">
       </div>
+    </div>
 
-      <!-- Content -->
-      <div class="relative z-10 p-5 sm:p-8 md:p-12 lg:p-16">
-        <!-- Floating mini-nav and newsletter on large screens -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div class="lg:col-span-7">
-            <h1 class="!text-violet-300 !tracking-tight !text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05]">
-              Launch your shop in hours, not weeks
+    <!-- Hero -->
+    <section class="relative" style="z-index: 2;">
+      <div class="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 md:pb-24 md:pt-20 lg:px-8">
+        <div class="grid items-center gap-10 md:grid-cols-2">
+          <div>
+            <div
+              class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+              <mat-icon style="font-size: 16px; height: 16px; width: 16px;">sparkles</mat-icon>
+              Early access now open in India
+            </div>
+            <h1 class="!text-4xl !font-semibold !tracking-tight !text-white !sm:text-5xl">
+              Run and grow your gym with one app
             </h1>
-            <p class="mt-5 !text-neutral-200 text-base sm:text-lg max-w-xl">
-              Onboard your business, configure your storefront, and sell products, services, or rentals from a powerful
-              dashboard. Unified catalog, checkout, and payouts—built for scale.
+            <p class="mt-4 max-w-xl text-sm leading-6 text-slate-300">
+              <span class="text-violet-400 font-semibold text-2xl">9</span>myle is a lightweight app for Indian gyms to
+              manage members and keep them engaged.
+              Gyms can create memberships and workouts, while members track attendance, workouts, and remaining days.
             </p>
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              <a href="#demo"
+                class="inline-flex items-center gap-2 rounded-md !bg-white px-4 py-2 text-sm font-medium !text-slate-900 !shadow-sm !ring-1 !ring-black/5 !transition !hover:bg-slate-100 !active:bg-slate-200">
+                <mat-icon style="font-size: 16px; height: 16px; width: 16px;">bolt</mat-icon>
+                Try it with your gym
+              </a>
+              <!-- <a href="#video" class="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10">
+                Watch overview
+              </a> -->
+            </div>
 
-            <!-- Feature points -->
-            <div class="mt-6 max-w-2xl">
-              <div class="flex items-start gap-4">
-                <div
-                  class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
-                  <i class="fa-solid fa-bell-concierge"></i>
-                </div>
-                <div class="">
-                  <p class="text-white font-medium text-sm m-0">ServicePort</p>
-                  <p class="text-neutral-300 text-xs">Turn expertise into opportunity</p>
-                </div>
+            <!-- India-specific chips -->
+            <!-- <div class="mt-6 flex flex-wrap gap-2">
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                UPI & QR payments
+              </span>
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                GST invoices
+              </span>
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                WhatsApp campaigns
+              </span>
+              <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                Hindi + regional
+              </span>
+            </div> -->
+
+            <!-- Social proof -->
+            <div class="mt-8 grid max-w-xl grid-cols-2 gap-4 text-xs text-slate-300 sm:grid-cols-3">
+              <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                <div class="text-white">5x</div>
+                <div class="mt-1 text-slate-400">faster onboarding</div>
               </div>
-              <div class="flex items-start gap-4">
-                <div
-                  class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
-                  <i class="fa-solid fa-cart-shopping"></i>
-                </div>
-                <div class="">
-                  <p class="text-white font-medium text-sm m-0">StockBox</p>
-                  <p class="text-neutral-300 text-xs">The smarter way to sell your products</p>
-                </div>
+              <div class="rounded-lg border border-white/10 bg-white/5 p-3">
+                <div class="text-white">-35%</div>
+                <div class="mt-1 text-slate-400">late payments</div>
               </div>
-              <div class="flex items-start gap-4">
-                <div
-                  class="h-9 w-9 rounded-lg bg-white/10 backdrop-blur ring-1 ring-white/15 flex items-center justify-center text-amber-300">
-                  <i class="fa-solid fa-business-time"></i>
-                </div>
-                <div class="">
-                  <p class="text-white font-medium text-sm m-0">BorrowBox</p>
-                  <p class="text-neutral-300 text-xs">Your assets become opportunities</p>
-                </div>
+              <div class="rounded-lg border border-white/10 bg-white/5 p-3 sm:col-span-1 col-span-2">
+                <div class="text-white">+22%</div>
+                <div class="mt-1 text-slate-400">member retention</div>
               </div>
             </div>
           </div>
 
-          <!-- Newsletter card (floating on the right) -->
-          <div class="lg:col-span-5">
+          <!-- Mock dashboard preview -->
+          <div class="relative">
             <div
-              class="lg:ml-auto w-full max-w-md lg:max-w-sm rounded-2xl bg-white/80 backdrop-blur-md ring-1 ring-black/10 shadow-lg p-8 sm:p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-neutral-900 font-medium tracking-tight">Let’s Connect!</p>
-                  <p class="text-neutral-500 text-xs mt-0.5">Want to learn more or need a walkthrough?</p>
+              class="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-tr from-violet-500/20 to-fuchsia-500/20 blur-2xl">
+            </div>
+            <div
+              class="rounded-2xl border border-white/10 bg-slate-900/60 shadow-2xl ring-1 ring-white/10 backdrop-blur">
+              <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                <div class="flex items-center gap-2">
+                  <span class="h-2 w-2 rounded-full bg-red-400/80"></span>
+                  <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
+                  <span class="h-2 w-2 rounded-full bg-emerald-400/80"></span>
                 </div>
-                <span class="inline-flex items-center gap-2 text-[11px] text-neutral-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    data-lucide="shield-check" class="lucide lucide-shield-check h-3.5 w-3.5">
-                    <path
-                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
-                    </path>
-                    <path d="m9 12 2 2 4-4"></path>
-                  </svg>
-                  Privacy-first
-                </span>
+                <div class="text-xs text-slate-400">9myle • Dashboard</div>
+                <div class="text-xs text-slate-400">v0.1</div>
               </div>
-              <form class="mt-3" (ngSubmit)="onSubmit()" #leadForm="ngForm">
-                <div class="flex gap-2">
-                  <div class="relative flex-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      data-lucide="mail"
-                      class="lucide lucide-mail h-4 w-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2">
-                      <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
-                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                    </svg>
-                    <input type="email" placeholder="your@dream.com" [(ngModel)]="email" name="email" required
-                      class="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl ring-1 ring-black/10 focus:ring-2 focus:ring-neutral-900 outline-none bg-white placeholder:text-neutral-400">
+              <div class="grid gap-4 p-4 sm:grid-cols-2">
+                <div class="rounded-lg border border-white/10 bg-slate-900 p-4">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">Monthly Revenue</span>
+                    <mat-icon class="icon-landing">money_bag</mat-icon>
                   </div>
-                  <button type="submit"
-                    class="rounded-xl bg-neutral-900 !text-white px-4 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors"
-                    [disabled]="!leadForm.form.valid">
-                    Connect
-                  </button>
+                  <div class="mt-2 text-2xl font-semibold tracking-tight text-white">₹4,80,200</div>
+                  <div class="mt-3 flex gap-2">
+                    <span class="rounded-md bg-emerald-400/10 px-2 py-1 text-xs text-emerald-300">+12.2%</span>
+                    <span class="rounded-md bg-white/5 px-2 py-1 text-xs text-slate-300">This month</span>
+                  </div>
+                  <div class="mt-3 h-24 rounded-md bg-gradient-to-b from-violet-500/10 to-transparent"></div>
                 </div>
-              </form>
+                <div class="rounded-lg border border-white/10 bg-slate-900 p-4">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">Active Members</span>
+                    <mat-icon class="icon-landing">group_add</mat-icon>
+                  </div>
+                  <div class="mt-2 text-2xl font-semibold tracking-tight text-white">1,246</div>
+                  <div class="mt-3 flex gap-2">
+                    <span class="rounded-md bg-emerald-400/10 px-2 py-1 text-xs text-emerald-300">+31.2%</span>
+                    <span class="rounded-md bg-white/5 px-2 py-1 text-xs text-slate-300">This month</span>
+                  </div>
+                </div>
+                <div class="rounded-lg border border-white/10 bg-slate-900 p-4 sm:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">Attendance Today</span>
+                    <mat-icon class="icon-landing">fitness_center</mat-icon>
+                  </div>
+                  <div class="mt-3 grid grid-cols-7 gap-2 text-center">
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Mon</div>
+                      <div class="mt-1 text-sm text-white">182</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Tue</div>
+                      <div class="mt-1 text-sm text-white">201</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Wed</div>
+                      <div class="mt-1 text-sm text-white">226</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Thu</div>
+                      <div class="mt-1 text-sm text-white">214</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Fri</div>
+                      <div class="mt-1 text-sm text-white">198</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Sat</div>
+                      <div class="mt-1 text-sm text-white">244</div>
+                    </div>
+                    <div class="rounded-md bg-white/5 py-4">
+                      <div class="text-xs text-slate-400">Sun</div>
+                      <div class="mt-1 text-sm text-white">156</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Bottom overlays -->
-        <div class="mt-8 sm:mt-12 flex items-end justify-between">
-          <!-- Video teaser -->
-          <button class="group inline-flex items-center gap-3">
-            <div
-              class="relative w-40 sm:w-48 aspect-[16/10] rounded-xl overflow-hidden ring-2 ring-amber-400/70 shadow-lg">
-              <img
-                src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a6398c31-e7f2-45ea-9396-0967a4ff0c97_800w.jpg"
-                alt="Product teaser" class="h-full w-full object-cover">
-              <div class="absolute inset-0 bg-black/20"></div>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div
-                  class="h-10 w-10 rounded-full bg-white/90 text-neutral-900 flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    data-lucide="play" class="lucide lucide-play h-5 w-5 translate-x-0.5">
-                    <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
-                  </svg>
-                </div>
+    <!-- Product -->
+    <section id="product" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Everything your gym needs</h2>
+          <p class="mt-3 text-sm text-slate-300">From front-desk to growth, one stack that just works.</p>
+        </div>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">group</mat-icon>
               </div>
+              <div class="text-sm font-medium text-white">Member CRM</div>
             </div>
-          </button>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              Onboard in seconds, track plans, attendance, renewals, and follow-ups with automations.
+            </p>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Smart follow-up queues
+              </li>
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Freezes, holds, discounts
+              </li>
+            </ul>
+          </div>
 
-          <!-- Inline stock badge + CTA -->
-          <!-- <div class="hidden md:flex items-center gap-3">
-            <div class="text-xs text-neutral-300">
-              In stock • Ships in 2–5 business days
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">payments</mat-icon>
+              </div>
+              <div class="text-sm font-medium text-white">Payments & GST</div>
             </div>
-            <a href="#"
-              class="inline-flex items-center justify-center rounded-xl !bg-amber-500 !text-neutral-900 px-4 py-2.5 text-sm font-medium shadow-md !hover:bg-amber-400 transition-colors">
-              Order now
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                data-lucide="arrow-right" class="lucide lucide-arrow-right h-4 w-4 ml-2">
-                <path d="M5 12h14"></path>
-                <path d="m12 5 7 7-7 7"></path>
-              </svg>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              UPI, cards, BNPL. Auto-receipts and GST invoices with HSN/SAC and multi-rate tax.
+            </p>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+
+                <!-- <iconify-icon icon="lucide:qr-code" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon> -->
+                UPI QR at front desk
+              </li>
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+
+                <!-- <iconify-icon icon="lucide:receipt" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon> -->
+                GST-compliant billing
+              </li>
+            </ul>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">trending_up</mat-icon>
+              </div>
+              <div class="text-sm font-medium text-white">Growth & Referrals</div>
+            </div>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              WhatsApp campaigns, drip journeys, and referral rewards to fill your floor every month.
+            </p>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+
+                <!-- <iconify-icon icon="lucide:megaphone" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon> -->
+                Templates in English/Hindi
+              </li>
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+
+                <!-- <iconify-icon icon="lucide:gift" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon> -->
+                Incentives & coupons
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">android</mat-icon>
+              </div>
+              <div class="text-sm font-medium text-white">Member App</div>
+            </div>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              Digital passes, self-renewals, workouts, and upsells—on iOS/Android with your branding.
+            </p>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">qr_code</mat-icon>
+              </div>
+              <div class="text-sm font-medium text-white">Access & Attendance</div>
+            </div>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              QR/OTP entry, shift rosters, trainer tracking. Works offline at the front desk.
+            </p>
+          </div>
+
+          <div class="rounded-xl border border-white/10 bg-slate-900/60 p-5">
+            <div class="flex items-center gap-3">
+              <div class="grid h-9 w-9 place-items-center rounded-lg bg-violet-500/15">
+                <mat-icon class="icon-landing">analytics</mat-icon>
+              </div>
+              <div class="text-sm font-medium text-white">Analytics</div>
+            </div>
+            <p class="!mt-2 text-xs leading-5 text-slate-300">
+              MRR, churn, cohort retention, campaign ROI, and GST reports exported in a click.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solutions -->
+    <section id="solutions" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="grid items-start gap-8 md:grid-cols-2">
+          <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div class="flex items-center gap-4">
+              <mat-icon>man_2</mat-icon>
+              <h3 class="!text-xl !font-semibold !tracking-tight !text-white m-0">For single gyms</h3>
+            </div>
+            <p class="!mt-2 text-sm text-slate-300">Simplify day-to-day ops, keep members engaged, and never miss a
+              renewal.</p>
+            <ul class="mt-4 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Automated reminders on WhatsApp/SMS
+              </li>
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Aadhaar-ready member verification
+              </li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div class="flex items-center gap-4">
+              <mat-icon>factory</mat-icon>
+              <h3 class="!text-xl !font-semibold !tracking-tight !text-white m-0">For chains & franchises</h3>
+            </div>
+            <p class="!mt-2 text-sm text-slate-300">Multi-branch control—centralized plans, unified analytics, and
+              cross-location access.</p>
+            <ul class="mt-4 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Branch-level targets & performance
+              </li>
+              <li class="flex items-center gap-2">
+                <mat-icon class="icon-landing">check_small</mat-icon>
+                Role-based access & approvals
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Simple, usage-based pricing</h2>
+          <p class="mt-3 text-sm text-slate-300">Start free. Upgrade as you grow.</p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div class="text-sm font-medium text-white">Demo</div>
+            <div class="mt-2 text-3xl font-semibold tracking-tight text-white">Free</div>
+            <div class="mt-1 text-xs text-slate-400">❤️ We’ve put our heart and hard work into this.</div>
+            <ul class="mt-4 space-y-2 text-xs text-slate-300">
+            </ul>
+            <a href="#demo"
+              class="mt-5 inline-flex w-full items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-slate-900 shadow-sm ring-1 ring-black/5 hover:bg-slate-100">Get
+              started</a>
+          </div>
+
+          <div
+            class="relative rounded-2xl border border-violet-400/30 bg-gradient-to-b from-violet-500/10 to-slate-900/60 p-6 ring-1 ring-inset ring-violet-400/20">
+            <div class="absolute -top-3 right-4 rounded-full bg-violet-500/20 px-3 py-1 text-[0.65rem] text-violet-200">
+              Popular</div>
+            <div class="text-sm font-medium text-white">Growth</div>
+            <div class="mt-2 text-3xl font-semibold tracking-tight text-white">₹2,000</div>
+            <span class="mt-1 text-xs text-slate-300">per location / month</span>
+            <ul class="!mt-4 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2"><mat-icon class="icon-landing">check_small</mat-icon>Dashboard Access</li>
+              <li class="flex items-center gap-2"><mat-icon class="icon-landing">check_small</mat-icon>Marketplace Access</li>
+              <li class="flex items-center gap-2"><mat-icon class="icon-landing">check_small</mat-icon>1 GB Media Storage</li>
+              <li class="flex items-center gap-2"><mat-icon class="icon-landing">check_small</mat-icon>1 Shop</li>
+              <li class="flex items-center gap-2"><mat-icon class="icon-landing">check_small</mat-icon>1 Staff</li>
+            </ul>
+            <a href="#demo"
+              class="mt-5 inline-flex w-full items-center justify-center rounded-md bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-sm font-medium !text-white shadow-sm ring-1 ring-white/10 hover:opacity-95">
+              Launch your business in just 2 minutes.
             </a>
+          </div>
+
+          <!-- <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div class="text-sm font-medium text-white">Scale</div>
+            <div class="mt-2 text-3xl font-semibold tracking-tight text-white">Custom</div>
+            <div class="mt-1 text-xs text-slate-300">10+ locations</div>
+            <ul class="mt-4 space-y-2 text-xs text-slate-300">
+            </ul>
+            <a href="#demo"
+              class="mt-5 inline-flex w-full items-center justify-center rounded-md border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 hover:bg-white/10">Talk
+              to sales</a>
           </div> -->
         </div>
       </div>
-    </div>
-  </section>
-  <!-- Hero card -->
-  <!-- <section class="relative overflow-hidden h-[58vh] md:h-[64vh] bg-zinc-200 border-zinc-300 border rounded-3xl">
-    <img
-      src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      alt="Minimal portrait" class="absolute inset-0 w-full h-full object-center object-cover" style="">
+    </section>
 
-    <div class="relative z-10 h-full flex items-center justify-center">
-      <div class="absolute left-8 top-8 max-w-md">
+    <!-- CTA / Demo form -->
+    <section id="demo" class="border-t border-white/10">
+      <div class="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+          <div
+            class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+            <mat-icon class="icon-landing">star_shine</mat-icon>
+            Get early access
+          </div>
+          <h3 class="!mt-3 !text-2xl !font-semibold !tracking-tight !text-white m-0">See 9myle with your data</h3>
+          <p class="mt-2 text-sm text-slate-300">We’ll set up your plans, taxes, and WhatsApp templates for a fast
+            pilot in 48 hours.</p>
 
-        <h3 class="leading-tight !text-8xl font-medium !text-white tracking-tighter mb-1">ServicePort</h3>
-        <p class="text-4xl font-normal text-white/80 tracking-tighter leading-snug">
-          Turn <span class="font-medium text-white">expertise into opportunity</span> with a platform that simplifies
-          <span class="font-medium text-white">discovery, bookings, and payments</span>. <br />
-          Your talent stays in the spotlight while we power the growth behind it.
-        </p>
-      </div>
-
-      <button id="playReel"
-        class="group inline-flex items-center gap-4 px-5 py-3 rounded-full bg-white/90 backdrop-blur hover:bg-white transition text-zinc-900 border border-white/70 shadow-md">
-        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play"
-            class="lucide lucide-play h-5 w-5 translate-x-[1px]">
-            <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
-          </svg>
-        </span>
-        <div class="text-left">
-          <p class="sm:text-xl leading-tight text-lg font-semibold tracking-tight m-0">Watch Our Story</p>
-          <p class="text-xs text-zinc-600 m-0">Behind the scenes</p>
-        </div>
-      </button>
-    </div>
-
-    <div class="absolute right-5 top-5 flex items-center gap-2 text-xs text-white/80">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-        class="lucide lucide-star h-4 w-4">
-        <path
-          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-        </path>
-      </svg>
-      <span class="font-medium">Your gateway to turning skills into success.</span>
-    </div>
-  </section> -->
-  <!--  -->
-
-  <!-- Secondary row -->
-  <section class="sm:p-8 bg-white border-zinc-200 border rounded-3xl pt-6 pr-6 !pb-30 pl-6">
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-start">
-      <div class="grid grid-cols-2 gap-4 h-[320px]">
-        <!-- Card 1 -->
-        <article class="relative overflow-hidden h-[200px] bg-zinc-100 border-zinc-200 border rounded-2xl">
-          <img
-            src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Portrait of Emma Rodriguez" class="absolute inset-0 h-full w-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-          <div class="absolute top-3 left-3">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-zinc-900 border border-white/80 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-3.5 w-3.5">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <div class="absolute top-3 right-3">
-            <span class="px-2 py-1 rounded-md bg-black/40 backdrop-blur text-[11px] text-white/90 font-medium">Scheduling</span>
-          </div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <p class="text-white text-lg font-medium tracking-tight leading-tight">Sevices</p>
-          </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 h-[200px]">
-          <img
-            src="https://images.unsplash.com/photo-1670684684445-a4504dca0bbc?q=80&w=1183&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Portrait of David Chen" class="absolute inset-0 h-full w-full object-cover" style="">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-          <div class="absolute top-3 left-3">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-zinc-900 border border-white/80 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-3.5 w-3.5">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <div class="absolute top-3 right-3">
-            <span class="px-2 py-1 rounded-md bg-black/40 backdrop-blur text-[11px] text-white/90 font-medium"> Orders
-              </span>
-          </div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <p class="text-white text-lg font-medium tracking-tight leading-tight">Products</p>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="relative overflow-hidden bg-zinc-100 border-zinc-200 border rounded-2xl h-[200px]">
-          <img
-            src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Portrait of Maya Johnson" class="absolute inset-0 h-full w-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-          <div class="absolute top-3 left-3">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-zinc-900 border border-white/80 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-3.5 w-3.5">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <div class="absolute top-3 right-3">
-            <span class="px-2 py-1 rounded-md bg-black/40 backdrop-blur text-[11px] text-white/90 font-medium"> Bookings
-              </span>
-          </div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <p class="text-white text-lg font-medium tracking-tight leading-tight">Rentals</p>
-          </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100 h-[200px]">
-          <img
-            src="https://images.unsplash.com/photo-1616587656977-ac36a5a430bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Portrait of Alex Thompson" class="absolute inset-0 h-full w-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-          <div class="absolute top-3 left-3">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-zinc-900 border border-white/80 shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-3.5 w-3.5">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <div class="absolute top-3 right-3">
-            <span class="px-2 py-1 rounded-md bg-black/40 backdrop-blur text-[11px] text-white/90 font-medium">Commission
-              </span>
-          </div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <p class="text-white text-lg font-medium tracking-tight leading-tight">Sales partner</p>
-          </div>
-        </article>
-      </div>
-
-      <!-- Right: -->
-      <div class="flex flex-col justify-between !min-h-full">
-        <div class="">
-          <span class="text-sm text-zinc-500 font-medium">9Myle®</span>
-          <h2 class="text-[44px] sm:text-6xl lg:text-7xl leading-[0.9] font-semibold text-zinc-900 tracking-tight mt-2">
-            Live in 3 steps</h2>
-
-          <div class="mt-8 hidden sm:grid grid-cols-3 gap-6 text-zinc-400">
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Create account</span>
+          <form id="leadForm" class="mt-4 grid gap-3" (ngSubmit)="onSubmit()" #leadFormElement="ngForm">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">Full name</span>
+                <input required type="text" name="name" [(ngModel)]="name"
+                  class="rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none ring-0 focus:border-violet-500/40"
+                  placeholder="Priya Sharma" />
+              </label>
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">Gym name</span>
+                <input required type="text" name="gym" [(ngModel)]="gym"
+                  class="rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-violet-500/40"
+                  placeholder="9m Fitness Studio" />
+              </label>
             </div>
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Add catalog</span>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">Email</span>
+                <input required type="email" name="email" [(ngModel)]="email"
+                  class="rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-violet-500/40"
+                  placeholder="you@company.in" />
+              </label>
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">Phone (India)</span>
+                <div class="flex">
+                  <span
+                    class="inline-flex items-center rounded-l-md border border-white/10 bg-white/5 px-2 text-xs text-slate-300">+91</span>
+                  <input required type="tel" name="phone" pattern="[6-9][0-9]{9}" [(ngModel)]="phone"
+                    class="w-full rounded-r-md border border-l-0 border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-violet-500/40"
+                    placeholder="9876543210" />
+                </div>
+              </label>
             </div>
-            <div class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-              <span class="text-sm font-medium">Go live</span>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">City</span>
+                <input type="text" name="city" [(ngModel)]="city"
+                  class="rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-violet-500/40"
+                  placeholder="Mumbai" />
+              </label>
+              <label class="grid gap-1">
+                <span class="text-xs text-slate-300">Locations</span>
+                <input type="number" name="locations" min="1" [(ngModel)]="locations"
+                  class="rounded-md border border-white/10 bg-slate-950 px-3 py-2 text-sm text-white placeholder-slate-500 outline-none focus:border-violet-500/40"
+                  placeholder="1" />
+              </label>
             </div>
-          </div>
+
+            <div>
+              <button type="submit"
+                class="!mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:opacity-95"
+                [disabled]="!name || !gym || !email || !phone || !city">
+                <!-- <mat-icon class="h-4 w-4" style="font-size: 16px; height: 16px; width: 16px;" svgIcon="send"></mat-icon> -->
+                Request demo
+              </button>
+              <p id="leadNote" class="hidden !mt-2 text-xs !text-emerald-300">Thanks! We’ll reach out on WhatsApp within
+                1
+                business day.</p>
+            </div>
+
+          </form>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-         
+        <!-- <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div class="flex items-center gap-2">
+              <iconify-icon icon="lucide:info" style="stroke-width:1.5" class="h-5 w-5 text-violet-400"></iconify-icon>
+              <h4 class="text-lg font-semibold tracking-tight text-white">What’s included</h4>
+            </div>
+            <ul class="mt-4 space-y-2 text-xs text-slate-300">
+              <li class="flex items-center gap-2"><iconify-icon icon="lucide:check-circle2" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon>White-glove onboarding (plans, taxes, templates)</li>
+              <li class="flex items-center gap-2"><iconify-icon icon="lucide:check-circle2" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon>UPI QR setup and payment links</li>
+              <li class="flex items-center gap-2"><iconify-icon icon="lucide:check-circle2" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon>Migration from Excel or other tools</li>
+              <li class="flex items-center gap-2"><iconify-icon icon="lucide:check-circle2" style="stroke-width:1.5" class="h-3.5 w-3.5 text-emerald-400"></iconify-icon>Dedicated success manager</li>
+            </ul>
 
-          <p class="text-base text-zinc-700 leading-relaxed sm:text-right">
-            You can start the <span class="font-semibold">onboarding</span><br>
-             Our team will be there to guide you along the way.
-          </p>
+            <div class="mt-6 grid gap-3">
+              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="text-sm text-white">“Renewals went up without hiring more staff. The WhatsApp flows pay for
+                  themselves.”</div>
+                <div class="mt-2 text-xs text-slate-400">Aakash • Owner, Iron Den Mumbai</div>
+              </div>
+              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="text-sm text-white">“UPI + GST in one place is exactly what we needed across branches.”
+                </div>
+                <div class="mt-2 text-xs text-slate-400">Ritu • Ops Lead, FitNation Delhi</div>
+              </div>
+            </div>
+          </div> -->
+      </div>
+    </section>
 
-           <div class="">
-            <p class="text-md text-zinc-900 font-semibold tracking-tight">Join our growing team</p>
-            <p class="mt-1 text-sm text-zinc-600">One platform for products, services, and rentals</p>
-            <button
-              class="mt-12 inline-flex items-center gap-2 h-10 px-4 rounded-full bg-zinc-900 !text-white text-sm font-medium !hover:bg-zinc-800 transition"
-              aria-label="View careers">
-              Book Demo
-              <span class="inline-flex h-2 w-2 rounded-full bg-green-400"></span>
-            </button>
-          </div>
+    <!-- Resources -->
+    <!-- <section id="resources" class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+          <h2 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Resources</h2>
+          <p class="mt-3 text-sm text-slate-300">Guides and templates to grow your gym.</p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          <a class="group rounded-xl border border-white/10 bg-slate-900/60 p-5 transition hover:border-violet-400/30"
+            href="#">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium text-white">GST Guide for Gyms</div>
+            </div>
+            <p class="mt-2 text-xs text-slate-300">Everything you need to stay compliant and fast.</p>
+          </a>
+
+          <a class="group rounded-xl border border-white/10 bg-slate-900/60 p-5 transition hover:border-violet-400/30"
+            href="#">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium text-white">WhatsApp Campaign Pack</div>
+            </div>
+            <p class="mt-2 text-xs text-slate-300">Templates in EN/HI to boost renewals.</p>
+          </a>
+
+          <a class="group rounded-xl border border-white/10 bg-slate-900/60 p-5 transition hover:border-violet-400/30"
+            href="#">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium text-white">Front Desk SOPs</div>
+            </div>
+            <p class="mt-2 text-xs text-slate-300">Checklists for smooth operations daily.</p>
+          </a>
         </div>
       </div>
-    </div>
+    </section> -->
 
-  </section>
-
-  <!--  Review -->
-  <!-- <section
-    class="sm:p-8 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] bg-zinc-900 border-zinc-700 border rounded-3xl pt-6 pr-6 pb-6 pl-6"
-    id="aura-emeia8iep">
-    <div class="flex items-center gap-2 text-sm text-zinc-400">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-        class="lucide lucide-star h-4 w-4">
-        <path
-          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-        </path>
-      </svg>
-      <span class="font-medium">Client Success Stories</span>
-    </div>
-    <div class="mt-2">
-      <h2
-        class="!text-[44px] !sm:text-6xl !lg:text-7xl !xl:text-8xl !font-semibold !tracking-tight !leading-[0.9] !text-white">
-        Reviews.</h2>
-      <p class="mt-1 text-sm sm:text-base text-zinc-400 font-medium">Real feedback from real clients</p>
-    </div>
-
-    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      <article
-        class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between min-h-[420px]">
-        <div class="space-y-5">
-          <div class="flex items-end gap-2">
-            <span class="text-5xl sm:text-6xl font-semibold tracking-tight text-white">4.8</span>
-            <span class="text-zinc-400 text-base font-medium">/5</span>
+    <!-- Footer -->
+    <footer class="border-t border-white/10">
+      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div class="grid gap-8 md:grid-cols-5">
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2">
+              <div
+                class="grid h-8 w-8 place-items-center rounded-md bg-gradient-to-br from-violet-500/80 to-fuchsia-500/80 text-slate-50">
+                <span class="text-sm font-semibold tracking-tight">9m</span>
+              </div>
+              <span class="text-lg font-semibold tracking-tight">9myle</span>
+            </div>
+            <p class="!mt-3 max-w-sm text-xs text-slate-400">The all-in-one gym OS for India—operations, payments, and
+              growth in one place.</p>
+            <!-- <div class="mt-4 flex items-center gap-3">
+              <a href="#" aria-label="Twitter"
+                class="rounded-md border border-white/10 p-2 text-slate-300 hover:bg-white/5">
+                <mat-icon>factory</mat-icon>
+              </a>
+              <a href="#" aria-label="LinkedIn"
+                class="rounded-md border border-white/10 p-2 text-slate-300 hover:bg-white/5">
+                <mat-icon>factory</mat-icon>
+              </a>
+              <a href="#" aria-label="YouTube"
+                class="rounded-md border border-white/10 p-2 text-slate-300 hover:bg-white/5">
+                <mat-icon>factory</mat-icon>
+              </a>
+            </div> -->
           </div>
-          <p class="text-sm text-zinc-300">We've completed <span class="font-semibold text-white">78+ successful
-              projects</span> that drive measurable business growth.</p>
-          <div class="flex items-center gap-3">
-            <span class="text-sm font-semibold text-white">studio.nova®</span>
+          <!-- <div>
+            <div class="text-xs font-medium text-white">Product</div>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li><a class="hover:text-slate-100" href="#product">Overview</a></li>
+              <li><a class="hover:text-slate-100" href="#solutions">Solutions</a></li>
+              <li><a class="hover:text-slate-100" href="#pricing">Pricing</a></li>
+            </ul>
           </div>
+          <div>
+            <div class="text-xs font-medium text-white">Company</div>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li><a class="hover:text-slate-100" href="#">About</a></li>
+              <li><a class="hover:text-slate-100" href="#">Careers</a></li>
+              <li><a class="hover:text-slate-100" href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-xs font-medium text-white">Legal</div>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li><a class="hover:text-slate-100" href="#">Privacy</a></li>
+              <li><a class="hover:text-slate-100" href="#">Terms</a></li>
+              <li><a class="hover:text-slate-100" href="#">Refunds</a></li>
+            </ul>
+          </div> -->
+        </div>
+        <!-- <div
+          class="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 sm:flex-row">
+          <div>© <span id="year"></span> 9myle Technologies Pvt Ltd</div>
           <div class="flex items-center gap-2">
-            <img class="h-7 w-7 ring-2 ring-zinc-700 object-cover rounded-full"
-              src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/ccb2768f-93cf-4a28-bc1b-c1366e15fc03_320w.jpg"
-              alt="Client 1" style="">
-            <img class="h-7 w-7 ring-2 ring-zinc-700 -ml-2 object-cover rounded-full"
-              src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/b3738db4-e122-4f81-a199-9ae2536b9357_320w.jpg"
-              alt="Client 2" style="">
-            <img class="h-7 w-7 ring-2 ring-zinc-700 -ml-2 object-cover rounded-full"
-              src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/58209f8d-3aac-451a-a02c-ef7ca0a96175_320w.jpg"
-              alt="Client 3" style="">
-            <span
-              class="inline-flex items-center justify-center -ml-1 h-7 px-2 rounded-full bg-white text-zinc-900 text-xs font-medium">78+</span>
+            <span>ISO-ready processes • Data hosted in India</span>
           </div>
-          <div class="flex items-center gap-1 text-amber-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-              class="lucide lucide-star h-4 w-4">
-              <path
-                d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-              </path>
-            </svg>
-            <span class="text-xs text-zinc-400 font-medium">Rated by partners globally</span>
-          </div>
-        </div>
-        <button
-          class="mt-6 h-11 w-full rounded-full bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-100 transition">
-          Share your experience
-        </button>
-      </article>
-
-      <div class="grid grid-rows-[auto_1fr] gap-4">
-        <article class="bg-zinc-800 border border-zinc-700 rounded-2xl p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <img class="h-9 w-9 object-cover rounded-md"
-              src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/7206b228-1279-4d12-b408-6a9e34152341_320w.jpg"
-              alt="Sarah Chen">
-            <div>
-              <p class="text-sm font-semibold tracking-tight leading-tight text-white m-0">Sarah Chen</p>
-              <p class="text-xs text-zinc-400 m-0">TechFlow Solutions</p>
-            </div>
-          </div>
-          <span class="text-zinc-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-              class="lucide lucide-plus h-4 w-4">
-              <path d="M5 12h14"></path>
-              <path d="M12 5v14"></path>
-            </svg>
-          </span>
-        </article>
-
-        <article
-          class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between min-h-[420px]">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1 text-amber-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-            </div>
-            <span class="text-zinc-600">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <p class="text-2xl sm:text-3xl font-semibold tracking-tight text-right leading-snug text-white">Outstanding
-            design vision! They transformed our brand completely and our conversion rates increased by 240%.</p>
-        </article>
+        </div> -->
       </div>
+    </footer>
 
-      <div class="grid grid-rows-[1fr_auto] gap-4">
-        <article class="bg-zinc-800 border border-zinc-700 rounded-2xl p-6 flex flex-col justify-between min-h-[420px]">
-          <p class="text-2xl sm:text-3xl font-semibold tracking-tight text-center leading-snug text-white">Best
-            investment we've made for our company. The team is incredibly talented and responsive.</p>
-          <div class="mt-6 flex items-center justify-between">
-            <div class="flex items-center gap-1 text-amber-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-            </div>
-            <span class="text-zinc-600">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-        </article>
-
-        <article class="bg-zinc-800 border border-zinc-700 rounded-2xl p-4 flex items-center gap-3">
-          <img class="h-9 w-9 object-cover rounded-md"
-            src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/03e7a11a-281a-4d56-b980-f5e027acbaf7_320w.jpg"
-            alt="Marcus Johnson" style="">
-          <div class="">
-            <p class="text-sm font-semibold tracking-tight leading-tight text-white m-0">Marcus Johnson</p>
-            <p class="text-xs text-zinc-400 m-0">Innovate Labs</p>
-          </div>
-        </article>
-      </div>
-
-      <div class="grid grid-rows-[auto_1fr] gap-4">
-        <article class="bg-zinc-800 border border-zinc-700 rounded-2xl p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <img class="h-9 w-9 object-cover rounded-md"
-              src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/05b8d217-cbbf-409b-a1ff-f4515ea6aab3_320w.jpg"
-              alt="Maya Patel" style="">
-            <div>
-              <p class="text-sm font-semibold tracking-tight leading-tight text-white m-0">Maya Patel</p>
-              <p class="text-xs text-zinc-400 m-0">Design Director</p>
-            </div>
-          </div>
-          <span class="text-zinc-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-              class="lucide lucide-plus h-4 w-4">
-              <path d="M5 12h14"></path>
-              <path d="M12 5v14"></path>
-            </svg>
-          </span>
-        </article>
-
-        <article
-          class="bg-zinc-800 border border-zinc-700 rounded-2xl p-5 sm:p-6 flex flex-col justify-between min-h-[420px]">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1 text-amber-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star"
-                class="lucide lucide-star h-4 w-4">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
-                </path>
-              </svg>
-            </div>
-            <span class="text-zinc-600">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus"
-                class="lucide lucide-plus h-4 w-4">
-                <path d="M5 12h14"></path>
-                <path d="M12 5v14"></path>
-              </svg>
-            </span>
-          </div>
-          <p class="text-2xl sm:text-3xl font-semibold tracking-tight text-right leading-snug text-white">Revolutionary
-            approach to design! Our user engagement improved by 180% after the rebrand.</p>
-        </article>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- Plan -->
-
-  <!-- <section class="flex items-center justify-center min-h-screen sm:p-8 bg-white border-zinc-200 border rounded-3xl mt-10 px-6 py-6">
-    <div class="w-full max-w-5xl">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-slate-800 mb-3">Choose Your Plan</h2>
-        <p class="text-slate-500 max-w-lg !mx-auto">Select the perfect virtual card solution for your needs with our
-          flexible pricing options.</p>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-200">
-          <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-semibold text-slate-800 text-xl">Basic</h3>
-              <span class="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full">Personal</span>
-            </div>
-            <div class="mb-6">
-              <span class="text-4xl font-bold text-slate-800">$9</span>
-              <span class="text-slate-500">/month</span>
-            </div>
-            <p class="text-slate-500 text-sm mb-6">Perfect for individuals just getting started with virtual cards.</p>
-
-            <ul class="space-y-3 mb-8">
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                1 virtual card
-              </li>
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                $1,000 monthly limit
-              </li>
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Basic analytics
-              </li>
-              <li class="flex items-center text-sm text-slate-400">
-                <svg class="w-5 h-5 mr-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                Team access
-              </li>
-            </ul>
-
-            <button
-              class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium rounded-xl transition">Get
-              Started</button>
-          </div>
-        </div>
-
-        <div
-          class="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-indigo-500 to-indigo-400 transform md:scale-105">
-          <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-semibold text-white text-xl">Pro</h3>
-              <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full">Popular</span>
-            </div>
-            <div class="mb-6">
-              <span class="text-4xl font-bold text-white">$29</span>
-              <span class="text-white/70">/month</span>
-            </div>
-            <p class="text-white/70 text-sm mb-6">Ideal for professionals who need more flexibility and features.</p>
-
-            <ul class="space-y-3 mb-8">
-              <li class="flex items-center text-sm text-white">
-                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                5 virtual cards
-              </li>
-              <li class="flex items-center text-sm text-white">
-                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                $10,000 monthly limit
-              </li>
-              <li class="flex items-center text-sm text-white">
-                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Advanced analytics
-              </li>
-              <li class="flex items-center text-sm text-white">
-                <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                1 team member
-              </li>
-            </ul>
-
-            <button
-              class="w-full py-3 px-4 bg-white hover:bg-white/90 text-indigo-600 font-medium rounded-xl transition">Get
-              Started</button>
-          </div>
-
-          <div class="px-6 pb-6">
-            <div class="flex justify-between text-xs text-white/70 mb-1">
-              <span>Monthly usage</span>
-              <span>70% used</span>
-            </div>
-            <div class="h-1.5 w-full bg-white/20 rounded-full">
-              <div class="h-1.5 bg-white w-[70%] rounded-full"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-200">
-          <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="font-semibold text-slate-800 text-xl">Business</h3>
-              <span class="bg-slate-100 text-slate-600 text-xs px-3 py-1 rounded-full">Enterprise</span>
-            </div>
-            <div class="mb-6">
-              <span class="text-4xl font-bold text-slate-800">$99</span>
-              <span class="text-slate-500">/month</span>
-            </div>
-            <p class="text-slate-500 text-sm mb-6">Full-featured solution for businesses with advanced needs.</p>
-
-            <ul class="space-y-3 mb-8">
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Unlimited virtual cards
-              </li>
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                $50,000 monthly limit
-              </li>
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Enterprise analytics
-              </li>
-              <li class="flex items-center text-sm text-slate-700">
-                <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Unlimited team members
-              </li>
-            </ul>
-
-            <button
-              class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium rounded-xl transition">Get
-              Started</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-10 text-center">
-        <p class="text-slate-500 text-sm">All plans include 24/7 support, fraud protection, and secure transactions.</p>
-        <p class="text-slate-500 text-sm mt-2">Need a custom solution? <a href="#"
-            class="text-indigo-500 font-medium">Contact our sales team</a></p>
-      </div>
-    </div>
-  </section> -->
-
-  <!--  -->
+  </div>
 
 </main>
-
-
-<div class="landing-page">
-
-  <!-- <app-navbar></app-navbar> -->
-
-  <!-- Hero Section -->
-  <!-- <section class="hero">
-    <h1>If you're great at planning, you're in the right place!</h1>
-    <div class="category-toggles">
-      <button *ngFor="let category of categories" [class.active]="category.active"
-        (click)="setActiveCategory(category.id)" class="category-btn">
-        {{category.label}}
-      </button>
-    </div>
-    <app-search-bar [category]="activeCategory"></app-search-bar>
-    <p class="appointment-count">4,73,230 appointments booked today</p>
-  </section> -->
-
-  <!-- Deals Section -->
-  <!-- <section class="deals-section">
-    <h2>Flashbag Deals</h2>
-    <div class="deals-grid">
-      <app-deal-card *ngFor="let deal of deals" [deal]="deal" (click)="navigateToProduct(deal.id)">
-      </app-deal-card>
-    </div>
-  </section> -->
-
-  <!-- Video Reels Section -->
-  <!-- <app-video-reel></app-video-reel> -->
-
-  <!-- Recommended Section -->
-  <!-- <section class="section">
-    <h2>Recommended</h2>
-    <div class="card-grid">
-      <app-product-card *ngFor="let item of recommendedItems" [id]="item.id" [image]="item.image" [title]="item.title"
-        [location]="item.location" [rating]="item.rating">
-      </app-product-card>
-    </div>
-  </section> -->
-
-  <!-- New Section -->
-  <!-- <section class="section">
-    <h2>New to Flashbag</h2>
-    <div class="card-grid">
-      <app-product-card *ngFor="let item of newItems" [id]="item.id" [image]="item.image" [title]="item.title"
-        [location]="item.location" [rating]="item.rating">
-      </app-product-card>
-    </div>
-  </section> -->
-
-  <!-- Trending Section -->
-  <!-- <section class="section">
-    <h2>Trending</h2>
-    <div class="card-grid">
-      <app-product-card *ngFor="let item of trendingItems" [id]="item.id" [image]="item.image" [title]="item.title"
-        [location]="item.location" [rating]="item.rating">
-      </app-product-card>
-    </div>
-  </section> -->
-
-  <!-- App Download Section -->
-  <!-- <section class="app-download">
-    <div class="app-content">
-      <h2>Download the Flashbag app dv1:10-10-2025</h2>
-      <p>Book affordable beauty and wellness services with the Flashbag mobile app</p>
-      <img src="assets/qr-code.png" alt="QR Code" class="qr-code">
-    </div>
-    <div class="app-preview">
-      <img src="assets/app-preview.png" alt="App Preview">
-    </div>
-  </section> -->
-
-  <!-- Add test button and side panel -->
-  <!-- <button class="test-btn" (click)="openPanel()">Open Side Panel</button>
-
-  <app-side-panel [isOpen]="isPanelOpen" [title]="'Test Panel'" (closePanel)="closePanel()">
-    <div>
-      <h4>Panel Content</h4>
-      <p>This is a test content for the side panel.</p>
-    </div>
-  </app-side-panel> -->
-
-</div>

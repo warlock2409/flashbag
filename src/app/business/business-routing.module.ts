@@ -19,6 +19,8 @@ import { SelectOrganizationComponent } from './pages/select-organization/select-
 import { ServiceDetailsComponent } from './settings/components/business-setup/setup-components/service-details/service-details.component';
 import { GymCheckInComponent } from './business-specific/gym-check-in/gym-check-in.component';
 import { ExercisePlanComponent } from './settings/components/business-setup/setup-components/exercise-plan/exercise-plan.component';
+import { InstagramAutomationComponent } from './settings/components/online-presence/instagram-automation/instagram-automation.component';
+import { FlashVibeComponent } from './settings/components/online-presence/instagram-automation/components/flash-vibe/flash-vibe.component';
 
 const routes: Routes = [
   {
@@ -66,6 +68,16 @@ const routes: Routes = [
           {
             path: "",
             component: SettingsComponent
+          },
+          {
+            path: "insta-automate",
+            component: InstagramAutomationComponent,
+            children: [
+              {
+                path: "flash-vibe",
+                component: FlashVibeComponent
+              },
+            ]
           },
           {
             path: 'business-setup',

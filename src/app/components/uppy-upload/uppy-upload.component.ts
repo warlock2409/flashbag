@@ -21,7 +21,7 @@ export interface UploadFileData {
 })
 export class UppyUploadComponent {
   // baseUrl= "http://localhost:9000/";
-    baseUrl= "https://9myle.store/";
+  baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
   
 
 

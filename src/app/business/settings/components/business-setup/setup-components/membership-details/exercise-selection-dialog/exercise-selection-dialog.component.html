@@ -1,0 +1,85 @@
+<div id="exerciseSelectionDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col dialog-animate">
+    <!-- Dialog Header -->
+    <div class="flex justify-between items-center border-b border-gray-200 py-3 px-4">
+      <h2 class="text-lg font-semibold text-gray-800 m-0">Select Exercises for {{ category }}</h2>
+      <button (click)="close()" class="text-gray-400 hover:text-red-500 cursor-pointer">
+        <mat-icon style="color: lightcoral;">cancel</mat-icon>
+      </button>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="flex-1 flex items-center justify-center p-8">
+      <div class="text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-violet-500"></div>
+        <p class="mt-2 text-gray-600">Loading exercises...</p>
+      </div>
+    </div>
+
+    <!-- No Exercises Message -->
+    <div *ngIf="!isLoading && availableExercises.length === 0" class="flex-1 flex items-center justify-center p-8">
+      <div class="text-center">
+        <mat-icon class="text-4xl text-gray-300 mb-2">fitness_center</mat-icon>
+        <p class="text-gray-500">No exercises found for {{ category }}</p>
+      </div>
+    </div>
+
+    <!-- Exercises List -->
+    <div *ngIf="!isLoading && availableExercises.length > 0" class="flex-1 overflow-y-auto custom-scrollbar p-6">
+      <div class="text-sm text-gray-500 mb-2 italic">Select exercises and reorder them using the arrows</div>
+      <div>
+        <div *ngFor="let exercise of availableExercises; let i = index" class="flex items-center mb-1">
+          
+          <label
+            class="exercise-item flex items-center p-3 rounded-lg border border-gray-200 hover:border-violet-300 hover:bg-violet-50 transition-colors cursor-pointer flex-grow"
+            [class.bg-violet-50]="exercise.checked">
+            
+            <input type="checkbox" class="h-5 w-5 text-violet-600 rounded focus:ring-violet-500 cursor-pointer"
+              [(ngModel)]="exercise.checked" (ngModelChange)="onExerciseSelectionChange()">
+            
+            <span class="ml-3 text-gray-700 font-medium">{{ exercise.name }}</span>
+            
+            <!-- Order number for selected exercises -->
+            <span *ngIf="exercise.checked" class="ml-2 bg-violet-100 text-violet-800 text-xs font-bold px-2 py-1 rounded">
+              #{{ getExerciseOrder(exercise) }}
+            </span>
+            
+            <span *ngIf="exercise.equipment" class="ml-auto text-sm text-gray-500">
+              {{ exercise.equipment }}
+            </span>
+          </label>
+          
+          <!-- Reordering buttons for selected exercises -->
+          <div *ngIf="exercise.checked" class="flex flex-col ml-2">
+            <button type="button" 
+                    class="p-1 text-violet-600 hover:text-violet-800 hover:bg-violet-100 rounded"
+                    [disabled]="getExerciseOrder(exercise) <= 1"
+                    (click)="moveExerciseUp(i)"
+                    title="Move up">
+              <mat-icon class="text-base">arrow_drop_up</mat-icon>
+            </button>
+            <button type="button" 
+                    class="p-1 text-violet-600 hover:text-violet-800 hover:bg-violet-100 rounded"
+                    [disabled]="getExerciseOrder(exercise) >= selectedExercises.length"
+                    (click)="moveExerciseDown(i)"
+                    title="Move down">
+              <mat-icon class="text-base">arrow_drop_down</mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog Footer -->
+    <div class="border-t border-gray-200 p-4 flex justify-between items-center">
+      <div class="text-sm text-gray-600">
+        <span>{{ selectedExercises.length }}</span> exercises selected
+      </div>
+      <div class="space-x-3 flex gap-2">
+        <button mat-stroked-button (click)="close()">Cancel</button>
+        <button mat-raised-button style="background-color: #a684ff; color: white;" (click)="save()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

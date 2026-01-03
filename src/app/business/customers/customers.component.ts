@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
@@ -6,7 +6,7 @@ import { AddCustomerComponent } from '../components/add-customer/add-customer.co
 import { ResponseDate } from 'src/app/app.component';
 import { UserDto } from 'src/app/services/auth.service';
 import { TimeZoneHelperService } from 'src/app/services/timeZoneHelper';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-customers',
@@ -16,6 +16,8 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class CustomersComponent {
 
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   private _snackBar = inject(NzMessageService);
   orgService = inject(OrganizationServiceService);
@@ -74,6 +76,10 @@ export class CustomersComponent {
     this.activeFilter = filter;
     // Reset to first page when changing filter
     this.pageIndex = 0;
+    // Also reset the paginator to first page
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
     this.getCustomerByOrg();
   }
 

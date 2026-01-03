@@ -1,0 +1,27 @@
+<!-- Show the connection button if not connected, otherwise show the FlashVibe dashboard -->
+<div *ngIf="!isConnected; else dashboardView">
+  <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="connectToInstagram()"
+    style="background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); 
+           border: none; 
+           color: white; 
+           padding: 12px 24px; 
+           text-align: center; 
+           text-decoration: none; 
+           display: inline-block; 
+           font-size: 16px; 
+           margin: 4px 2px; 
+           cursor: pointer; 
+           border-radius: 4px;"
+  >
+    <i class="fab fa-instagram"></i> Connect with Instagram
+  </button>
+</div>
+
+<ng-template #dashboardView>
+  <app-flash-vibe></app-flash-vibe>
+</ng-template>
+
+<!-- <router-outlet></router-outlet> -->

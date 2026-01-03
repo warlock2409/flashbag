@@ -38,7 +38,7 @@
           <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
         </div>
 
-        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]="card.routerLink">
+        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]=" '/business/settings'+ card.routerLink">
           View <mat-icon>arrow_forward</mat-icon>
         </a>
 

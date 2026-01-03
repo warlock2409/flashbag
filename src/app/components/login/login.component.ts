@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
     this.error = '';
 
     this.authService.login(
-      this.loginForm.get('email')?.value,
+      this.loginForm.get('email')?.value.toLowerCase(),
       this.loginForm.get('password')?.value,
       this.loginType
     ).subscribe({
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
         this.redirectBasedOnRole();
       },
       error: error => {
-        this.error = error.message || 'Login failed';
+        this.error = error.error || 'Login failed';
         this.loading = false;
       }
     });

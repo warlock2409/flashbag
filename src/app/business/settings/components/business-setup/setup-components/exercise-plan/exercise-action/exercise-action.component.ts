@@ -35,7 +35,7 @@ export class ExerciseActionComponent {
       description: [''],
       category: ['', Validators.required],
       mode: ['Beginner', Validators.required],
-      tag: ['Strength'],
+      tag: 'Strength',
       orgId: [1],
       industryId: [101],
       documentId: null,

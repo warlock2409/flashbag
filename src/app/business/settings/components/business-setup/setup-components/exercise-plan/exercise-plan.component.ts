@@ -8,6 +8,7 @@ import { ExerciseActionComponent } from './exercise-action/exercise-action.compo
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { ResponseDate } from 'src/app/app.component';
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
 export interface BodyFilter {
   key: string;
@@ -29,26 +30,26 @@ export class ExercisePlanComponent {
 
   modelFilters: BodyFilter[] = [
     { key: "", name: "All", icon: "directions_walk" },
-    { key: "calves", name: "Calves", icon: "directions_walk" },
-    { key: "quads", name: "Quads", icon: "fitness_center" },
+    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
+    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+    { key: "chest", name: "Chest", icon: "sports_mma" },
+    { key: "biceps", name: "Biceps", icon: "arm_flex" }, 
+    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
     { key: "abdominals", name: "Abs", icon: "self_improvement" },
     { key: "obliques", name: "Obliques", icon: "accessibility_new" },
     { key: "hands", name: "Hands", icon: "pan_tool" },
     { key: "forearms", name: "Forearms", icon: "back_hand" },
-    { key: "biceps", name: "Biceps", icon: "arm_flex" }, // custom, or use emoji if no material icon
-    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
-    { key: "chest", name: "Chest", icon: "sports_mma" },
     { key: "traps", name: "Traps", icon: "change_history" },
-    { key: "body", name: "Full Body", icon: "accessibility" },
     { key: "wrist", name: "Wrists", icon: "watch" },
+    { key: "quads", name: "Quads", icon: "fitness_center" },
     { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
     { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    { key: "calves", name: "Calves", icon: "directions_walk" },
     { key: "traps_middle", name: "Traps", icon: "height" },
-    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
-    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" }
+    { key: "body", name: "Full Body", icon: "accessibility" },
   ];
 
-  constructor(public dialog: MatDialog, private organizationService: OrganizationServiceService) {
+  constructor(public dialog: MatDialog, private organizationService: OrganizationServiceService, private swalService: SweatAlertService) {
     this.getExercise();
   }
 
@@ -60,7 +61,7 @@ export class ExercisePlanComponent {
       // Filter only non-null strings with length >= 2 OR empty string
       filter((val: string | null): val is string => !!val && val.length >= 2 || val === '')
     ).subscribe(searchTerm => {
-      this.getExercise(searchTerm);
+      this.getExercise("",searchTerm);
     });
   }
 
@@ -105,6 +106,7 @@ export class ExercisePlanComponent {
       },
       error: (err: any) => {
         console.error('Delete exercise failed:', err);
+        this.swalService.error(err.error);
       }
     });
   }

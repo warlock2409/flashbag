@@ -80,6 +80,12 @@ export class SettingsComponent {
     ],
     onlinePresence: [
       {
+        title: 'Instagram Management',
+        desc: 'Every comment becomes a conversation',
+        locked: false,
+        routerLink: '/insta-automate'
+      },
+      {
         title: 'Marketplace profile',
         desc: 'Attract new clients with online bookings.',
         locked: true,
@@ -152,7 +158,7 @@ export class SettingsComponent {
 
   openLockedDialog(card: any) {
     console.log(card);
-    
+
     const userString = localStorage.getItem('currentUser');
     let userData: any = null;
 
@@ -189,7 +195,7 @@ export class SettingsComponent {
   }
 
 
-  notifyTeam(feature: string, firstName: string, email: string, organization: string, intrest:boolean) {
+  notifyTeam(feature: string, firstName: string, email: string, organization: string, intrest: boolean) {
     const payload = {
       content: "May be New feature request received!",
       embeds: [
@@ -218,7 +224,7 @@ export class SettingsComponent {
       .then(data => console.log('Message sent:', data))
       .catch(error => console.error('Error sending message:', error));
   }
-  
+
 }
 
 

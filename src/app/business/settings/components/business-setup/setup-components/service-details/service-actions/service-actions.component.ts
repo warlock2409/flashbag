@@ -195,6 +195,13 @@ export class ServiceActionsComponent {
     }
   }
 
+  onPriceTypeChange($event: any) {
+    const selectedValue = $event.target.value;
+    if (selectedValue === 'FREE') {
+      this.serviceForm.get('price')?.setValue(0);
+    }
+  }
+
   loadShopsByIndustry(industryId: number) {
     this.orgService.getOrgShopsByIndustry(industryId).subscribe({
       next: (res: ResponseDate) => {
@@ -224,7 +231,11 @@ export class ServiceActionsComponent {
     console.log(service);
     return;
     
-    let prompt = `You are a content writer .\n\nUser provides: \n - Service Name: ${service.serviceName}\n- `
+    let prompt = `You are a content writer .
+
+User provides: 
+ - Service Name: ${service.serviceName}
+- `
 
     // this.buffer = true;
     // this.organizationService.generateContent(prompt, 150).subscribe({

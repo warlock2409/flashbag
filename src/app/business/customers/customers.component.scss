@@ -770,3 +770,31 @@
     display: none;
   }
 }
+
+// Fade in animation for table rows and cards
+.fade-in {
+  animation: fadeIn 0.3s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+// Deleted customer indicator - red dot
+.deleted-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ef4444; // Red color
+  margin-left: 8px;
+}
+// Card status for deleted customers
+.card-status-inactive {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+}

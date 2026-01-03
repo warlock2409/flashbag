@@ -1,0 +1,183 @@
+<div class="flash-vibe-dashboard">
+  <!-- Success Header Section -->
+  <header class="success-header">
+    <div class="header-content">
+      <div class="check-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1>Instagram Connected</h1>
+        <p>Your account is now live with FlashVibe.</p>
+      </div>
+    </div>
+    
+    <div class="profile-status">
+      <div class="profile-info">
+        <div class="profile-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="profile-details">
+          <span class="username">ironforge_gym</span>
+          <span class="status-badge">Connected • Active</span>
+        </div>
+      </div>
+      <p class="reassurance-text">We never post or reply without your permission.</p>
+    </div>
+  </header>
+
+  <!-- Primary Action Section -->
+  <section class="automation-section">
+    <h2>What would you like to automate?</h2>
+    
+    <div class="feature-grid">
+      <div class="feature-card" (click)="openSetup('auto-reply')">
+        <h3>Auto-reply to Comments</h3>
+        <p>Instantly reply to comments and start conversations.</p>
+      </div>
+      
+      <div class="feature-card" (click)="openSetup('quiz')">
+        <h3>Run a Quiz</h3>
+        <p>Turn comments into leads with interactive quizzes.</p>
+      </div>
+      
+      <div class="feature-card locked">
+        <div class="lock-overlay">🔒</div>
+        <h3>Coupon Generator</h3>
+        <p>Reward engagement with instant discount codes.</p>
+        <span class="locked-text">Upgrade to unlock</span>
+      </div>
+      
+      <div class="feature-card locked">
+        <div class="lock-overlay">🔒</div>
+        <h3>Intention-based Marketing</h3>
+        <p>Reply differently based on what people ask.</p>
+        <span class="locked-text">Upgrade to unlock</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Automation Setup Dialog -->
+  <div class="dialog-overlay" *ngIf="activeSetup" (click)="closeSetup()">
+    <div class="dialog-content" (click)="$event.stopPropagation()" *ngIf="activeSetup">
+      <div class="dialog-header">
+        <h3>Setup Automation</h3>
+        <button class="close-btn" (click)="closeSetup()" mat-icon-button>
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      
+      <div class="dialog-body">
+        <div class="setup-form">
+          <div class="setup-step">
+            <label>Step 1 – Trigger</label>
+            <select [(ngModel)]="selectedTrigger" (ngModelChange)="onTriggerChange()">
+              <option value="any">Any comment</option>
+              <option value="word">Specific word</option>
+              <option value="emoji">Emoji</option>
+            </select>
+            
+            <input type="text" placeholder="Enter specific word..." *ngIf="selectedTrigger === 'word'" [(ngModel)]="triggerWord" (ngModelChange)="onTriggerChange()">
+          </div>
+          
+          <div class="setup-step">
+            <label>Step 2 – Reply Message</label>
+            <textarea placeholder="Thanks for your comment! Check your DM 😊" [(ngModel)]="replyMessage" (ngModelChange)="onReplyMessageChange()"></textarea>
+          </div>
+          
+          <button class="activate-btn" (click)="activateAutomation()">Activate Automation</button>
+        </div>
+        
+        <!-- Instagram Mobile Preview -->
+        <div class="instagram-mobile-preview">
+          <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+              <div class="status-left">
+                <span class="time">9:41</span>
+              </div>
+              <div class="status-right">
+                <mat-icon class="signal">network_cell</mat-icon>
+                <span class="carrier">Verizon</span>
+                <mat-icon class="battery">battery_full</mat-icon>
+              </div>
+            </div>
+                    
+            <!-- Post Header -->
+            <div class="post-header">
+              <div class="user-info">
+                <div class="user-avatar"></div>
+                <div class="username-and-location">
+                  <span class="username">ironforge_gym</span>
+                  <span class="location">Gym</span>
+                </div>
+              </div>
+              <mat-icon class="more-options">more_vert</mat-icon>
+            </div>
+                    
+            <!-- Post Image -->
+            <div class="post-image">
+              <!-- Placeholder for post image -->
+            </div>
+                    
+            <!-- Post Actions -->
+            <div class="post-actions">
+              <div class="action-icons">
+                <mat-icon class="action-icon">favorite_border</mat-icon>
+                <mat-icon class="action-icon">chat_bubble_outline</mat-icon>
+                <mat-icon class="action-icon">send</mat-icon>
+              </div>
+              <mat-icon class="save-icon">bookmark_border</mat-icon>
+            </div>
+                     
+                    
+            <!-- Caption -->
+            <div class="post-caption">
+              <span class="caption-username">ironforge_gym</span>
+              <span class="caption-text">Check out our new fitness program!</span>
+            </div>
+                    
+            <!-- Comments -->
+            <div class="comments-section">
+              <div class="comment original-comment">
+                <span class="comment-username">customer_01</span>
+                <span class="comment-text">{{ previewComment }}</span>
+              </div>
+                            
+              <div class="comment flashvibe-reply">
+                <span class="comment-username">flashvibe</span>
+                <span class="comment-text">{{ previewReply }}</span>
+              </div>
+                          
+              <div class="view-comments">View all 12 comments</div>
+            </div>
+                    
+            <!-- Add Comment Input -->
+            <div class="add-comment">
+              <mat-icon class="emoji">mood</mat-icon>
+              <span class="input-placeholder">Add a comment...</span>
+              <div class="post-options">
+                <span class="gif">GIF</span>
+                <mat-icon class="send">send</mat-icon>
+              </div>
+            </div>
+                    
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+              <mat-icon class="nav-icon">home</mat-icon>
+              <mat-icon class="nav-icon">search</mat-icon>
+              <mat-icon class="nav-icon">add_box</mat-icon>
+              <mat-icon class="nav-icon">favorite_border</mat-icon>
+              <mat-icon class="nav-icon profile-icon">person</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust & Status Footer -->
+  <footer class="status-footer">
+    <div class="stats">Comments replied today: 12 / 50</div>
+    <a href="#" class="upgrade-link">Upgrade for unlimited replies</a>
+  </footer>
+</div>

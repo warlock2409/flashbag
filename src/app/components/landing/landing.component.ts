@@ -2,14 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { ProductCardComponent } from '../shared/product-card/product-card.component';
-import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
-import { DealCardComponent } from '../shared/deal-card/deal-card.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
-import { SidePanelComponent } from '../shared/side-panel/side-panel.component';
-import { VideoReelComponent } from '../shared/video-reel/video-reel.component';
-import { UploadMediaComponent } from '../upload-media/upload-media.component';
 import { SweatAlertService } from '../../services/sweat-alert.service';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
@@ -19,18 +14,19 @@ import { SweatAlertService } from '../../services/sweat-alert.service';
     CommonModule,
     FormsModule,
     RouterModule,
-    ProductCardComponent,
-    SearchBarComponent,
-    DealCardComponent,
     NavbarComponent,
-    SidePanelComponent,
-    VideoReelComponent,
-    UploadMediaComponent
+    MatIconModule,
   ]})
 export class LandingComponent {
   private placeholderImage = 'https://www.istockphoto.com/resources/images/PhotoFTLP/1035146258.jpg';
   
+  // Form data properties
+  name: string = '';
+  gym: string = '';
   email: string = '';
+  phone: string = '';
+  city: string = '';
+  locations: number = 1;
 
   categories = [
     { id: 'deals', label: 'Flashbag Deals', active: true },
@@ -191,17 +187,61 @@ export class LandingComponent {
   }
   
   async onSubmit() {
-    if (this.email && this.isValidEmail(this.email)) {
-      const success = await this.sweatAlertService.sendLead(this.email);
+    // Validate required fields
+    if (!this.name || !this.gym || !this.email || !this.phone || !this.city) {
+      this.sweatAlertService.error('Please fill in all required fields.');
+      return;
+    }
+    
+    if (!this.isValidEmail(this.email)) {
+      this.sweatAlertService.error('Please enter a valid email address.');
+      return;
+    }
+    
+    if (!this.isValidPhone(this.phone)) {
+      this.sweatAlertService.error('Please enter a valid Indian phone number (6-9 followed by 9 digits).');
+      return;
+    }
+    
+    // Prepare the lead data
+    const leadData = {
+      name: this.name,
+      gym: this.gym,
+      email: this.email,
+      phone: this.phone,
+      city: this.city,
+      locations: this.locations
+    };
+    
+    try {
+      const success = await this.sweatAlertService.sendLeadWithDetails(leadData);
       if (success) {
         this.sweatAlertService.success('Thank you for connecting with us!');
-        this.email = ''; // Clear the email field
+        
+        // Clear all form fields
+        this.name = '';
+        this.gym = '';
+        this.email = '';
+        this.phone = '';
+        this.city = '';
+        this.locations = 1;
+        
+        // Show success message
+        const leadNote = document.getElementById('leadNote') as HTMLElement;
+        if (leadNote) {
+          leadNote.classList.remove('hidden');
+        }
       } else {
         this.sweatAlertService.error('Failed to submit your request. Please try again.');
       }
-    } else {
-      this.sweatAlertService.error('Please enter a valid email address.');
+    } catch (error) {
+      this.sweatAlertService.error('An error occurred while submitting your request. Please try again.');
     }
+  }
+  
+  isValidPhone(phone: string): boolean {
+    const phoneRegex = /^[6-9][0-9]{9}$/;
+    return phoneRegex.test(phone);
   }
   
   isValidEmail(email: string): boolean {
