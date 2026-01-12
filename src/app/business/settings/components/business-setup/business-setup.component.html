@@ -44,7 +44,7 @@
 
         <li nz-submenu nzTitle="Catelog" nzOpen>
           <ul>
-            <!-- <li nz-menu-item>Products</li> -->
+            <!-- <li nz-menu-item (click)="navigateTo('./product')">Products</li> -->
             <!-- <li nz-menu-item (click)="navigateTo('./rental')">Rental</li> -->
             <li nz-menu-item (click)="navigateTo('./service')" [class.ant-menu-item-selected]="isActive('service')" [nzDisabled]="details?.status != 'ACTIVE'">Services</li>
             <li nz-menu-item (click)="navigateTo('./membership')" [nzDisabled]="details?.status != 'ACTIVE'">Memberships</li>

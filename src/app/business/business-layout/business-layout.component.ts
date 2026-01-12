@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatSidenavContainer } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AblyService } from 'src/app/services/ably.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
@@ -15,8 +15,16 @@ import { TimeZoneHelperService } from 'src/app/services/timeZoneHelper';
 export class BusinessLayoutComponent {
   isExpanded = false;
   currentShopCode = '';
+  showSidebar = true;
 
   constructor(private router: Router,private cdr: ChangeDetectorRef, private ablyService: AblyService, private notification: SweatAlertService, private timeZoneHelper: TimeZoneHelperService, public authService: AuthService) {
+    // Subscribe to router events to detect when we're on gym-checkin route
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.showSidebar = !event.url.includes('/business/gym-checkin');
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   async logout() {

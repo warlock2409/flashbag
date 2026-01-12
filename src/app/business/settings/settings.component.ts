@@ -35,6 +35,13 @@ export class SettingsComponent {
         locked: false,
         routerLink: './business-setup'
       },
+      // {
+      //   title: 'Product Inventory',
+      //   desc: 'Manage your products and inventory, set availability, and configure online booking preferences.',
+      //   icon: 'inventory',
+      //   locked: false,
+      //   routerLink: './scheduling'
+      // },
       {
         title: 'Scheduling',
         desc: 'Set your availability, manage bookable resources and online booking preferences.',

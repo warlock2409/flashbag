@@ -168,4 +168,17 @@ mat-sidenav-content {
 .content {
   // min-height: 100vh;
   overflow-y: auto;
+  width: calc(100% - 65px);
+}
+
+.sidenav-container.hide-sidenav {
+  .content {
+    width: 100%;
+  }
+  
+  .sidenav {
+    width: 0px;
+    min-width: 0px;
+    max-width: 0px;
+  }
 }
