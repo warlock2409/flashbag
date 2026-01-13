@@ -28,6 +28,8 @@ import { ShopModel } from 'src/app/models/shop.model';
 import { ShopActionsComponent } from "./location-action/shop-actions/shop-actions.component";
 import { MatDialog } from '@angular/material/dialog';
 import { NzBadgeComponent } from "ng-zorro-antd/badge";
+import { HolidayActionsComponent } from "./holiday-actions/holiday-actions.component";
+import { HolidayService } from 'src/app/services/holiday.service';
 
 @Component({
   selector: 'app-location',
@@ -75,6 +77,7 @@ export class LocationComponent {
   // Dummy 
 
   dialog = inject(MatDialog);
+  holidayService = inject(HolidayService);
   isLoading = false;
   ngOnInit(): void {
     console.log("*Locations*");
@@ -228,6 +231,24 @@ export class LocationComponent {
   changePopover(visible: boolean, id: string): void {
     this.activePopover = visible ? id : null;
   }
+
+  openHolidaysDialog(shop: ShopModel) {
+    console.log('Opening holidays dialog for shop:', shop);
+    
+    const dialogRef = this.dialog.open(HolidayActionsComponent, {
+      data: { shop: shop },
+      width: '800px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Holiday dialog closed with:', result);
+      if (result) {
+        // In a real implementation, this would save the holidays to the backend
+        console.log('Saving holidays to backend:', result);
+      }
+    });
+  }
+
 }
 
 export interface SegmentData {

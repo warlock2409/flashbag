@@ -1,0 +1,59 @@
+<!-- Dialog Overlay -->
+<div class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col dialog-animate">
+
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <h2 class="text-lg font-semibold text-gray-800 m-0">Holidays - {{ data.shop.name }}</h2>
+
+            <button (click)="dialogRef.close()" class="text-gray-400 hover:text-red-500 cursor-pointer">
+                <mat-icon style="color: lightcoral;">cancel</mat-icon>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <div class="max-w-[800px] mx-auto">
+                <!-- Holiday list -->
+                <nz-card nzType="inner" nzTitle="Scheduled Holidays" class="m-b-4" [nzExtra]="addTemplate">
+                    <ng-template #addTemplate>
+                        <button mat-raised-button style="background-color: #a684ff; color: white;"
+                            (click)="addHoliday()">
+                            <mat-icon>add</mat-icon> Add Holiday
+                        </button>
+                    </ng-template>
+
+                    <div *ngIf="holidays.length === 0" class="text-center py-4 text-gray-500">
+                        No holidays scheduled yet.
+                    </div>
+
+                    <div *ngFor="let holiday of holidays; let i = index"
+                        class="flex items-center p-3 bg-gray-50 rounded mb-2">
+                        <!-- Calendar date display -->
+                        <div class="calendar-date mr-4 text-center">
+                            <div class="text-xs font-semibold text-gray-500">{{ holiday.holidayDate | date:'MMM' |
+                                uppercase }}</div>
+                            <div class="text-xl font-bold text-gray-800">{{ holiday.holidayDate | date:'d' }}</div>
+                            <div class="text-xs text-gray-500">{{ holiday.holidayDate | date:'yy' }}</div>
+                        </div>
+
+                        <div class="flex-1 ml-4">
+                            <div class="font-medium">{{ holiday.name }}</div>
+                            <div *ngIf="holiday.notify" class="text-xs text-blue-600 mt-1">Notification ON</div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button mat-raised-button class="edit-button" (click)="editHoliday(holiday, i)">
+                                Edit
+                            </button>
+
+                            <button mat-raised-button class="holidays-button" (click)="removeHoliday(i)">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+        </div>
+    </div>
+</div>
