@@ -14,6 +14,14 @@
 
         <div class="flex-1 overflow-y-auto p-6 space-y-6">
             <div class="max-w-[800px] mx-auto">
+                <!-- Loading Spinner -->
+                <div *ngIf="loading" class="flex justify-center py-8">
+                    <div class="flex flex-col items-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mb-2"></div>
+                        <p class="text-gray-500 text-sm">Loading holidays...</p>
+                    </div>
+                </div>
+
                 <!-- Holiday list -->
                 <nz-card nzType="inner" nzTitle="Scheduled Holidays" class="m-b-4" [nzExtra]="addTemplate">
                     <ng-template #addTemplate>

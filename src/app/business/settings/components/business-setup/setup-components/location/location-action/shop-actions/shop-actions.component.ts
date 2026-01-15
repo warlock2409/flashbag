@@ -1,6 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject, ViewChild } from '@angular/core';
+import { Component, Inject, inject, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -68,7 +68,7 @@ export interface SessionForm {
   templateUrl: './shop-actions.component.html',
   styleUrl: './shop-actions.component.scss'
 })
-export class ShopActionsComponent {
+export class ShopActionsComponent implements AfterViewInit {
 
   updateShopStatus(shopCode: string) {
 
@@ -131,6 +131,7 @@ export class ShopActionsComponent {
   buffer = false;
   isLinear = false;
   loading = false;
+  shouldCloseAfterUpdate = false;
   @ViewChild('stepper') stepper!: MatStepper;
   private _formBuilder = inject(FormBuilder);
   newDocument: DocumentDto | null = null;
@@ -143,6 +144,7 @@ export class ShopActionsComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.i18n.setLocale(en_US);
+    this.shouldCloseAfterUpdate = this.data?.shouldCloseAfterUpdate || false;
     const daysOfWeek: string[] = [
       'MONDAY',
       'TUESDAY',
@@ -167,6 +169,15 @@ export class ShopActionsComponent {
         console.log(this.taxDefaults.get('model'));
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Jump to specific step if initialStep is provided
+    if (this.data.initialStep !== undefined && this.stepper) {
+      setTimeout(() => {
+        this.stepper.selectedIndex = this.data.initialStep;
+      }, 0);
+    }
   }
 
   getOrgBusinessModel() {
@@ -349,7 +360,11 @@ export class ShopActionsComponent {
             this.buffer = false;
             console.log("Shop Updated successfully", res);
             this.currentShop = res.data;
-            this.goNext();
+            if (this.shouldCloseAfterUpdate) {
+              this.dialogRef.close();
+            } else {
+              this.goNext();
+            }
           },
           error: (err: any) => {
             this.buffer = false;
@@ -365,7 +380,11 @@ export class ShopActionsComponent {
     this.orgApiService.addNewShop(shop).subscribe({
       next: (res: ResponseDate) => {
         this.currentShop = res.data;
-        this.goNext();
+        if (this.shouldCloseAfterUpdate) {
+          this.dialogRef.close();
+        } else {
+          this.goNext();
+        }
         this.changeLoader();
         this.buffer = false;
 
@@ -424,7 +443,11 @@ export class ShopActionsComponent {
       this.orgApiService.addShopAddress(addressDto, this.currentShop.code).subscribe({
         next: (res: ResponseDate) => {
           this.currentShopAddress = res.data;
-          this.goNext();
+          if (this.shouldCloseAfterUpdate) {
+            this.dialogRef.close();
+          } else {
+            this.goNext();
+          }
           this.changeLoader();
         },
         error: (err: any) => {
@@ -483,6 +506,9 @@ export class ShopActionsComponent {
       next: (res: ResponseDate) => {
         console.log(res, "business hours");
         this.sweatAlert.success("Business Hours Updated");
+        if (this.shouldCloseAfterUpdate) {
+          this.dialogRef.close();
+        }
         this.changeLoader();
       },
       error: (err: any) => {

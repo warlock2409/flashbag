@@ -38,7 +38,7 @@
                         <h3 class="location-name">
                             {{ shop.name }}
                         </h3>
-                        <span class="location-industry-tag">
+                        <span class="location-industry-tag" *ngIf="shop.primaryIndustry && shop.primaryIndustry.name">
                             {{shop.primaryIndustry.name}}
                         </span>
                         <span class="w-3 h-3 rounded-full" [ngClass]="shop.active ? 'bg-green-500' : 'bg-red-500'"></span>
@@ -49,17 +49,17 @@
 
                     <!-- Buttons -->
                     <div class="location-actions">
-
-                        <button mat-raised-button class="edit-button" (click)="editLocation(shop)">
-                            Edit
-                        </button>
-                        
-                        <button mat-raised-button class="holidays-button" (click)="openHolidaysDialog(shop)">
-                            Holidays
-                        </button>
-                        
-                        <button mat-raised-button class="configure-button" (click)="openConfigurePanel(shop)">
+                        <button mat-raised-button class="edit-button" (click)="openConfigurePanel(shop)">
                             Configure
+                        </button>
+                        
+                        <button mat-raised-button 
+                            [style.background-color]="shop.active ? '#f8d7da' : '#28a745'"
+                            [style.color]="shop.active ? '#721c24' : 'white'"
+                            [style.border-color]="shop.active ? '#f5c6cb' : '#c3e6cb'"
+                            (click)="confirmToggleShopVisibility(shop)"
+                            *ngIf="shop.active !== null">
+                            {{ shop.active ? "Go Offline" : "Go Online" }}
                         </button>
                     </div>
                 </div>

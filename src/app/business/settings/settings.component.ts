@@ -89,7 +89,7 @@ export class SettingsComponent {
       {
         title: 'Instagram Management',
         desc: 'Every comment becomes a conversation',
-        locked: false,
+        locked: true,
         routerLink: '/insta-automate'
       },
       {

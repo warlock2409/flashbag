@@ -31,6 +31,7 @@ import { NzBadgeComponent } from "ng-zorro-antd/badge";
 import { HolidayActionsComponent } from "./holiday-actions/holiday-actions.component";
 import { HolidayService } from 'src/app/services/holiday.service';
 import { ConfigurePanelComponent } from './configure-panel/configure-panel.component';
+import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
 @Component({
   selector: 'app-location',
@@ -58,7 +59,7 @@ export class LocationComponent {
   isMobileView = false;
   shops: ShopModel[] = [];
 
-  constructor(private i18n: NzI18nService, private route: ActivatedRoute, private orgApiService: OrganizationServiceService) {
+  constructor(private i18n: NzI18nService, private route: ActivatedRoute, private orgApiService: OrganizationServiceService, private sweatAlert: SweatAlertService) {
     this.i18n.setLocale(en_US);
     this.checkScreenSize();
   }
@@ -255,6 +256,82 @@ export class LocationComponent {
     });
   }
 
+  async confirmToggleShopVisibility(shop: ShopModel) {
+    const action = shop.active ? 'Go Offline' : 'Go Online';
+    const message = shop.active 
+      ? 'Are you sure you want to take this shop offline? Customers will not be able to access it.'
+      : 'Are you sure you want to take this shop online? It will be visible to customers.';
+    
+    const result = await this.sweatAlert.confirm(message, action, 'Confirm', 'Cancel');
+    if (result.isConfirmed) {
+      this.toggleShopVisibility(shop);
+    }
+  }
+
+  toggleShopVisibility(shop: ShopModel) {
+    console.log('Toggling visibility for shop:', shop);
+    
+    this.orgApiService.getOrganizationDetails().subscribe({
+      next: (res: ResponseDate) => {
+        if (res.data && res.data.organizationPlan && res.data.organizationPlan.bucketDtos) {
+          const buckets = res.data.organizationPlan.bucketDtos;
+
+          // Find the LOCATION bucket
+          const locationBucket = buckets.find(
+            (b: any) => b.type === 'LOCATION'
+          );
+
+          if (locationBucket && !shop.active) {
+            const available = locationBucket.allocated - locationBucket.used;
+
+            if (available > 0) {
+              console.log('✅ You have free locations available:', available);
+            } else {
+              console.warn('❌ No free location slots left.');
+              this.sweatAlert.error("Upgrade Plan Make this shop online");
+              return;
+            }
+          }
+
+          this.orgApiService.toggleVisibility(shop.code!).subscribe({
+            next: (res: ResponseDate) => {
+              // Update the shop in the local array
+              const shopIndex = this.shops.findIndex(s => s.code === shop.code);
+              if (shopIndex !== -1) {
+                // Preserve primaryIndustry if it exists in the current shop but not in response
+                const currentShop = this.shops[shopIndex];
+                const updatedShop = { ...currentShop, ...res.data };
+                
+                // Ensure primaryIndustry is preserved if it was present before
+                if (currentShop.primaryIndustry && !updatedShop.primaryIndustry) {
+                  updatedShop.primaryIndustry = currentShop.primaryIndustry;
+                }
+                
+                this.shops[shopIndex] = updatedShop;
+              }
+              
+              if (res.data.active) {
+                this.sweatAlert.success("Hurray! Your shop is now ready to receive online orders.", 2500);
+              } else {
+                this.sweatAlert.success("Your Shop is offline", 2500);
+              }
+            },
+            error: (err: any) => {
+              this.sweatAlert.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+              this.sweatAlert.alertTeam("Location", "toggleShopVisibility", "Error", JSON.stringify(err));
+            }
+          });
+        } else {
+          this.sweatAlert.error("Purchase plan to active this location");
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching organization details', err);
+        this.sweatAlert.error("Failed to fetch organization details");
+      }
+    });
+  }
+
   openConfigurePanel(shop: ShopModel) {
     this.selectedShop = shop;
     this.configurePanelOpen = true;
@@ -267,7 +344,23 @@ export class LocationComponent {
 
   handleConfigOption(option: string) {
     console.log('Configuration option selected:', option);
-    // Here you can implement specific logic for each configuration option
+    
+    // Handle the new configure panel events
+    if (option.startsWith('open-shop-section-')) {
+      const parts = option.split('-');
+      // Check if it's the update variant that should close after API calls
+      const shouldCloseAfterUpdate = parts.includes('update');
+      const sectionIndex = parseInt(parts[parts.length - 1]);
+      this.openShopActionsWithSection(sectionIndex, shouldCloseAfterUpdate);
+      return;
+    }
+    
+    if (option === 'open-holidays' && this.selectedShop) {
+      this.openHolidaysDialog(this.selectedShop);
+      return;
+    }
+    
+    // Handle existing configuration options
     switch(option) {
       case 'business-hours':
         // Handle business hours configuration
@@ -287,6 +380,28 @@ export class LocationComponent {
       default:
         console.log('Unknown configuration option:', option);
     }
+  }
+
+  openShopActionsWithSection(sectionIndex: number, shouldCloseAfterUpdate: boolean = false) {
+    if (!this.selectedShop) return;
+    
+    const dialogRef = this.dialog.open(ShopActionsComponent, {
+      data: { 
+        isUpdate: true, 
+        shop: this.selectedShop,
+        initialStep: sectionIndex,
+        shouldCloseAfterUpdate: shouldCloseAfterUpdate
+      },
+      width: '800px',
+      height: '800px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Shop actions dialog closed with:', result);
+      if (result) {
+        this.getLocations(); // Refresh the locations list
+      }
+    });
   }
 
 }

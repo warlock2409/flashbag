@@ -71,6 +71,10 @@ import { MatIconModule } from '@angular/material/icon';
         margin: 0;
         font-size: 18px;
         color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
       }
 
       .close-btn {
@@ -79,6 +83,7 @@ import { MatIconModule } from '@angular/material/icon';
         padding: 4px;
         cursor: pointer;
         color: #666;
+        margin-left: 10px;
 
         &:hover {
           color: #333;
@@ -115,9 +120,52 @@ import { MatIconModule } from '@angular/material/icon';
       display: none; /* Chrome, Safari, Opera */
     }
 
+    /* Responsive adjustments for different screen sizes */
+    @media (max-width: 1023px) {
+      .side-panel {
+        width: 70vw; /* Make it wider on tablets */
+      }
+      
+      .panel-header {
+        padding-left: 80px;
+      }
+      
+      .panel-header h3 {
+        font-size: 16px;
+        padding-left: 8px; /* Add left padding for tablet view */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .side-panel {
+        width: 85vw; /* Wider on smaller tablets */
+      }
+      
+      .panel-header {
+        padding-left: 80px;
+      }
+      
+      .panel-header h3 {
+        font-size: 15px;
+        padding-left: 6px; /* Add left padding for smaller tablet view */
+      }
+    }
+    
     @media (max-width: 480px) {
       .side-panel {
-        width: 100%;
+        width: 100%; /* Full width on mobile */
+      }
+      
+      .panel-header {
+        padding: 10px 12px;
+      }
+      
+      .panel-header h3 {
+        font-size: 14px;
+      }
+      
+      .close-btn {
+        padding: 6px;
       }
     }
   `]

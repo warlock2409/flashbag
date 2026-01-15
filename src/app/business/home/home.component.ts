@@ -129,6 +129,60 @@ export class HomeComponent implements OnDestroy {
     })
   }
 
+  toggleShopVisibility() {
+    if (!this.selectedShop || this.selectedShop.active === null) return;
+    
+    console.log('Toggling visibility for shop:', this.selectedShop);
+    
+    this.orgApiService.getOrganizationDetails().subscribe({
+      next: (res: ResponseDate) => {
+        if (res.data && res.data.organizationPlan && res.data.organizationPlan.bucketDtos) {
+          const buckets = res.data.organizationPlan.bucketDtos;
+
+          // Find the LOCATION bucket
+          const locationBucket = buckets.find(
+            (b: any) => b.type === 'LOCATION'
+          );
+
+          if (locationBucket && !this.selectedShop.active) {
+            const available = locationBucket.allocated - locationBucket.used;
+
+            if (available > 0) {
+              console.log('✅ You have free locations available:', available);
+            } else {
+              console.warn('❌ No free location slots left.');
+              this.swallService.error("Upgrade Plan Make this shop online");
+              return;
+            }
+          }
+
+          this.orgApiService.toggleVisibility(this.selectedShop.code!).subscribe({
+            next: (res: ResponseDate) => {
+              // Update the selected shop
+              this.selectedShop = { ...this.selectedShop, ...res.data };
+              
+              if (res.data.active) {
+                this.swallService.success("Hurray! Your shop is now ready to receive online orders.", 2500);
+              } else {
+                this.swallService.success("Your Shop is offline", 2500);
+              }
+            },
+            error: (err: any) => {
+              this.swallService.error("Failed to complete the action. We’ve informed our team. Please try again later.");
+              console.error("Toggle visibility error:", err);
+            }
+          });
+        } else {
+          this.swallService.error("Purchase plan to active this location");
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching organization details', err);
+        this.swallService.error("Failed to fetch organization details");
+      }
+    });
+  }
+
 
   private async getLocations(): Promise<void> {
     this.isLoading = true;

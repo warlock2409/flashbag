@@ -21,6 +21,7 @@ import * as moment from 'moment-timezone';
 })
 export class HolidayActionsComponent {
   holidays: HolidayDto[] = [];
+  loading = false;
   
   constructor(
     public dialogRef: MatDialogRef<HolidayActionsComponent>,
@@ -34,6 +35,7 @@ export class HolidayActionsComponent {
   
   loadHolidays() {
     if (this.data.shop.code) {
+      this.loading = true;
       this.holidayService.getHolidays(this.data.shop.code).pipe(
         catchError(error => {
           console.error('Error loading holidays:', error);
@@ -41,6 +43,7 @@ export class HolidayActionsComponent {
         })
       ).subscribe(response => {
         this.holidays = response.data || [];
+        this.loading = false;
       });
     }
   }
@@ -60,9 +63,11 @@ export class HolidayActionsComponent {
         };
         
         // Add the new holiday to the backend
+        this.loading = true;
         this.holidayService.createHoliday(this.data.shop.code, holidayWithTimestamp).pipe(
           catchError(error => {
             console.error('Error creating holiday:', error);
+            this.loading = false;
             return of({ data: null, message: 'Error creating holiday', status: 500 });
           })
         ).subscribe(response => {
@@ -70,6 +75,7 @@ export class HolidayActionsComponent {
             // Add the new holiday to the list
             this.holidays = [...this.holidays, response.data];
           }
+          this.loading = false;
         });
       }
     });
@@ -90,9 +96,11 @@ export class HolidayActionsComponent {
         };
         
         // Update the holiday in the backend
+        this.loading = true;
         this.holidayService.updateHoliday(this.data.shop.code, holidayWithTimestamp).pipe(
           catchError(error => {
             console.error('Error updating holiday:', error);
+            this.loading = false;
             return of({ data: null, message: 'Error updating holiday', status: 500 });
           })
         ).subscribe(response => {
@@ -101,6 +109,7 @@ export class HolidayActionsComponent {
             this.holidays[index] = response.data;
             this.holidays = [...this.holidays]; // Trigger change detection
           }
+          this.loading = false;
         });
       }
     });
@@ -109,9 +118,11 @@ export class HolidayActionsComponent {
   removeHoliday(index: number) {
     const holiday = this.holidays[index];
     if (holiday.id && this.data.shop.code) {
+      this.loading = true;
       this.holidayService.deleteHoliday(this.data.shop.code, holiday.id).pipe(
         catchError(error => {
           console.error('Error deleting holiday:', error);
+          this.loading = false;
           return of({ data: false, message: 'Error deleting holiday', status: 500 });
         })
       ).subscribe(response => {
@@ -120,6 +131,7 @@ export class HolidayActionsComponent {
           this.holidays.splice(index, 1);
           this.holidays = [...this.holidays]; // Trigger change detection
         }
+        this.loading = false;
       });
     }
   }

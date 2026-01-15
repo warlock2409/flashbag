@@ -52,7 +52,7 @@ import { ShopModel } from 'src/app/models/shop.model';
             </div>
             <div class="flex-1">
               <h5 class="!font-semibold text-lg text-gray-900 !mb-1">Address</h5>
-              <p class="text-sm text-gray-600 !mb-2">Manage address, including street, city, state, and zip code</p>
+              <p class="text-sm text-gray-600 !mb-2">Manage address, city, state, and zip code</p>
             </div>
           </div>
         </div>
@@ -81,6 +81,29 @@ import { ShopModel } from 'src/app/models/shop.model';
     .config-card:hover {
       transform: translateY(-2px);
     }
+    
+    /* Mobile styles */
+    .configure-content {
+      padding: 1rem;
+    }
+    
+    /* Tablet styles - add margin to account for sidebar */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .configure-content {
+        padding: 1rem;
+        margin-left: 60px;
+        margin-right: 20px;
+      }
+    }
+    
+    /* Desktop styles */
+    @media (min-width: 1024px) {
+      .configure-content {
+        padding: 1.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    }
   `]
 })
 export class ConfigurePanelComponent {
@@ -88,6 +111,38 @@ export class ConfigurePanelComponent {
     @Output() optionSelected = new EventEmitter<string>();
 
     onOptionSelect(option: string) {
+        // Emit the option first
         this.optionSelected.emit(option);
+        
+        // Then open the appropriate section of the existing shop-actions component
+        if (this.shop) {
+            this.openShopActionsSection(option);
+        }
+    }
+
+    openShopActionsSection(section: string) {
+        // Map the configure panel options to stepper indices
+        let stepperIndex = 0;
+        switch(section) {
+            case 'general':
+                stepperIndex = 0; // Basic step
+                break;
+            case 'address':
+                stepperIndex = 1; // Address step
+                break;
+            case 'business-hours':
+                stepperIndex = 2; // Business Hours step
+                break;
+            case 'holidays':
+                // For holidays, we'll use the existing holiday dialog
+                this.optionSelected.emit('open-holidays');
+                return;
+            default:
+                return;
+        }
+
+        // Emit event to parent component to open shop actions with specific section
+        // Use a different event identifier to indicate that the dialog should close after API updates
+        this.optionSelected.emit(`open-shop-section-update-${stepperIndex}`);
     }
 }

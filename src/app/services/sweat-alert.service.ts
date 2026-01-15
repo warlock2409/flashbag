@@ -201,5 +201,19 @@ export class SweatAlertService {
     }
   }
 
+  async confirm(message: string, title: string = 'Are you sure?', confirmButtonText: string = 'Yes', cancelButtonText: string = 'Cancel') {
+    const result = await Swal.fire({
+      title: title,
+      text: message,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: confirmButtonText,
+      cancelButtonText: cancelButtonText
+    });
+    return result;
+  }
+
 
 }
