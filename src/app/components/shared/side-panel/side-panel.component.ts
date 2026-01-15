@@ -26,10 +26,11 @@ import { MatIconModule } from '@angular/material/icon';
     .side-panel-container {
       visibility: hidden;
       position: fixed;
+      top: 0;
       right: 0;
       bottom: 0;
       left: 0;
-      z-index: 1000;
+      z-index: 9999;
 
       &.open {
         visibility: visible;
@@ -46,6 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
 
     .side-panel {
       position: fixed;
+      top: 0;
       bottom: 0;
       right: 0;
       width: 500px;
@@ -53,7 +55,7 @@ import { MatIconModule } from '@angular/material/icon';
       box-shadow: -2px 0 8px rgba(0,0,0,0.1);
       transform: translateX(100%);
       transition: transform 0.3s ease;
-      z-index: 1001;
+      z-index: 10000;
       display: flex;
       flex-direction: column;
     }
@@ -88,6 +90,7 @@ import { MatIconModule } from '@angular/material/icon';
       flex: 1;
       overflow-y: auto;
       padding: 10px;
+      min-height: 0;
     }
 
     .overlay {
@@ -99,6 +102,7 @@ import { MatIconModule } from '@angular/material/icon';
       background: rgba(0,0,0,0.5);
       opacity: 0;
       transition: opacity 0.3s ease;
+      z-index: 9998;
     }
 
     .scroll-hidden {

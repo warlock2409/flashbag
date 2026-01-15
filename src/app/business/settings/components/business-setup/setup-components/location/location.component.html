@@ -57,6 +57,10 @@
                         <button mat-raised-button class="holidays-button" (click)="openHolidaysDialog(shop)">
                             Holidays
                         </button>
+                        
+                        <button mat-raised-button class="configure-button" (click)="openConfigurePanel(shop)">
+                            Configure
+                        </button>
                     </div>
                 </div>
             </div>
@@ -79,4 +83,16 @@
     <ng-template #addTemplate>
         <a (click)="createLocation()">Create</a>
     </ng-template>
+
+    <!-- Configure Panel -->
+    <app-side-panel 
+        [isOpen]="configurePanelOpen" 
+        title="Configure Location" 
+        (closePanel)="closeConfigurePanel()"
+        [panelStyles]="{ width: isMobileView ? '100%' : '500px' }">
+        <app-configure-panel 
+            [shop]="selectedShop" 
+            (optionSelected)="handleConfigOption($event)">
+        </app-configure-panel>
+    </app-side-panel>
 </div>

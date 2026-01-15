@@ -30,6 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NzBadgeComponent } from "ng-zorro-antd/badge";
 import { HolidayActionsComponent } from "./holiday-actions/holiday-actions.component";
 import { HolidayService } from 'src/app/services/holiday.service';
+import { ConfigurePanelComponent } from './configure-panel/configure-panel.component';
 
 @Component({
   selector: 'app-location',
@@ -45,8 +46,11 @@ import { HolidayService } from 'src/app/services/holiday.service';
     MatFormFieldModule,
     MatInputModule, MatSelectModule, MatTooltipModule,
     ShopActionsComponent,
-    NzBadgeComponent
+    NzBadgeComponent,
+    SidePanelComponent,
+    ConfigurePanelComponent
 ],
+
   templateUrl: './location.component.html',
   styleUrl: './location.component.scss'
 })
@@ -227,6 +231,8 @@ export class LocationComponent {
   }
 
   activePopover: string | null = null;
+  selectedShop: ShopModel | null = null;
+  configurePanelOpen = false;
 
   changePopover(visible: boolean, id: string): void {
     this.activePopover = visible ? id : null;
@@ -247,6 +253,40 @@ export class LocationComponent {
         console.log('Saving holidays to backend:', result);
       }
     });
+  }
+
+  openConfigurePanel(shop: ShopModel) {
+    this.selectedShop = shop;
+    this.configurePanelOpen = true;
+  }
+
+  closeConfigurePanel() {
+    this.configurePanelOpen = false;
+    this.selectedShop = null;
+  }
+
+  handleConfigOption(option: string) {
+    console.log('Configuration option selected:', option);
+    // Here you can implement specific logic for each configuration option
+    switch(option) {
+      case 'business-hours':
+        // Handle business hours configuration
+        break;
+      case 'services':
+        // Handle services configuration
+        break;
+      case 'staff':
+        // Handle staff configuration
+        break;
+      case 'payment-settings':
+        // Handle payment settings configuration
+        break;
+      case 'notifications':
+        // Handle notifications configuration
+        break;
+      default:
+        console.log('Unknown configuration option:', option);
+    }
   }
 
 }
