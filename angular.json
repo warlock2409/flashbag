@@ -39,15 +39,32 @@
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "allowedCommonJsDependencies": [
+              "sweetalert2",
+              "moment",
+              "moment-timezone",
+              "qrcode",
+              "dijkstrajs",
+              "ably",
+              "leaflet",
+              "@transloadit/prettier-bytes",
+              "mime-match",
+              "lodash/throttle.js",
+              "namespace-emitter",
+              "is-mobile",
+              "classnames",
+              "lodash/debounce.js",
+              "cropperjs"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "3mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",

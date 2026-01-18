@@ -298,14 +298,12 @@ export class LocationComponent {
               // Update the shop in the local array
               const shopIndex = this.shops.findIndex(s => s.code === shop.code);
               if (shopIndex !== -1) {
-                // Preserve primaryIndustry if it exists in the current shop but not in response
+                // Only update the active status and preserve all other existing properties
                 const currentShop = this.shops[shopIndex];
-                const updatedShop = { ...currentShop, ...res.data };
-                
-                // Ensure primaryIndustry is preserved if it was present before
-                if (currentShop.primaryIndustry && !updatedShop.primaryIndustry) {
-                  updatedShop.primaryIndustry = currentShop.primaryIndustry;
-                }
+                const updatedShop = { 
+                  ...currentShop, 
+                  active: res.data.active // Only update the active status
+                };
                 
                 this.shops[shopIndex] = updatedShop;
               }

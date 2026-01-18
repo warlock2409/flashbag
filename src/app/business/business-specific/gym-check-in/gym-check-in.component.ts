@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, inject, ViewChild, OnDestroy, NgZone, OnInit, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import QRCode from 'qrcode';
+// QRCode is imported dynamically to reduce bundle size
+// import QRCode from 'qrcode';
 import { GymCheckinActionsComponent } from './gym-checkin-actions/gym-checkin-actions.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ShopService } from 'src/app/services/shop.service';
@@ -104,7 +105,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  generateQRCode() {
+  async generateQRCode() {
     let shopCode = localStorage.getItem("shopCode");
     console.log('Generating QR code for shop code:', shopCode);
     
@@ -112,7 +113,10 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     const isLargeScreen = window.innerWidth >= 1024;
     const qrSize = isLargeScreen ? 400 : 280;
     
-    QRCode.toCanvas(this.qrCanvas.nativeElement, shopCode, { 
+    // Dynamically import qrcode to reduce initial bundle size
+    const { toCanvas } = await import('qrcode');
+    
+    toCanvas(this.qrCanvas.nativeElement, shopCode, { 
       width: qrSize,
       margin: 2
     })

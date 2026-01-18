@@ -6,7 +6,7 @@ import { MembershipSummary, ShopModel, WaitListDto } from 'src/app/models/shop.m
 import { ResponseDate } from 'src/app/app.component';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { AblyService } from 'src/app/services/ably.service';
 import { ShopActionsComponent } from '../settings/components/business-setup/setup-components/location/location-action/shop-actions/shop-actions.component';
 import { AuthService } from 'src/app/services/auth.service';

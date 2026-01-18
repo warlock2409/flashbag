@@ -34,6 +34,7 @@
     "ably": "^2.14.0",
     "canvas-confetti": "^1.9.3",
     "chart.js": "^4.5.0",
+    "cropperjs": "^2.1.0",
     "google-one-tap": "^1.0.6",
     "leaflet": "^1.9.4",
     "lottie-web": "^5.13.0",
