@@ -2,16 +2,16 @@
 
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';  // Adjust the import to match your file structure
+import { AuthService } from '../services/auth.service';  // Adjust the import to match your file structurel
 import { catchError, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 
 // This function replaces the class-based interceptor
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
-    // const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:8080');
+    const updatedUrl = req.url.replace('http://localhost:8080', 'http://localhost:8080');
     // const updatedUrl = req.url.replace('http://localhost:8080', 'https://9myle.store');
-    const updatedUrl = req.url.replace('http://localhost:8080', 'https://nine-myle-350908556628.asia-south1.run.app');
+    // const updatedUrl = req.url.replace('http://localhost:8080', 'https://nine-myle-350908556628.asia-south1.run.app');
 
 
     const updatedReq = req.clone({

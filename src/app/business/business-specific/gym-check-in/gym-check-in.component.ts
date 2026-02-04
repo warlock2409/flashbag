@@ -239,12 +239,12 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('Customer data received:', customerRes);
 
         // Check if the response contains a list of customers
-        if (Array.isArray(customerRes.data)) {
+        if (Array.isArray(customerRes.data) && customerRes.data.length > 1) {
           // Multiple customers returned - show selection dialog
           this.showCustomerSelectionDialog(customerRes.data);
         } else {
           // Single customer returned - proceed with check-in
-          this.proceedWithCheckIn(customerRes.data.id);
+          this.swalService.error('We couldn’t find the customer ID. Please check with the trainer.');
         }
       },
       error: (err: any) => {
