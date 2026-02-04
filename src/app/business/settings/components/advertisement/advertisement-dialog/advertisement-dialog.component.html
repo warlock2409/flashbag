@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="bg-white" style="margin: 0;">Create Advertisement</h2>
+<h2 mat-dialog-title class="bg-white" style="margin: 0;">{{ id ? 'Update Advertisement' : 'Create Advertisement' }}</h2>
 
 <mat-dialog-content class="mat-typography bg-white">
     <form class="p-4">
@@ -22,7 +22,8 @@
             <!-- Target Area Dropdown -->
             <div class="form-field">
                 <label class="block mb-2 text-sm font-medium">Target Area</label>
-                <mat-select [(ngModel)]="targetArea" name="targetArea" placeholder="Select Target Area" class="w-full border border-gray-300 rounded-md">
+                <mat-select [(ngModel)]="targetArea" name="targetArea" placeholder="Select Target Area"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2">
                     <mat-option *ngFor="let area of targetAreas" [value]="area.id">
                         {{ area.name }}
                     </mat-option>
@@ -42,8 +43,8 @@
             <!-- Image Upload -->
             <div class="form-field">
                 <label class="block mb-2 text-sm font-medium">Advertisement Image</label>
-                <app-upload-media (uploaded)="onMediaUploaded($event)" [existingUploads]="null" [type]="'BUSINESS'"
-                    [multiple]="false">
+                <app-upload-media (uploaded)="onMediaUploaded($event)" [existingUploads]="uploadedDocument"
+                    [type]="'BUSINESS'" [multiple]="false">
                 </app-upload-media>
             </div>
         </div>
@@ -52,8 +53,8 @@
 
 <mat-dialog-actions align="end" class="bg-white button-container">
     <button mat-stroked-button mat-dialog-close>Cancel</button>
-    <button mat-stroked-button (click)="submitForm()" [disabled]="!adName || !targetArea || !endDate || !imageFile"
+    <button mat-stroked-button (click)="submitForm()" [disabled]="!adName || !targetArea || !endDate"
         style="background-color: #a684ff; color: white;">
-        Create Advertisement
+        {{ id ? 'Update Advertisement' : 'Create Advertisement' }}
     </button>
 </mat-dialog-actions>

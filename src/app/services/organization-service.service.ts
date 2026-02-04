@@ -11,8 +11,8 @@ import { Todo } from '../business/settings/components/business-setup/setup-compo
   providedIn: 'root'
 })
 export class OrganizationServiceService {
- 
-  
+
+
 
 
 
@@ -290,6 +290,30 @@ export class OrganizationServiceService {
     if (size != null) params.size = size;
 
     return this.Http.get<ServiceResponse<any>>(url, { params });
+  }
+
+  getAdvertisementsByShop(page: number, size: number, expired?: boolean) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/advertisements/shop/${shopCode}`;
+    let params: any = {
+      page: page,
+      size: size
+    };
+    if (expired !== undefined) {
+      params.expired = expired;
+    }
+    return this.Http.get<ServiceResponse<any>>(url, { params });
+  }
+
+  createAdvertisement(advertisement: any) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/advertisements/shop/${shopCode}`;
+    return this.Http.post<ServiceResponse<any>>(url, advertisement);
+  }
+
+  updateAdvertisement(id: number, advertisement: any) {
+    let url = `http://localhost:8080/api/advertisements/${id}`;
+    return this.Http.put<ServiceResponse<any>>(url, advertisement);
   }
 
 }

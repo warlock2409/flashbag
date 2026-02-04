@@ -40,7 +40,7 @@
     <section class="controls-section">
       <!-- Search -->
       <div class="search-container">
-        <div class="search-wrapper">
+        <!-- <div class="search-wrapper">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="search"
             class="search-icon">
@@ -49,64 +49,77 @@
           </svg>
           <input id="search" type="text" placeholder="Search by title or description…" [(ngModel)]="searchQuery"
             (input)="onSearchChange($event)" class="search-input">
-        </div>
+        </div> -->
       </div>
 
       <!-- Segmented Filter -->
       <div class="filter-container">
         <div class="filter-wrapper">
-          <button data-filter="all" [class.filter-btn-active]="activeFilter === 'all'"
-            class="filter-btn" (click)="onFilterChange('all')">
-            <span [class.filter-indicator-active]="activeFilter === 'all'"
-              class="filter-indicator">•</span>
+          <button data-filter="all" [class.filter-btn-active]="activeFilter === 'all'" class="filter-btn"
+            (click)="onFilterChange('all')">
+            <span [class.filter-indicator-active]="activeFilter === 'all'" class="filter-indicator">•</span>
             <span class="filter-text">All</span>
           </button>
-          <button data-filter="active" [class.filter-btn-active]="activeFilter === 'active'"
-            class="filter-btn" (click)="onFilterChange('active')">
+          <button data-filter="active" [class.filter-btn-active]="activeFilter === 'active'" class="filter-btn"
+            (click)="onFilterChange('active')">
             <span [class.filter-indicator-active]="activeFilter === 'active'"
               class="filter-indicator filter-indicator-active">•</span>
             <span class="filter-text">Active</span>
           </button>
-          <button data-filter="inactive" [class.filter-btn-active]="activeFilter === 'inactive'"
-            class="filter-btn" (click)="onFilterChange('inactive')">
-            <span [class.filter-indicator-active]="activeFilter === 'inactive'"
-              class="filter-indicator">•</span>
+          <button data-filter="inactive" [class.filter-btn-active]="activeFilter === 'inactive'" class="filter-btn"
+            (click)="onFilterChange('inactive')">
+            <span [class.filter-indicator-active]="activeFilter === 'inactive'" class="filter-indicator">•</span>
             <span class="filter-text">Inactive</span>
           </button>
         </div>
       </div>
     </section>
 
-    
+
 
     <mat-paginator [length]="totalElements" [pageSize]="pageSize" aria-label="Select page" class="paginator"
       (page)="onPageChange($event)">
     </mat-paginator>
-    
+
     <!-- Table (Desktop) -->
     <section class="desktop-table-section">
       <div class="table-header">
         <div class="table-header-cell ad-header">Ad</div>
         <div class="table-header-cell media-header">Media</div>
         <div class="table-header-cell area-header">Target Area</div>
-        <div class="table-header-cell stats-header">Impressions</div>
+        <!-- <div class="table-header-cell stats-header">Impressions</div> -->
         <div class="table-header-cell status-header">Status</div>
         <div class="table-header-cell expiry-header">End Date</div>
       </div>
 
       <div class="table-body">
         <!-- Rows -->
-        <div class="table-row fade-in" *ngFor="let ad of advertisements; let rowIndex = index" [style.animation-delay]="rowIndex * 0.05 + 's'" [attr.data-ad-id]="ad.id" [attr.data-status]="ad.status">
+        <div class="table-row fade-in" *ngFor="let ad of advertisements; let rowIndex = index"
+          [style.animation-delay]="rowIndex * 0.05 + 's'" [attr.data-ad-id]="ad.id" [attr.data-status]="ad.status"
+          (click)="openEditAdvertisement(ad)">
+
           <div class="table-cell ad-cell">
-            <i class="ad-icon image-icon" *ngIf="ad.mediaType === 'image'"></i>
-            <i class="ad-icon video-icon" *ngIf="ad.mediaType === 'video'"></i>
-            <span class="ad-title">{{ad.title}}</span>
+            <i class="ad-icon image-icon" *ngIf="ad.documentDto?.attachments?.[0]?.contentType?.includes('image')"></i>
+            <i class="ad-icon video-icon" *ngIf="ad.documentDto?.attachments?.[0]?.contentType?.includes('video')"></i>
+            <span class="ad-title">{{ad.name}}</span>
           </div>
+
           <div class="table-cell media-cell">
-            <img [src]="ad.mediaUrl" alt="Advertisement Media" class="media-preview" />
+            <img *ngIf="!ad.documentDto?.attachments?.[0]?.contentType?.includes('video')"
+              [src]="ad.documentDto?.attachments?.[0]?.url" alt="Advertisement Media" class="media-preview" />
+            <div *ngIf="ad.documentDto?.attachments?.[0]?.contentType?.includes('video')"
+              class="media-preview flex items-center justify-center bg-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-gray-400">
+                <path d="m22 8-6 4 6 4V8Z" />
+                <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+              </svg>
+            </div>
           </div>
-          <div class="table-cell area-cell">{{ad.targetArea}}</div>
-          <div class="table-cell stats-cell">
+
+          <div class="table-cell area-cell">{{ad.advertisementArea}}</div>
+          <!-- <div class="table-cell stats-cell">
             <div class="stats-row">
               <span class="stat-label">Imps:</span>
               <span class="stat-value">{{ad.impressions | number}}</span>
@@ -115,19 +128,19 @@
               <span class="stat-label">CTR:</span>
               <span class="stat-value">{{ad.clickThroughRate}}</span>
             </div>
-          </div>
+          </div> -->
           <div class="table-cell status-cell">
-            <span *ngIf="ad.status === 'active'" class="status-badge status-badge-active">Active</span>
-            <span *ngIf="ad.status === 'inactive'" class="status-badge status-badge-inactive">Inactive</span>
+            <span *ngIf="ad.status === true" class="status-badge status-badge-active">Active</span>
+            <span *ngIf="ad.status === false" class="status-badge status-badge-inactive">Inactive</span>
           </div>
           <div class="table-cell expiry-cell">
             <span *ngIf="!ad.endDate" class="expiry-badge expiry-badge-empty">— — —</span>
 
-            <span *ngIf="ad.endDate && isExpired(ad.endDate)"
-              class="expiry-badge expiry-badge-expired">{{ad.endDate}}</span>
-              
-            <span *ngIf="ad.endDate && !isExpired(ad.endDate)"
-              class="expiry-badge expiry-badge-active">{{ad.endDate}}</span>
+            <span *ngIf="ad.endDate && isExpired(ad.endDate)" class="expiry-badge expiry-badge-expired">{{ad.endDate |
+              date: 'dd-MMM-yyyy'}}</span>
+
+            <span *ngIf="ad.endDate && !isExpired(ad.endDate)" class="expiry-badge expiry-badge-active">{{ad.endDate |
+              date: 'dd-MMM-yyyy'}}</span>
           </div>
         </div>
       </div>
@@ -136,44 +149,54 @@
     <!-- Cards (Mobile/Tablet) -->
     <section class="mobile-cards-section">
       <!-- Card -->
-      <article class="ad-card fade-in" *ngFor="let ad of advertisements; let rowIndex = index" [style.animation-delay]="rowIndex * 0.05 + 's'" [attr.data-ad-id]="ad.id" [attr.data-status]="ad.status">
+      <article class="ad-card fade-in" *ngFor="let ad of advertisements; let rowIndex = index"
+        [style.animation-delay]="rowIndex * 0.05 + 's'" [attr.data-ad-id]="ad.id" [attr.data-status]="ad.status"
+        (click)="openEditAdvertisement(ad)">
         <div class="card-header">
           <div class="card-header-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="tv"
-              class="card-icon">
-              <rect x="2" y="7" width="20" height="15" rx="2"></rect>
-              <polyline points="17 2 12 7 7 2"></polyline>
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+              <!-- Using image icon as default, check type if possible -->
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
             </svg>
             <h3 class="card-title">
-              {{ad.title}}
+              {{ad.name}}
             </h3>
           </div>
-          <span class="card-status" [class.card-status-inactive]="ad.status !== 'active'">{{ad.status | titlecase}}</span>
+          <span class="card-status" [class.card-status-inactive]="!ad.status">{{ad.status ? 'Active' :
+            'Inactive'}}</span>
         </div>
         <div class="card-description">{{ad.description}}</div>
         <div class="card-media">
-          <img [src]="ad.mediaUrl" alt="Advertisement Media" class="card-media-preview" />
+          <img *ngIf="!ad.documentDto?.attachments?.[0]?.contentType?.includes('video')"
+            [src]="ad.documentDto?.attachments?.[0]?.url" alt="Advertisement Media" class="w-12 h-full object-cover">
+          <div *ngIf="ad.documentDto?.attachments?.[0]?.contentType?.includes('video')"
+            class="w-12 h-full flex items-center justify-center bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-gray-400">
+              <path d="m22 8-6 4 6 4V8Z" />
+              <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+            </svg>
+          </div>
         </div>
         <div class="card-stats">
           <div class="stat-item">
-            <span class="stat-label">Area:</span> 
-            <span class="stat-value">{{ad.targetArea}}</span>
+            <span class="stat-label">Area:</span>
+            <span class="stat-value">{{ad.advertisementArea}}</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Impressions:</span> 
+          <!-- <div class="stat-item">
+            <span class="stat-label">Impressions:</span>
             <span class="stat-value">{{ad.impressions | number}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="card-footer">
           <div class="card-dates">
             <div class="date-item">
-              <span class="date-label">Start:</span> 
-              <span class="date-value">{{ad.startDate}}</span>
-            </div>
-            <div class="date-item">
-              <span class="date-label">End:</span> 
-              <span class="date-value">{{ad.endDate}}</span>
+              <span class="date-label">End:</span>
+              <span class="date-value">{{ad.endDate | date: 'dd-MMM-yyyy'}}</span>
             </div>
           </div>
           <button class="view-button">

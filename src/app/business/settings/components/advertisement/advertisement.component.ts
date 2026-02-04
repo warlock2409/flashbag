@@ -1,8 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageService, NzMessageModule } from 'ng-zorro-antd/message';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
-import { ResponseDate } from 'src/app/app.component';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { CommonModule, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,10 +9,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AdvertisementDialogComponent } from './advertisement-dialog/advertisement-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 
+
 @Component({
   selector: 'app-advertisement',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatPaginatorModule, DecimalPipe, TitleCasePipe,MatButtonModule],
+  imports: [CommonModule, FormsModule, MatPaginatorModule, DecimalPipe, TitleCasePipe, MatButtonModule, NzMessageModule],
   templateUrl: './advertisement.component.html',
   styleUrl: './advertisement.component.scss'
 })
@@ -23,7 +23,7 @@ export class AdvertisementComponent {
 
   private _snackBar = inject(NzMessageService);
   orgService = inject(OrganizationServiceService);
-  
+
   advertisements: any[] = [];
   totalElements = 0;
   pageSize = 10;
@@ -39,49 +39,25 @@ export class AdvertisementComponent {
   }
 
   getAdvertisements() {
-    // Mock data for now - in real implementation, this would call an API
-    this.advertisements = [
-      {
-        id: 1,
-        title: 'Summer Sale Campaign',
-        description: 'Special discounts for summer products',
-        mediaType: 'image',
-        mediaUrl: 'https://via.placeholder.com/300x200',
-        startDate: '2023-06-15',
-        endDate: '2023-08-30',
-        status: 'active',
-        targetArea: 'Homepage Banner',
-        clickThroughRate: '2.5%',
-        impressions: 12500
+    let isExpired: boolean | undefined;
+    if (this.activeFilter === 'active') {
+      isExpired = false;
+    } else if (this.activeFilter === 'inactive') {
+      isExpired = true;
+    }
+
+    this.orgService.getAdvertisementsByShop(this.pageIndex, this.pageSize, isExpired).subscribe({
+      next: (res: any) => {
+        if (res && res.data) {
+          this.advertisements = res.data.content;
+          this.totalElements = res.data.totalElements;
+        }
       },
-      {
-        id: 2,
-        title: 'New Product Launch',
-        description: 'Introducing our latest product line',
-        mediaType: 'video',
-        mediaUrl: 'https://via.placeholder.com/300x200/4a90e2/FFFFFF?text=Video',
-        startDate: '2023-07-01',
-        endDate: '2023-09-15',
-        status: 'active',
-        targetArea: 'Sidebar Promotion',
-        clickThroughRate: '1.8%',
-        impressions: 8700
-      },
-      {
-        id: 3,
-        title: 'End of Season Clearance',
-        description: 'Up to 70% off on winter collection',
-        mediaType: 'image',
-        mediaUrl: 'https://via.placeholder.com/300x200/d0021b/FFFFFF?text=Sale',
-        startDate: '2023-08-20',
-        endDate: '2023-09-30',
-        status: 'inactive',
-        targetArea: 'Homepage Banner',
-        clickThroughRate: '3.2%',
-        impressions: 15600
+      error: (err) => {
+        console.error('Error fetching advertisements', err);
+        // this._snackBar.error('Failed to load advertisements');
       }
-    ];
-    this.totalElements = this.advertisements.length;
+    });
   }
 
   onSearchChange(event: any) {
@@ -121,8 +97,23 @@ export class AdvertisementComponent {
   addAdvertisementManually(): void {
     const dialogRef = this.dialog.open(AdvertisementDialogComponent, {
       data: {},
-      minWidth: "500px",
-      maxWidth: "800px"
+      width: '800px',
+      maxWidth: '95vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Refresh advertisements list if needed
+        this.getAdvertisements();
+      }
+    });
+  }
+
+  openEditAdvertisement(ad: any): void {
+    const dialogRef = this.dialog.open(AdvertisementDialogComponent, {
+      data: ad,
+      width: '800px',
+      maxWidth: '95vw'
     });
 
     dialogRef.afterClosed().subscribe(result => {

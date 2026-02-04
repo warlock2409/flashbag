@@ -1,5 +1,5 @@
 <div class="settings-container responsive-padding-top">
-  
+
   <h1 class="responsive-title">Workspace settings</h1>
   <p class="subtitle responsive-subtitle">Manage settings for One Piece.</p>
 
@@ -38,7 +38,7 @@
           <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
         </div>
 
-        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]=" '/business/settings'+ card.routerLink">
+        <a *ngIf="!card.locked" class="view-link responsive-view-link" [routerLink]="['./', card.routerLink]">
           View <mat-icon>arrow_forward</mat-icon>
         </a>
 
@@ -60,7 +60,7 @@
           <div class="card-desc responsive-card-desc">{{ card.desc }}</div>
         </div>
 
-        <a *ngIf="!card.locked" class="view-link responsive-view-link" [href]="card.routerLink">
+        <a *ngIf="!card.locked" class="view-link responsive-view-link" [routerLink]="['./', card.routerLink]">
           View <mat-icon>arrow_forward</mat-icon>
         </a>
 

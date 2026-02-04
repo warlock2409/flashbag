@@ -26,6 +26,18 @@
 
 .overlay {
   color: white;
+  background-color: rgba(0, 0, 0, 0.8); // Added background color
+  position: absolute; // Ensure it overlays content
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   h1,
   h3 {
     color: white !important;
@@ -33,7 +45,7 @@
 
   @media (max-width: 768px) {
     padding: 15px;
-    margin-top: 10px;
+    // removed margin-top as it should be centered/overlay
 
     h1 {
       font-size: 1.5rem;
@@ -297,7 +309,7 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 2fr 1fr 1fr 0.5fr;
   padding: 12px 24px;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
@@ -310,7 +322,7 @@
   @media (max-width: 1200px) {
     padding: 10px 16px;
     // Adjust column widths for better alignment on smaller screens
-    grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 2fr 1fr 1fr 0.5fr;
   }
 
   // Ensure proper text alignment for each header cell
@@ -341,25 +353,30 @@
     &.expiry-header {
       justify-content: flex-end;
     }
+
+    &.actions-header {
+      justify-content: flex-end;
+    }
   }
 }
 
 .table-body {
   .table-row {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 2fr 1fr 1fr 0.5fr;
     padding: 16px 24px;
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.2s;
 
     &:hover {
       background-color: #f9fafb;
+      cursor: pointer;
     }
 
     @media (max-width: 1200px) {
       padding: 14px 16px;
       // Ensure row columns match header columns
-      grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 2fr 1fr 1fr 0.5fr;
     }
   }
 }
@@ -397,6 +414,10 @@
     justify-content: flex-end;
   }
 
+  &.actions-cell {
+    justify-content: flex-end;
+  }
+
   &.expiry-cell {
     justify-content: flex-end;
   }
@@ -425,12 +446,12 @@
   justify-content: flex-end;
   gap: 4px;
   font-size: 0.75rem;
-  
+
   .stat-label {
     color: #9ca3af;
     font-weight: 500;
   }
-  
+
   .stat-value {
     color: #1f2937;
     font-weight: 500;
@@ -541,6 +562,7 @@
 
   &:hover {
     background-color: #f9fafb;
+    cursor: pointer;
   }
 
   @media (max-width: 768px) {

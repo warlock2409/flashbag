@@ -7,6 +7,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-attendance-chart',
   imports: [FormsModule, CommonModule],
+  standalone: true,
   templateUrl: './attendance-chart.component.html',
   styleUrl: './attendance-chart.component.scss'
 })
@@ -42,12 +43,12 @@ export class AttendanceChartComponent {
 
     // Update labels
     this.chart.data.labels = filteredData.map(d => {
-    const hour = d.hour;
-    if (hour === 0) return '12AM';
-    if (hour < 12) return `${hour}AM`;
-    if (hour === 12) return '12PM';
-    return `${hour - 12}PM`;
-  });
+      const hour = d.hour;
+      if (hour === 0) return '12AM';
+      if (hour < 12) return `${hour}AM`;
+      if (hour === 12) return '12PM';
+      return `${hour - 12}PM`;
+    });
 
     // Update datasets
     this.chart.data.datasets[0].data = filteredData.map(d => d.todayMembers);
@@ -70,7 +71,7 @@ export class AttendanceChartComponent {
     secondaryGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
     secondaryGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
     console.log(this.attendanceData);
-    
+
     const data = {
       labels: this.attendanceData.map(d => {
         const hour = d.hour;

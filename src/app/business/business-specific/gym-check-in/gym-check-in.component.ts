@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, inject, ViewChild, OnDestroy, NgZone, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, ViewChild, OnDestroy, NgZone, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,10 +35,15 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
   qrCodeDataUrl: string | null = null;
 
   @ViewChild('qrCanvas') qrCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  constructor(private swalService: SweatAlertService, private ablyService: AblyService, private zone: NgZone) {
+  playableItems: any[] = [];
+  currentAdIndex: number = 0;
+  carouselTimer: any;
+
+  constructor(private swalService: SweatAlertService, private ablyService: AblyService, private zone: NgZone, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -47,6 +52,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ensureAblyInitialization().then(() => {
       this.setupAblySubscription();
     });
+    this.loadAdvertisements();
   }
 
   ngAfterViewInit() {
@@ -58,6 +64,9 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     console.log('GymCheckInComponent ngOnDestroy');
     this.cleanupSubscription();
+    if (this.carouselTimer) {
+      clearTimeout(this.carouselTimer);
+    }
   }
 
   private cleanupSubscription(): void {
@@ -303,7 +312,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  maskEmail(email:string) {
+  maskEmail(email: string) {
     if (!email) return '';
     const [name, domain] = email.split('@');
     if (name.length <= 2) return `**@${domain}`;
@@ -331,5 +340,79 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
+  }
+
+  loadAdvertisements() {
+    this.shopService.getAdvertisementsForArea('CHECKIN_AREA').subscribe({
+      next: (res: any) => {
+        if (res && res.data && res.data.content) {
+          this.playableItems = [];
+          res.data.content.forEach((ad: any) => {
+            // Check if ad is active (status is boolean true)
+            // And check if ad is not expired (endDate is in the future)
+            const isActive = ad.status === true;
+            const isNotExpired = ad.endDate ? new Date(ad.endDate) > new Date() : true;
+
+            if (isActive && isNotExpired && ad.documentDto && ad.documentDto.attachments) {
+              this.playableItems.push(...ad.documentDto.attachments);
+            }
+          });
+          if (this.playableItems.length > 0) {
+            this.playCarousel();
+          }
+        }
+      },
+      error: (err) => console.error('Error loading ads', err)
+    });
+  }
+
+  playCarousel() {
+    if (!this.playableItems || this.playableItems.length === 0) return;
+
+    if (this.carouselTimer) {
+      clearTimeout(this.carouselTimer);
+    }
+
+    const currentItem = this.playableItems[this.currentAdIndex];
+    // Check if it's a video based on contentType
+    const isVideo = currentItem.contentType && currentItem.contentType.startsWith('video');
+
+    if (!isVideo) {
+      // Image - set timer for 10 seconds
+      this.carouselTimer = setTimeout(() => {
+        this.nextAd();
+      }, 10000);
+    }
+    // If Video, the (ended) event in HTML will trigger nextAd()
+    // However, we need to ensure the video starts playing. 
+    // In Angular, when [src] changes, the video element updates. 
+    // We can rely on 'autoplay' attribute in HTML.
+
+    if (isVideo) {
+      // Force change detection to ensure the video element exists in the DOM
+      this.cdr.detectChanges();
+
+      // Use setTimeout to allow the browser to process the DOM update
+      setTimeout(() => {
+        if (this.videoPlayer && this.videoPlayer.nativeElement) {
+          const videoElement = this.videoPlayer.nativeElement;
+          videoElement.muted = true; // Ensure muted is set
+          videoElement.play().catch(error => {
+            console.log('Video autoplay failed:', error);
+            // If autoplay fails, we might want to skip to next ad or try again
+            // For now, let's just log it. 
+          });
+        }
+      });
+    }
+  }
+
+  nextAd() {
+    this.currentAdIndex = (this.currentAdIndex + 1) % this.playableItems.length;
+    this.playCarousel();
+  }
+
+  onVideoEnded() {
+    this.nextAd();
   }
 }

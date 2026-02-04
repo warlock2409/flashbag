@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
         <!-- Top Bar -->
         <header class="flex items-center justify-between gap-4">
-            <div class="flex items-start gap-3">
+            <div class="flex items-start gap-4">
                 <div
                     class="h-9 w-9 rounded-md bg-blue-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
                     <span class="text-sm font-semibold tracking-tight"
@@ -35,8 +35,9 @@
             </div>
             <div id="scan-status"
                 class="md:ml-auto inline-flex items-center gap-2 rounded-md bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-3 py-1.5 text-sm text-neutral-700">
-                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                Waiting for scan
+                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                <p class="!mb-0 text-medium text-neutral-800">Track workouts 💪 • See busy hours ⏰ •
+                    Earn rewards 🎁</p>
             </div>
         </section>
 
@@ -47,18 +48,17 @@
                 <div class="lg:col-span-5 border-r border-neutral-200">
                     <div class="p-6">
                         <div id="qr-panel">
-                            <div class="flex items-center justify-between gap-3">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                 <h2 class="text-lg font-semibold tracking-tight text-neutral-900 !mb-1"
                                     style="letter-spacing: -0.02em;">Scan to Check In</h2>
-                                <p class="!mb-0 text-medium text-neutral-800">Track workouts 💪 • See busy hours ⏰ •
-                                    Earn rewards 🎁</p>
                             </div>
-                            <div class="flex items-center justify-between gap-3">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                 <p class="!mb-0 text-medium text-neutral-800">Join the 9Myle clan</p>
-                                <p class="!mb-0 text-medium text-neutral-800">Play Store → search 9Myle → download</p>
+                                <p class="!mb-0 text-medium text-neutral-800">Play Store → Search 9Myle → Download</p>
                             </div>
                             <div class="mt-5 rounded-xl ring-1 ring-inset ring-neutral-200 bg-neutral-50">
-                                <p class="!mb-0 text-medium text-neutral-800 text-center">Open your 9Myle app and scan the code to check in.</p>
+                                <p class="!mb-0 text-medium text-neutral-800 text-center">Open your 9Myle app and scan
+                                    the code to check in.</p>
                                 <div
                                     class="bg-white rounded-lg ring-1 ring-inset ring-neutral-200 p-1 grid place-items-center">
                                     <canvas id="qr-canvas" class="w-full h-auto max-w-[350px] aspect-square"
@@ -83,12 +83,31 @@
                     <!-- Advertisement block -->
                     <div class="p-6 flex items-center h-full justify-center">
                         <div class="rounded-lg ring-1 ring-inset ring-neutral-200 overflow-hidden bg-red-50 w-full">
-                            <div class="flex items-center justify-center">
+
+                            <!-- Default Static Content (if no ads) -->
+                            <div *ngIf="playableItems.length === 0" class="flex items-center justify-center">
                                 <div class="aspect-[16/9] bg-white w-full max-w-2xl">
                                     <img src="https://livefit.com/cdn/shop/articles/top_ten_fitness_quotes_for_new_year_resolutions_goals_fitness_motivation.jpg?v=1577804322&width=1600"
                                         alt="Fitness motivation" class="w-full h-full object-cover">
                                 </div>
                             </div>
+
+                            <!-- Carousel (if ads exist) -->
+                            <div *ngIf="playableItems.length > 0"
+                                class="flex items-center justify-center w-full h-full">
+                                <div class="aspect-[16/9] bg-black w-full max-w-2xl relative">
+                                    <ng-container *ngIf="playableItems[currentAdIndex] as item">
+                                        <img *ngIf="!item.contentType?.startsWith('video')" [src]="item.url"
+                                            class="w-full h-full object-contain" alt="Advertisement">
+
+                                        <video *ngIf="item.contentType?.startsWith('video')" #videoPlayer
+                                            [src]="item.url" class="w-full h-full object-contain" autoplay
+                                            [muted]="true" playsinline (ended)="onVideoEnded()">
+                                        </video>
+                                    </ng-container>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

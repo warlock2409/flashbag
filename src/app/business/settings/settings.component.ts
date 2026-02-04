@@ -90,7 +90,7 @@ export class SettingsComponent {
         title: 'Instagram Management',
         desc: 'Every comment becomes a conversation',
         locked: true,
-        routerLink: '/insta-automate'
+        routerLink: 'insta-automate'
       },
       {
         title: 'Marketplace profile',
@@ -124,7 +124,7 @@ export class SettingsComponent {
         title: 'Advertising',
         desc: 'Share special offers and important updates over email and text message.',
         locked: false,
-        routerLink: '/advertising'
+        routerLink: 'advertising'
       },
       {
         title: 'Blast marketing',

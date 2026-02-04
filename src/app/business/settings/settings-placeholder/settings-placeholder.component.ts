@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
   `,
   styles: `
   .setting_placeholder{
-    margin-top:80px;
+    // margin-top:80px;
   }
   `
 })
