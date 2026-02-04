@@ -48,7 +48,10 @@ export class UploadMediaComponent {
   @Input() existingUploads: DocumentDto | null = null;
   @Input() type!: string;
   @Output() uploaded = new EventEmitter<DocumentDto>();
-  @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnU5NXFncHV2ZWlmYjV5eXVxeDNwZWd0emU5Ym5zNzBzcHFvaW41bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ctYt1iImGI71RwUIQO/giphy.gif";
+  //
+  // @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnU5NXFncHV2ZWlmYjV5eXVxeDNwZWd0emU5Ym5zNzBzcHFvaW41bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ctYt1iImGI71RwUIQO/giphy.gif";
+  @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXFpZWUzM2RqMXZ4YnduYzFvZ213emx0bnhocWUxeDM3d2M4ZG1qcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/A0kDTa8yhi19D4tP5C/giphy.gif";
+
 
   ngOnChanges(changes: SimpleChanges) {
 

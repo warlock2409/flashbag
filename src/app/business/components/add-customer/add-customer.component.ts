@@ -61,6 +61,7 @@ export class AddCustomerComponent implements OnInit {
       email: ['', [Validators.email]],
       phone: ['', [Validators.minLength(10)]],
       name: ['', Validators.required],
+      existingCustomerId: [''],
       countryCode: ['+91'] // Default country code
     };
 
@@ -164,7 +165,8 @@ export class AddCustomerComponent implements OnInit {
     return {
       firstName: formValue.name,
       email: formValue.email || undefined,  // optional if not provided
-      contactNumber: fullPhoneNumber || undefined   // optional if not provided
+      contactNumber: fullPhoneNumber || undefined,   // optional if not provided
+      id: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
     };
   }
 
@@ -178,7 +180,8 @@ export class AddCustomerComponent implements OnInit {
     const customer: Customer = {
       firstName: formValue.name,
       email: formValue.email || undefined,
-      contactNumber: fullPhoneNumber || undefined
+      contactNumber: fullPhoneNumber || undefined,
+      id: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
     };
 
     // If we have a document uploaded, we would typically associate it here
@@ -270,4 +273,4 @@ export class AddCustomerComponent implements OnInit {
       }
     });
   }
-}
+} 

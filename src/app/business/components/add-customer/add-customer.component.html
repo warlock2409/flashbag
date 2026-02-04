@@ -16,6 +16,14 @@
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
                 </div>
                 
+                <!-- Existing Customer ID -->
+                <div class="form-field">
+                    <label class="block mb-2 text-sm font-medium">Existing Customer ID</label>
+                    <input type="text" autocomplete="off" formControlName="existingCustomerId"
+                        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" 
+                        placeholder="Enter existing customer ID (if applicable)" />
+                </div>
+                
                 <!-- Membership Dropdown - Placed parallel to name in export mode -->
                 <div class="form-field" *ngIf="isExportCustomerMode">
                     <label class="block mb-2 text-sm font-medium">Membership</label>

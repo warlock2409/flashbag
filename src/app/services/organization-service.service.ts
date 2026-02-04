@@ -241,6 +241,13 @@ export class OrganizationServiceService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
+  getCustomerByOrgAndShopAndId(customerId: number) {
+    const orgCode = localStorage.getItem("orgCode");
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/users/organization/${orgCode}/shop/${shopCode}/customer/${customerId}`;
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
   // Gym 
   createExercise(exercise: any) {
     let orgCode = localStorage.getItem("orgCode");

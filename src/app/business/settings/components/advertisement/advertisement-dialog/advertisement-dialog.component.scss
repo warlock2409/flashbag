@@ -1,0 +1,13 @@
+.form-field {
+  width: 100%;
+}
+
+.button-container {
+  padding: 16px;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    border-radius: 8px;
+  }
+}

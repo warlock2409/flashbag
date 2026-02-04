@@ -19,7 +19,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HomeComponent implements OnDestroy {
 
-  private subscription!: Subscription;
+  private subscription?: Subscription;
   timeZone = 'Asia/Kolkata';
   dialog = inject(MatDialog);
   dashboardService = inject(DashboardService);
@@ -42,6 +42,12 @@ export class HomeComponent implements OnDestroy {
 
   async ngOnInit() {
     console.log('HomeComponent ngOnInit');
+    
+    // Clean up any existing subscription to prevent duplicates
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    
     await this.initialize();
     this.subscription = this.ablyService.onMessage('home').subscribe(msg => {
       console.log('Home received:', msg.data);
@@ -51,7 +57,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
+    if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
   }

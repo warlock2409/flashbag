@@ -121,6 +121,12 @@ export class SettingsComponent {
     ],
     marketing: [
       {
+        title: 'Advertising',
+        desc: 'Share special offers and important updates over email and text message.',
+        locked: false,
+        routerLink: '/advertising'
+      },
+      {
         title: 'Blast marketing',
         desc: 'Share special offers and important updates over email and text message.',
         locked: true,

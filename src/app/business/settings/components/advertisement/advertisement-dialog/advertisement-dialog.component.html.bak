@@ -1,0 +1,59 @@
+<h2 mat-dialog-title class="bg-white" style="margin: 0;">Create Advertisement</h2>
+
+<mat-dialog-content class="mat-typography bg-white">
+    <form class="p-4">
+        <div class="grid grid-cols-1 space-y-4">
+
+            <!-- Name Field -->
+            <div class="form-field">
+                <label class="block mb-2 text-sm font-medium">Advertisement Name</label>
+                <input type="text" [(ngModel)]="adName" name="adName"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"
+                    placeholder="Enter advertisement name" />
+            </div>
+
+            <!-- End Date -->
+            <div class="form-field">
+                <label class="block mb-2 text-sm font-medium">End Date</label>
+                <input type="date" [(ngModel)]="endDate" name="endDate"
+                    class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5" />
+            </div>
+
+            <!-- Target Area Dropdown -->
+            <div class="form-field">
+                <label class="block mb-2 text-sm font-medium">Target Area</label>
+                <mat-select [(ngModel)]="targetArea" name="targetArea" placeholder="Select Target Area" class="w-full">
+                    <mat-option *ngFor="let area of targetAreas" [value]="area.id">
+                        {{ area.name }}
+                    </mat-option>
+                </mat-select>
+            </div>
+
+            <!-- Status Toggle -->
+            <div class="form-field mb-4">
+                <div class="flex items-center justify-between">
+                    <label class="block text-sm font-medium">Status</label>
+                    <mat-slide-toggle [(ngModel)]="isActive" name="isActive" color="primary">
+                        {{ isActive ? 'On' : 'Off' }}
+                    </mat-slide-toggle>
+                </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-field">
+                <label class="block mb-2 text-sm font-medium">Advertisement Image</label>
+                <app-upload-media (uploaded)="onMediaUploaded($event)" [existingUploads]="null" [type]="'BUSINESS'"
+                    [multiple]="false">
+                </app-upload-media>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="bg-white button-container">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-stroked-button (click)="submitForm()" [disabled]="!adName || !targetArea || !endDate || !imageFile"
+        style="background-color: #a684ff; color: white;">
+        Create Advertisement
+    </button>
+</mat-dialog-actions>
