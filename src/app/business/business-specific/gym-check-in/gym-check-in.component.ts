@@ -248,7 +248,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('Customer data received:', customerRes);
 
         // Check if the response contains a list of customers
-        if (Array.isArray(customerRes.data) && customerRes.data.length > 1) {
+        if (Array.isArray(customerRes.data) && customerRes.data.length > 0) {
           // Multiple customers returned - show selection dialog
           this.showCustomerSelectionDialog(customerRes.data);
         } else {

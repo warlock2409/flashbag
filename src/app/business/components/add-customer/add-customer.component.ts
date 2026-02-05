@@ -45,7 +45,7 @@ export class AddCustomerComponent implements OnInit {
     if (this.data && this.data.mode === 'export') {
       this.isExportCustomerMode = true;
     }
-    
+
     // Initialize form with conditional fields based on mode
     this.initializeForm();
   }
@@ -110,7 +110,7 @@ export class AddCustomerComponent implements OnInit {
 
   submitAccountForm() {
     if (this.customerForm.invalid) return;
-    
+
     if (this.isExportCustomerMode) {
       this.submitExportCustomerForm();
     } else {
@@ -123,8 +123,8 @@ export class AddCustomerComponent implements OnInit {
 
     this.orgService.addCustomerToOrganization(newCustomer).subscribe({
       next: (res: any) => {
-        console.log(res.data,"addCustomerToOrganization");
-        
+        console.log(res.data, "addCustomerToOrganization");
+
         this._snackBar.success('Customer added succesfully');
         this.customerForm.reset();
         this.dialogRef.close(true);
@@ -142,12 +142,12 @@ export class AddCustomerComponent implements OnInit {
       next: (res: any) => {
         console.log(res.data, "addCustomerToOrganization");
         const customerId = res.data.id;
-        
+
         this._snackBar.success('Customer added successfully');
-        
+
         // Step 2: Create invoice for membership
         this.createMembershipInvoice(customerId);
-      }, 
+      },
       error: (err) => {
         this._snackBar.error(err.error.message);
         console.error('Error adding customer:', err);
@@ -158,8 +158,8 @@ export class AddCustomerComponent implements OnInit {
   getCustomer(): Customer {
     const formValue = this.customerForm.value;
     // Merge country code with phone number
-    const fullPhoneNumber = formValue.countryCode && formValue.phone 
-      ? `${formValue.countryCode}${formValue.phone}` 
+    const fullPhoneNumber = formValue.countryCode && formValue.phone
+      ? `${formValue.countryCode}${formValue.phone}`
       : formValue.phone;
 
     return {
@@ -173,21 +173,21 @@ export class AddCustomerComponent implements OnInit {
   getCustomerWithDocument(): Customer {
     const formValue = this.customerForm.value;
     // Merge country code with phone number
-    const fullPhoneNumber = formValue.countryCode && formValue.phone 
-      ? `${formValue.countryCode}${formValue.phone}` 
+    const fullPhoneNumber = formValue.countryCode && formValue.phone
+      ? `${formValue.countryCode}${formValue.phone}`
       : formValue.phone;
-      
+
     const customer: Customer = {
       firstName: formValue.name,
       email: formValue.email || undefined,
       contactNumber: fullPhoneNumber || undefined,
-      id: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
+      existingCustomerId: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
     };
 
     // If we have a document uploaded, we would typically associate it here
     // However, the Customer model doesn't seem to have a document field
     // The document ID would likely be associated during the invoice creation
-    
+
     return customer;
   }
 
@@ -225,9 +225,9 @@ export class AddCustomerComponent implements OnInit {
       next: (res: ServiceResponse<any>) => {
         console.log(res.data, "createInvoice");
         this._snackBar.success('Membership invoice created');
-        
+
         const invoiceId = res.data.id;
-        
+
         // Step 3: Issue invoice (set status to ISSUED)
         this.issueInvoice(invoiceId);
       },
@@ -263,7 +263,7 @@ export class AddCustomerComponent implements OnInit {
       next: (res: ServiceResponse<any>) => {
         console.log(res.data, "recordPayment");
         this._snackBar.success('Import Completed');
-        
+
         // All steps completed
         this.dialogRef.close(true);
       },
