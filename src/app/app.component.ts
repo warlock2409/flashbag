@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { ThemeService } from './services/theme.service';
 import { BookingPanelComponent } from './components/shared/booking-panel/booking-panel.component';
 import { OrderPanelComponent } from './components/shared/order-panel/order-panel.component';
@@ -38,7 +37,6 @@ const fbLoginCallback = (response: any) => {
   standalone: true,
   imports: [
     RouterModule,
-    NavbarComponent,
     BookingPanelComponent,
     OrderPanelComponent,
     ProfilePanelComponent,

@@ -251,6 +251,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         if (Array.isArray(customerRes.data) && customerRes.data.length > 0) {
           // Multiple customers returned - show selection dialog
           this.showCustomerSelectionDialog(customerRes.data);
+          
         } else {
           // Single customer returned - proceed with check-in
           this.swalService.error('We couldn’t find the customer ID. Please check with the trainer.');
@@ -266,6 +267,8 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+  
 
   tempCustomers: any[] = [];
 
@@ -284,10 +287,28 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       customerListHtml += `
         <div class="customer-item" style="padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background-color: #f9f9f9; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" 
              onclick="selectCustomer(${index})">
-          <strong style="color: #333;">${name}</strong>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <strong style="color: #333;">${name}</strong>
+
+            <button
+               type="button"
+               tabindex="-1"
+              style="
+                background-color: #d4f8d4;
+                color: #2e7d32;
+                border: 1px solid #a5d6a7;
+                border-radius: 4px;
+                padding: 6px 12px;
+                cursor: pointer;
+                font-weight: 500;
+              "
+            >
+              Select
+            </button>
+        </div>
           <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
             ${customer.email ? `<div>Email: ${this.maskEmail(customer.email)}</div>` : ''}
-             ${customer.contactNumber ? `<div>Phone: ${this.maskPhone(customer.contactNumber)}</div>` : ''}
+            ${customer.contactNumber ? `<div>Phone: ${this.maskPhone(customer.contactNumber)}</div>` : ''}
           </div>
         </div>
       `;
@@ -308,7 +329,9 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       html: customerListHtml,
       showCancelButton: true,
       showConfirmButton: false,
-      width: '600px'
+      width: '600px',
+      timer: 30000,
+      timerProgressBar: true,
     });
   }
 

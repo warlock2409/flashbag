@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
 import { UploadxModule } from 'node_modules/ngx-uploadx/public-api';
 import * as Sentry from "@sentry/angular";
-import { BrowserTracing } from "@sentry/tracing";
+import { RouterModule } from '@angular/router';
 
 Sentry.init({
   dsn: "https://297945be24914a48b3bb87c331d2fa65@app.glitchtip.com/13128",

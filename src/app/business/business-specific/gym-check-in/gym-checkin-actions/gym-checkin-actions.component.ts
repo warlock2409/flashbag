@@ -12,6 +12,7 @@ import confetti from 'canvas-confetti';
   styleUrl: './gym-checkin-actions.component.scss'
 })
 export class GymCheckinActionsComponent {
+  workoutDuration: string = '0h 0m 0s';
   avatar: string = 'BI';
   memberName: string = 'Gym Member';
   today: string = new Date().toDateString();
@@ -47,6 +48,7 @@ export class GymCheckinActionsComponent {
   constructor(private dialogRef: MatDialogRef<GymCheckinActionsComponent>) {
     // Map the incoming data to component properties
     this.attendance = this.data.weeklyAttendance;
+    this.getTodayWorkDuration(this.data.weeklyAttendance);
 
     // Set member name from customer data
     if (this.data.customerDTO) {
@@ -182,6 +184,26 @@ export class GymCheckinActionsComponent {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  getTodayWorkDuration(data: any) {
+    const today = new Date().toLocaleDateString('en-CA');
+    const entry = data[today];
+
+    if (!entry?.checkInAt || !entry?.checkOutAt) return null;
+
+    const checkIn = new Date(entry.checkInAt);
+    const checkOut = new Date(entry.checkOutAt);
+
+    const diffMs = checkOut.getTime() - checkIn.getTime();
+
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+
+    console.log(`${diffHours}h ${diffMinutes % 60}m ${diffSeconds % 60}s`);
+    this.workoutDuration = `${diffHours}h ${diffMinutes % 60}m ${diffSeconds % 60}s`;
+    return this.workoutDuration;
   }
 
   firePoppers() {

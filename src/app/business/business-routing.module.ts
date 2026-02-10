@@ -22,7 +22,7 @@ import { ExercisePlanComponent } from './settings/components/business-setup/setu
 import { InstagramAutomationComponent } from './settings/components/online-presence/instagram-automation/instagram-automation.component';
 import { FlashVibeComponent } from './settings/components/online-presence/instagram-automation/components/flash-vibe/flash-vibe.component';
 import { ProductDetailsComponent } from './settings/components/business-setup/setup-components/product-details/product-details.component';
-// import { AdvertisementComponent } from './settings/components/advertisement/advertisement.component';
+import { AdvertisementComponent } from './settings/components/advertisement/advertisement.component';
 
 const routes: Routes = [
   {
@@ -82,8 +82,8 @@ const routes: Routes = [
             ]
           },
           {
-            path: "advertising",
-            loadComponent: () => import('./settings/components/advertisement/advertisement.component').then(m => m.AdvertisementComponent),
+            path: "advertisement",
+            component: AdvertisementComponent
           },
           {
             path: 'business-setup',

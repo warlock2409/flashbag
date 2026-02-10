@@ -83,7 +83,8 @@ export class OrganizationServiceService {
 
   addCustomerToOrganization(newCustomer: Customer) {
     let orgCode = localStorage.getItem("orgCode");
-    let url = "http://localhost:8080/users/organization/{orgCode}/addCustomer".replace("{orgCode}", orgCode!);
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/users/organization/{orgCode}/addCustomer/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode!);
     return this.Http.post<ServiceResponse<any>>(url, newCustomer);
   }
 
