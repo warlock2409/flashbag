@@ -12,6 +12,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ShopModel } from 'src/app/models/shop.model';
 import { ResponseDate } from 'src/app/app.component';
 import { MembershipBenefit, OrganizationMembershipPlan, OrganizationServiceModel } from 'src/app/models/organization';
+import { log } from 'console';
 
 // Interface for exercise day
 export interface Todo {
@@ -47,7 +48,7 @@ export class MembershipActionsComponent {
 
   // Simple UUID v4 generator
   private generateUUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       const r = Math.random() * 16 | 0;
       const v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
@@ -61,44 +62,54 @@ export class MembershipActionsComponent {
 
   // Body filters copied from exercise-plan.component.ts
   modelFilters: BodyFilter[] = [
-  { key: "", name: "All", icon: "directions_walk" },
+    { key: "", name: "All", icon: "directions_walk" },
 
-  // Upper back / neck
-  { key: "traps", name: "Traps", icon: "change_history" },
-  { key: "traps_middle", name: "Middle Traps", icon: "height" },
+    // Upper back / neck
+    { key: "traps", name: "Traps", icon: "change_history" },
+    { key: "traps_middle", name: "Middle Traps", icon: "height" },
 
-  // Shoulders
-  { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
-  { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
+    // Shoulders
+    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
 
-  // Chest & back
-  { key: "chest", name: "Chest", icon: "sports_mma" },
-  { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    // Chest & back
+    { key: "chest", name: "Chest", icon: "sports_mma" },
+    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
 
-  // Arms
-  { key: "biceps", name: "Biceps", icon: "arm_flex" },
-  { key: "forearms", name: "Forearms", icon: "back_hand" },
-  { key: "hands", name: "Hands", icon: "pan_tool" },
+    // Arms
+    { key: "biceps", name: "Biceps", icon: "arm_flex" },
+    { key: "forearms", name: "Forearms", icon: "back_hand" },
+    { key: "hands", name: "Hands", icon: "pan_tool" },
 
-  // Core
-  { key: "abdominals", name: "Abs", icon: "self_improvement" },
-  { key: "obliques", name: "Obliques", icon: "accessibility_new" },
-  { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
+    // Core
+    { key: "abdominals", name: "Abs", icon: "self_improvement" },
+    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
+    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
 
-  // Legs
-  { key: "quads", name: "Quads", icon: "fitness_center" },
-  { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
-  { key: "calves", name: "Calves", icon: "directions_walk" },
+    // Legs
+    { key: "quads", name: "Quads", icon: "fitness_center" },
+    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+    { key: "calves", name: "Calves", icon: "directions_walk" },
 
-  // Full body
-  { key: "body", name: "Full Body", icon: "accessibility" },
-];
+    // Full body
+    { key: "body", name: "Full Body", icon: "accessibility" },
+  ];
+
+  durationOptions = [
+    { value: 7, unit: 'DAY', label: '7 Days' },
+    { value: 1, unit: 'MONTH', label: '1 Month' },
+    { value: 3, unit: 'MONTH', label: '3 Months' },
+    { value: 4, unit: 'MONTH', label: '4 Months' },
+    { value: 6, unit: 'MONTH', label: '6 Months' },
+    { value: 8, unit: 'MONTH', label: '8 Months' },
+    { value: 9, unit: 'MONTH', label: '9 Months' },
+    { value: 12, unit: 'MONTH', label: '12 Months' }
+  ];
 
 
   // temp 
   benefitType = 'DURATION_ACCESS';
-  days = '0';
-
+  selectedDuration: any;
   // Exercise mapping data
   exerciseDays: Todo[] = [];
 
@@ -130,18 +141,43 @@ export class MembershipActionsComponent {
 
       let durationBenefit = existingPlan.benefits
         .filter(benefit => benefit.benefitType === 'DURATION_ACCESS')
-        .reduce((max, current) =>
-          current.accessDurationInDays! > (max?.accessDurationInDays ?? 0) ? current : max,
-          null as any
-        );
+        .reduce((max, current) => {
+          const currentDays = this.toComparableDays(current);
+          const maxDays = max ? this.toComparableDays(max) : 0;
+          return currentDays > maxDays ? current : max;
+        }, null as any);
 
       if (durationBenefit) {
-        this.days = durationBenefit.accessDurationInDays ? durationBenefit.accessDurationInDays?.toString() : "0";
+        this.selectedDuration = this.durationOptions.find(
+          opt =>
+            opt.value === durationBenefit.durationValue &&
+            opt.unit === durationBenefit.durationUnit
+        );
       }
+      console.log('Selected Duration:', this.selectedDuration);
 
       this.selectedServices = existingPlan.benefits;
     }
   }
+
+  private toComparableDays(benefit: any): number {
+    if (!benefit) return 0;
+
+    switch (benefit.durationUnit) {
+      case 'DAY':
+        return benefit.durationValue;
+
+      case 'MONTH':
+        return benefit.durationValue * 30;
+
+      case 'YEAR':
+        return benefit.durationValue * 365;
+
+      default:
+        return 0;
+    }
+  }
+
 
   constructor(private dialog: MatDialog, private orgService: OrganizationServiceService) {
 
@@ -200,7 +236,7 @@ export class MembershipActionsComponent {
     this.orgService.getTodos(id, 'MEMBERSHIP').subscribe({
       next: (response: ResponseDate) => {
         console.log('API response:', response);
-        
+
         // Map the response data to exerciseDays format using only title and including IDs when they exist
         this.exerciseDays = response.data.map((day: any) => {
           return {
@@ -215,7 +251,7 @@ export class MembershipActionsComponent {
             })
           };
         });
-        
+
         console.log('Mapped exerciseDays:', this.exerciseDays);
       },
       error: (error: any) => {
@@ -313,8 +349,8 @@ export class MembershipActionsComponent {
     // Preserve selected exercises if they exist
     const existingExercises = this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex].selectedExercises || [];
     // Update the body part object
-    this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = { 
-      title: selectedTitle, 
+    this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = {
+      title: selectedTitle,
       selectedExercises: existingExercises
     };
   }
@@ -322,20 +358,20 @@ export class MembershipActionsComponent {
   // Open exercise selection dialog for a body part
   openExerciseSelectionDialog(dayIndex: number, bodyPartIndex: number) {
     const bodyPart = this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex];
-    
+
     if (!bodyPart.title || bodyPart.title === 'Select Body Part') {
       return;
     }
-    
+
     const dialogRef = this.dialog.open(ExerciseSelectionDialogComponent, {
       width: '600px',
-      data: { 
+      data: {
         category: bodyPart.title,
         mode: this.membershipPlan.mode,
         selectedExercises: bodyPart.selectedExercises || []
       }
     });
-    
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Update the selected exercises for this body part
@@ -360,7 +396,8 @@ export class MembershipActionsComponent {
   createMembership() {
     this.membershipPlan.benefits = this.selectedServices.map(service => ({
       benefitType: this.benefitType,     // from variable
-      days: Number(this.days),                 // from variable
+      durationValue: this.selectedDuration?.value,
+      durationUnit: this.selectedDuration?.unit, // from variable
       serviceKey: service.serviceKey!     // from selected service
     }));
 
@@ -426,7 +463,8 @@ export class MembershipActionsComponent {
   updateMembership() {
     this.membershipPlan.benefits = this.selectedServices.map(service => ({
       benefitType: this.benefitType,     // from variable
-      days: Number(this.days),                 // from variable
+      durationValue: this.selectedDuration?.value,
+      durationUnit: this.selectedDuration?.unit,                 // from variable
       serviceKey: service.serviceKey!     // from selected service
     }));
 
