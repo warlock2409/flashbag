@@ -3,17 +3,17 @@
         <!-- Top Bar -->
         <header class="flex items-center justify-between gap-4">
             <div class="flex items-start gap-4">
-                <div
-                    class="h-9 w-9 rounded-md bg-blue-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
-                    <span class="text-sm font-semibold tracking-tight"
-                        style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">CI</span>
+                <div class="h-9 w-9 rounded-md grid place-items-center mt-1">
+                    <div class="h-10 w-12 rounded-xl text-white flex items-center justify-center">
+                        <img src="../../../../assets/png/logo.png" alt="" srcset="" class="animate-spin">
+                    </div>
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900"
                         style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;margin: 0;">
                         Check In
                     </h1>
-                    <p class="text-xs text-neutral-600">
+                    <p class="text-sm text-neutral-800">
                         Scan the QR to mark today's attendance and view your progress
                     </p>
                 </div>
@@ -28,51 +28,92 @@
         </header>
 
         <!-- Controls (Session status) -->
-        <section class="mt-3 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-            <div class="flex gap-2">
-                <input [(ngModel)]="typedText" type="text" placeholder="Enter check-in code" style="font-size: 1.4rem;"
-                    class="placeholder-gray-500 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
-            </div>
+
+        <section class="flex justify-center items-center mb-6 mt-4">
             <div id="scan-status"
-                class="md:ml-auto inline-flex items-center gap-2 rounded-md bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-3 py-1.5 text-sm text-neutral-700">
-                <span class="inline-flex h-1.5 w-1.5 rounded-full bg-green-500"></span>
-                <p class="!mb-0 text-medium text-neutral-800">Track workouts 💪 • See busy hours ⏰ •
-                    Earn rewards 🎁</p>
+                class="inline-flex items-center gap-2 rounded-md bg-violet-200 ring-1 ring-inset ring-neutral-300 px-4 py-2 text-sm text-neutral-700">
+
+                <p class="!mb-0 text-lg text-neutral-800">
+                    <i class="fa-brands fa-google-play mr-1"></i> Download 9Myle
+                    <span class="inline-flex h-2 w-2 rounded-full bg-green-500 ml-2"></span>
+                    Track workouts 💪 • See busy hours ⏰ •
+                    Earn rewards 🎁
+                </p>
             </div>
         </section>
 
+        <div class="w-1/4 md:hidden sm:hidden lg:block">
+            <input [(ngModel)]="typedText" type="text" placeholder="Enter check-in code" style="font-size: 1.4rem;"
+                class="placeholder-gray-500 w-full rounded-md border border-gray-500 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
+        </div>
+
         <!-- Main Content - Unified for all devices -->
-        <section class="mt-4 rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden">
+        <section class="mt-4 rounded-xl bg-white ring-3 ring-inset ring-neutral-200 overflow-hidden">
+
             <div class="grid grid-cols-1 lg:grid-cols-12">
                 <!-- Left: QR - Adjust column span for tablet -->
-                <div class="lg:col-span-5 border-r border-neutral-200">
-                    <div class="p-6">
-                        <div id="qr-panel">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                                <h2 class="text-lg font-semibold tracking-tight text-neutral-900 !mb-1"
-                                    style="letter-spacing: -0.02em;">Scan to Check In</h2>
-                            </div>
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                                <p class="!mb-0 text-medium text-neutral-800">Join the 9Myle clan</p>
-                                <p class="!mb-0 text-medium text-neutral-800">Play Store → Search 9Myle → Download</p>
-                            </div>
-                            <div class="mt-5 rounded-xl ring-1 ring-inset ring-neutral-200 bg-neutral-50">
-                                <p class="!mb-0 text-medium text-neutral-800 text-center">Open your 9Myle app and scan
-                                    the code to check in.</p>
+                <div class="lg:col-span-5 md:col-span-12 border-r border-neutral-200">
+                    <div class="flex">
+                        <div class="p-6">
+                            <div id="qr-panel">
                                 <div
-                                    class="bg-white rounded-lg ring-1 ring-inset ring-neutral-200 p-1 grid place-items-center">
-                                    <canvas id="qr-canvas" class="w-full h-auto max-w-[350px] aspect-square"
-                                        #qrCanvas></canvas>
+                                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                    <h2 class="!text-2xl font-semibold tracking-tight text-neutral-900 !mb-1"
+                                        style="letter-spacing: -0.02em;"><i class="fa-solid fa-qrcode mr-2"></i> Scan to Check In</h2>
+                                </div>
+
+                                <div class="mt-6 rounded-xl ring-1 ring-inset ring-neutral-200 bg-neutral-50">
+                                    <p class="!mb-0 text-medium text-violet-800 text-center">Open your 9Myle app and
+                                        scan
+                                        the code to check-in.</p>
+                                    <div
+                                        class="bg-white rounded-lg ring-1 ring-inset ring-neutral-200 p-1 grid place-items-center">
+                                        <canvas id="qr-canvas" class="w-full h-auto max-w-[350px] aspect-square"
+                                            #qrCanvas></canvas>
+                                    </div>
+                                </div>
+
+                                <!-- Checked in panel - hidden by default, shown when checked in -->
+                                <div id="checked-in-panel" class="hidden mt-4">
+                                    <div class="flex items-center gap-2 text-emerald-700 text-sm font-medium">
+                                        <svg data-lucide="check-circle-2" class="w-4 h-4"></svg>
+                                        Attendance confirmed
+                                    </div>
+                                    <p class="mt-1 text-sm text-neutral-600" id="checked-in-time">—</p>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Checked in panel - hidden by default, shown when checked in -->
-                            <div id="checked-in-panel" class="hidden mt-4">
-                                <div class="flex items-center gap-2 text-emerald-700 text-sm font-medium">
-                                    <svg data-lucide="check-circle-2" class="w-4 h-4"></svg>
-                                    Attendance confirmed
+                        <div class="p-6 w-1/2 items-center lg:hidden md:block">
+                            <div class="w-full max-w-sm">
+                                <!-- Display -->
+                                <input [(ngModel)]="typedText" readonly
+                                    class="w-full text-center !text-lg font-semibold border-violet-500 border rounded-lg py-3 !mb-3"
+                                    placeholder="Enter Check-In Code">
+
+                                <!-- Keypad -->
+                                <div class="grid grid-cols-3 gap-4">
+
+                                    <button *ngFor="let n of [1,2,3,4,5,6,7,8,9]" (click)="addDigit(n)"
+                                        class="py-5 text-xl bg-violet-200 rounded-lg hover:bg-purple-200 !text-lg font-bold">
+                                        {{n}}
+                                    </button>
+
+                                    <button (click)="typedText = typedText.slice(0,-1)"
+                                        class="py-5 text-xl bg-red-200 rounded-lg hover:bg-red-300 !text-lg font-bold">
+                                        <i class="fa-solid fa-delete-left"></i>
+                                    </button>
+
+                                    <button class="py-5 text-xl bg-violet-200 rounded-lg !text-lg font-bold"
+                                        (click)="addDigit(0)">
+                                        0
+                                    </button>
+
+                                    <button (click)="submitCode()"
+                                        class="py-5 text-xl bg-green-300 !text-black rounded-lg !text-lg font-bold">
+                                        <i class="fa-solid fa-play"></i>
+                                    </button>
                                 </div>
-                                <p class="mt-1 text-sm text-neutral-600" id="checked-in-time">—</p>
                             </div>
                         </div>
                     </div>
@@ -82,7 +123,7 @@
                 <div class="lg:col-span-7">
                     <!-- Advertisement block -->
                     <div class="p-6 flex items-center h-full justify-center">
-                        <div class="rounded-lg ring-1 ring-inset ring-neutral-200 overflow-hidden bg-red-50 w-full">
+                        <div class="rounded-lg ring-1 ring-inset ring-neutral-200 overflow-hidden bg-gray-50 w-full">
 
                             <!-- Default Static Content (if no ads) -->
                             <div *ngIf="playableItems.length === 0" class="flex items-center justify-center">
@@ -114,43 +155,9 @@
             </div>
         </section>
 
-        <!-- Mobile-only section - simplified for tablet -->
-        <section class="mt-6 md:hidden">
-            <!-- QR Card -->
-            <article class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4">
-                <div id="qr-panel-m">
-                    <div class="flex items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold tracking-tight text-neutral-900"
-                            style="letter-spacing: -0.02em;">Scan to Check In</h3>
-                        <div
-                            class="inline-flex items-center gap-1.5 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-2 py-0.5 text-xs text-neutral-700">
-                            <svg data-lucide="clock" class="w-3.5 h-3.5"></svg>
-                            <span id="expiry-label-m">Expires in —</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 rounded-lg ring-1 ring-inset ring-neutral-200 bg-neutral-50 p-3">
-                        <div class="bg-white rounded-md ring-1 ring-inset ring-neutral-200 p-3 grid place-items-center">
-                            <canvas id="qr-canvas-mobile" class="w-full h-auto max-w-[350px] aspect-square"
-                                #qrCanvas></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="checked-in-panel-m" class="hidden mt-4">
-                    <div class="flex items-center gap-2 text-emerald-700 text-sm font-medium">
-                        <svg data-lucide="check-circle-2" class="w-4 h-4"></svg>
-                        Attendance confirmed
-                    </div>
-                    <p class="mt-1 text-sm text-neutral-600" id="checked-in-time-m">—</p>
-                </div>
-            </article>
-        </section>
-
-        <!-- Hidden: helper toast -->
-        <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden">
-            <div class="rounded-md bg-neutral-900 text-white text-sm px-3 py-2 shadow/50 shadow-black/50">
-                Copied link to clipboard
-            </div>
+        <div style="height: 7rem;">
+            <img class="w-full h-full object-contain" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?hl=hi" alt=""
+                srcset="">
         </div>
     </div>
 </div>

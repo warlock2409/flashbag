@@ -23,6 +23,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./gym-check-in.component.scss'] // Added SCSS file reference
 })
 export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
+  submitCode() {
+    this.submitCheckIn(this.typedText);
+    this.typedText = '';
+  }
 
   private subscription?: Subscription;
   private isSubscribed: boolean = false;
@@ -226,10 +230,19 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  addDigit(n: number) {
+    this.typedText += n.toString();
+  }
+
+  removeDigit() {
+    this.typedText = this.typedText.slice(0, -1);
+  }
+
   submitCheckIn(code: string) {
     // Restrict empty API calls - require at least 1 character
     if (!code || code.trim().length < 1) {
       console.log('Check-in code must be at least 1 character, skipping API call');
+      this.swalService.error('Check-in code must be at least 1 character');
       return;
     }
 
@@ -251,7 +264,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         if (Array.isArray(customerRes.data) && customerRes.data.length > 0) {
           // Multiple customers returned - show selection dialog
           this.showCustomerSelectionDialog(customerRes.data);
-          
+
         } else {
           // Single customer returned - proceed with check-in
           this.swalService.error('We couldn’t find the customer ID. Please check with the trainer.');
@@ -268,7 +281,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  
+
 
   tempCustomers: any[] = [];
 
