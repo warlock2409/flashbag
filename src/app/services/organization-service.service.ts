@@ -317,4 +317,10 @@ export class OrganizationServiceService {
     return this.Http.put<ServiceResponse<any>>(url, advertisement);
   }
 
+  getCustomerProgress(customerId: number) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/membership/shop/${shopCode}/customer/${customerId}/progress`;
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
 }

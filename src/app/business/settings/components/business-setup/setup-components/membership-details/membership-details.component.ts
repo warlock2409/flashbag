@@ -160,7 +160,40 @@ export class MembershipDetailsComponent {
 
   setMembership(data: OrganizationMembershipPlan[]) {
     this.memberships = data;
-    this.memberships.forEach(membership => membership.industry = this.industries.find(industry => industry.id == membership.industryId)?.name);
+    this.memberships.forEach(membership => {
+      membership.industry = this.industries.find(industry => industry.id == membership.industryId)?.name;
+      // Calculate maximum duration for the membership
+      membership.maxDuration = this.calculateMaxDuration(membership.benefits);
+    });
+  }
+
+  calculateMaxDuration(benefits: any[]): { value: number; unit: string } | undefined {
+    if (!benefits || benefits.length === 0) {
+      return undefined;
+    }
+
+    // Filter benefits with duration information
+    const durationBenefits = benefits.filter((benefit: any) => 
+      benefit.durationValue && benefit.durationUnit && 
+      benefit.benefitType === 'DURATION_ACCESS'
+    );
+
+    if (durationBenefits.length === 0) {
+      return undefined;
+    }
+
+    // Find the benefit with the maximum duration value
+    let maxDurationBenefit = durationBenefits[0];
+    for (const benefit of durationBenefits) {
+      if (benefit.durationValue > maxDurationBenefit.durationValue) {
+        maxDurationBenefit = benefit;
+      }
+    }
+
+    return {
+      value: maxDurationBenefit.durationValue,
+      unit: maxDurationBenefit.durationUnit
+    };
   }
 
   getOrgMemberships() {

@@ -36,6 +36,7 @@
     "chart.js": "^4.5.0",
     "cropperjs": "^2.1.0",
     "google-one-tap": "^1.0.6",
+    "html-to-image": "^1.11.13",
     "leaflet": "^1.9.4",
     "lottie-web": "^5.13.0",
     "moment": "^2.30.1",

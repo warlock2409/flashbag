@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { AddCustomerComponent } from '../components/add-customer/add-customer.component';
+import { CustomersActionsComponent } from './customers-actions/customers-actions.component';
 import { ResponseDate } from 'src/app/app.component';
 import { UserDto } from 'src/app/services/auth.service';
 import { TimeZoneHelperService } from 'src/app/services/timeZoneHelper';
@@ -118,6 +119,21 @@ export class CustomersComponent {
       minWidth: "600px",  // Increased width for export mode
       maxWidth: "800px",  // Increased max width for export mode
       width: "70vw"       // Use viewport width for responsive sizing
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getCustomerByOrg();
+      }
+    });
+  }
+
+  openCustomerActions(customer: any): void {
+    const dialogRef = this.dialog.open(CustomersActionsComponent, {
+      data: { customer },
+      minWidth: "400px",
+      maxWidth: "800px",
+      width: "90vw"
     });
 
     dialogRef.afterClosed().subscribe(result => {

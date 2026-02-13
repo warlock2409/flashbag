@@ -81,13 +81,17 @@ export interface OrganizationMembershipPlan {
   mode?: 'Beginner' | 'Intermediate' | 'Advanced';
 
   industry?:string;
+  maxDuration?: { value: number; unit: string };
 }
 export interface MembershipBenefit {
+  id?: number;
+  active?: boolean;
   benefitType: string; // add more if needed
   serviceKey: string;
+  durationValue?: number;     // duration value (e.g., 4)
+  durationUnit?: string;     // duration unit (e.g., 'MONTH', 'DAY', 'YEAR')
   days?: number;             // only if benefitType = DURATION_ACCESS
   discountPercent?: number;  // only if benefitType = DISCOUNT
-
-  accessDurationInDays?:number
-  id?:number
+  accessDurationInDays?: number;
+  lifetime?: boolean;
 }

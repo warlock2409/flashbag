@@ -46,6 +46,10 @@
                             <span class="stat-label child_text">Price</span>
                             <div class="stat-value expiry-date">{{membership.basePrice | currency:'INR'}}</div>
                         </div>
+                        <div class="stat-item">
+                            <span class="stat-label child_text">Max Duration</span>
+                            <div class="stat-value expiry-date">{{membership.maxDuration ? membership.maxDuration.value + ' ' + membership.maxDuration.unit : 'N/A'}}</div>
+                        </div>
                     </div>
                     
                     <!-- Mobile view - simplified display -->
