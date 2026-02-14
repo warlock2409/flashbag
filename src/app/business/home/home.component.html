@@ -315,7 +315,7 @@
               <p class="text-white/60 text-sm hover:text-white/80 transition-colors">Weekly expiring</p>
             </div>
           </div>
-          <div class="h-40 mb-6 hover:scale-105 transition-transform">
+          <div class="min-h-40 mb-6 hover:scale-105 transition-transform">
             @for (expiringMembership of membershipSummary?.expiringMemberships; track $index) {
             <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-3">
               <div class="flex items-center justify-between">
@@ -324,7 +324,6 @@
                     <i class="fa-solid fa-user"></i>
                   </div>
                   <div>
-
                     <span
                       class="font-medium text-md hover:text-purple-300 transition-colors cursor-pointer">{{expiringMembership.planName}}
                       - </span>
@@ -371,6 +370,7 @@
             </div>
           </div>
         </div>
+
         <!-- Free session events -->
         <div
           class="glass-card rounded-3xl p-6  transition-all duration-500 hover:bg-white/8 hover:shadow-2xl hover:shadow-green-500/10">
@@ -418,11 +418,11 @@
                   </div>
                 </div>
               </div>
-
               }
             </div>
           </div>
         </div>
+
         <!-- Upcoming events -->
         <div class="lg:col-span-1">
           <div

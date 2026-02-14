@@ -85,12 +85,48 @@ export class AddCustomerComponent implements OnInit {
     this.orgService.getAllOrgMembership().subscribe({
       next: (res: ServiceResponse<any>) => {
         this.memberships = res.data;
+        console.log(this.memberships, "loadMemberships");
+        this.memberships = this.memberships.map(membership => {
+
+          const durationBenefits = membership.benefits
+            .filter((b: any) => b.benefitType === 'DURATION_ACCESS' && b.durationValue && b.durationUnit);
+
+          if (!durationBenefits.length) {
+            return { ...membership, durationLabel: null };
+          }
+
+          const longest = durationBenefits.reduce((max: any, item: any) => {
+            const currentDays = this.convertToDays(item.durationValue, item.durationUnit);
+            const maxDays = this.convertToDays(max.durationValue, max.durationUnit);
+            return currentDays > maxDays ? item : max;
+          });
+
+          const durationLabel = `${longest.durationValue}-${this.capitalize(longest.durationUnit || '')}`;
+
+          return { ...membership, durationLabel };
+        });
+
+        console.log(this.memberships, "updatedMemberships");
       },
       error: (err) => {
         console.error('Error loading memberships:', err);
         this._snackBar.error('Error loading memberships');
       }
     });
+  }
+
+  capitalize(unit: string): string {
+    return unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase();
+  }
+
+  convertToDays(value: number, unit: string): number {
+    switch (unit) {
+      case 'DAY': return value;
+      case 'WEEK': return value * 7;
+      case 'MONTH': return value * 30;   // approximate
+      case 'YEAR': return value * 365;   // approximate
+      default: return 0;
+    }
   }
 
   emailOrPhoneValidator(group: AbstractControl): ValidationErrors | null {

@@ -30,8 +30,8 @@
                     <mat-select formControlName="membershipId" placeholder="Select Membership" class="w-full">
                         <mat-option *ngFor="let membership of memberships" [value]="membership.id" [title]="membership.name">
                             <div class="membership-option">
-                                <span class="membership-price">₹{{ membership.basePrice }} - </span>
-                                <span class="membership-name"> {{ membership.name }}</span>
+                                <span class="membership-price">{{ membership.durationLabel }}- ₹{{ membership.basePrice }}</span>
+                                <span class="membership-name">- {{ membership.name }}</span>
                             </div>
                         </mat-option>
                     </mat-select>

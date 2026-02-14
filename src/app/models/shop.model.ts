@@ -67,6 +67,8 @@ export interface Item {
   description: string;
   basePrice: number;
   duration?: string;
+  durationLabel?: string;
+  type?: string;
   image: string;
   quantity?: number;
   startDate?: Date;

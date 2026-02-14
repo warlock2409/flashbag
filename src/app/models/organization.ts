@@ -79,7 +79,9 @@ export interface OrganizationMembershipPlan {
   benefits: MembershipBenefit[];
   shopIds: number[];
   mode?: 'Beginner' | 'Intermediate' | 'Advanced';
-
+  durationValue?: number;
+  durationUnit?: string;
+  durationLabel?: string | null;
   industry?:string;
   maxDuration?: { value: number; unit: string };
 }

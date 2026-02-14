@@ -173,8 +173,8 @@ export class MembershipDetailsComponent {
     }
 
     // Filter benefits with duration information
-    const durationBenefits = benefits.filter((benefit: any) => 
-      benefit.durationValue && benefit.durationUnit && 
+    const durationBenefits = benefits.filter((benefit: any) =>
+      benefit.durationValue && benefit.durationUnit &&
       benefit.benefitType === 'DURATION_ACCESS'
     );
 
@@ -195,6 +195,7 @@ export class MembershipDetailsComponent {
       unit: maxDurationBenefit.durationUnit
     };
   }
+
 
   getOrgMemberships() {
     this.isLoading = true;
@@ -240,7 +241,7 @@ export class MembershipDetailsComponent {
 
   openEditMembership(membershipPlan: OrganizationMembershipPlan) {
     const dialogRef = this.dialog.open(MembershipActionsComponent, {
-      data: {existingPlan:membershipPlan, isUpdate:true},
+      data: { existingPlan: membershipPlan, isUpdate: true },
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -106,12 +106,20 @@ export class PosComponent implements OnInit {
   addToCart(item: Item) {
 
     const existing = this.cart.find(i => i.id === item.id);
+
     if (existing) {
       existing.quantity! += 1;
     } else {
       console.log(this.activeCategoryName);
       if (this.activeCategoryName === "Memberships") {
         // Open start date dialog
+        const existing = this.cart.find(i => i.type === "MEMBERSHIPS");
+        if(existing){
+          this._snackBar.create('error', 'You already have a membership in cart. Please remove it first.');
+          return;
+        }
+
+
         const dialogRef = this.dialog.open(PosActionsComponent, {
           disableClose: true, data: { type: "MEMBERSHIP_START_DATE_PICKER", name: "Membership Start Date" }
         });
@@ -119,6 +127,7 @@ export class PosComponent implements OnInit {
           "taxRate": number,
           "basePrice": number
         };
+
         this.shopService.getCurrentMembership(item.id).subscribe({
           next: (res: ResponseDate) => {
             priceDetails = res.data;
@@ -251,7 +260,7 @@ export class PosComponent implements OnInit {
   }
 
   shopCode: any;
-  constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }, private swal:SweatAlertService) {
+  constructor(private dialogRef: MatDialogRef<PosComponent>, @Inject(MAT_DIALOG_DATA) public data: { existingInvoice: InvoiceModel }, private swal: SweatAlertService) {
 
   }
 
@@ -422,10 +431,13 @@ export class PosComponent implements OnInit {
         res.data.forEach((mem: Item) => {
           mem.itemType = "MEMBERSHIPS"
         });
+
         this.items = {
           ...this.items,
-          ['memberships']: res.data
+          ['memberships']: this.transformMembership(res.data)
         };
+
+        console.log(this.items,".Memberships");
 
       },
       error: (err: any) => {
@@ -433,6 +445,56 @@ export class PosComponent implements OnInit {
       }
     })
   }
+
+  transformMembership(data: any) {
+    if (!data) return [];
+
+    return data.map((membership: any) => {
+
+      membership.type = "MEMBERSHIPS";
+      const durationBenefits = membership.benefits?.filter(
+        (b: any) =>
+          b.benefitType === 'DURATION_ACCESS' &&
+          b.durationValue &&
+          b.durationUnit
+      ) || [];
+
+      if (!durationBenefits.length) {
+        return membership; // no null (avoid type issue)
+      }
+
+      const longest = durationBenefits.reduce((max: any, item: any) => {
+        const currentDays = this.convertToDays(item.durationValue, item.durationUnit);
+        const maxDays = this.convertToDays(max.durationValue, max.durationUnit);
+        return currentDays > maxDays ? item : max;
+      });
+
+      const durationLabel =
+        `${longest.durationValue}-${this.capitalize(longest.durationUnit)}`;
+
+      return {
+        ...membership,
+        durationLabel
+      };
+    });
+  }
+
+
+  capitalize(unit: string): string {
+    return unit.charAt(0).toUpperCase() + unit.slice(1).toLowerCase();
+  }
+
+  convertToDays(value: number, unit: string): number {
+    switch (unit) {
+      case 'DAY': return value;
+      case 'WEEK': return value * 7;
+      case 'MONTH': return value * 30;   // approximate
+      case 'YEAR': return value * 365;   // approximate
+      default: return 0;
+    }
+  }
+
+
 
   // 🛠️ Helper Methods → Utility functions, formatters, mappers
 
@@ -526,7 +588,7 @@ export class PosComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
       if (result) {
         console.log(result);
-        
+
         if (result.status == "COMPLETED") {
           this.firePoppers();
           this._snackBar.success("Payment Completed");
