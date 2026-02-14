@@ -11,6 +11,7 @@ import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import { AblyService } from 'src/app/services/ably.service';
+import {MatRippleModule} from '@angular/material/core';
 import { Subscription } from 'rxjs';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import Swal from 'sweetalert2';
@@ -18,11 +19,12 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-gym-check-in',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule],
+  imports: [FormsModule, CommonModule, MatIconModule,MatRippleModule],
   templateUrl: './gym-check-in.component.html',
   styleUrls: ['./gym-check-in.component.scss'] // Added SCSS file reference
 })
 export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
+  isLoading: any = false;
   submitCode() {
     this.submitCheckIn(this.typedText);
     this.typedText = '';
@@ -255,10 +257,11 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       this.swalService.error('Invalid customer ID');
       return;
     }
-
+    this.isLoading = true;
     this.organizationService.getCustomerByOrgAndShopAndId(customerId).subscribe({
       next: (customerRes: ResponseDate) => {
         console.log('Customer data received:', customerRes);
+        this.isLoading = false;
 
         // Check if the response contains a list of customers
         if (Array.isArray(customerRes.data) && customerRes.data.length > 0) {
@@ -271,6 +274,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (err: any) => {
+        this.isLoading = false;
         console.error('Error getting customer:', err);
         if (err.status === 400 || err.status === 404) {
           this.swalService.error(err.error?.message || 'Customer not found');

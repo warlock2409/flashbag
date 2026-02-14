@@ -1,3 +1,16 @@
+<!-- <div class="overlay" style="color: white;" *ngIf="isLoading">
+    <div class="h-20 w-20 rounded-xl text-white flex items-center justify-center">
+        <img src="../../../../assets/png/logo.png" alt="" srcset="" class="animate-spin">
+    </div>
+     <h1 class="text-white!">
+        “Protein preserves muscle during fat loss.”
+    </h1>
+    <h3 class="text-white!">
+       Aim ~1.6–2.2g protein per kg body weight if training seriously.
+    </h3>
+</div> -->
+
+
 <div class="min-h-screen antialiased text-neutral-900 bg-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
         <!-- Top Bar -->
@@ -59,7 +72,8 @@
                                 <div
                                     class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                     <h2 class="!text-2xl font-semibold tracking-tight text-neutral-900 !mb-1"
-                                        style="letter-spacing: -0.02em;"><i class="fa-solid fa-qrcode mr-2"></i> Scan to Check In</h2>
+                                        style="letter-spacing: -0.02em;"><i class="fa-solid fa-qrcode mr-2"></i> Scan to
+                                        Check In</h2>
                                 </div>
 
                                 <div class="mt-6 rounded-xl ring-1 ring-inset ring-neutral-200 bg-neutral-50">
@@ -94,24 +108,25 @@
                                 <!-- Keypad -->
                                 <div class="grid grid-cols-3 gap-4">
 
-                                    <button *ngFor="let n of [1,2,3,4,5,6,7,8,9]" (click)="addDigit(n)"
+                                    <button *ngFor="let n of [1,2,3,4,5,6,7,8,9]" (click)="addDigit(n)" matRipple
                                         class="py-5 text-xl bg-violet-200 rounded-lg hover:bg-purple-200 !text-lg font-bold">
                                         {{n}}
                                     </button>
 
-                                    <button (click)="typedText = typedText.slice(0,-1)"
+                                    <button (click)="typedText = typedText.slice(0,-1)" matRipple
                                         class="py-5 text-xl bg-red-200 rounded-lg hover:bg-red-300 !text-lg font-bold">
                                         <i class="fa-solid fa-delete-left"></i>
                                     </button>
 
-                                    <button class="py-5 text-xl bg-violet-200 rounded-lg !text-lg font-bold"
+                                    <button class="py-5 text-xl bg-violet-200 rounded-lg !text-lg font-bold" matRipple
                                         (click)="addDigit(0)">
                                         0
                                     </button>
 
-                                    <button (click)="submitCode()"
+                                    <button (click)="submitCode()" [disabled]="isLoading" matRipple
                                         class="py-5 text-xl bg-green-300 !text-black rounded-lg !text-lg font-bold">
-                                        <i class="fa-solid fa-play"></i>
+                                        <i class="fa-solid fa-play" *ngIf="!isLoading"></i>
+                                        <i class="fa-solid fa-yin-yang animate-spin" *ngIf="isLoading"></i>
                                     </button>
                                 </div>
                             </div>
@@ -156,7 +171,8 @@
         </section>
 
         <div style="height: 7rem;">
-            <img class="w-full h-full object-contain" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?hl=hi" alt=""
+            <img class="w-full h-full object-contain"
+                src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?hl=hi" alt=""
                 srcset="">
         </div>
     </div>
