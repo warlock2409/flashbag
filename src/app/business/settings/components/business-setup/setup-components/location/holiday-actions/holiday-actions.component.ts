@@ -28,7 +28,7 @@ export class HolidayActionsComponent {
     @Inject(MAT_DIALOG_DATA) public data: { shop: ShopModel },
     private dialog: MatDialog,
     private holidayService: HolidayService
-  ) {
+  ){
     // Initialize with data from service
     this.loadHolidays();
   }

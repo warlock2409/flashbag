@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
@@ -18,6 +18,7 @@ import { PageEvent, MatPaginator } from '@angular/material/paginator';
 export class CustomersComponent {
 
 
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   private _snackBar = inject(NzMessageService);
@@ -29,11 +30,24 @@ export class CustomersComponent {
   shopCode;
   searchQuery = '';
   activeFilter = 'all'; // 'all', 'active', or 'inactive'
+  configurePanelOpen: boolean = false;
+  isMobileView: any= false;
+  selectedCustomer: any;
+
 
   constructor(public dialog: MatDialog, private timeZoneHelper: TimeZoneHelperService) {
     this.shopCode = localStorage.getItem("shopCode");
     if (this.shopCode)
       this.getCustomerByOrg();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
   }
 
   getCustomerByOrg() {
@@ -44,7 +58,7 @@ export class CustomersComponent {
     } else if (this.activeFilter === 'inactive') {
       memStatus = false;
     }
-    
+
     this.orgService.getAllCustomerByOrg(this.pageIndex, this.pageSize, this.searchQuery, memStatus).subscribe({
       next: (res: ResponseDate) => {
         this.customers = res.data.map((customer: any) => {
@@ -102,7 +116,7 @@ export class CustomersComponent {
 
   addCustomerMannually(): void {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
-      data: {}, 
+      data: {},
       minWidth: "400px",
       maxWidth: "500px"
     });
@@ -115,7 +129,7 @@ export class CustomersComponent {
   importCustomers(): void {
     // Open the add customer dialog with export mode
     const dialogRef = this.dialog.open(AddCustomerComponent, {
-      data: { mode: 'export' }, 
+      data: { mode: 'export' },
       minWidth: "600px",  // Increased width for export mode
       maxWidth: "800px",  // Increased max width for export mode
       width: "70vw"       // Use viewport width for responsive sizing
@@ -129,17 +143,11 @@ export class CustomersComponent {
   }
 
   openCustomerActions(customer: any): void {
-    const dialogRef = this.dialog.open(CustomersActionsComponent, {
-      data: { customer },
-      minWidth: "400px",
-      maxWidth: "800px",
-      width: "90vw"
-    });
+    this.selectedCustomer = customer;
+    this.configurePanelOpen = true;
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getCustomerByOrg();
-      }
-    });
+  closeConfigurePanel() {
+    this.configurePanelOpen = false;
   }
 }

@@ -39,21 +39,7 @@
                 </button>
             </div> -->
         </header>
-
-        <!-- Controls (Session status) -->
-
-        <section class="flex justify-center items-center mb-6 mt-4">
-            <div id="scan-status"
-                class="inline-flex items-center gap-2 rounded-md bg-violet-200 ring-1 ring-inset ring-neutral-300 px-4 py-2 text-sm text-neutral-700">
-
-                <p class="!mb-0 text-lg text-neutral-800">
-                    <i class="fa-brands fa-google-play mr-1"></i> Download 9Myle
-                    <span class="inline-flex h-2 w-2 rounded-full bg-green-500 ml-2"></span>
-                    Track workouts 💪 • See busy hours ⏰ •
-                    Earn rewards 🎁
-                </p>
-            </div>
-        </section>
+        
 
         <div class="w-1/4 md:hidden sm:hidden lg:block">
             <input [(ngModel)]="typedText" type="text" placeholder="Enter check-in code" style="font-size: 1.4rem;"
@@ -97,8 +83,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="p-6 w-1/2 items-center lg:hidden md:block">
+                        <!-- Number Key pad -->
+                        <div class="p-6 w-3/4 items-center lg:hidden md:block">
                             <div class="w-full max-w-sm">
                                 <!-- Display -->
                                 <input [(ngModel)]="typedText" readonly
@@ -151,7 +137,7 @@
                             <!-- Carousel (if ads exist) -->
                             <div *ngIf="playableItems.length > 0"
                                 class="flex items-center justify-center w-full h-full">
-                                <div class="aspect-[16/9] bg-black w-full max-w-2xl relative">
+                                <div class="aspect-[16/10] bg-black w-full max-w-2xl relative">
                                     <ng-container *ngIf="playableItems[currentAdIndex] as item">
                                         <img *ngIf="!item.contentType?.startsWith('video')" [src]="item.url"
                                             class="w-full h-full object-contain" alt="Advertisement">
@@ -167,6 +153,19 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="flex justify-center items-center mb-6 mt-4">
+            <div id="scan-status"
+                class="inline-flex items-center gap-2 rounded-md bg-violet-200 ring-1 ring-inset ring-neutral-300 px-4 py-2 text-sm text-neutral-700">
+
+                <p class="!mb-0 text-lg text-neutral-800">
+                    <i class="fa-brands fa-google-play mr-1"></i> Download 9Myle
+                    <span class="inline-flex h-2 w-2 rounded-full bg-green-500 ml-2"></span>
+                    Track workouts 💪 • See busy hours ⏰ •
+                    Earn rewards 🎁
+                </p>
             </div>
         </section>
 
