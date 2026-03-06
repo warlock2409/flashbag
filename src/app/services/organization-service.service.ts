@@ -6,6 +6,7 @@ import { AddressModel, ShopHoursModel, ShopModel, WaitListDto } from '../models/
 import { OrganizationMembershipPlan, OrganizationServiceModel } from '../models/organization';
 import { S } from 'node_modules/@angular/cdk/scrolling-module.d-ud2XrbF8';
 import { Todo } from '../business/settings/components/business-setup/setup-components/membership-details/membership-actions/membership-actions.component';
+import { DocumentDto } from '../components/upload-media/upload-media.component';
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,18 @@ export class OrganizationServiceService {
     let shopCode = localStorage.getItem("shopCode");
     let url = "http://localhost:8080/users/organization/{orgCode}/addCustomer/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode!);
     return this.Http.post<ServiceResponse<any>>(url, newCustomer);
+  }
+
+  updateCustomerDocument(customerId: number, documentId: number) {
+    let orgCode = localStorage.getItem("orgCode");
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/users/organization/{orgCode}/updateCustomer/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode!);
+    return this.Http.put<ServiceResponse<any>>(url, { documentId: documentId, id: customerId });
+  }
+
+  getDocumentById(documentId: number) {
+    let url = "http://localhost:8080/document/{documentId}".replace("{documentId}", documentId.toString());
+    return this.Http.get<ServiceResponse<DocumentDto>>(url);
   }
 
   uploadCustomes(currentBatch: any[]) {

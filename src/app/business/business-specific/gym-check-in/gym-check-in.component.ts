@@ -301,31 +301,47 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
         `${customer.firstName || ''} ${customer.lastName || ''}`.trim() :
         customer.email || customer.contactNumber || `Customer #${customer.id}`;
 
+      // Check if customer has image attachments in documentDto
+      const hasImages = customer.documentDto?.attachments && Array.isArray(customer.documentDto.attachments) && customer.documentDto.attachments.length > 0;
+      const firstImage = hasImages ? customer.documentDto.attachments.find((att: any) => att.contentType?.startsWith('image/')) : null;
+      const imageUrl = firstImage?.url || null;
+      
       customerListHtml += `
         <div class="customer-item" style="padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background-color: #f9f9f9; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" 
              onclick="selectCustomer(${index})">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <strong style="color: #333;">${name}</strong>
-
-            <button
-               type="button"
-               tabindex="-1"
-              style="
-                background-color: #d4f8d4;
-                color: #2e7d32;
-                border: 1px solid #a5d6a7;
-                border-radius: 4px;
-                padding: 6px 12px;
-                cursor: pointer;
-                font-weight: 500;
-              "
-            >
-              Select
-            </button>
-        </div>
-          <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
-            ${customer.email ? `<div>Email: ${this.maskEmail(customer.email)}</div>` : ''}
-            ${customer.contactNumber ? `<div>Phone: ${this.maskPhone(customer.contactNumber)}</div>` : ''}
+          <div style="display: flex; align-items: center; gap: 15px;">
+            ${imageUrl ? `
+              <img src="${imageUrl}" alt="${name}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; flex-shrink: 0;" />
+            ` : `
+              <div style="width: 120px; height: 120px; background-color: #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-size: 3em; color: #999;">👤</span>
+              </div>
+            `}
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <strong style="color: #333; font-size: 1.2em;">${name}</strong>
+                  <button
+                     type="button"
+                     tabindex="-1"
+                    style="
+                      background-color: #d4f8d4;
+                      color: #2e7d32;
+                      border: 1px solid #a5d6a7;
+                      border-radius: 4px;
+                      padding: 8px 16px;
+                      cursor: pointer;
+                      font-weight: 500;
+                      flex-shrink: 0;
+                    "
+                  >
+                    Select
+                  </button>
+              </div>
+              <div style="font-size: 0.95em; color: #666; margin-top: 8px;">
+                ${customer.email ? `<div>Email: ${this.maskEmail(customer.email)}</div>` : ''}
+                ${customer.contactNumber ? `<div>Phone: ${this.maskPhone(customer.contactNumber)}</div>` : ''}
+              </div>
+            </div>
           </div>
         </div>
       `;

@@ -9,6 +9,9 @@ import { ShopConfiguration } from '../../../models/shop-config.model';
 import { CustomerProfile } from '../../../models/customer-profile.model';
 import { CustomerProfileUpdateRequest } from '../../../models/customer-profile-update.model';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
+import { UploadMediaComponent } from '../../../components/upload-media/upload-media.component';
+import { DocumentDto } from '../../../components/upload-media/upload-media.component';
+import { OrganizationServiceService } from '../../../services/organization-service.service';
 
 interface WeightEntry {
   date: Date;
@@ -27,11 +30,13 @@ interface HeightEntry {
 @Component({
   selector: 'app-customer-general',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatIconModule, UploadMediaComponent],
   templateUrl: './customer-general.component.html',
   styleUrl: './customer-general.component.scss'
 })
 export class CustomerGeneralComponent implements OnInit {
+  organizationService = inject(OrganizationServiceService);
+  
   constructor(
     private shopConfigService: ShopConfigService,
     private customerProfileService: CustomerProfileService,
@@ -50,6 +55,11 @@ export class CustomerGeneralComponent implements OnInit {
       if (this.data.customer.createdAt) {
         const date = new Date(this.data.customer.createdAt);
         this.memberSince = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+      }
+      
+      // Check if documentId exists in the customer data
+      if (this.data.customer.documentId) {
+        this.loadDocumentById(this.data.customer.documentId);
       }
         
       // Load customer profiles if customer ID is available
@@ -79,6 +89,9 @@ export class CustomerGeneralComponent implements OnInit {
   dateOfBirth: string = '';
   privateNotes: string = '';
   goals: string[] = ['Weight Loss', 'Cardio'];
+  
+  // Document upload
+  sampleUploads: DocumentDto | null = null;
 
   newWeightEntry: number | null = null;
   newHeightEntry: number | null = null;
@@ -639,5 +652,48 @@ export class CustomerGeneralComponent implements OnInit {
   isFieldEnabled(fieldType: string): boolean {
     const config = this.shopConfigurations.find(c => c.type === fieldType);
     return config !== undefined;
+  }
+
+  setDocument($event: DocumentDto) {
+    this.sampleUploads = $event;
+    console.log("Document received", $event);
+    
+    // If we have a document ID and customer ID, update the customer with the new document
+    if ($event.id && this.customerId) {
+      this.updateCustomerWithDocument($event.id);
+    }
+  }
+
+  loadDocumentById(documentId: number) {
+    console.log('Loading document with ID:', documentId);
+    this.organizationService.getDocumentById(documentId).subscribe({
+      next: (res) => {
+        console.log('Document loaded:', res.data);
+        this.sampleUploads = res.data;
+      },
+      error: (error) => {
+        console.error('Error loading document:', error);
+      }
+    });
+  }
+
+  updateCustomerWithDocument(documentId: number) {
+    const customerId = Number(this.customerId);
+    if (!customerId) {
+      console.error('Customer ID not available');
+      return;
+    }
+
+    console.log('Updating customer with document ID:', documentId);
+    this.organizationService.updateCustomerDocument(customerId, documentId).subscribe({
+      next: (res) => {
+        console.log('Customer document updated successfully:', res.data);
+        this.data.customer.documentId = documentId;
+      },
+      error: (error) => {
+        this.swallService.error('Error updating customer document:');
+        console.error('Error updating customer document:', error);
+      }
+    });
   }
 }

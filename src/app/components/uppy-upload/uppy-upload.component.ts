@@ -20,9 +20,9 @@ export interface UploadFileData {
   styleUrl: './uppy-upload.component.scss'
 })
 export class UppyUploadComponent {
-  // baseUrl= "http://localhost:9000/";
+  // baseUrl = "http://localhost:8080/";
   baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
-  
+
 
 
   @ViewChild('uppyDashboard', { static: true }) uppyDashboard!: ElementRef;
@@ -30,6 +30,58 @@ export class UppyUploadComponent {
   uploadComplete: any;
 
   constructor(private http: HttpClient, private dialogRef: MatDialogRef<UppyUploadComponent>) { }
+
+  /**
+   * Compress an image file using Canvas API
+   * @param file - The image file to compress
+   * @param quality - Compression quality (0.0 to 1.0)
+   * @returns Promise<Blob> - The compressed image blob
+   */
+  private compressImage(file: Blob, quality: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = (event: any) => {
+        const img = new Image();
+        
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'));
+            return;
+          }
+          
+          // Set canvas dimensions to match image
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          // Draw image on canvas
+          ctx.drawImage(img, 0, 0);
+          
+          // Convert canvas to blob with compression
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error('Compression failed'));
+              }
+            },
+            file.type || 'image/jpeg',
+            quality
+          );
+        };
+        
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = event.target.result;
+      };
+      
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
 
   ngOnInit() {
     this.uppy = new Uppy({
@@ -49,13 +101,39 @@ export class UppyUploadComponent {
       .use(Webcam, { modes: ['picture', 'video-audio'] })
       .use(ImageEditor, { quality: 0.9 });
 
-    // Custom upload pipeline
+    // Listen to compression events
+    this.uppy.on('file-added', (file) => {
+      console.log('📥 File added:', file.name, 'Size:', file.size ? (file.size / 1024 / 1024).toFixed(2) + 'MB' : 'N/A');
+    });
+
     this.uppy.on('upload', async () => {
       const files = this.uppy.getFiles();
       const uploadedFiles: UploadFileData[] = [];
 
+      console.log('\n🚀 Starting upload for', files.length, 'files\n');
+
       for (const file of files) {
         try {
+          // Compress image if it's an image file
+          let fileData = file.data;
+          const originalSize = file.size;
+          
+          if (file.type?.startsWith('image/') && file.size && file.data instanceof Blob) {
+            console.log(`📁 File: ${file.name}`);
+            console.log(`📊 Original size: ${(file.size / 1024 / 1024).toFixed(2)}MB (${(file.size / 1024).toFixed(0)}KB)`);
+            console.log(`🔧 Compressing...`);
+            
+            // Compress with 60% quality
+            fileData = await this.compressImage(file.data, 0.6);
+            
+            if (file.size) {
+              console.log(`📊 Original size: ${(file.size / 1024 / 1024).toFixed(2)}MB (${(file.size / 1024).toFixed(0)}KB)`);
+              console.log(`✅ Compressed size: ${(fileData.size! / 1024 / 1024).toFixed(2)}MB (${(fileData.size! / 1024).toFixed(0)}KB)`);
+              console.log(`💾 Saved: ${((file.size - fileData.size!) / 1024 / 1024).toFixed(2)}MB (${((file.size - fileData.size!) / file.size * 100).toFixed(1)}%)`);
+              console.log('');
+            }
+          }
+
           // 1️⃣ Get presigned URL
           const presign: any = await firstValueFrom(
             this.http.get<{ url: string }>(`${this.baseUrl}presign?fileName=${file.name}`)
@@ -63,7 +141,7 @@ export class UppyUploadComponent {
           const presignedUrl = presign.url;
 
           await lastValueFrom(
-            this.http.put(presignedUrl, file.data, {
+            this.http.put(presignedUrl, fileData, {
               headers: new HttpHeaders({ 'Content-Type': file.type || 'application/octet-stream' }),
               reportProgress: true,
               observe: 'events',
@@ -94,13 +172,15 @@ export class UppyUploadComponent {
           // 3️⃣ Construct file metadata
           const urlObj = new URL(presignedUrl);
           const objectKey = urlObj.pathname.substring(1);
-          const url = `https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/${objectKey}`;
-
+          
+          // Use compressed file size if available, otherwise use original
+          const actualSize = fileData instanceof Blob ? fileData.size : file.size;
+          
           uploadedFiles.push({
             filename: file.name!,
-            size: file.size!,
+            size: actualSize!,  // Use compressed file size
             contentType: file.type!,
-            url:objectKey
+            url: objectKey
           });
         } catch (err) {
           console.error('Upload failed for', file.name, err);

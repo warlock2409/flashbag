@@ -168,6 +168,16 @@
                         </div>
                     </div>
 
+                    <!-- Customer Media Card -->
+                    <div class="bg-white rounded-xl border border-zinc-200 shadow-sm p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-medium text-zinc-900">Customer Media</h3>
+                        </div>
+                        <app-upload-media [existingUploads]="sampleUploads" [multiple]="false"
+                            [type]="'CUSTOMER'" (uploaded)="setDocument($event)"
+                            class="flex-none w-50"></app-upload-media>
+                    </div>
+
                 </div>
 
                 <!-- Right Column: Dynamic Data (Weight History) -->

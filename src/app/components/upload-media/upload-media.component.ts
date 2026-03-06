@@ -38,7 +38,7 @@ export interface UploadFile {
 })
 export class UploadMediaComponent {
   baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
-  // baseUrl= "http://localhost:9000/";
+  // baseUrl= "http://localhost:8080/";
 
 
   constructor(private http: HttpClient, public dialog: MatDialog, private swalService: SweatAlertService) { }

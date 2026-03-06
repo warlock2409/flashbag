@@ -213,16 +213,17 @@ export class AddCustomerComponent implements OnInit {
       ? `${formValue.countryCode}${formValue.phone}`
       : formValue.phone;
 
-    const customer: Customer = {
+    const customer: any = {
       firstName: formValue.name,
       email: formValue.email || undefined,
       contactNumber: fullPhoneNumber || undefined,
       existingCustomerId: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
     };
 
-    // If we have a document uploaded, we would typically associate it here
-    // However, the Customer model doesn't seem to have a document field
-    // The document ID would likely be associated during the invoice creation
+    // If we have a document uploaded, include the document ID
+    if (this.sampleUploads && this.sampleUploads.id) {
+      customer.documentId = this.sampleUploads.id;
+    }
 
     return customer;
   }
