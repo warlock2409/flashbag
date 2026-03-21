@@ -1,6 +1,7 @@
 .customers-container {
   min-height: 100vh;
   background-color: white;
+  padding-bottom: 1rem;
   padding-top: 70px; // Increased top spacing to avoid navbar overlap (navbar height ~80px + some margin)
 
   @media (max-width: 768px) {
@@ -26,6 +27,7 @@
 
 .overlay {
   color: white;
+
   h1,
   h3 {
     color: white !important;
@@ -297,7 +299,7 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 3fr 1fr 2fr 2fr 2fr;
+  grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
   padding: 12px 24px;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
@@ -310,7 +312,7 @@
   @media (max-width: 1200px) {
     padding: 10px 16px;
     // Adjust column widths for better alignment on smaller screens
-    grid-template-columns: 2fr 3fr 1fr 2fr 2fr 2fr;
+    grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
   }
 
   // Ensure proper text alignment for each header cell
@@ -319,6 +321,10 @@
     align-items: center;
 
     &.customer-header {
+      justify-content: flex-start;
+    }
+
+    &.id-header {
       justify-content: flex-start;
     }
 
@@ -347,7 +353,7 @@
 .table-body {
   .table-row {
     display: grid;
-    grid-template-columns: 2fr 3fr 1fr 2fr 2fr 2fr;
+    grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
     padding: 16px 24px;
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.2s;
@@ -359,7 +365,7 @@
     @media (max-width: 1200px) {
       padding: 14px 16px;
       // Ensure row columns match header columns
-      grid-template-columns: 2fr 3fr 1fr 2fr 2fr 2fr;
+      grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
     }
   }
 }
@@ -376,6 +382,27 @@
     font-weight: 500;
     gap: 8px;
     justify-content: flex-start;
+  }
+
+  &.id-cell {
+    justify-content: flex-start;
+
+    .id-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .primary-id {
+        color: #6366f1;
+        font-weight: 600;
+        font-size: 0.8125rem;
+      }
+
+      .existing-id {
+        color: #9ca3af;
+        font-size: 0.75rem;
+      }
+    }
   }
 
   &.contact-cell {
@@ -480,7 +507,7 @@
 
 .expiry-badge-expired {
   background-color: #fee2e2;
-  color: #16a34a;
+  color: #ef4444;
   border: 1px solid #fecaca;
 }
 
@@ -792,6 +819,7 @@
   background-color: #ef4444; // Red color
   margin-left: 8px;
 }
+
 // Card status for deleted customers
 .card-status-inactive {
   background-color: #fee2e2;

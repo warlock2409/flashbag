@@ -127,7 +127,7 @@ import { MatIconModule } from '@angular/material/icon';
       }
       
       .panel-header {
-        padding-left: 80px;
+        // padding-left: 80px;
       }
       
       .panel-header h3 {

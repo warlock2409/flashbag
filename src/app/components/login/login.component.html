@@ -39,23 +39,23 @@
       </div>
 
       <div class="error-message" *ngIf="error">
-              <span class="error-icon">⚠️</span>
-              <span>{{error}}</span>
-            </div>
+        <span class="error-icon">⚠️</span>
+        <span>{{error}}</span>
+      </div>
 
       <button type="submit" [disabled]="loading || loginForm.invalid" class="btn btn-primary">
         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
         Sign In
       </button>
 
-      <!-- <div class="divider">
+      <div class="divider">
         <span>or</span>
       </div>
 
       <button *ngIf="loginType === 'business'" type="button" class="btn btn-create-account"
         (click)="openBusinessRequest()">
-         Create New Business
-      </button> -->
+        Create New Business
+      </button>
     </form>
   </div>
 </div>

@@ -57,7 +57,8 @@
       </div>
       <!-- Segmented Filter - Takes more space on tablet -->
       <div class="filters-container w-full lg:w-auto lg:order-1 scroll-fade">
-        <div class="inline-flex w-full items-center rounded-lg bg-white ring-1 ring-inset ring-neutral-200 p-1 responsive-filters horizontal-scroll"
+        <div
+          class="inline-flex w-full items-center rounded-lg bg-white ring-1 ring-inset ring-neutral-200 p-1 responsive-filters horizontal-scroll"
           role="tablist">
           <button *ngFor="let tab of tabs" (click)="selectTab(tab.value)"
             class="filter-btn flex-1 lg:flex-none inline-flex items-center cursor-pointer gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors responsive-filter-btn whitespace-nowrap"
@@ -65,7 +66,8 @@
             'text-neutral-900 bg-neutral-100': selectedTab === tab.value,
             'text-neutral-600 hover:text-neutral-900': selectedTab !== tab.value
             }" [attr.aria-selected]="selectedTab === tab.value">
-            <span class="inline-flex h-5 min-w-[28px] items-center justify-center rounded-full text-xs ring-1 ring-inset"
+            <span
+              class="inline-flex h-5 min-w-[28px] items-center justify-center rounded-full text-xs ring-1 ring-inset"
               [ngClass]="tab.badgeClass">•</span>
             <span class="responsive-filter-text">{{ tab.label }}</span>
             <span class="ml-1 text-neutral-500 text-xs tabular-nums" *ngIf="tab.count !== null">
@@ -75,13 +77,14 @@
         </div>
       </div>
     </section>
-    
+
     <!-- Pagination -->
     <mat-paginator [length]="totalElements" [pageSize]="pageSize" aria-label="Select page" class="mt-4"
       (page)="onPageChange($event)">
     </mat-paginator>
     <!-- Table (Desktop) -->
-    <section class="mt-6 hidden lg:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden responsive-table">
+    <section
+      class="mt-6 hidden lg:block rounded-xl bg-white ring-1 ring-inset ring-neutral-200 overflow-hidden responsive-table">
       <div
         class="grid grid-cols-12 px-4 sm:px-6 py-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200 responsive-table-header">
         <div class="col-span-3">Invoice</div>
@@ -108,7 +111,8 @@
               <path d="M16 13H8"></path>
               <path d="M16 17H8"></path>
             </svg>
-            <span class="font-medium text-neutral-900">{{invoice?.invoiceNumber?.split('-')?.slice(-3)?.join('-')}}</span>
+            <span
+              class="font-medium text-neutral-900">{{invoice?.invoiceNumber?.split('-')?.slice(-3)?.join('-')}}</span>
           </div>
           <div class="col-span-3">
             <div class="font-medium text-neutral-800">
@@ -122,14 +126,19 @@
             </div>
           </div>
           <div class="col-span-2 text-neutral-500">{{ invoice.invoiceDate | date:'MMM d, y, h:mm a'}}</div>
-          <!-- <div class="col-span-2 text-neutral-500">Sep 11, 2025</div> -->
+
           <div class="col-span-3 text-right text-neutral-900">{{invoice.grandTotal | currency:'INR':'symbol':'1.2-2'}}
           </div>
           <div class="col-span-1 flex items-start justify-end">
-            <span class="inline-flex items-start rounded-full px-2 py-0.5 text-xs ring-1 ring-inset"
+            <div class="inline-flex items-start rounded-full px-2 py-0.5 text-xs ring-1 ring-inset whitespace-nowrap"
               [ngClass]="statusClasses[invoice.status!]">
-              {{ invoice.status }}
-            </span>
+              <span *ngIf="invoice.status === 'PARTIALLY_PAID'; else showStatus">
+                Due: {{ getRemainingAmount(invoice) | currency:'INR':'symbol':'1.0-0' }}
+              </span>
+              <ng-template #showStatus>
+                <span>{{ invoice.status }}</span>
+              </ng-template>
+            </div>
           </div>
         </div>
         }
@@ -140,7 +149,7 @@
     <section id="cards" class="mt-6 space-y-4 lg:hidden responsive-cards">
       <!-- Card -->
       @for (invoice of invoiceList; track $index; let rowIndex = $index) {
-      <article data-role="card" 
+      <article data-role="card"
         class="rounded-xl bg-white ring-1 ring-inset ring-neutral-200 p-4 hover:bg-neutral-50 transition-colors responsive-card fade-in"
         [style.animation-delay]="rowIndex * 0.05 + 's'">
         <div class="flex items-center justify-between gap-3">
@@ -159,10 +168,16 @@
               {{invoice.invoiceNumber}}
             </h3>
           </div>
-          <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs ring-1 ring-inset responsive-status-badge"
+          <div
+            class="inline-flex items-center rounded-full px-2 py-0.5 text-xs ring-1 ring-inset responsive-status-badge whitespace-nowrap"
             [ngClass]="statusClasses[invoice.status!]">
-            {{ invoice.status }}
-          </span>
+            <span *ngIf="invoice.status === 'PARTIALLY_PAID'; else showStatusMobile">
+              Due: {{ getRemainingAmount(invoice) | currency:'INR':'symbol':'1.0-0' }}
+            </span>
+            <ng-template #showStatusMobile>
+              <span>{{ invoice.status }}</span>
+            </ng-template>
+          </div>
         </div>
         <div class="mt-2 text-sm text-neutral-700">{{ invoice.customer?.firstName }}</div>
         <div class="mt-1 text-xs text-gray-400">{{ invoice.customer?.email }}</div>

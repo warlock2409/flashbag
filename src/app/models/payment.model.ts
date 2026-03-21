@@ -10,7 +10,8 @@ export interface InvoiceModel {
     invoiceNumber?: string,
     status?: string,
     grandTotal?:number,
-    invoiceDate?:string
+    invoiceDate?:string,
+    payments?: any[]
 }
 
 export interface ItemModel {
@@ -24,7 +25,8 @@ export interface ItemModel {
 
 export interface PaymentModel {
     paymentMode:string,
-    grandTotal:number
+    grandTotal:number,
+    paidAmount?:number
 }
 
 export interface PaymentResponse {

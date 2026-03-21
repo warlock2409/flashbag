@@ -30,6 +30,7 @@ export class AddCustomerComponent implements OnInit {
   private _snackBar = inject(NzMessageService);
   memberships: OrganizationMembershipPlan[] = [];
   isExportCustomerMode = false;
+  isEditMode = false;
   // Added property for document uploads
   sampleUploads: DocumentDto | null = null;
   // Injected services
@@ -41,6 +42,11 @@ export class AddCustomerComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private orgService: OrganizationServiceService
   ) {
+    // Check if opened in edit mode
+    if (this.data && this.data.mode === 'edit') {
+      this.isEditMode = true;
+    }
+
     // Check if opened by export customer
     if (this.data && this.data.mode === 'export') {
       this.isExportCustomerMode = true;
@@ -48,6 +54,31 @@ export class AddCustomerComponent implements OnInit {
 
     // Initialize form with conditional fields based on mode
     this.initializeForm();
+
+    // Pre-populate form fields in edit mode
+    if (this.isEditMode && this.data.customer) {
+      const c = this.data.customer;
+
+      // Parse country code and phone from the stored contactNumber or phone (e.g. "+919876543210")
+      const knownCodes = ['+91', '+1', '+44', '+61', '+81'];
+      let countryCode = '+91';
+      let phone = c.contactNumber || c.phone || '';
+      if (phone) {
+        const matched = knownCodes.find(code => phone.startsWith(code));
+        if (matched) {
+          countryCode = matched;
+          phone = phone.slice(matched.length).trim();
+        }
+      }
+
+      this.customerForm.patchValue({
+        name: c.firstName || c.name || '',
+        existingCustomerId: c.existingCustomerId || '',
+        email: c.email || '',
+        phone,
+        countryCode
+      });
+    }
   }
 
   // Added method to handle document upload
@@ -71,7 +102,17 @@ export class AddCustomerComponent implements OnInit {
       formControls.startDate = [''];
     }
 
-    this.customerForm = this.fb.group(formControls, { validators: [this.emailOrPhoneValidator] });
+    this.customerForm = this.fb.group(
+      formControls,
+      this.isEditMode ? {} : { validators: [this.emailOrPhoneValidator] }
+    );
+
+    // In edit mode disable email & phone
+    if (this.isEditMode) {
+      this.customerForm.get('email')?.disable();
+      this.customerForm.get('phone')?.disable();
+      this.customerForm.get('countryCode')?.disable();
+    }
   }
 
   ngOnInit(): void {
@@ -145,13 +186,55 @@ export class AddCustomerComponent implements OnInit {
   }
 
   submitAccountForm() {
+    const formValue = this.customerForm.getRawValue();
+
+    if (!formValue.name) {
+      this._snackBar.error('Please enter a name');
+      return;
+    }
+    if (!formValue.phone) {
+      this._snackBar.error('Please enter a phone number');
+      return;
+    }
     if (this.customerForm.invalid) return;
 
-    if (this.isExportCustomerMode) {
+    if (this.isEditMode) {
+      this.submitEditCustomerForm();
+    } else if (this.isExportCustomerMode) {
+      const membershipId = formValue.membershipId;
+      const startDate = formValue.startDate;
+
+      if (!startDate) {
+        this._snackBar.error('Please select a start date');
+        return;
+      }
+      if (!membershipId) {
+        this._snackBar.error('Please select a membership');
+        return;
+      }
       this.submitExportCustomerForm();
     } else {
       this.submitRegularCustomerForm();
     }
+  }
+
+  submitEditCustomerForm() {
+    const formValue = this.customerForm.getRawValue();
+    const customerId: number = this.data?.customer?.id;
+    const existingCustomerId: number = formValue.existingCustomerId
+      ? parseInt(formValue.existingCustomerId)
+      : this.data?.customer?.existingCustomerId;
+    const customerName: string = formValue.name;
+
+    this.orgService.updateCustomerDetails(customerId, existingCustomerId, customerName).subscribe({
+      next: (res: any) => {
+        this._snackBar.success('Customer updated successfully');
+        this.dialogRef.close(res.data);
+      },
+      error: (err) => {
+        this._snackBar.error(err?.error?.message || 'Error updating customer');
+      }
+    });
   }
 
   submitRegularCustomerForm() {
@@ -163,7 +246,7 @@ export class AddCustomerComponent implements OnInit {
 
         this._snackBar.success('Customer added succesfully');
         this.customerForm.reset();
-        this.dialogRef.close(true);
+        this.dialogRef.close(res.data);
       }, error: (err) => {
         this._snackBar.error(err.error.message);
       },
@@ -280,7 +363,7 @@ export class AddCustomerComponent implements OnInit {
       next: (res: ServiceResponse<any>) => {
         console.log(res.data, "issueInvoice");
         // Step 4: Record payment with CASH method
-        this.recordPayment(invoiceId);
+        this.recordPayment(invoiceId, res.data.grandTotal);
       },
       error: (err) => {
         this._snackBar.error('Error creating membership invoice');
@@ -290,10 +373,12 @@ export class AddCustomerComponent implements OnInit {
     });
   }
 
-  recordPayment(invoiceId: number) {
+  recordPayment(invoiceId: number, grandTotal: any) {
+
     const payment: PaymentModel = {
       paymentMode: 'CASH',
-      grandTotal: 0 // This will be set by the backend based on the invoice
+      grandTotal: grandTotal,
+      paidAmount: grandTotal
     };
 
     this.paymentService.makePayment(payment, invoiceId).subscribe({

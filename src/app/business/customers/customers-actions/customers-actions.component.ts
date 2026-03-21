@@ -384,7 +384,4 @@ export class CustomersActionsComponent {
     this.processing = true;
     this.prepareImage();
   }
-
-
-
 }

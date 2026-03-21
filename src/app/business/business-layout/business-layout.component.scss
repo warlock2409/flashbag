@@ -2,6 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: row;
+  background-color: #0d0d0d !important; // Explicit dark background for iPad/browsers
 
   .sidenav {
     flex-shrink: 0; // Prevent shrinking
@@ -9,7 +10,8 @@
    
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); // Transition on transform
     overflow: hidden;
-    background: transparent;
+    background-color: transparent !important; // Override material defaults
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
 
     &.expanded {
       width: 200px;

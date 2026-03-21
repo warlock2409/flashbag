@@ -10,6 +10,7 @@ import { InvoiceModel, PaymentModel } from 'src/app/models/payment.model';
 import { MatButtonModule } from '@angular/material/button';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ResponseDate } from 'src/app/app.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-pos-actions',
   standalone: true,
@@ -19,15 +20,26 @@ import { ResponseDate } from 'src/app/app.component';
   styleUrl: './pos-actions.component.scss'
 })
 export class PosActionsComponent {
+  private _snackBar = inject(NzMessageService);
 
-  constructor(private dialogRef: MatDialogRef<PosActionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { type: string, name: string, invoice: InvoiceModel }) {
+  payableAmount: number = 0;
+
+  constructor(private dialogRef: MatDialogRef<PosActionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { type: string, name: string, invoice: InvoiceModel, payableAmount?: number, minDate?: Date }) {
     console.log(this.data);
-
+    if (this.data.minDate !== undefined) {
+      this.minDate = this.data.minDate;
+    }
+    if (this.data.payableAmount !== undefined) {
+      this.payableAmount = this.data.payableAmount;
+    } else if (this.data?.invoice?.grandTotal) {
+      const totalPaid = this.data.invoice.payments?.reduce((sum, p) => sum + (p.amount || p.paidAmount || 0), 0) || 0;
+      this.payableAmount = this.data.invoice.grandTotal - totalPaid;
+    }
   }
 
   paymentService = inject(PaymentService);
   selected: Date | null = null;     // cannot be null
-  minDate: Date = new Date();      // today
+  minDate: Date | null = null;
   maxDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
 
   // Payment 
@@ -52,13 +64,18 @@ export class PosActionsComponent {
   ProcessPayment() {
     let payment: PaymentModel = {
       paymentMode: this.selectedPayment!,
-      grandTotal: this.data.invoice.grandTotal!
+      grandTotal: this.data.invoice.grandTotal!,
+      paidAmount: this.payableAmount
     }
 
     this.paymentService.makePayment(payment, this.data.invoice.id).subscribe({
       next: (res: ResponseDate) => {
         console.log(res);
-        this.dialogRef.close(res.data);
+        if (res.data == null) {
+          this._snackBar.warning(res.message);
+        } else {
+          this.dialogRef.close(res.data);
+        }
       },
       error: (err: any) => {
 

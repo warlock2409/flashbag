@@ -89,6 +89,13 @@ export class OrganizationServiceService {
     return this.Http.post<ServiceResponse<any>>(url, newCustomer);
   }
 
+  updateCustomerDetails(customerId: number, existingCustomerId: number, customerName: string) {
+    let orgCode = localStorage.getItem("orgCode");
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/users/organization/{orgCode}/updateCustomer/{shopCode}".replace("{orgCode}", orgCode!).replace("{shopCode}", shopCode!);
+    return this.Http.put<ServiceResponse<any>>(url, { existingCustomerId: existingCustomerId, id: customerId, firstName: customerName });
+  }
+
   updateCustomerDocument(customerId: number, documentId: number) {
     let orgCode = localStorage.getItem("orgCode");
     let shopCode = localStorage.getItem("shopCode");
@@ -255,6 +262,35 @@ export class OrganizationServiceService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
+  getCustomerByOrgShop(page: number = 0, size: number = 10, search?: string, memStatus?: boolean, neverSpent?: boolean, month?: number, year?: number) {
+    const orgCode = localStorage.getItem("orgCode");
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/users/organization/${orgCode}/customers/${shopCode}?page=${page}&size=${size}`;
+    if (search) {
+      url += `&query=${encodeURIComponent(search)}`;
+    }
+    if (memStatus !== undefined) {
+      url += `&memStatus=${memStatus}`;
+    }
+    if (neverSpent !== undefined) {
+      url += `&neverSpent=${neverSpent}`;
+    }
+    if (month !== undefined) {
+      url += `&month=${month}`;
+    }
+    if (year !== undefined) {
+      url += `&year=${year}`;
+    }
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getCustomerActivity(month: number, year: number) {
+    const orgCode = localStorage.getItem("orgCode");
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/users/organization/${orgCode}/customers/${shopCode}/activity?month=${month}&year=${year}`;
+    return this.Http.get<any>(url);
+  }
+
   getCustomerByOrgAndShopAndId(customerId: number) {
     const orgCode = localStorage.getItem("orgCode");
     const shopCode = localStorage.getItem("shopCode");
@@ -334,6 +370,20 @@ export class OrganizationServiceService {
     const shopCode = localStorage.getItem("shopCode");
     let url = `http://localhost:8080/api/membership/shop/${shopCode}/customer/${customerId}/progress`;
     return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  cancelCustomerMembership(customerId: number) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/membership/shop/${shopCode}/customer/${customerId}/cancel`;
+    return this.Http.put<ServiceResponse<any>>(url, {});
+  }
+
+  deleteCustomer(customerId: number) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/user/shop/{shopCode}/customer/{customerId}"
+      .replace("{shopCode}", shopCode!)
+      .replace("{customerId}", customerId.toString());
+    return this.Http.delete<ServiceResponse<any>>(url);
   }
 
 }

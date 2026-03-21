@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -28,6 +28,10 @@ export class HomeComponent implements OnDestroy {
   private sub!: Subscription;
 
 
+  selectedCustomer: any;
+  configurePanelOpen: boolean = false;
+  isMobileView: any = false;
+
   shopCategory = new Map<string, string>([
     ['Fitness & Gyms', 'Gym'],
     ['Health & Wellness', 'Spa'],
@@ -36,19 +40,20 @@ export class HomeComponent implements OnDestroy {
     // add more mappings here
   ])
 
-  constructor(private ablyService: AblyService,private authService:AuthService) {
+  constructor(private ablyService: AblyService, private authService: AuthService) {
   }
 
 
   async ngOnInit() {
     console.log('HomeComponent ngOnInit');
-    
+
     // Clean up any existing subscription to prevent duplicates
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
-    
+
     await this.initialize();
+    this.checkScreenSize();
     this.subscription = this.ablyService.onMessage('home').subscribe(msg => {
       console.log('Home received:', msg.data);
       // this.trailListCustomer.unshift(msg.data);
@@ -60,6 +65,15 @@ export class HomeComponent implements OnDestroy {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
   }
 
   private async initialize() {
@@ -100,7 +114,7 @@ export class HomeComponent implements OnDestroy {
 
   getGreeting(): string {
     const currentHour = new Date().getHours();
-    
+
     if (currentHour >= 5 && currentHour < 12) {
       return 'Good morning';
     } else if (currentHour >= 12 && currentHour < 18) {
@@ -137,9 +151,9 @@ export class HomeComponent implements OnDestroy {
 
   toggleShopVisibility() {
     if (!this.selectedShop || this.selectedShop.active === null) return;
-    
+
     console.log('Toggling visibility for shop:', this.selectedShop);
-    
+
     this.orgApiService.getOrganizationDetails().subscribe({
       next: (res: ResponseDate) => {
         if (res.data && res.data.organizationPlan && res.data.organizationPlan.bucketDtos) {
@@ -166,7 +180,7 @@ export class HomeComponent implements OnDestroy {
             next: (res: ResponseDate) => {
               // Update the selected shop
               this.selectedShop = { ...this.selectedShop, ...res.data };
-              
+
               if (res.data.active) {
                 this.swallService.success("Hurray! Your shop is now ready to receive online orders.", 2500);
               } else {
@@ -210,6 +224,7 @@ export class HomeComponent implements OnDestroy {
           if (this.shops.length > 0) {
             this.selectedShop = this.shops[0];
             localStorage.setItem("shopCode", this.selectedShop.code!);
+            localStorage.setItem("shopName", this.selectedShop.name!);
             // Initialize Ably service
             this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
             this.ablyService.setShopCode(this.selectedShop.code!);
@@ -337,6 +352,19 @@ export class HomeComponent implements OnDestroy {
     const diffPercentage = ((mean - today) / mean) * 100;
 
     return `${diffPercentage.toFixed(1)}% less than average`;
+  }
+
+  // Customer Actions
+  openCustomerActions(customer: any): void {
+    if (!customer) return;
+    this.selectedCustomer = customer;
+    this.configurePanelOpen = true;
+  }
+
+  closeConfigurePanel() {
+    this.configurePanelOpen = false;
+    this.loadGymDashboard();
+    this.getTrailSessions();
   }
 
   // Chart js 

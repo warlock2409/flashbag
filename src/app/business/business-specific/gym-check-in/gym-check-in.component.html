@@ -1,14 +1,14 @@
-<!-- <div class="overlay" style="color: white;" *ngIf="isLoading">
+<div class="overlay" style="color: white;" *ngIf="isLoading">
     <div class="h-20 w-20 rounded-xl text-white flex items-center justify-center">
         <img src="../../../../assets/png/logo.png" alt="" srcset="" class="animate-spin">
     </div>
-     <h1 class="text-white!">
+    <h1 class="text-white!">
         “Protein preserves muscle during fat loss.”
     </h1>
     <h3 class="text-white!">
-       Aim ~1.6–2.2g protein per kg body weight if training seriously.
+        Aim ~1.6–2.2g protein per kg body weight if training seriously.
     </h3>
-</div> -->
+</div>
 
 
 <div class="min-h-screen antialiased text-neutral-900 bg-white">
@@ -39,10 +39,11 @@
                 </button>
             </div> -->
         </header>
-        
+
 
         <div class="w-1/4 md:hidden sm:hidden lg:block">
-            <input [(ngModel)]="typedText" type="text" placeholder="Enter check-in code" style="font-size: 1.4rem;"
+            <input [(ngModel)]="typedText" type="text" placeholder="Use Keypad to Enter Check-in Code"
+                style="font-size: 1.4rem;"
                 class="placeholder-gray-500 w-full rounded-md border border-gray-500 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
         </div>
 
@@ -58,8 +59,8 @@
                                 <div
                                     class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                     <h2 class="!text-2xl font-semibold tracking-tight text-neutral-900 !mb-1"
-                                        style="letter-spacing: -0.02em;"><i class="fa-solid fa-qrcode mr-2"></i> Scan to
-                                        Check In</h2>
+                                        style="letter-spacing: -0.02em;"><i class="fa-solid fa-qrcode mr-2"></i>
+                                        {{shopText}}</h2>
                                 </div>
 
                                 <div class="mt-6 rounded-xl ring-1 ring-inset ring-neutral-200 bg-neutral-50">
@@ -89,10 +90,10 @@
                                 <!-- Display -->
                                 <input [(ngModel)]="typedText" readonly
                                     class="w-full text-center !text-lg font-semibold border-violet-500 border rounded-lg py-3 !mb-3"
-                                    placeholder="Enter Check-In Code">
+                                    placeholder="Use Keypad to Enter Check-in Code">
 
                                 <!-- Keypad -->
-                                <div class="grid grid-cols-3 gap-4">
+                                <div class=" grid grid-cols-3 gap-4">
 
                                     <button *ngFor="let n of [1,2,3,4,5,6,7,8,9]" (click)="addDigit(n)" matRipple
                                         class="py-5 text-xl bg-violet-200 rounded-lg hover:bg-purple-200 !text-lg font-bold">
@@ -129,8 +130,14 @@
                             <!-- Default Static Content (if no ads) -->
                             <div *ngIf="playableItems.length === 0" class="flex items-center justify-center">
                                 <div class="aspect-[16/9] bg-white w-full max-w-2xl">
-                                    <img src="https://livefit.com/cdn/shop/articles/top_ten_fitness_quotes_for_new_year_resolutions_goals_fitness_motivation.jpg?v=1577804322&width=1600"
-                                        alt="Fitness motivation" class="w-full h-full object-cover">
+                                    <!-- <img src="https://livefit.com/cdn/shop/articles/top_ten_fitness_quotes_for_new_year_resolutions_goals_fitness_motivation.jpg?v=1577804322&width=1600"
+                                        alt="Fitness motivation" class="w-full h-full object-cover"> -->
+                                    <video class="w-full h-full object-cover" autoplay muted loop playsinline
+                                        preload="auto">
+                                        <source
+                                            src="https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/0_Exercise_Fitness_1280x720.mp4"
+                                            type="video/mp4">
+                                    </video>
                                 </div>
                             </div>
 

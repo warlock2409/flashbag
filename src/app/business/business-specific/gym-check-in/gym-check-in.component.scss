@@ -1,5 +1,6 @@
 // Tablet-specific styles for gym check-in component
 @media (min-width: 768px) and (max-width: 1023px) {
+
   // Adjust padding for tablet view
   .container {
     padding-left: 1rem;
@@ -8,6 +9,7 @@
 
   // Modify the main content section for better tablet layout
   section.rounded-xl {
+
     // Reduce padding on tablets for better use of screen space
     .p-6 {
       padding: 1.5rem;

@@ -7,4 +7,7 @@ export interface Customer {
     contactNumber?: string;
     introduced?: boolean;
     active?: boolean;
+    phone?: string;
+    membershipName?: string;
+    membershipExpiry?: string | Date;
 }

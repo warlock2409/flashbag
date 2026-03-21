@@ -77,11 +77,8 @@
         </div>
       </div>
       <div class="flex items-center gap-2 space-x-4 animate-fade-in delay-500">
-        <button 
-          *ngIf="selectedShop?.active !== null"
-          (click)="toggleShopVisibility()"
-          [style.backgroundColor]="selectedShop?.active ? '#dc3545' : '#28a745'"
-          [style.color]="'white'"
+        <button *ngIf="selectedShop?.active !== null" (click)="toggleShopVisibility()"
+          [style.backgroundColor]="selectedShop?.active ? '#dc3545' : '#28a745'" [style.color]="'white'"
           class="px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl transform hover:scale-105">
           {{ selectedShop?.active ? "Go Offline" : "Go Online" }}
         </button>
@@ -317,7 +314,7 @@
           </div>
           <div class="min-h-40 mb-6 hover:scale-105 transition-transform">
             @for (expiringMembership of membershipSummary?.expiringMemberships; track $index) {
-            <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-3">
+            <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-3" (click)="openCustomerActions(expiringMembership.customerDTO)" style="cursor: pointer;">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                   <div class="px-4 py-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 icon-hover">
@@ -330,11 +327,13 @@
                     <span
                       class="font-medium text-md hover:text-purple-300 transition-colors cursor-pointer">{{expiringMembership.customerDTO?.firstName
                       ?? "Online Customer"}}</span>
-                    <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]" *ngIf="expiringMembership.customerDTO?.email">
+                    <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]"
+                      *ngIf="expiringMembership.customerDTO?.email">
                       <span class="number-digit"
                         style="--digit-delay: 1s">{{expiringMembership.customerDTO?.email}}</span>
                     </p>
-                    <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]" *ngIf="expiringMembership.customerDTO?.contactNumber">
+                    <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]"
+                      *ngIf="expiringMembership.customerDTO?.contactNumber">
                       <span class="number-digit"
                         style="--digit-delay: 1s">{{expiringMembership.customerDTO?.contactNumber}}</span>
                     </p>
@@ -363,10 +362,6 @@
                 <div class="w-2 h-2 bg-blue-400 rounded-full group-hover:scale-150 transition-transform"></div>
                 <span class="text-white/60 group-hover:text-white/80 transition-colors">Today</span>
               </div>
-              <div class="flex items-center space-x-2 hover-lift cursor-pointer group">
-                <div class="w-2 h-2 bg-white/30 rounded-full group-hover:scale-150 transition-transform"></div>
-                <span class="text-white/60 group-hover:text-white/80 transition-colors">Yesterday</span>
-              </div>
             </div>
           </div>
         </div>
@@ -383,7 +378,7 @@
           <div class="min-h-40 mb-6">
             <div *ngIf="trailListCustomer?.length">
               @for (trail of trailListCustomer; track $index) {
-              <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-3">
+              <div class="room-card bg-white/5 rounded-2xl p-2 border border-white/5 mb-3" (click)="openCustomerActions(trail.customerDto)" style="cursor: pointer;">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-2">
                     <div
@@ -396,10 +391,12 @@
                         class="font-medium text-md hover:text-purple-300 transition-colors cursor-pointer">{{trail.serviceName}}
                         - {{trail.customerDto?.firstName
                         ?? "Online Customer"}}</span>
-                      <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]" *ngIf="trail.customerDto?.email">
+                      <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]"
+                        *ngIf="trail.customerDto?.email">
                         <span class="number-digit" style="--digit-delay: 1s">{{trail.customerDto?.email}}</span>
                       </p>
-                      <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]" *ngIf="trail.customerDto?.contactNumber">
+                      <p class="text-xs text-white/60 m-0 whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]"
+                        *ngIf="trail.customerDto?.contactNumber">
                         <span class="number-digit" style="--digit-delay: 1s">{{trail.customerDto?.contactNumber}}</span>
                       </p>
                     </div>
@@ -407,12 +404,12 @@
                   <div class="flex gap-2">
                     <button *ngIf="trail.status != 'APPROVED'"
                       class="text-sm text-blue-400 hover:text-blue-300 transition-all bg-green-500/10 px-3 py-2 rounded-xl hover:bg-green-500/20 hover:scale-105 button-hover"
-                      (click)="changeTrailStatus(trail,'APPROVED')">
+                      (click)="$event.stopPropagation(); changeTrailStatus(trail,'APPROVED')">
                       <i class="fa-solid fa-check"></i>
                     </button>
                     <button
                       class="text-sm text-blue-400 hover:text-blue-300 transition-all bg-red-500/10 px-3 py-2 rounded-xl hover:bg-red-500/20 hover:scale-105 button-hover"
-                      (click)="changeTrailStatus(trail,'DECLINED')">
+                      (click)="$event.stopPropagation(); changeTrailStatus(trail,'DECLINED')">
                       <i class="fa-solid fa-xmark"></i>
                     </button>
                   </div>
@@ -549,5 +546,12 @@
 
     </div>
   </main>
+
+<!-- Configure Panel -->
+<app-side-panel [isOpen]="configurePanelOpen" title="Configure Customer" (closePanel)="closeConfigurePanel()"
+  [panelStyles]="{ width: isMobileView ? '100%' : '600px' }">
+  <app-customer-configure-panel [customer]="selectedCustomer"
+    (customerDeleted)="closeConfigurePanel()"></app-customer-configure-panel>
+</app-side-panel>
 
 </div>

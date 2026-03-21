@@ -4,7 +4,7 @@
         <!-- Dialog Header -->
         <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
             <h2 class="text-lg font-semibold text-gray-800 m-0">{{data.name}}</h2>
-            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500">
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500 cursor-pointer">
                 <mat-icon style="color: lightcoral;">cancel</mat-icon>
             </button>
         </div>
@@ -12,7 +12,7 @@
         <!-- Content -->
         <div class="flex-1 overflow-y-auto p-2 space-y-6" *ngIf="data.type == 'MEMBERSHIP_START_DATE_PICKER'">
             <mat-card class="demo-inline-calendar-card">
-                <mat-calendar [(selected)]="selected" [maxDate]="maxDate"
+                <mat-calendar [(selected)]="selected" [minDate]="minDate" [maxDate]="maxDate"
                     (selectedChange)="onDateSelected($event)">
                 </mat-calendar>
             </mat-card>
@@ -45,8 +45,8 @@
                         <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-500">
                             <i class="fa-solid fa-indian-rupee-sign"></i>
                         </div>
-                        <input id="pay-amount" type="text" inputmode="decimal" placeholder="0.00"
-                            [value]="data.invoice.grandTotal"
+                        <input id="pay-amount" type="number" inputmode="decimal" placeholder="0.00"
+                            [(ngModel)]="payableAmount"
                             class="w-full rounded-md bg-white pl-7 pr-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 ring-1 ring-inset ring-neutral-200 focus:outline-none focus:ring-neutral-300"
                             style="font-family: 'Inter', ui-sans-serif, system-ui;">
                     </div>

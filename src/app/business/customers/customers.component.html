@@ -44,20 +44,64 @@
       <!-- Search -->
       <div class="search-container">
         <div class="search-wrapper">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="search"
-            class="search-icon">
+          <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+            data-lucide="search" class="search-icon">
             <path d="m21 21-4.34-4.34"></path>
             <circle cx="11" cy="11" r="8"></circle>
           </svg>
+          <div *ngIf="loading" class="search-icon">
+            <i class="fa-solid fa-circle-notch animate-spin text-blue-500"></i>
+          </div>
           <input id="search" type="text" placeholder="Search by customer or company…" [(ngModel)]="searchQuery"
             (input)="onSearchChange($event)" class="search-input">
+        </div>
+      </div>
+
+      <!-- Expiry Date Filter -->
+      <div class="filter-container" *ngIf="activeFilter === 'expiry' || activeFilter === 'activity'">
+        <div class="filter-wrapper">
+          <div class="flex items-center px-4 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-gray-400">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <select [(ngModel)]="selectedMonth" (change)="onMonthChange(selectedMonth)"
+              class="bg-transparent border-none text-sm text-gray-600 outline-none cursor-pointer py-2 pr-2 min-w-[120px]">
+              <option [ngValue]="undefined">Month</option>
+              <option *ngFor="let month of months" [ngValue]="month.value">
+                {{ month.name }}
+              </option>
+            </select>
+            <div class="w-[1px] h-4 bg-gray-200"></div>
+            <select [(ngModel)]="selectedYear" (change)="onYearChange(selectedYear)"
+              class="bg-transparent border-none text-sm text-gray-600 outline-none cursor-pointer py-2 pr-4 min-w-[80px]">
+              <option [ngValue]="undefined">Year</option>
+              <option *ngFor="let year of years" [ngValue]="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
 
       <!-- Segmented Filter -->
       <div class="filter-container">
         <div class="filter-wrapper">
+          <button data-filter="activity" [class.filter-btn-active]="activeFilter === 'activity'" class="filter-btn"
+            (click)="onFilterChange('activity')">
+            <span [class.filter-indicator-active]="activeFilter === 'activity'" class="filter-indicator">•</span>
+            <span class="filter-text">Activity</span>
+          </button>
+          <button data-filter="expiry" [class.filter-btn-active]="activeFilter === 'expiry'" class="filter-btn"
+            (click)="onFilterChange('expiry')">
+            <span [class.filter-indicator-active]="activeFilter === 'expiry'" class="filter-indicator">•</span>
+            <span class="filter-text">Expiry</span>
+          </button>
           <button data-filter="all" [class.filter-btn-active]="activeFilter === 'all'" class="filter-btn"
             (click)="onFilterChange('all')">
             <span [class.filter-indicator-active]="activeFilter === 'all'" class="filter-indicator">•</span>
@@ -74,6 +118,11 @@
             <span [class.filter-indicator-active]="activeFilter === 'inactive'" class="filter-indicator">•</span>
             <span class="filter-text">Inactive</span>
           </button>
+          <button data-filter="leads" [class.filter-btn-active]="activeFilter === 'leads'" class="filter-btn"
+            (click)="onFilterChange('leads')">
+            <span [class.filter-indicator-active]="activeFilter === 'leads'" class="filter-indicator">•</span>
+            <span class="filter-text">Leads</span>
+          </button>
         </div>
       </div>
     </section>
@@ -85,10 +134,12 @@
     <!-- Table (Desktop) -->
     <section class="desktop-table-section">
       <div class="table-header">
+        <div class="table-header-cell id-header">ID</div>
         <div class="table-header-cell customer-header">Customer</div>
         <div class="table-header-cell contact-header">Contact</div>
-        <div class="table-header-cell spend-header">Last Spend</div>
-        <div class="table-header-cell total-header">Total Spend</div>
+        <div class="table-header-cell spend-header">{{ activeFilter === 'activity' ? 'Last Checkin' : 'Last Spend' }}
+        </div>
+        <div class="table-header-cell total-header">{{ activeFilter === 'activity' ? 'Checkins' : 'Total Spend' }}</div>
         <div class="table-header-cell membership-header">Membership</div>
         <div class="table-header-cell expiry-header">Expiry</div>
       </div>
@@ -99,6 +150,14 @@
         <div class="table-row fade-in" [style.animation-delay]="rowIndex * 0.05 + 's'"
           [attr.data-customer-id]="customer.id" data-status="active" (click)="openCustomerActions(customer)"
           style="cursor: pointer;">
+          <div class="table-cell id-cell">
+            <div class="id-wrapper">
+              <span class="primary-id">#{{customer.id}}</span>
+              <!-- existingId -->
+              <span class="existing-id" *ngIf="customer.existingCustomerId">({{customer.existingCustomerId}})</span>
+              <span class="existing-id" *ngIf="customer.existingId">({{customer.existingId}})</span>
+            </div>
+          </div>
           <div class="table-cell customer-cell">
             <i class="customer-icon introduced-icon" *ngIf="customer.introduced"></i>
             <i class="customer-icon regular-icon" *ngIf="!customer.introduced"></i>
@@ -113,16 +172,22 @@
           <div class="table-cell spend-cell">
             {{ customer?.lastSpendDate || '— — —' }}
           </div>
-          <div class="table-cell total-cell">{{customer.totalSpent | currency:'INR' }}</div>
+          <div class="table-cell total-cell">
+            @if (activeFilter === 'activity') {
+            ({{ customer.totalCheckins || 0 }})
+            } @else {
+            {{customer.totalSpent | currency:'INR' }}
+            }
+          </div>
           <div class="table-cell membership-cell">{{customer.membershipName}}</div>
           <div class="table-cell expiry-cell">
             <span *ngIf="!customer.membershipExpiry" class="expiry-badge expiry-badge-empty">— — —</span>
 
             <span *ngIf="customer.membershipExpiry && isExpired(customer.membershipExpiry)"
-              class="expiry-badge expiry-badge-expired">{{customer.membershipExpiry}}</span>
+              class="expiry-badge expiry-badge-expired">{{customer.membershipExpiry | date:'dd MMM yyyy' }}</span>
 
             <span *ngIf="customer.membershipExpiry && !isExpired(customer.membershipExpiry)"
-              class="expiry-badge expiry-badge-active">{{customer.membershipExpiry}}</span>
+              class="expiry-badge expiry-badge-active">{{customer.membershipExpiry | date:'dd MMM yyyy' }}</span>
           </div>
         </div>
         }
@@ -134,8 +199,8 @@
       <!-- Card -->
       @for (customer of customers; track $index; let rowIndex = $index) {
       <article class="customer-card fade-in" [style.animation-delay]="rowIndex * 0.05 + 's'"
-        [attr.data-customer-id]="customer.id" data-status="active">
-        <div class="card-header" (click)="openCustomerActions(customer)">
+        [attr.data-customer-id]="customer.id" data-status="active" (click)="openCustomerActions(customer)">
+        <div class="card-header">
           <div class="card-header-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
@@ -149,7 +214,11 @@
               {{customer.firstName}} {{customer.lastName}}
             </h3>
           </div>
-          <span class="card-status">Active</span>
+          <span class="card-status"
+            [class.card-status-inactive]="!customer.membershipExpiry || isExpired(customer.membershipExpiry)">
+            {{ !customer.membershipExpiry ? 'No Membership' : (isExpired(customer.membershipExpiry) ? 'Expired' :
+            'Active') }}
+          </span>
         </div>
         <div class="card-company">{{customer.companyName}}</div>
         <div class="card-contact">
@@ -163,7 +232,13 @@
           </div>
         </div>
         <div class="card-footer">
-          <div class="card-amount">{{customer.totalSpent | currency:'INR'}}</div>
+          <div class="card-amount">
+            @if (activeFilter === 'activity') {
+            {{ customer.totalCheckins || 0 }} Checkins
+            } @else {
+            {{customer.totalSpent | currency:'INR'}}
+            }
+          </div>
           <button class="view-button">
             View
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -202,6 +277,7 @@
 
 <!-- Configure Panel -->
 <app-side-panel [isOpen]="configurePanelOpen" title="Configure Customer" (closePanel)="closeConfigurePanel()"
-  [panelStyles]="{ width: isMobileView ? '100%' : '500px' }">
-  <app-customer-configure-panel [customer]="selectedCustomer"></app-customer-configure-panel>
+  [panelStyles]="{ width: isMobileView ? '100%' : '600px' }">
+  <app-customer-configure-panel [customer]="selectedCustomer"
+    (customerDeleted)="closeConfigurePanel()"></app-customer-configure-panel>
 </app-side-panel>

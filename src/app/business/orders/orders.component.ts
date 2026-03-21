@@ -174,6 +174,12 @@ export class OrdersComponent implements OnInit {
     CANCELLED: 'bg-red-200 text-red-700 ring-red-300'
   };
 
+  getRemainingAmount(invoice: InvoiceModel): number {
+    if (!invoice.grandTotal) return 0;
+    const totalPaid = invoice.payments?.reduce((sum, p) => sum + (p.amount || 0), 0) || 0;
+    return invoice.grandTotal - totalPaid;
+  }
+
   openNewInvoice() {
     const dialogRef = this.dialog.open(PosComponent, {
       width: '100%',

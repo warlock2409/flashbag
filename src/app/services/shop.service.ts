@@ -7,16 +7,6 @@ import { InvoiceModel } from '../models/payment.model';
   providedIn: 'root'
 })
 export class ShopService {
-
-
-
-
-
-
-
-
-
-
   Http = inject(HttpClient);
 
   constructor() {
@@ -100,6 +90,29 @@ export class ShopService {
     let shopCode = localStorage.getItem("shopCode");
     let url = "http://localhost:8080/api/advertisements/shop/{shopCode}?area={area}".replace("{shopCode}", shopCode!).replace("{area}", area);
     return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getCustomerMembershipDetails(customerId: number) {
+    let url = "http://localhost:8080/api/membership/customer/membership/{customerId}".replace("{customerId}", customerId.toString());
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  updateCustomerMembershipStatus(customerId: number, membershipId: number, status: string) {
+    let url = "http://localhost:8080/api/membership/customer/{customerId}/membership/{membershipId}/status"
+      .replace("{customerId}", customerId.toString())
+      .replace("{membershipId}", membershipId.toString());
+    let body = {
+      status: status
+    }
+    console.log(body);
+    return this.Http.put<ServiceResponse<any>>(url, body);
+  }
+
+  updatePendingMembershipStatus(customerId: number, membershipId: number, data: any) {
+    let url = "http://localhost:8080/api/membership/{membershipId}/customer/{customerId}/pending"
+      .replace("{customerId}", customerId.toString())
+      .replace("{membershipId}", membershipId.toString());
+    return this.Http.put<ServiceResponse<any>>(url, data);
   }
 
 }
