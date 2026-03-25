@@ -30,23 +30,23 @@ export class ExercisePlanComponent {
 
   modelFilters: BodyFilter[] = [
     { key: "", name: "All", icon: "directions_walk" },
-    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
-    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
-    { key: "chest", name: "Chest", icon: "sports_mma" },
-    { key: "biceps", name: "Biceps", icon: "arm_flex" }, 
-    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
     { key: "abdominals", name: "Abs", icon: "self_improvement" },
-    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
-    { key: "hands", name: "Hands", icon: "pan_tool" },
-    { key: "forearms", name: "Forearms", icon: "back_hand" },
-    { key: "traps", name: "Traps", icon: "change_history" },
-    { key: "wrist", name: "Wrists", icon: "watch" },
-    { key: "quads", name: "Quads", icon: "fitness_center" },
-    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
-    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    { key: "biceps", name: "Biceps", icon: "arm_flex" },
     { key: "calves", name: "Calves", icon: "directions_walk" },
-    { key: "traps_middle", name: "Traps", icon: "height" },
+    { key: "chest", name: "Chest", icon: "sports_mma" },
+    { key: "forearms", name: "Forearms", icon: "back_hand" },
     { key: "body", name: "Full Body", icon: "accessibility" },
+    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+    { key: "hands", name: "Hands", icon: "pan_tool" },
+    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
+    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
+    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+    { key: "quads", name: "Quads", icon: "fitness_center" },
+    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
+    { key: "traps", name: "Traps", icon: "change_history" },
+    { key: "traps_middle", name: "Traps", icon: "height" },
+    { key: "wrist", name: "Wrists", icon: "watch" },
   ];
 
   constructor(public dialog: MatDialog, private organizationService: OrganizationServiceService, private swalService: SweatAlertService) {
@@ -61,7 +61,7 @@ export class ExercisePlanComponent {
       // Filter only non-null strings with length >= 2 OR empty string
       filter((val: string | null): val is string => !!val && val.length >= 2 || val === '')
     ).subscribe(searchTerm => {
-      this.getExercise("",searchTerm);
+      this.getExercise("", searchTerm);
     });
   }
 
@@ -78,6 +78,8 @@ export class ExercisePlanComponent {
   }
 
   editExercise(exercise: any) {
+    console.log(exercise);
+
     const dialogRef = this.dialog.open(ExerciseActionComponent, {
       data: { bodyFilter: this.modelFilters, isEdit: true, existingExercise: exercise },
     });
@@ -90,8 +92,8 @@ export class ExercisePlanComponent {
   }
 
   deleteExercise(exercise: any) {
-    console.log(exercise,this.byPart);
-    
+    console.log(exercise, this.byPart);
+
     const category = exercise.category?.toLowerCase();
     if (!category || !this.byPart[category]) return;
 
@@ -160,25 +162,22 @@ export class ExercisePlanComponent {
 
     this.byPart[bodyPart] = this.byPart[bodyPart].filter((e: any) => e.id !== ex.id);
 
-    // Convert each set clearly
-    const sets = ex.sets?.map((s: any, i: number) => ({
-      setNo: i + 1,
-      reps: s.reps,
-      weight: s.weight,
-      rest: s.rest,
-      duration: s.duration
-    })) || [];
+    let totalSets = 0;
+    if (ex.modeConfigs) {
+       ex.modeConfigs.forEach((m: any) => {
+         totalSets += m.sets ? m.sets.length : 0;
+       });
+    }
 
     // Push the formatted exercise with detailed set info
     this.byPart[bodyPart].push({
       id: ex.id,
       name: ex.name,
-      totalSets: sets.length,
-      sets: sets,
+      totalSets: totalSets,
+      modeConfigs: ex.modeConfigs || [],
       equipment: ex.equipment || ex.tag || 'Bodyweight',
-      mode: ex.mode,
-      tags: [ex.tag],
-      notes: ex.description || '',
+      tag: ex.tag,
+      notes: ex.description || ex.notes || '',
       documentDto: ex.documentDto,
       category: ex.category
     });

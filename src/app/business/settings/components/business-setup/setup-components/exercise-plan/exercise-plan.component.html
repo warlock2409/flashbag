@@ -99,38 +99,37 @@
                                                 {{ item.name}}
                                             </span>
                                             <span class="text-[12px] text-neutral-600">
-                                                • {{ item.mode}}
+                                                • {{ item.equipment}}
                                             </span>
                                         </h4>
 
                                         <div class="flex gap-4">
-                                            <button mat-raised-button
-                                                style="background-color: #00b1c3; color: white;"
+                                            <button mat-raised-button style="background-color: #00b1c3; color: white;"
                                                 (click)="editExercise(item)">
                                                 Edit
                                             </button>
-                                            <button mat-raised-button
-                                                style="background-color: coral; color: white;"
+                                            <button mat-raised-button style="background-color: coral; color: white;"
                                                 (click)="deleteExercise(item)">
                                                 Delete
                                             </button>
                                         </div>
 
                                     </div>
-                                    <div class="mt-1 text-sm text-neutral-600">
-                                        @for (itemSet of item.sets; track $index) {
-                                        <p>
-                                            • {{ itemSet.weight }} kg x {{ itemSet.reps }} reps • {{ itemSet.rest
-                                            }}s
-                                            rest
-                                        </p>
+                                    <!-- <div class="mt-1 text-sm text-neutral-600">
+                                        @for (modeConf of item.modeConfigs; track $index) {
+                                            <div class="mt-1 font-semibold text-xs text-neutral-800">{{ modeConf.mode }}</div>
+                                            @for (itemSet of modeConf.sets; track $index) {
+                                            <p class="ml-2 mt-0.5">
+                                                • {{ itemSet.weight ? itemSet.weight + ' kg x ' : '' }}{{ itemSet.reps }} reps • {{ itemSet.rest }}s rest
+                                            </p>
+                                            }
                                         }
-                                    </div>
+                                    </div> -->
                                     <div class="mt-2 flex flex-wrap gap-1.5">
-                                        <span *ngFor="let t of item.tags"
+                                        <span *ngIf="item.tag"
                                             class="inline-flex items-center gap-1 rounded-full bg-neutral-50 ring-1 ring-inset ring-neutral-200 px-2 py-0.5 text-[11px] text-neutral-700">
                                             <i class="fa-solid fa-tag"></i>
-                                            {{ t }}
+                                            {{ item.tag }}
                                         </span>
                                     </div>
                                     <p *ngIf="item.notes" class="mt-2! text-xs text-neutral-600">{{ item.notes }}

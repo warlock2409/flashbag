@@ -1,4 +1,3 @@
-
 <div class="setup-container">
 
   <div class="filter-chips-container breadcrump-spacing">
@@ -14,21 +13,15 @@
 
   <div class="content-container responsive-flex-row">
     <!-- Mobile menu toggle button -->
-    <button 
-      *ngIf="isMobileView" 
-      mat-icon-button 
-      class="mobile-menu-toggle"
-      (click)="toggleMenu()"
+    <button *ngIf="isMobileView" mat-icon-button class="mobile-menu-toggle" (click)="toggleMenu()"
       aria-label="Toggle menu">
       <mat-icon>{{isMenuOpen ? 'close' : 'menu'}}</mat-icon>
     </button>
-    
+
     <!-- Sidebar menu with conditional visibility -->
-    <div 
-      class="sidebar-menu" 
-      [class.mobile-menu-open]="isMenuOpen && isMobileView"
+    <div class="sidebar-menu" [class.mobile-menu-open]="isMenuOpen && isMobileView"
       [class.hide-mobile]="isMobileView && !isMenuOpen">
-      
+
       <ul nz-menu nzMode="inline">
         <li nz-submenu nzTitle="Organization setup" nzOpen>
           <ul>
@@ -38,7 +31,8 @@
         <li nz-submenu nzTitle="Business setup" nzOpen>
           <ul>
             <!-- <li nz-menu-item (click)="navigateTo('./details',['view','business'])">Business details</li> -->
-            <li nz-menu-item (click)="navigateTo('./locations')" [nzDisabled]="details?.status != 'ACTIVE'">Locations</li>
+            <li nz-menu-item (click)="navigateTo('./locations')" [nzDisabled]="details?.status != 'ACTIVE'">Locations
+            </li>
           </ul>
         </li>
 
@@ -46,13 +40,18 @@
           <ul>
             <!-- <li nz-menu-item (click)="navigateTo('./product')">Products</li> -->
             <!-- <li nz-menu-item (click)="navigateTo('./rental')">Rental</li> -->
-            <li nz-menu-item (click)="navigateTo('./service')" [class.ant-menu-item-selected]="isActive('service')" [nzDisabled]="details?.status != 'ACTIVE'">Services</li>
-            <li nz-menu-item (click)="navigateTo('./membership')" [nzDisabled]="details?.status != 'ACTIVE'">Memberships</li>
+            <li nz-menu-item (click)="navigateTo('./service')" [class.ant-menu-item-selected]="isActive('service')"
+              [nzDisabled]="details?.status != 'ACTIVE'">Services</li>
+            <li nz-menu-item (click)="navigateTo('./membership')" [nzDisabled]="details?.status != 'ACTIVE'">Memberships
+            </li>
           </ul>
         </li>
         <li nz-submenu nzTitle="Activity" nzOpen>
           <ul>
-            <li nz-menu-item (click)="navigateTo('./exercisePlan')" [nzDisabled]="details?.status != 'ACTIVE'">Exercise Plan</li>
+            <li nz-menu-item (click)="navigateTo('./exercisePlan')" [nzDisabled]="details?.status != 'ACTIVE'">Exercise
+              Plan</li>
+            <li nz-menu-item (click)="navigateTo('./goalPlan')" [nzDisabled]="details?.status != 'ACTIVE'">Goal Plan
+            </li>
           </ul>
         </li>
       </ul>

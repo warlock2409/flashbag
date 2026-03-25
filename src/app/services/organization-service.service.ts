@@ -318,7 +318,6 @@ export class OrganizationServiceService {
   getExercise(
     category?: string,
     name?: string,
-    mode?: string,
     page?: number,
     size?: number
   ) {
@@ -334,7 +333,6 @@ export class OrganizationServiceService {
     const params: any = {};
 
     if (category) params.category = category;
-    if (mode) params.mode = mode;
     if (name) params.name = name;
     if (page != null) params.page = page;
     if (size != null) params.size = size;
@@ -384,6 +382,18 @@ export class OrganizationServiceService {
       .replace("{shopCode}", shopCode!)
       .replace("{customerId}", customerId.toString());
     return this.Http.delete<ServiceResponse<any>>(url);
+  }
+
+  // Goal Plan
+  createGoalPlan(payload: any) {
+    let url = "http://localhost:8080/api/exercise/goal";
+    return this.Http.post<ServiceResponse<any>>(url, payload);
+  }
+
+  getGoalPlans() {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/api/exercise/org/{orgCode}".replace("{orgCode}", orgCode!);
+    return this.Http.get<ServiceResponse<any>>(url);
   }
 
 }

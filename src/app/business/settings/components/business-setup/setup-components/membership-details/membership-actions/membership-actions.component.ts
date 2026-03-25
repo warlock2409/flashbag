@@ -367,7 +367,6 @@ export class MembershipActionsComponent {
       width: '600px',
       data: {
         category: bodyPart.title,
-        mode: this.membershipPlan.mode,
         selectedExercises: bodyPart.selectedExercises || []
       }
     });
