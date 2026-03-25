@@ -37,7 +37,7 @@ export interface UploadFile {
   standalone: true
 })
 export class UploadMediaComponent {
-  baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
+  baseUrl = "https://nine-myle-144983988304.asia-south1.run.app/";
   // baseUrl= "http://localhost:8080/";
 
 
@@ -50,14 +50,14 @@ export class UploadMediaComponent {
   @Output() uploaded = new EventEmitter<DocumentDto>();
   //
   // @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnU5NXFncHV2ZWlmYjV5eXVxeDNwZWd0emU5Ym5zNzBzcHFvaW41bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ctYt1iImGI71RwUIQO/giphy.gif";
-  @Input() placeholderUrl:string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXFpZWUzM2RqMXZ4YnduYzFvZ213emx0bnhocWUxeDM3d2M4ZG1qcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/A0kDTa8yhi19D4tP5C/giphy.gif";
+  @Input() placeholderUrl: string = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXFpZWUzM2RqMXZ4YnduYzFvZ213emx0bnhocWUxeDM3d2M4ZG1qcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/A0kDTa8yhi19D4tP5C/giphy.gif";
 
 
   ngOnChanges(changes: SimpleChanges) {
 
     console.log(this.existingUploads);
-    
-    
+
+
     if (this.existingUploads && Array.isArray(this.existingUploads.attachments)) {
       const prefix = "https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/";
 

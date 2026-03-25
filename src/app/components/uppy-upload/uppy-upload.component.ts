@@ -21,7 +21,7 @@ export interface UploadFileData {
 })
 export class UppyUploadComponent {
   // baseUrl = "http://localhost:8080/";
-  baseUrl= "https://nine-myle-350908556628.asia-south1.run.app/";
+  baseUrl = "https://nine-myle-144983988304.asia-south1.run.app/";
 
 
 
@@ -40,26 +40,26 @@ export class UppyUploadComponent {
   private compressImage(file: Blob, quality: number): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (event: any) => {
         const img = new Image();
-        
+
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          
+
           if (!ctx) {
             reject(new Error('Could not get canvas context'));
             return;
           }
-          
+
           // Set canvas dimensions to match image
           canvas.width = img.width;
           canvas.height = img.height;
-          
+
           // Draw image on canvas
           ctx.drawImage(img, 0, 0);
-          
+
           // Convert canvas to blob with compression
           canvas.toBlob(
             (blob) => {
@@ -73,11 +73,11 @@ export class UppyUploadComponent {
             quality
           );
         };
-        
+
         img.onerror = () => reject(new Error('Failed to load image'));
         img.src = event.target.result;
       };
-      
+
       reader.onerror = () => reject(new Error('Failed to read file'));
       reader.readAsDataURL(file);
     });
@@ -117,15 +117,15 @@ export class UppyUploadComponent {
           // Compress image if it's an image file
           let fileData = file.data;
           const originalSize = file.size;
-          
+
           if (file.type?.startsWith('image/') && file.size && file.data instanceof Blob) {
             console.log(`📁 File: ${file.name}`);
             console.log(`📊 Original size: ${(file.size / 1024 / 1024).toFixed(2)}MB (${(file.size / 1024).toFixed(0)}KB)`);
             console.log(`🔧 Compressing...`);
-            
+
             // Compress with 60% quality
             fileData = await this.compressImage(file.data, 0.6);
-            
+
             if (file.size) {
               console.log(`📊 Original size: ${(file.size / 1024 / 1024).toFixed(2)}MB (${(file.size / 1024).toFixed(0)}KB)`);
               console.log(`✅ Compressed size: ${(fileData.size! / 1024 / 1024).toFixed(2)}MB (${(fileData.size! / 1024).toFixed(0)}KB)`);
@@ -172,10 +172,10 @@ export class UppyUploadComponent {
           // 3️⃣ Construct file metadata
           const urlObj = new URL(presignedUrl);
           const objectKey = urlObj.pathname.substring(1);
-          
+
           // Use compressed file size if available, otherwise use original
           const actualSize = fileData instanceof Blob ? fileData.size : file.size;
-          
+
           uploadedFiles.push({
             filename: file.name!,
             size: actualSize!,  // Use compressed file size
