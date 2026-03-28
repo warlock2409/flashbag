@@ -20,7 +20,6 @@ export class ExerciseSelectionDialogComponent {
   selectedExercises: any[] = [];
   availableExercises: any[] = [];
   category: string = '';
-  mode: string = '';
   isLoading: boolean = false;
 
   constructor(
@@ -29,7 +28,6 @@ export class ExerciseSelectionDialogComponent {
     private orgService: OrganizationServiceService
   ) {
     this.category = data.category;
-    this.mode = data.mode;
     this.selectedExercises = [...(data.selectedExercises || [])];
     
     // Ensure order property is set for existing selected exercises
@@ -40,7 +38,7 @@ export class ExerciseSelectionDialogComponent {
 
   loadExercises() {
     this.isLoading = true;
-    this.orgService.getExercise(this.category, '',this.mode).subscribe({
+    this.orgService.getExercise(this.category, '').subscribe({
       next: (response: ResponseDate) => {
         this.availableExercises = response.data.content || response.data || [];
         console.log('Available exercises:', this.availableExercises);

@@ -23,6 +23,7 @@ import { InstagramAutomationComponent } from './settings/components/online-prese
 import { FlashVibeComponent } from './settings/components/online-presence/instagram-automation/components/flash-vibe/flash-vibe.component';
 import { ProductDetailsComponent } from './settings/components/business-setup/setup-components/product-details/product-details.component';
 import { AdvertisementComponent } from './settings/components/advertisement/advertisement.component';
+import { GoalPlanComponent } from './settings/components/business-setup/setup-components/goal-plan/goal-plan.component';
 
 const routes: Routes = [
   {
@@ -116,6 +117,10 @@ const routes: Routes = [
               {
                 path: "exercisePlan",
                 component: ExercisePlanComponent
+              },
+              {
+                path: "goalPlan",
+                component: GoalPlanComponent
               },
               {
                 path: "product",

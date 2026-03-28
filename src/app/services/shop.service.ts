@@ -115,4 +115,10 @@ export class ShopService {
     return this.Http.put<ServiceResponse<any>>(url, data);
   }
 
+  assignGoalToMembership(membershipId: number, payload: { goalId: number; mode: string }) {
+    let url = "http://localhost:8080/api/membership/{membershipId}/assign-goal"
+      .replace("{membershipId}", membershipId.toString());
+    return this.Http.put<ServiceResponse<any>>(url, payload);
+  }
+
 }

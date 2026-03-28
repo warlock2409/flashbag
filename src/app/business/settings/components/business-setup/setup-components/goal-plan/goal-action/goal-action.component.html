@@ -1,0 +1,116 @@
+<div class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-4">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 m-0">{{ data.isEdit ? 'Edit Goal' : 'Create Goal' }}</h2>
+                <label class="text-sm text-gray-500">Map exercises by day to build comprehensive goal
+                    frameworks.</label>
+            </div>
+            <button (click)="closeDialog()" class="text-gray-400 hover:text-red-500 cursor-pointer p-1">
+                <i class="fa-solid fa-circle-xmark text-xl text-[lightcoral]"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+            <!-- Goal Details -->
+            <form [formGroup]="goalForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-900 mb-1">Goal Name</label>
+                    <input type="text" placeholder="e.g., Summer Shred" formControlName="name"
+                        class="w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-900 mb-1">Description</label>
+                    <textarea rows="3" placeholder="Describe the goal program..." formControlName="description"
+                        [maxLength]="250"
+                        class="w-full rounded-md bg-white ring-1 ring-inset ring-neutral-200 px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-blue-500"></textarea>
+                </div>
+            </form>
+
+            <hr class="border-gray-200" />
+
+            <!-- Exercise Mapping copied heavily from membership-actions -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 m-0">Exercise Mapping</h3>
+                        <p class="text-gray-600 text-xs mt-1 m-0">Create workout days and assign target body parts.</p>
+                    </div>
+                    <button type="button"
+                        class="flex items-center gap-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1.5 rounded-md transition-colors text-sm font-medium"
+                        (click)="addDay()">
+                        <mat-icon class="text-[18px] w-[18px] h-[18px]">add</mat-icon> Add Day
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div *ngFor="let day of exerciseDays; let dayIndex = index"
+                        class="border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4
+                                class="font-medium text-blue-900 m-0 bg-blue-50 px-2.5 py-1 rounded border border-blue-100 text-sm">
+                                Day {{ dayIndex + 1 }}</h4>
+                            <button type="button"
+                                class="text-red-500 hover:text-red-700 p-1 rounded-md hover:bg-red-50 transition-colors"
+                                (click)="removeDay(dayIndex)" title="Remove day">
+                                <mat-icon class="text-base w-4 h-4">delete</mat-icon>
+                            </button>
+                        </div>
+
+                        <!-- Body Parts for this Day -->
+                        <div class="space-y-2">
+                            <div *ngFor="let bodyPart of day.taskDtoList; let bpIndex = index; trackBy: trackByIndex"
+                                class="flex items-center gap-2 p-2 bg-gray-50 rounded-md border border-gray-100 hover:bg-gray-100 transition-colors">
+                                <div class="flex-1">
+                                    <select
+                                        class="w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-gray-700 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200 focus:outline-none hover:border-gray-400"
+                                        [value]="bodyPart.title" (change)="onBodyPartChange(dayIndex, bpIndex, $event)">
+                                        <option value="">Select Body Part</option>
+                                        <option *ngFor="let filter of modelFilters" [value]="filter.name"
+                                            [selected]="filter.name === bodyPart.title" [disabled]="filter.key === ''">
+                                            {{ filter.name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Exercise Selection Button -->
+                                <button type="button" *ngIf="bodyPart.title && bodyPart.title !== 'Select Body Part'"
+                                    class="text-blue-600 font-medium bg-white border border-blue-200 hover:text-blue-800 px-2 py-1 rounded-md hover:bg-blue-50 text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+                                    (click)="openExerciseSelectionDialog(dayIndex, bpIndex)">
+                                    <mat-icon class="text-[16px] w-[16px] h-[16px]">fitness_center</mat-icon>
+                                    {{ bodyPart.selectedExercises?.length || 0 }} exercises
+                                </button>
+
+                                <button type="button"
+                                    class="text-red-400 hover:text-red-600 p-1 rounded-md hover:bg-red-50 transition-colors"
+                                    (click)="removeBodyPart(dayIndex, bpIndex)" title="Remove body part">
+                                    <mat-icon class="text-base w-4 h-4">remove_circle_outline</mat-icon>
+                                </button>
+                            </div>
+
+                            <button type="button"
+                                class="mt-2 flex items-center gap-1.5 text-blue-600 hover:text-blue-800 text-xs font-medium p-1.5 rounded-md hover:bg-blue-50 w-full justify-center transition-colors border border-dashed border-blue-200"
+                                (click)="addBodyPartToDay(dayIndex)">
+                                <mat-icon class="text-[16px] w-[16px] h-[16px]">add_circle_outline</mat-icon> Add Body
+                                Part
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="exerciseDays.length === 0"
+                    class="py-10 text-center text-gray-500 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                    No workout days added yet. Click 'Add Day' to start outlining your program.
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 p-4 flex justify-end gap-3 bg-gray-50 rounded-b-xl">
+            <button mat-stroked-button (click)="closeDialog()" class="bg-white">Cancel</button>
+            <button mat-raised-button class="bg-blue-600! text-white!" (click)="saveGoal()">
+                {{ data.isEdit ? 'Update Goal' : 'Save Goal' }}
+            </button>
+        </div>
+    </div>
+</div>

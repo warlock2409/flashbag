@@ -34,12 +34,15 @@ export class ExerciseActionComponent {
       equipment: ['None'],
       description: [''],
       category: ['', Validators.required],
-      mode: ['Beginner', Validators.required],
       tag: 'Strength',
       orgId: [1],
       industryId: [101],
       documentId: null,
-      sets: this.fb.array([this.createSet()])
+      modeConfigs: this.fb.array([
+        this.createModeConfig('BEGINNER'),
+        this.createModeConfig('INTERMEDIATE'),
+        this.createModeConfig('ADVANCED')
+      ])
     });
 
     if (this.data.existingExercise) {
@@ -52,7 +55,7 @@ export class ExerciseActionComponent {
 
   generateAiContent() {
     let exercise = this.exerciseForm.value;
-    let prompt = `You are a fitness assistant that helps generate notes and tags for exercises.\n\nUser provides: \n - Body part: ${exercise.category}\n- Exercise Name: ${exercise.name}\n- Equipment: ${exercise.equipment}\n- Difficulty: ${exercise.mode}\n\nTask:\n1. Write a short note (2–3 sentences) describing the exercise and its benefits.\n2. Suggest exactly 1 descriptive tag that best represents this exercise (e.g., Strength”, “Mobility”, “Endurance”, “Power”, “Flexibility”, “Balance”, “Cardio”).\n\nOutput format (in JSON):\n{\n  \"note\": \"Your descriptive note here\",\n  \"tag\": \"one descriptive tag here\"\n}`
+    let prompt = `You are a fitness assistant that helps generate notes and tags for exercises.\n\nUser provides: \n - Body part: ${exercise.category}\n- Exercise Name: ${exercise.name}\n- Equipment: ${exercise.equipment}\n- Difficulty: All Levels\n\nTask:\n1. Write a short note (2–3 sentences) describing the exercise and its benefits.\n2. Suggest exactly 1 descriptive tag that best represents this exercise (e.g., Strength”, “Mobility”, “Endurance”, “Power”, “Flexibility”, “Balance”, “Cardio”).\n\nOutput format (in JSON):\n{\n  \"note\": \"Your descriptive note here\",\n  \"tag\": \"one descriptive tag here\"\n}`
 
     this.buffer = true;
     this.organizationService.generateContent(prompt, 150).subscribe({
@@ -79,12 +82,9 @@ export class ExerciseActionComponent {
     this.exerciseForm.patchValue({
       name: response.name,
       equipment: response.equipment,
-      difficulty: response.difficulty,
-      description: response.notes,
+      description: response.description || response.notes,
       category: response.category,
-      mode: response.mode,
-      duration: response.duration,
-      tag: response.tags,
+      tag: response.tag || response.tags,
       orgId: response.orgId,
       industryId: response.industryId,
       documentId: response.documentId
@@ -92,50 +92,74 @@ export class ExerciseActionComponent {
 
     this.selectedFilter = response.category;
 
-    // Handle sets (FormArray)
-    // Patch sets (FormArray)
-    const setsArray = this.exerciseForm.get('sets') as FormArray;
-    setsArray.clear();
+    const modeConfigsArray = this.exerciseForm.get('modeConfigs') as FormArray;
+    modeConfigsArray.clear();
 
-    if (response.sets && response.sets.length > 0) {
-      response.sets.forEach((set: any) => {
-        setsArray.push(
-          this.fb.group({
-            reps: [set.reps ?? 10, [Validators.required, Validators.min(1)]],
-            weight: [set.weight ?? 15, [Validators.required, Validators.min(0)]],
-            duration: [set.duration ?? 60, [Validators.required, Validators.min(0)]],
-            rest: [set.rest ?? 90, [Validators.required, Validators.min(0)]],
-          })
-        );
+    if (response.modeConfigs && response.modeConfigs.length > 0) {
+      response.modeConfigs.forEach((mConfig: any) => {
+        const modeGroup = this.fb.group({
+           mode: [mConfig.mode],
+           sets: this.fb.array([])
+        });
+        const setsArray = modeGroup.get('sets') as FormArray;
+        if (mConfig.sets && mConfig.sets.length > 0) {
+           mConfig.sets.forEach((set: any) => {
+             const setGroup = this.createSet();
+             setGroup.patchValue({
+                reps: set.reps ?? 10,
+                weight: set.weight ?? null,
+                duration: set.duration ?? null,
+                rest: set.rest ?? 90
+             });
+             setsArray.push(setGroup);
+           });
+        } else {
+           setsArray.push(this.createSet());
+        }
+        modeConfigsArray.push(modeGroup);
       });
     } else {
-      // If no sets in response, create one default
-      setsArray.push(this.createSet());
+      modeConfigsArray.push(this.createModeConfig('BEGINNER'));
+      modeConfigsArray.push(this.createModeConfig('INTERMEDIATE'));
+      modeConfigsArray.push(this.createModeConfig('ADVANCED'));
     }
 
     // Handle document/video attachments
     this.existingUploads = response.documentDto;
   }
 
+  createModeConfig(modeName: string): FormGroup {
+    return this.fb.group({
+      mode: [modeName],
+      sets: this.fb.array([this.createSet()])
+    });
+  }
+
   createSet(): FormGroup {
     return this.fb.group({
       reps: [10, [Validators.required, Validators.min(1)]],
-      weight: [15, [Validators.required, Validators.min(0)]],
-      duration: [60, [Validators.required, Validators.min(0)]],
+      weight: [null, [Validators.min(0)]],
+      duration: [null, [Validators.min(0)]],
       rest: [90, [Validators.required, Validators.min(0)]],
     });
   }
 
-  get sets(): FormArray {
-    return this.exerciseForm.get('sets') as FormArray;
+  get modeConfigs(): FormArray {
+    return this.exerciseForm.get('modeConfigs') as FormArray;
   }
 
-  addSet() {
-    this.sets.push(this.createSet());
+  getSets(modeIdx: number): FormArray {
+    return this.modeConfigs.at(modeIdx).get('sets') as FormArray;
   }
 
-  removeSet(index: number) {
-    this.sets.removeAt(index);
+  addSet(modeIdx: number) {
+    this.getSets(modeIdx).push(this.createSet());
+  }
+
+  removeSet(modeIdx: number, setIdx: number) {
+    if (this.getSets(modeIdx).length > 1) {
+      this.getSets(modeIdx).removeAt(setIdx);
+    }
   }
 
   setDocument($event: DocumentDto) {
@@ -181,11 +205,16 @@ export class ExerciseActionComponent {
       if (this.exerciseForm.get('description')?.invalid) {
         errors.push('Description is required.');
       }
-      if (this.sets.invalid) {
-        this.sets.controls.forEach((set, i) => {
-          if (set.get('weight')?.invalid) errors.push(`Set ${i + 1}: Weight is required and must be >=1`);
-          if (set.get('reps')?.invalid) errors.push(`Set ${i + 1}: Reps are required and must be >=1`);
-          if (set.get('rest')?.invalid) errors.push(`Set ${i + 1}: Rest is required and cannot be negative`);
+      if (this.modeConfigs.invalid) {
+        this.modeConfigs.controls.forEach((mConfig, mIdx) => {
+          const mSets = mConfig.get('sets') as FormArray;
+          const mName = mConfig.get('mode')?.value;
+          mSets.controls.forEach((set, i) => {
+            if (set.get('weight')?.invalid) errors.push(`${mName} Set ${i + 1}: Weight must be &gt;= 0`);
+            if (set.get('reps')?.invalid) errors.push(`${mName} Set ${i + 1}: Reps point is required and must be &gt;= 1`);
+            if (set.get('duration')?.invalid) errors.push(`${mName} Set ${i + 1}: Duration must be &gt;= 0`);
+            if (set.get('rest')?.invalid) errors.push(`${mName} Set ${i + 1}: Rest is required and cannot be negative`);
+          });
         });
       }
 
