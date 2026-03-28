@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import { ShopService } from 'src/app/services/shop.service';
@@ -12,7 +13,7 @@ import { PosActionsComponent } from '../../components/pos/pos-actions/pos-action
 @Component({
   selector: 'app-customer-membership',
   standalone: true,
-  imports: [CommonModule, DatePipe, MatIconModule, MatButtonModule],
+  imports: [CommonModule, DatePipe, MatIconModule, MatButtonModule, FormsModule],
   templateUrl: './customer-membership.component.html',
   styleUrl: './customer-membership.component.scss'
 })
@@ -28,12 +29,29 @@ export class CustomerMembershipComponent {
   upcomingMembership: any = null;
   currentMembership: any = null;
 
+  goals: any[] = [];
+  selectedGoalId: number | null = null;
+  selectedMode: string = 'BEGINNER';
+  assigningGoal = false;
+
   constructor(
     public dialogRef: MatDialogRef<CustomerMembershipComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.customer = data?.customer;
     this.loadMembershipData();
+    this.loadGoals();
+  }
+
+  loadGoals() {
+    this.orgService.getGoalPlans().subscribe({
+      next: (res: any) => {
+        this.goals = res?.data || [];
+      },
+      error: (err) => {
+        console.error('Error loading goals', err);
+      }
+    });
   }
 
   loadMembershipData() {
@@ -58,10 +76,17 @@ export class CustomerMembershipComponent {
             );
             this.customer.membershipName = this.currentMembership.planName;
             this.customer.membershipExpiry = this.currentMembership.endDate;
+
+            if (this.currentMembership.assignedGoal) {
+              this.selectedGoalId = this.currentMembership.assignedGoal.goalId;
+              this.selectedMode = this.currentMembership.assignedGoal.mode;
+            }
           } else {
             this.currentMembership = null;
             this.customer.membershipName = null;
             this.customer.membershipExpiry = null;
+            this.selectedGoalId = null;
+            this.selectedMode = 'BEGINNER';
           }
 
           // Upcoming: Active and starts in the future OR PENDING
@@ -193,4 +218,37 @@ export class CustomerMembershipComponent {
       }
     });
   }
+
+  assignGoal(): void {
+    if (!this.selectedGoalId || !this.selectedMode) {
+      this.swallService.error('Please select both a goal and a mode.');
+      return;
+    }
+
+    if (!this.currentMembership?.id) {
+      this.swallService.error('No active membership found to assign a plan.');
+      return;
+    }
+
+    this.assigningGoal = true;
+    const payload = {
+      goalId: Number(this.selectedGoalId),
+      mode: this.selectedMode
+    };
+
+    this.shopService.assignGoalToMembership(this.currentMembership.id, payload).subscribe({
+      next: () => {
+        this.assigningGoal = false;
+        this.swallService.success('Goal assigned successfully.');
+        // Optionally update local customer object to reflect
+        this.dialogRef.close();
+      },
+      error: (err) => {
+        this.assigningGoal = false;
+        console.error('Error assigning goal:', err);
+        this.swallService.error('Failed to assign goal. Please try again.');
+      }
+    });
+  }
 }
+
