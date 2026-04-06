@@ -37,6 +37,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { AttendanceChartComponent } from "./components/charts/attendance-chart/attendance-chart.component";
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { CustomerConfigurePanelComponent } from "./customers/customer-configure-panel";
+import { SalesAnalyticsCardComponent } from "./components/charts/sales-analytics-card/sales-analytics-card.component";
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { CustomerConfigurePanelComponent } from "./customers/customer-configure-
     NzToolTipModule,
     FormsModule,
     AttendanceChartComponent, MatPaginatorModule,
-    CustomerConfigurePanelComponent
+    CustomerConfigurePanelComponent,
+    SalesAnalyticsCardComponent
 ],
 })
 export class BusinessModule { } 

@@ -299,7 +299,7 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
+  grid-template-columns: 1.5fr 2fr 3fr 1fr 2fr 2fr 2fr;
   padding: 12px 24px;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
@@ -312,7 +312,7 @@
   @media (max-width: 1200px) {
     padding: 10px 16px;
     // Adjust column widths for better alignment on smaller screens
-    grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
+    grid-template-columns: 1.5fr 2fr 3fr 1fr 2fr 2fr 2fr;
   }
 
   // Ensure proper text alignment for each header cell
@@ -353,7 +353,7 @@
 .table-body {
   .table-row {
     display: grid;
-    grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
+    grid-template-columns: 1.5fr 2fr 3fr 1fr 2fr 2fr 2fr;
     padding: 16px 24px;
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.2s;
@@ -365,7 +365,7 @@
     @media (max-width: 1200px) {
       padding: 14px 16px;
       // Ensure row columns match header columns
-      grid-template-columns: 1.2fr 2fr 3fr 1fr 2fr 2fr 2fr;
+      grid-template-columns: 1.5fr 2fr 3fr 1fr 2fr 2fr 2fr;
     }
   }
 }
@@ -386,6 +386,7 @@
 
   &.id-cell {
     justify-content: flex-start;
+    gap: 12px;
 
     .id-wrapper {
       display: flex;
@@ -434,10 +435,68 @@
   }
 }
 
+.customer-dp-wrapper {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f8fafc;
+  border: 2px solid #ffffff; // White ring like an icon
+  box-shadow: 0 0 0 1px #e2e8f0, 0 2px 4px rgba(0,0,0,0.05); // Dual border for depth
+  cursor: zoom-in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &:hover {
+    transform: scale(1.1);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 1px #6366f1, 0 4px 12px rgba(99, 102, 241, 0.2);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .placeholder-dp {
+    font-size: 12px;
+    font-weight: 800;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  &.mobile-dp {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+}
+
 .customer-cell {
   color: #1f2937;
   font-weight: 500;
-  gap: 8px;
+  gap: 4px;
+
+  .customer-name-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .name-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
 }
 
 .customer-icon {
@@ -818,6 +877,16 @@
   border-radius: 50%;
   background-color: #ef4444; // Red color
   margin-left: 8px;
+}
+
+// Checked-in customer indicator - green dot
+.checkin-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e; // Green color
+  margin-right: 8px;
 }
 
 // Card status for deleted customers

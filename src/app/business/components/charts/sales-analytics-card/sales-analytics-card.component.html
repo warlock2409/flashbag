@@ -1,0 +1,116 @@
+<div class="sales-analytics-container">
+  <!-- Bar Chart Section -->
+  <div class="section bar-chart-section">
+    <div class="header">
+      <h3>Monthly Revenue Comparison</h3>
+    </div>
+    <div class="chart-wrapper">
+      <canvas #barChartCanvas></canvas>
+    </div>
+  </div>
+
+  <!-- Heatmap Section -->
+  <div class="section heatmap-section">
+    <div class="header">
+      <h3>Daily Revenue Heatmap</h3>
+      <div class="legend">
+        <span>Less</span>
+        <div class="legend-scale">
+          <div class="heatmap-cell level-0"></div>
+          <div class="heatmap-cell level-1"></div>
+          <div class="heatmap-cell level-2"></div>
+          <div class="heatmap-cell level-3"></div>
+          <div class="heatmap-cell level-4"></div>
+        </div>
+        <span>More</span>
+      </div>
+    </div>
+    
+    <div class="heatmaps-list">
+      <div *ngFor="let heatmap of processedHeatmaps" class="heatmap-year-block">
+        <h4 class="year-label">{{ heatmap.year }} Revenue Activity</h4>
+        
+        <div class="heatmap-container">
+          <div *ngFor="let month of heatmap.months" class="month-block">
+            <span class="month-label">{{ month.name }}</span>
+            <div class="heatmap-grid" [style.grid-template-columns]="'repeat(' + Math.ceil(month.days.length / 7) + ', 12px)'">
+              <div *ngFor="let day of month.days" 
+                   class="heatmap-cell level-{{day.level}}" 
+                   [class.clickable]="day.value > 0"
+                   [title]="getTooltip(day)"
+                   (click)="onDayClick(day)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Side Panel for Invoices -->
+<nz-drawer
+  [nzVisible]="isPanelOpen"
+  [nzWidth]="500"
+  [nzTitle]="drawerTitle"
+  (nzOnClose)="closePanel()"
+  nzPlacement="right"
+>
+  <ng-template #drawerTitle>
+    <div class="drawer-header">
+      <mat-icon>receipt</mat-icon>
+      <span>Invoices for {{ selectedDate | date:'mediumDate' }}</span>
+    </div>
+  </ng-template>
+
+  <ng-container *nzDrawerContent>
+    <div class="drawer-content">
+      <div *ngIf="isLoadingInvoices" class="loading-state">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p>Loading invoices...</p>
+      </div>
+
+      <div *ngIf="!isLoadingInvoices && selectedDayInvoices.length === 0" class="empty-state">
+        <nz-empty nzNotFoundImage="simple" nzNotFoundContent="No invoices found for this date"></nz-empty>
+      </div>
+
+      <div *ngIf="!isLoadingInvoices && selectedDayInvoices.length > 0" class="invoice-list">
+        <div *ngFor="let invoice of selectedDayInvoices" class="invoice-card clickable" (click)="openExisitingInvoice(invoice)">
+          <div class="invoice-main">
+            <div class="invoice-info">
+              <span class="invoice-num">{{ invoice.invoiceNumber }}</span>
+              <span class="customer-name">
+                <mat-icon>person</mat-icon>
+                {{ invoice.customer?.firstName }} {{ invoice.customer?.lastName || '' }}
+              </span>
+            </div>
+            <div class="invoice-amount">
+              <span class="total">₹{{ invoice.grandTotal | number:'1.2-2' }}</span>
+              <nz-tag [nzColor]="invoice.status === 'PAID' ? 'success' : 'warning'">
+                {{ invoice.status }}
+              </nz-tag>
+            </div>
+          </div>
+          
+          <div class="items-list" *ngIf="invoice.items?.length > 0">
+            <div *ngFor="let item of invoice.items" class="invoice-item">
+              <span class="item-name">{{ item.itemName }}</span>
+              <span class="item-price">₹{{ item.total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <div class="invoice-footer">
+            <span class="invoice-time">
+              <mat-icon>schedule</mat-icon>
+              {{ invoice.invoiceDate | date:'shortTime':'+0530' }}
+            </span>
+            <span class="payment-mode" *ngIf="invoice.payments?.length > 0">
+              <mat-icon>payments</mat-icon>
+              {{ invoice.payments[0].paymentMode }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>

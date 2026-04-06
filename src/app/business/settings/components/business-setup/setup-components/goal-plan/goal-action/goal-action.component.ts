@@ -17,6 +17,7 @@ export interface Todo {
 interface BodyPart {
   id?: number;
   title: string;
+  key: string;
   selectedExercises?: any[];
 }
 
@@ -36,26 +37,29 @@ interface BodyFilter {
 export class GoalActionComponent implements OnInit {
   goalForm!: FormGroup;
   exerciseDays: Todo[] = [];
-  
+
   // Reused body filters
   modelFilters: BodyFilter[] = [
     { key: "", name: "All", icon: "directions_walk" },
-    { key: "traps", name: "Traps", icon: "change_history" },
-    { key: "traps_middle", name: "Middle Traps", icon: "height" },
-    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
-    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
-    { key: "chest", name: "Chest", icon: "sports_mma" },
-    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
-    { key: "biceps", name: "Biceps", icon: "arm_flex" },
-    { key: "forearms", name: "Forearms", icon: "back_hand" },
-    { key: "hands", name: "Hands", icon: "pan_tool" },
     { key: "abdominals", name: "Abs", icon: "self_improvement" },
-    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
-    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
-    { key: "quads", name: "Quads", icon: "fitness_center" },
-    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+    { key: "biceps", name: "Biceps", icon: "arm_flex" },
+    { key: "triceps", name: "Triceps", icon: "arm_flex" },
     { key: "calves", name: "Calves", icon: "directions_walk" },
-    { key: "body", name: "Full Body", icon: "accessibility" },
+    { key: "chest", name: "Chest", icon: "sports_mma" },
+    { key: "forearms", name: "Forearms", icon: "back_hand" },
+    { key: "glutes", name: "Glutes", icon: "accessibility" },
+    { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
+    { key: "hands", name: "Hands", icon: "pan_tool" },
+    { key: "lats", name: "Lats", icon: "sports_kabaddi" },
+    { key: "lowerback", name: "Lower Back", icon: "airline_seat_recline_extra" },
+    { key: "obliques", name: "Obliques", icon: "accessibility_new" },
+    { key: "front_shoulders", name: "Front Shoulders", icon: "accessibility" },
+    { key: "quads", name: "Quads", icon: "fitness_center" },
+    { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
+    { key: "traps", name: "Traps", icon: "change_history" },
+    { key: "traps_middle", name: "Traps Middle", icon: "height" },
+    { key: "wrist", name: "Wrists", icon: "watch" },
+    { key: "body", name: "Full Body", icon: "accessibility" }
   ];
 
   constructor(
@@ -64,7 +68,7 @@ export class GoalActionComponent implements OnInit {
     public dialogRef: MatDialogRef<GoalActionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private orgService: OrganizationServiceService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.goalForm = this.fb.group({
@@ -76,11 +80,15 @@ export class GoalActionComponent implements OnInit {
       this.exerciseDays = this.data.goal.todos.map((todo: any) => ({
         id: todo.id,
         order: todo.order,
-        taskDtoList: todo.taskDtoList ? todo.taskDtoList.map((task: any) => ({
-          id: task.id,
-          title: task.title,
-          selectedExercises: task.selectedExercises || []
-        })) : []
+        taskDtoList: todo.taskDtoList ? todo.taskDtoList.map((task: any) => {
+          const filter = this.modelFilters.find(f => f.name === task.title || f.key === task.title);
+          return {
+            id: task.id,
+            title: filter ? filter.name : task.title,
+            key: filter ? filter.key : task.title,
+            selectedExercises: task.selectedExercises || []
+          };
+        }) : []
       }));
     } else {
       this.addDay();
@@ -90,13 +98,13 @@ export class GoalActionComponent implements OnInit {
   addDay() {
     const newDay: Todo = {
       order: this.exerciseDays.length + 1,
-      taskDtoList: [{ title: 'Select Body Part', selectedExercises: [] }]
+      taskDtoList: [{ title: 'Select Body Part', key: '', selectedExercises: [] }]
     };
     this.exerciseDays.push(newDay);
   }
 
   addBodyPartToDay(dayIndex: number) {
-    this.exerciseDays[dayIndex].taskDtoList.push({ title: 'Select Body Part', selectedExercises: [] });
+    this.exerciseDays[dayIndex].taskDtoList.push({ title: 'Select Body Part', key: '', selectedExercises: [] });
   }
 
   removeDay(index: number) {
@@ -109,11 +117,12 @@ export class GoalActionComponent implements OnInit {
   }
 
   onBodyPartChange(dayIndex: number, bodyPartIndex: number, event: any) {
-    const selectedTitle = event.target ? event.target.value : event.value;
-    const existingExercises = this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex].selectedExercises || [];
+    const selectedKey = event.target ? event.target.value : event.value;
+    const filter = this.modelFilters.find(f => f.key === selectedKey);
     this.exerciseDays[dayIndex].taskDtoList[bodyPartIndex] = {
-      title: selectedTitle,
-      selectedExercises: existingExercises
+      title: filter ? filter.name : 'Select Body Part',
+      key: selectedKey,
+      selectedExercises: [] // Clear existing exercises when body part changes
     };
   }
 
@@ -125,7 +134,7 @@ export class GoalActionComponent implements OnInit {
     const dialogRef = this.dialog.open(ExerciseSelectionDialogComponent, {
       width: '600px',
       data: {
-        category: bodyPart.title,
+        category: bodyPart.key,
         selectedExercises: bodyPart.selectedExercises || []
       }
     });
@@ -170,12 +179,15 @@ export class GoalActionComponent implements OnInit {
       active: true,
       todos: this.exerciseDays.map(day => ({
         id: day.id ?? undefined,
+        clientKey: day.id ? undefined : this.generateUUID(),
         order: day.order,
         taskDtoList: day.taskDtoList.map(task => ({
           id: task.id ?? undefined,
           title: task.title,
           clientKey: task.id ? undefined : this.generateUUID(),
           selectedExercises: task.selectedExercises ? task.selectedExercises.map(ex => ({
+            id: ex.exerciseId ? ex.id : undefined,
+            clientKey: ex.exerciseId ? undefined : this.generateUUID(),
             exerciseId: ex.exerciseId || ex.id,
             name: ex.name,
             order: ex.order

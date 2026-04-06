@@ -43,19 +43,20 @@ export class SettingsComponent {
       //   routerLink: './scheduling'
       // },
       {
+        title: 'Sales',
+        desc: 'Configure payment methods, taxes, receipts, service charges and gift cards.',
+        icon: 'sell',
+        locked: false,
+        routerLink: './sales'
+      },
+      {
         title: 'Scheduling',
         desc: 'Set your availability, manage bookable resources and online booking preferences.',
         icon: 'event',
         locked: true,
         routerLink: './scheduling'
       },
-      {
-        title: 'Sales',
-        desc: 'Configure payment methods, taxes, receipts, service charges and gift cards.',
-        icon: 'sell',
-        locked: true,
-        routerLink: './sales'
-      },
+
       {
         title: 'Billing',
         desc: 'Manage invoices, text messages, add-ons and billing.',

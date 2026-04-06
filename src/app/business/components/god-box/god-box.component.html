@@ -43,15 +43,30 @@
                 </div> -->
 
                 <!-- Other Tabs -->
-                <div *ngIf="selectedTab === 'Customer'" class="text-gray-100 mt-4 ">
+                <div *ngIf="selectedTab === 'Customer'" class="text-gray-100 mt-4">
                     @for (customer of customers; track $index) {
-                    <div class="flex justify-between items-center bg-[#71687f] rounded-lg p-2 mt-2" (click)="returnCustomer(customer)">
-                        <p>{{customer.firstName}}</p>
-                        <div>
-                            <p style="margin: 0;" class="text-purple-200">
+                    <div class="flex justify-between items-center bg-[#71687f] rounded-lg p-2 mt-2 hover:bg-[#857c94] transition-colors cursor-pointer" (click)="returnCustomer(customer)">
+                        <div class="flex items-center gap-3">
+                            <div class="customer-dp-wrapper godbox-dp" (click)="customer.profileImage ? openImagePreview(customer.profileImage, $event) : null">
+                                <img *ngIf="customer.profileImage" [src]="customer.profileImage" [alt]="customer.firstName">
+                                <div *ngIf="!customer.profileImage" class="placeholder-dp">
+                                  {{ getInitials(customer.firstName, customer.lastName) }}
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <p class="font-semibold text-white m-0 text-sm">{{customer.firstName}} {{customer.lastName}}</p>
+                                <div class="flex items-center gap-1">
+                                    <p class="text-purple-300 text-xs m-0">#{{customer.id}}</p>
+                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingCustomerId">({{customer.existingCustomerId}})</p>
+                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingId">({{customer.existingId}})</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p style="margin: 0;" class="text-purple-200 text-xs">
                                 {{customer.email}}
                             </p>
-                            <p style="margin: 0;" class="text-purple-300">
+                            <p style="margin: 0;" class="text-purple-300 text-xs">
                                 {{customer.contactNumber}}
                             </p>
                         </div>

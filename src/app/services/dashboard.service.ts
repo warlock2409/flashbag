@@ -41,5 +41,20 @@ export class DashboardService {
     const url = `http://localhost:8080/shop/${shopCode}/memberships/renewal-trends`;
     return this.http.get<any>(url);
   }
+  getRevenueHeatmap(year: number = 2025) {
+    const shopCode = localStorage.getItem("shopCode");
+    if (!shopCode) throw new Error("shop code not found");
+
+    const url = `http://localhost:8080/api/invoices/revenue/${shopCode}/heatmap/${year}`;
+    return this.http.get<any>(url);
+  }
+
+  getHeatmapInvoices(date: string) {
+    const shopCode = localStorage.getItem("shopCode");
+    if (!shopCode) throw new Error("shop code not found");
+
+    const url = `http://localhost:8080/api/invoices/revenue/heatmap/${shopCode}/invoices?date=${date}`;
+    return this.http.get<any>(url);
+  }
 
 }

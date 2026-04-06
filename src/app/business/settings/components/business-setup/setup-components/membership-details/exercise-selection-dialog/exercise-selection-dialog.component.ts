@@ -48,12 +48,11 @@ export class ExerciseSelectionDialogComponent {
         this.selectedExercises.sort((a, b) => (a.order || 0) - (b.order || 0));
         this.updateExerciseOrder();
         
-        // Mark selected exercises AFTER sorting and updating order
         this.availableExercises.forEach(exercise => {
           exercise.checked = this.selectedExercises.some(selected => {
             // Compare by exerciseId if it exists (actual exercise ID), otherwise by id
-            const selectedExerciseId = selected.exerciseId;
-            return selectedExerciseId === exercise.id || 
+            const selectedExerciseId = selected.exerciseId || selected.id;
+            return selectedExerciseId === exercise.id ||
                    String(selectedExerciseId) === String(exercise.id);
           });
         });
@@ -94,13 +93,10 @@ export class ExerciseSelectionDialogComponent {
     });
   }
   
-  // Get the order number of an exercise
   getExerciseOrder(exercise: any): number {
     const index = this.selectedExercises.findIndex(e => {
-      // Compare by exerciseId if it exists (actual exercise ID), otherwise by id
-      const selectedExerciseId = e.id;
-      return selectedExerciseId === exercise.id || 
-             String(selectedExerciseId) === String(exercise.id);
+      const selectedId = e.exerciseId || e.id;
+      return selectedId === exercise.id || String(selectedId) === String(exercise.id);
     });
     return index >= 0 ? index + 1 : 0;
   }
@@ -120,10 +116,8 @@ export class ExerciseSelectionDialogComponent {
     
     // Find the exercise in selectedExercises array
     const selectedIndex = this.selectedExercises.findIndex(e => {
-      // Compare by exerciseId if it exists (actual exercise ID), otherwise by id
-      const selectedExerciseId = e.id;
-      return selectedExerciseId === exercise.id || 
-             String(selectedExerciseId) === String(exercise.id);
+      const selectedId = e.exerciseId || e.id;
+      return selectedId === exercise.id || String(selectedId) === String(exercise.id);
     });
     if (selectedIndex > 0) {
       // Swap with previous exercise
@@ -143,10 +137,8 @@ export class ExerciseSelectionDialogComponent {
     
     // Find the exercise in selectedExercises array
     const selectedIndex = this.selectedExercises.findIndex(e => {
-      // Compare by exerciseId if it exists (actual exercise ID), otherwise by id
-      const selectedExerciseId = e.id;
-      return selectedExerciseId === exercise.id || 
-             String(selectedExerciseId) === String(exercise.id);
+      const selectedId = e.exerciseId || e.id;
+      return selectedId === exercise.id || String(selectedId) === String(exercise.id);
     });
     if (selectedIndex < this.selectedExercises.length - 1 && selectedIndex >= 0) {
       // Swap with next exercise

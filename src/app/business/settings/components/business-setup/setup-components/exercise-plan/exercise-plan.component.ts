@@ -32,10 +32,11 @@ export class ExercisePlanComponent {
     { key: "", name: "All", icon: "directions_walk" },
     { key: "abdominals", name: "Abs", icon: "self_improvement" },
     { key: "biceps", name: "Biceps", icon: "arm_flex" },
+    { key: "triceps", name: "Triceps", icon: "arm_flex" },
     { key: "calves", name: "Calves", icon: "directions_walk" },
     { key: "chest", name: "Chest", icon: "sports_mma" },
     { key: "forearms", name: "Forearms", icon: "back_hand" },
-    { key: "body", name: "Full Body", icon: "accessibility" },
+    { key: "glutes", name: "Glutes", icon: "accessibility" },
     { key: "hamstrings", name: "Hamstrings", icon: "directions_run" },
     { key: "hands", name: "Hands", icon: "pan_tool" },
     { key: "lats", name: "Lats", icon: "sports_kabaddi" },
@@ -45,8 +46,9 @@ export class ExercisePlanComponent {
     { key: "quads", name: "Quads", icon: "fitness_center" },
     { key: "rear_shoulders", name: "Rear Shoulders", icon: "person" },
     { key: "traps", name: "Traps", icon: "change_history" },
-    { key: "traps_middle", name: "Traps", icon: "height" },
+    { key: "traps_middle", name: "Traps Middle", icon: "height" },
     { key: "wrist", name: "Wrists", icon: "watch" },
+    { key: "body", name: "Full Body", icon: "accessibility" },
   ];
 
   constructor(public dialog: MatDialog, private organizationService: OrganizationServiceService, private swalService: SweatAlertService) {
@@ -72,21 +74,35 @@ export class ExercisePlanComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.pushExerciseToByPart(result);
+        this.getExercise(this.selectedFilter, this.searchControl.value || "");
       }
     });
   }
 
   editExercise(exercise: any) {
-    console.log(exercise);
+    if (!exercise.documentDto && exercise.documentId) {
+      this.organizationService.getDocumentById(exercise.documentId).subscribe({
+        next: (res: any) => {
+          exercise.documentDto = res.data;
+          this.openEditDialog(exercise);
+        },
+        error: () => {
+          this.openEditDialog(exercise);
+        }
+      });
+    } else {
+      this.openEditDialog(exercise);
+    }
+  }
 
+  openEditDialog(exercise: any) {
     const dialogRef = this.dialog.open(ExerciseActionComponent, {
       data: { bodyFilter: this.modelFilters, isEdit: true, existingExercise: exercise },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.pushExerciseToByPart(result);
+        this.getExercise(this.selectedFilter, this.searchControl.value || "");
       }
     });
   }
@@ -105,6 +121,7 @@ export class ExercisePlanComponent {
         if (this.byPart[category].length === 0) {
           delete this.byPart[category];
         }
+        this.updateBodyParts();
       },
       error: (err: any) => {
         console.error('Delete exercise failed:', err);
@@ -122,18 +139,23 @@ export class ExercisePlanComponent {
   }
 
   // component.ts
-  bodyParts = [
-    "calves",
-    "quads",
-    "abdominals",
-    "obliques",
-    "biceps",
-    "forearms",
-    "chest",
-    "back"
-  ];
-
   byPart: { [key: string]: any[] } = {};
+  bodyParts: string[] = [];
+
+  updateBodyParts() {
+    const keys = Object.keys(this.byPart);
+    // Sort these keys based on their order in modelFilters if possible
+    const filterOrder = this.modelFilters.map(f => f.key).filter(k => k !== "");
+
+    this.bodyParts = keys.sort((a, b) => {
+      const idxA = filterOrder.indexOf(a);
+      const idxB = filterOrder.indexOf(b);
+      if (idxA === -1 && idxB === -1) return a.localeCompare(b);
+      if (idxA === -1) return 1;
+      if (idxB === -1) return -1;
+      return idxA - idxB;
+    });
+  }
 
   isValidPart(bp: string): boolean {
     return !!this.byPart[bp] && this.byPart[bp].length > 0;
@@ -149,6 +171,7 @@ export class ExercisePlanComponent {
         response.data.content.forEach((ex: any) => {
           this.pushExerciseToByPart(ex);
         });
+        this.updateBodyParts();
       },
       error: (err: any) => {
 
@@ -164,13 +187,13 @@ export class ExercisePlanComponent {
 
     let totalSets = 0;
     if (ex.modeConfigs) {
-       ex.modeConfigs.forEach((m: any) => {
-         totalSets += m.sets ? m.sets.length : 0;
-       });
+      ex.modeConfigs.forEach((m: any) => {
+        totalSets += m.sets ? m.sets.length : 0;
+      });
     }
 
-    // Push the formatted exercise with detailed set info
-    this.byPart[bodyPart].push({
+    // Create the exercise item
+    const formattedEx: any = {
       id: ex.id,
       name: ex.name,
       totalSets: totalSets,
@@ -178,8 +201,12 @@ export class ExercisePlanComponent {
       equipment: ex.equipment || ex.tag || 'Bodyweight',
       tag: ex.tag,
       notes: ex.description || ex.notes || '',
+      documentId: ex.documentId,
       documentDto: ex.documentDto,
       category: ex.category
-    });
+    };
+
+    // Push the formatted exercise with detailed set info
+    this.byPart[bodyPart].push(formattedEx);
   }
 }

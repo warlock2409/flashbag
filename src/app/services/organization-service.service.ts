@@ -284,10 +284,10 @@ export class OrganizationServiceService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
-  getCustomerActivity(month: number, year: number) {
+  getCustomerActivity(month: number, year: number, page: number = 0, size: number = 10) {
     const orgCode = localStorage.getItem("orgCode");
     const shopCode = localStorage.getItem("shopCode");
-    let url = `http://localhost:8080/users/organization/${orgCode}/customers/${shopCode}/activity?month=${month}&year=${year}`;
+    let url = `http://localhost:8080/users/organization/${orgCode}/customers/${shopCode}/activity?month=${month}&year=${year}&page=${page}&size=${size}`;
     return this.Http.get<any>(url);
   }
 

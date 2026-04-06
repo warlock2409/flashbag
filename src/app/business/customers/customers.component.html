@@ -151,19 +151,31 @@
           [attr.data-customer-id]="customer.id" data-status="active" (click)="openCustomerActions(customer)"
           style="cursor: pointer;">
           <div class="table-cell id-cell">
+
             <div class="id-wrapper">
               <span class="primary-id">#{{customer.id}}</span>
               <!-- existingId -->
               <span class="existing-id" *ngIf="customer.existingCustomerId">({{customer.existingCustomerId}})</span>
               <span class="existing-id" *ngIf="customer.existingId">({{customer.existingId}})</span>
             </div>
+            <div class="customer-dp-wrapper"
+              (click)="customer.profileImage ? openImagePreview(customer.profileImage, $event) : null">
+              <img *ngIf="customer.profileImage" [src]="customer.profileImage" [alt]="customer.firstName">
+              <div *ngIf="!customer.profileImage" class="placeholder-dp">
+                {{ getInitials(customer.firstName, customer.lastName) }}
+              </div>
+            </div>
           </div>
           <div class="table-cell customer-cell">
-            <i class="customer-icon introduced-icon" *ngIf="customer.introduced"></i>
-            <i class="customer-icon regular-icon" *ngIf="!customer.introduced"></i>
-            <!-- Red dot for deleted customers -->
-            <span class="deleted-indicator" *ngIf="customer.deleted === true"></span>
-            <span class="customer-name">{{customer.firstName}} {{customer.lastName}}</span>
+            <div class="customer-name-wrapper">
+              <div class="name-status">
+                <span class="customer-name">{{customer.firstName}} {{customer.lastName}}</span>
+                <i class="customer-icon introduced-icon" *ngIf="customer.introduced"></i>
+                <i class="customer-icon regular-icon" *ngIf="!customer.introduced"></i>
+                <!-- Red dot for deleted customers -->
+                <span class="deleted-indicator" *ngIf="customer.deleted === true"></span>
+              </div>
+            </div>
           </div>
           <div class="table-cell contact-cell">
             <div class="contact-info">{{customer.email}}</div>
@@ -174,6 +186,9 @@
           </div>
           <div class="table-cell total-cell">
             @if (activeFilter === 'activity') {
+            <!-- Green dot for checked-in customers (Activity tab only) -->
+            <span class="checkin-indicator" title="Currently Checked-in"
+              *ngIf="activeFilter === 'activity' && customer.isCheckedIn === true"></span>
             ({{ customer.totalCheckins || 0 }})
             } @else {
             {{customer.totalSpent | currency:'INR' }}
@@ -202,15 +217,19 @@
         [attr.data-customer-id]="customer.id" data-status="active" (click)="openCustomerActions(customer)">
         <div class="card-header">
           <div class="card-header-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="user"
-              class="card-icon">
-              <path d="M20 21a8 8 0 1 0-16 0"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
+            <div class="customer-dp-wrapper mobile-dp" 
+              (click)="customer.profileImage ? openImagePreview(customer.profileImage, $event) : null">
+              <img *ngIf="customer.profileImage" [src]="customer.profileImage" [alt]="customer.firstName">
+              <div *ngIf="!customer.profileImage" class="placeholder-dp">
+                {{ getInitials(customer.firstName, customer.lastName) }}
+              </div>
+            </div>
             <h3 class="card-title">
               <!-- Red dot for deleted customers -->
               <span class="deleted-indicator" *ngIf="customer.deleted === true"></span>
+              <!-- Green dot for checked-in customers (Activity tab only) -->
+              <span class="checkin-indicator" title="Currently Checked-in"
+                *ngIf="activeFilter === 'activity' && customer.isCheckedIn === true"></span>
               {{customer.firstName}} {{customer.lastName}}
             </h3>
           </div>

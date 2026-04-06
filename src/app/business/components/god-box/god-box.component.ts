@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ResponseDate } from 'src/app/app.component';
 import { Customer } from 'src/app/models/customer.model';
 import { UserDto } from 'src/app/services/auth.service';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-god-box',
   standalone: true,
-  imports: [MatIconModule, FormsModule, CommonModule],
+  imports: [MatIconModule, FormsModule, CommonModule, MatDialogModule],
   templateUrl: './god-box.component.html',
   styleUrl: './god-box.component.scss'
 })
@@ -22,13 +23,14 @@ export class GodBoxComponent implements OnInit, AfterViewInit {
   tabs = ['Customer'];
   selectedTab = 'Customer';
   private searchTimeout: any;
-  customers: Customer[] = [];
+  customers: any[] = [];
 
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  constructor(private dialogRef: MatDialogRef<GodBoxComponent>) {
-
-  }
+  constructor(
+    private dialogRef: MatDialogRef<GodBoxComponent>,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     // Initial fetch of customers when dialog opens
@@ -64,8 +66,10 @@ export class GodBoxComponent implements OnInit, AfterViewInit {
       if (this.selectedTab == "Customer") {
         this.orgService.getCustomerByOrgShop(0, 50, this.searchQuery, undefined).subscribe({
           next: (res: ResponseDate) => {
-            console.log(res);
-            this.customers = res.data;
+            this.customers = res.data.map((customer: any) => ({
+              ...customer,
+              profileImage: customer.documentDto?.attachments?.[0]?.url
+            }));
           },
           error: (err: any) => {
             console.error('Initial GodBox fetch failed', err);
@@ -86,7 +90,45 @@ export class GodBoxComponent implements OnInit, AfterViewInit {
 
 
 
-  returnCustomer(customer: Customer) {
+  returnCustomer(customer: any) {
     this.dialogRef.close(customer);
   }
+
+  openImagePreview(url: string, event: MouseEvent): void {
+    event.stopPropagation();
+    this.dialog.open(ImagePreviewDialog, {
+      data: { url },
+      panelClass: 'image-preview-dialog',
+      maxWidth: '90vw',
+      maxHeight: '90vh'
+    });
+  }
+
+  getInitials(firstName: string, lastName: string): string {
+    return ((firstName?.[0] || '') + (lastName?.[0] || '')).toUpperCase();
+  }
+}
+
+// Simple internal component for image preview
+@Component({
+  selector: 'image-preview-dialog-gb',
+  standalone: true,
+  template: `
+    <div style="position: relative; line-height: 0; background: transparent; padding: 0;">
+      <img [src]="data.url" style="max-width: 100%; max-height: 90vh; display: block; border-radius: 4px; box-shadow: 0 4px 24px rgba(0,0,0,0.3);">
+      <button (click)="dialogRef.close()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: background 0.2s;">
+        <span style="font-size: 24px; line-height: 1;">&times;</span>
+      </button>
+    </div>
+  `,
+  styles: [`
+    :host { display: block; padding: 0; background: transparent; }
+  `],
+  imports: []
+})
+export class ImagePreviewDialog {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { url: string },
+    public dialogRef: MatDialogRef<ImagePreviewDialog>
+  ) { }
 }

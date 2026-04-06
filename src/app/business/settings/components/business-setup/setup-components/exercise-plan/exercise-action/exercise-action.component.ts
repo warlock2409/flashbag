@@ -22,6 +22,7 @@ export class ExerciseActionComponent {
   existingUploads: DocumentDto | null = null;
   selectedFilter = "";
   buffer = false;
+  changeMade = false;
 
   constructor(
     public dialogRef: MatDialogRef<ExerciseActionComponent>,
@@ -126,6 +127,14 @@ export class ExerciseActionComponent {
 
     // Handle document/video attachments
     this.existingUploads = response.documentDto;
+    
+    if(!this.existingUploads && response.documentId) {
+      this.organizationService.getDocumentById(response.documentId).subscribe({
+        next: (res: any) => {
+          this.existingUploads = res.data;
+        }
+      });
+    }
   }
 
   createModeConfig(modeName: string): FormGroup {
@@ -153,7 +162,15 @@ export class ExerciseActionComponent {
   }
 
   addSet(modeIdx: number) {
-    this.getSets(modeIdx).push(this.createSet());
+    const sets = this.getSets(modeIdx);
+    const lastSet = sets.at(sets.length - 1);
+    const newSet = this.createSet();
+
+    if (lastSet) {
+      newSet.patchValue(lastSet.value);
+    }
+
+    sets.push(newSet);
   }
 
   removeSet(modeIdx: number, setIdx: number) {
@@ -175,7 +192,7 @@ export class ExerciseActionComponent {
         next: (res: ResponseDate) => {
           this.swalService.success("Media Updated")
           this.buffer = false;
-
+          this.changeMade = true;
         },
         error: (err: any) => {
           this.buffer = false;
@@ -268,7 +285,7 @@ export class ExerciseActionComponent {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.changeMade ? true : null);
   }
 
 

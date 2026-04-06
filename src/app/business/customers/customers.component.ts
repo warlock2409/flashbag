@@ -1,5 +1,5 @@
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, HostListener, inject, ViewChild, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { AddCustomerComponent } from '../components/add-customer/add-customer.component';
@@ -103,7 +103,7 @@ export class CustomersComponent {
       const month = this.selectedMonth || (new Date().getMonth() + 1);
       const year = this.selectedYear || new Date().getFullYear();
 
-      this.orgService.getCustomerActivity(month, year)
+      this.orgService.getCustomerActivity(month, year, this.pageIndex, this.pageSize)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: any) => {
@@ -123,9 +123,12 @@ export class CustomersComponent {
               if (customer.lastCheckin) {
                 customer.lastSpendDate = this.timeZoneHelper.toTimeZoneSpecific(undefined, customer.lastCheckin)
               }
+              // Set DP from first attachment
+              customer.profileImage = customer.documentDto?.attachments?.[0]?.url;
               return customer;
             });
-            this.totalElements = this.customers.length;
+            this.totalElements = res.totalElements || this.customers.length;
+            this.pageSize = res.pageSize || this.pageSize;
             this.loading = false;
           },
           error: (err: any) => {
@@ -165,6 +168,8 @@ export class CustomersComponent {
             if (customer.lastSpendDate) {
               customer.lastSpendDate = this.timeZoneHelper.toTimeZoneSpecific(undefined, customer.lastSpendDate)
             }
+            // Set DP from first attachment
+            customer.profileImage = customer.documentDto?.attachments?.[0]?.url;
             return customer;
           });
           this.totalElements = res.totalElements || res.data.length;
@@ -279,4 +284,42 @@ export class CustomersComponent {
     this.configurePanelOpen = false;
     this.getCustomerByOrgShop();
   }
+
+  openImagePreview(url: string, event: MouseEvent): void {
+    event.stopPropagation(); // Prevent opening customer actions sidebar
+    this.dialog.open(ImagePreviewDialog, {
+      data: { url },
+      panelClass: 'image-preview-dialog',
+      maxWidth: '90vw',
+      maxHeight: '90vh'
+    });
+  }
+
+  getInitials(firstName: string, lastName: string): string {
+    return ((firstName?.[0] || '') + (lastName?.[0] || '')).toUpperCase();
+  }
+}
+
+// Simple internal component for image preview
+@Component({
+  selector: 'image-preview-dialog',
+  standalone: true,
+  template: `
+    <div style="position: relative; line-height: 0; background: transparent; padding: 0;">
+      <img [src]="data.url" style="max-width: 100%; max-height: 90vh; display: block; border-radius: 4px; box-shadow: 0 4px 24px rgba(0,0,0,0.3);">
+      <button (click)="dialogRef.close()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); transition: background 0.2s;">
+        <span style="font-size: 24px; line-height: 1;">&times;</span>
+      </button>
+    </div>
+  `,
+  styles: [`
+    :host { display: block; padding: 0; background: transparent; }
+  `],
+  imports: []
+})
+export class ImagePreviewDialog {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { url: string },
+    public dialogRef: MatDialogRef<ImagePreviewDialog>
+  ) { }
 }

@@ -1,0 +1,61 @@
+<div class="sales-page-container">
+  <!-- Unified Sales Card -->
+  <div class="sales-dashboard-card">
+    <div class="card-header">
+      <div class="header-left">
+        <button mat-icon-button (click)="goBack()" class="back-btn">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="header-titles">
+          <h1>Sales & Revenue</h1>
+          <p>Comprehensive overview of your business growth and transaction history.</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item" *ngFor="let item of revenueDataList">
+          <span class="stat-label">Total Revenue ({{ item.year }})</span>
+          <span class="stat-value">₹{{ getTotalRevenue(item.data.monthly) | number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-filter-container">
+      <div class="filter-label">Compare Years:</div>
+      <div class="year-chips">
+        <button *ngFor="let year of availableYears" class="year-chip" [class.active]="selectedYears.includes(year)"
+          [style.background-color]="selectedYears.includes(year) ? yearColors[year] : 'white'"
+          [style.border-color]="selectedYears.includes(year) ? yearColors[year] : '#eee'"
+          [style.color]="selectedYears.includes(year) ? 'white' : '#666'" (click)="onYearToggle(year)">
+          {{ year }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Analytics Section (Bar Chart & Heatmap) -->
+    <div class="analytics-wrapper">
+      <app-sales-analytics-card [revenueDataList]="revenueDataList"></app-sales-analytics-card>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Settings Grid Section -->
+    <!-- <div class="settings-footer">
+      <h3>Sales Configuration</h3>
+      <div class="mini-card-grid">
+        <div *ngFor="let option of salesOptions" class="mini-option-card">
+          <div class="option-icon" [style.background-color]="option.color + '22'">
+            <mat-icon [style.color]="option.color">{{ option.icon }}</mat-icon>
+          </div>
+          <div class="option-info">
+            <h4>{{ option.title }}</h4>
+            <p>{{ option.status }}</p>
+          </div>
+          <button mat-icon-button class="go-btn">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>

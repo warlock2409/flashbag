@@ -24,6 +24,7 @@ import { FlashVibeComponent } from './settings/components/online-presence/instag
 import { ProductDetailsComponent } from './settings/components/business-setup/setup-components/product-details/product-details.component';
 import { AdvertisementComponent } from './settings/components/advertisement/advertisement.component';
 import { GoalPlanComponent } from './settings/components/business-setup/setup-components/goal-plan/goal-plan.component';
+import { SalesComponent } from './settings/components/sales/sales.component';
 
 const routes: Routes = [
   {
@@ -85,6 +86,10 @@ const routes: Routes = [
           {
             path: "advertisement",
             component: AdvertisementComponent
+          },
+          {
+            path: "sales",
+            component: SalesComponent
           },
           {
             path: 'business-setup',

@@ -55,7 +55,12 @@ export class CustomersActionsComponent {
 
           const grouped = this.getAttendanceGroupedByMonth();
           console.log(grouped);
-          const monthKeys = Object.keys(grouped);
+          const monthKeys = Object.keys(grouped).sort((a, b) => {
+            const [yearA, monthA] = a.split('-').map(Number);
+            const [yearB, monthB] = b.split('-').map(Number);
+            return new Date(yearA, monthA).getTime() - new Date(yearB, monthB).getTime();
+          });
+
           monthKeys.forEach(key => {
             let monthData = this.getMonthlyHeatmapData(key);
             let monthLabel = this.getCurrentMonthLabel(monthData);
@@ -191,29 +196,43 @@ export class CustomersActionsComponent {
 
   getMonthlyHeatmapData(monthKey: string) {
     const grouped = this.getAttendanceGroupedByMonth();
-    const monthData = grouped[monthKey];
+    const monthData = grouped[monthKey] || {};
 
-    if (!monthData) return [];
+    const [year, month] = monthKey.split('-').map(Number);
+    const firstDayOfMonth = new Date(year, month, 1);
+    const lastDayOfMonth = new Date(year, month + 1, 0);
 
-    return Object.entries(monthData)
-      .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
-      .map(([date, day]: [string, any]) => {
+    const padding = firstDayOfMonth.getDay(); // 0 is Sunday, 1 is Monday...
+    const result: any[] = [];
 
-        let duration = 0;
+    // Add padding for days before the 1st of the month
+    for (let i = 0; i < padding; i++) {
+      result.push({ empty: true });
+    }
 
-        if (day.checkInAt && day.checkOutAt) {
-          const checkIn = new Date(day.checkInAt).getTime();
-          const checkOut = new Date(day.checkOutAt).getTime();
-          duration = Math.max((checkOut - checkIn) / (1000 * 60), 0);
-        }
+    // Add every day of the month
+    for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+      // Create local date string YYYY-MM-DD
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const attendance = monthData[dateStr] || {};
 
-        return {
-          date,
-          duration,
-          future: new Date(date) > new Date(),
-          level: this.getIntensityLevel(duration)
-        };
+      let duration = 0;
+      if (attendance.checkInAt && attendance.checkOutAt) {
+        const checkIn = new Date(attendance.checkInAt).getTime();
+        const checkOut = new Date(attendance.checkOutAt).getTime();
+        duration = Math.max((checkOut - checkIn) / (1000 * 60), 0);
+      }
+
+      result.push({
+        date: dateStr,
+        duration,
+        future: new Date(year, month, day) > new Date(),
+        level: this.getIntensityLevel(duration),
+        empty: false
       });
+    }
+
+    return result;
   }
 
 
@@ -272,14 +291,12 @@ export class CustomersActionsComponent {
 
 
   getCurrentMonthLabel(data: any): string {
-    console.log(data, 'data');
+    if (!data || !Array.isArray(data)) return '';
 
-    if (!data) return '';
+    const firstValidDay = data.find(d => !d.empty);
+    if (!firstValidDay) return '';
 
-    const firstDate = data[0]?.date || '';
-    console.log(firstDate);
-
-    return new Date(firstDate).toLocaleString('default', {
+    return new Date(firstValidDay.date).toLocaleString('default', {
       month: 'short',
       year: 'numeric'
     });
