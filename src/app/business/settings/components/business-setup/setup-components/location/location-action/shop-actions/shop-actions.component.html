@@ -14,7 +14,7 @@
         </div>
         @if (this.businessModels.length == 0 && !loading) {
         <ng-container>
-            <div class="px-2 md:px-10 lg:px-15 xl:px-20 py-6">
+            <div class="px-2 md:px-10 lg:px-15 xl:px-20 py-3">
                 <div class="p-2 md:p-4">
                     <mat-card-title class="text-end">What types of business activities does your organization
                         offer?</mat-card-title>
@@ -46,21 +46,21 @@
             </div>
         </ng-container>
         } @else{
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="flex-1 overflow-y-auto p-3 space-y-3">
 
-            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper style="margin: auto;width: 700px;"
+            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper class="mx-auto w-full max-w-[700px]"
                 (selectionChange)="onStepChange($event)">
                 <!-- Shop Basic -->
                 <mat-step [stepControl]="shopBasic">
-                    <form [formGroup]="shopBasic" class="max-w-[600px]">
+                    <form [formGroup]="shopBasic" class="w-full max-w-[600px]">
                         <ng-template matStepLabel>Basic</ng-template>
                         <!-- Location Details -->
                         <nz-card nzType="inner" nzTitle="Location Details" class="m-b-4 m-t-8">
-                            <div class="flex gap-1rem">
+                            <div class="flex flex-col md:flex-row gap-4">
                                 <!-- Media Upload -->
                                 <app-upload-media [existingUploads]="sampleUploads" [multiple]="false"
                                     [type]="'BUSINESS'" (uploaded)="setDocument($event)"
-                                    class="flex-none w-50"></app-upload-media>
+                                    class="flex-none w-50 md:w-48 sm:w-50"></app-upload-media>
 
                                 <div class="w-100">
                                     <p class="parent_text flex justify-between items-end">
@@ -102,7 +102,7 @@
 
                         <!-- Business Types -->
                         <nz-card nzType="inner" nzTitle="Business types" class="m-b-4" [formGroup]="shopBasic">
-                            <div class="flex">
+                            <div class="flex flex-col md:flex-row gap-4">
                                 <div class="mb-4 flex-1">
                                     <p class="parent_text flex items-end gap-1">
                                         <mat-icon
@@ -112,7 +112,7 @@
                                         </mat-icon>
                                         Primary Business
                                     </p>
-                                    <nz-select class="w-3/4" formControlName="primaryModel"
+                                    <nz-select class="w-full md:w-3/4" formControlName="primaryModel"
                                         [nzDisabled]="data.isUpdate">
                                         <nz-option *ngFor="let model of businessModels" [nzValue]="model"
                                             [nzLabel]="model.name"></nz-option>
@@ -128,7 +128,7 @@
                                         Primary Business Industry
                                     </p>
 
-                                    <nz-select class="w-3/4" formControlName="businessIndustry"
+                                    <nz-select class="w-full md:w-3/4" formControlName="businessIndustry"
                                         [nzDisabled]="data.isUpdate">
                                         <nz-option *ngFor="let industry of industries" [nzValue]="industry"
                                             [nzLabel]="industry.name">
@@ -153,26 +153,26 @@
 
                             <div formArrayName="secondaryModels" class="mt-4">
                                 <div *ngFor="let sec of secondaryModels.controls; let i = index" [formGroupName]="i"
-                                    class="flex mb-2">
+                                    class="flex flex-col md:flex-row gap-4 mb-4 md:mb-2 items-start md:items-end">
 
-                                    <div class="flex-1">
+                                    <div class="w-full md:flex-1">
                                         <p class="parent_text">Secondart Business</p>
-                                        <nz-select class="w-3/4 mr-4" formControlName="model">
+                                        <nz-select class="w-full md:w-3/4 md:mr-4" formControlName="model">
                                             <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
                                             <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
                                         </nz-select>
                                     </div>
 
-                                    <div class="flex-1">
+                                    <div class="w-full md:flex-1">
                                         <p class="parent_text">Business Industry</p>
-                                        <nz-select class="w-3/4 mr-4" formControlName="type">
+                                        <nz-select class="w-full md:w-3/4 md:mr-4" formControlName="type">
                                             <nz-option nzValue="retail" nzLabel="Retail"></nz-option>
                                             <nz-option nzValue="service" nzLabel="Service"></nz-option>
                                         </nz-select>
                                     </div>
 
-                                    <button mat-icon-button color="warn" type="button"
-                                        (click)="removeSecondaryModel(i)">
+                                    <button mat-icon-button color="warn" type="button" (click)="removeSecondaryModel(i)"
+                                        class="mt-2 md:mt-0">
                                         <mat-icon>delete</mat-icon>
                                     </button>
                                 </div>
@@ -203,7 +203,7 @@
 
                 <!-- Shop Address -->
                 <mat-step [stepControl]="addressGroup">
-                    <form [formGroup]="addressGroup" class="max-w-[600px]">
+                    <form [formGroup]="addressGroup" class="w-full max-w-[600px]">
                         <ng-template matStepLabel>Shop Address</ng-template>
 
                         <div class="mt-8">
@@ -241,7 +241,8 @@
 
                             <!-- Location Picker Button -->
                             <div class="flex items-center gap-2 mb-4">
-                                <button mat-stroked-button type="button" (click)="openLocationPicker()" class="flex items-center gap-2">
+                                <button mat-stroked-button type="button" (click)="openLocationPicker()"
+                                    class="flex items-center gap-2">
                                     <mat-icon>location_on</mat-icon>
                                     <span>Select Location on Map</span>
                                 </button>
@@ -260,7 +261,7 @@
                 </mat-step>
 
                 <mat-step [stepControl]="businessHoursGroup">
-                    <form [formGroup]="businessHoursGroup" class="max-w-[600px]">
+                    <form [formGroup]="businessHoursGroup" class="w-full max-w-[600px]">
                         <ng-template matStepLabel>Business Hours</ng-template>
 
                         <div formArrayName="days" *ngFor="let day of days.controls; let i = index">
@@ -269,37 +270,43 @@
                                     {{ day.value.day | titlecase }}
                                 </mat-checkbox>
 
-                                <div *ngIf="day.get('enabled')?.value" class="ml-10">
-                                    <button mat-stroked-button color="primary" class="cursor-pointer"
-                                        (click)="addSession(i)">
-                                        <i class="fa-solid fa-plus"></i> Add Session
-                                    </button>
-                                    <button mat-stroked-button color="secondary" class="cursor-pointer"
-                                        style="margin-left: 13px;" (click)="copyHoursToAll(i)">
-                                        <i class="fa-solid fa-check-double"></i> Copy to All
-                                    </button>
+                                <div *ngIf="day.get('enabled')?.value" class="ml-4 md:ml-10 space-y-4">
+                                    <div class="flex flex-wrap gap-3">
+                                        <button mat-stroked-button color="primary" class="cursor-pointer"
+                                            (click)="addSession(i)">
+                                            <i class="fa-solid fa-plus"></i> Add Session
+                                        </button>
+                                        <button mat-stroked-button color="secondary" class="cursor-pointer"
+                                            (click)="copyHoursToAll(i)">
+                                            <i class="fa-solid fa-check-double"></i> Copy to All
+                                        </button>
+                                    </div>
 
-                                    <div formArrayName="sessions" class="m-t-8"
+                                    <div formArrayName="sessions" class="space-y-3"
                                         *ngFor="let session of getSessions(i).controls; let j = index">
-                                        <div [formGroupName]="j" class="flex gap-4 items-center"
+                                        <div [formGroupName]="j" class="flex gap-2 md:gap-4 items-center"
                                             *ngIf="session.get('operation')?.value !== 'DELETE'">
-                                            <input type="time" formControlName="start" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 
-                                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                step="900" min="09:00" max="18:00" />
+                                            <div class="flex gap-2 flex-1 md:flex-none">
+                                                <input type="time" formControlName="start"
+                                                    class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
+                                                  focus:border-blue-500 block text-xs md:text-sm border-gray-300 p-2 md:p-2.5 
+                                                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-[110px] md:w-32" step="900" min="09:00"
+                                                    max="18:00" />
 
-                                            <input type="time" formControlName="end" class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
-                                                focus:border-blue-500 block text-sm border-gray-300 p-2.5 
-                                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                step="900" min="09:00" max="18:00" />
+                                                <input type="time" formControlName="end"
+                                                    class="rounded-md bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 
+                                                  focus:border-blue-500 block text-xs md:text-sm border-gray-300 p-2 md:p-2.5 
+                                                  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-[110px] md:w-32" step="900" min="09:00"
+                                                    max="18:00" />
+                                            </div>
 
-                                            <mat-icon class="cursor-pointer"
+                                            <mat-icon class="cursor-pointer text-gray-400 hover:text-red-500 flex-none"
                                                 (click)="removeSession(i,j)">delete</mat-icon>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="text-red-500 ml-10 m-t-4" *ngIf="validateNoOverlap(i)">
+                                <div class="text-red-500 ml-4 md:ml-10 m-t-4" *ngIf="validateNoOverlap(i)">
                                     Overlapping time slots detected!
                                 </div>
                             </div>

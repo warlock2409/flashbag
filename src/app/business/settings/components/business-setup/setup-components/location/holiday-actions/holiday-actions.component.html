@@ -36,26 +36,33 @@
                     </div>
 
                     <div *ngFor="let holiday of holidays; let i = index"
-                        class="flex items-center p-3 bg-gray-50 rounded mb-2">
-                        <!-- Calendar date display -->
-                        <div class="calendar-date mr-4 text-center">
-                            <div class="text-xs font-semibold text-gray-500">{{ holiday.holidayDate | date:'MMM' |
-                                uppercase }}</div>
-                            <div class="text-xl font-bold text-gray-800">{{ holiday.holidayDate | date:'d' }}</div>
-                            <div class="text-xs text-gray-500">{{ holiday.holidayDate | date:'yy' }}</div>
+                        class="flex flex-col sm:flex-row sm:items-center p-3 md:p-4 bg-gray-50 rounded mb-3 gap-4">
+                        
+                        <!-- Left side: Date and Info -->
+                        <div class="flex items-center flex-1 gap-4">
+                            <!-- Calendar date display -->
+                            <div class="calendar-date w-12 text-center flex-none">
+                                <div class="text-[10px] font-semibold text-gray-400 leading-none mb-1">{{ holiday.holidayDate | date:'MMM' | uppercase }}</div>
+                                <div class="text-lg font-bold text-gray-800 leading-none">{{ holiday.holidayDate | date:'d' }}</div>
+                                <div class="text-[10px] text-gray-400 leading-none mt-1">{{ holiday.holidayDate | date:'yy' }}</div>
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800">{{ holiday.name }}</div>
+                                <div *ngIf="holiday.notify" class="inline-flex items-center text-[10px] text-blue-600 font-medium px-2 py-0.5 bg-blue-50 rounded mt-1">
+                                    <mat-icon style="font-size: 12px; height: 12px; width: 12px; margin-right: 4px;">notifications_active</mat-icon>
+                                    Notification ON
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="flex-1 ml-4">
-                            <div class="font-medium">{{ holiday.name }}</div>
-                            <div *ngIf="holiday.notify" class="text-xs text-blue-600 mt-1">Notification ON</div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button mat-raised-button class="edit-button" (click)="editHoliday(holiday, i)">
+                        <!-- Right side: Actions -->
+                        <div class="flex gap-2 justify-end sm:justify-start">
+                            <button mat-raised-button class="edit-button text-sm px-4" (click)="editHoliday(holiday, i)">
                                 Edit
                             </button>
 
-                            <button mat-raised-button class="holidays-button" (click)="removeHoliday(i)">
+                            <button mat-raised-button class="holidays-button text-sm px-4" (click)="removeHoliday(i)">
                                 Delete
                             </button>
                         </div>

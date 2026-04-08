@@ -79,6 +79,10 @@ export class CustomersComponent {
       this.getCustomerByOrgShop();
   }
 
+  ngOnInit() {
+    this.checkScreenSize();
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -250,7 +254,7 @@ export class CustomersComponent {
   addCustomerMannually(): void {
     const dialogRef = this.dialog.open(AddCustomerComponent, {
       data: {},
-      minWidth: "400px",
+      width: "90vw",
       maxWidth: "500px"
     });
 
@@ -263,9 +267,8 @@ export class CustomersComponent {
     // Open the add customer dialog with export mode
     const dialogRef = this.dialog.open(AddCustomerComponent, {
       data: { mode: 'export' },
-      minWidth: "600px",  // Increased width for export mode
-      maxWidth: "800px",  // Increased max width for export mode
-      width: "70vw"       // Use viewport width for responsive sizing
+      width: "90vw",       // Use larger viewport width to allow full use of mobile screens
+      maxWidth: "800px"    // Cap at 800px for desktop views
     });
 
     dialogRef.afterClosed().subscribe(result => {

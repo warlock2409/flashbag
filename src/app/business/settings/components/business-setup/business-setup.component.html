@@ -13,8 +13,9 @@
 
   <div class="content-container responsive-flex-row">
     <!-- Mobile menu toggle button -->
-    <button *ngIf="isMobileView" mat-icon-button class="mobile-menu-toggle" (click)="toggleMenu()"
-      aria-label="Toggle menu">
+    <button *ngIf="isMobileView" mat-icon-button
+      class="mobile-menu-toggle !border-1 !border-purple-500/60 !shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-300"
+      (click)="toggleMenu()" aria-label="Toggle menu">
       <mat-icon>{{isMenuOpen ? 'close' : 'menu'}}</mat-icon>
     </button>
 
@@ -48,8 +49,8 @@
         </li>
         <li nz-submenu nzTitle="Activity" nzOpen>
           <ul>
-            <li nz-menu-item (click)="navigateTo('./exercisePlan')" [nzDisabled]="details?.status != 'ACTIVE'">Exercise
-              Plan</li>
+            <li nz-menu-item (click)="navigateTo('./exercisePlan')" [nzDisabled]="details?.status != 'ACTIVE'">Exercises
+            </li>
             <li nz-menu-item (click)="navigateTo('./goalPlan')" [nzDisabled]="details?.status != 'ACTIVE'">Goal Plan
             </li>
           </ul>

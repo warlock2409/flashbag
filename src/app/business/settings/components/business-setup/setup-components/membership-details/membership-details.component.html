@@ -54,7 +54,14 @@
                     
                     <!-- Mobile view - simplified display -->
                     <div class="mobile-membership-info">
-                        <div class="mobile-price">{{membership.basePrice | currency:'INR'}}</div>
+                        <div class="mobile-stat-box">
+                            <span class="mobile-label">Price</span>
+                            <div class="mobile-value">{{membership.basePrice | currency:'INR'}}</div>
+                        </div>
+                        <div class="mobile-stat-box" *ngIf="membership.maxDuration">
+                            <span class="mobile-label">Max Duration</span>
+                            <div class="mobile-value">{{membership.maxDuration.value}} {{membership.maxDuration.unit}}</div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -55,18 +55,25 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+  padding: 16px 24px !important;
+  margin-bottom: 0 !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .form-field {
     margin-bottom: 1rem;
   }
   
   .button-container {
-    flex-direction: column;
+    flex-direction: column-reverse;
+    padding: 12px 16px !important;
+    gap: 12px;
   }
   
   .button-container button {
-    width: 100%;
+    width: 100% !important;
+    margin-left: 0 !important;
+    height: 48px;
+    font-weight: 600;
   }
 }

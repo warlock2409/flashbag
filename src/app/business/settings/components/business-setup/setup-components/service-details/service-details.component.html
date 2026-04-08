@@ -68,20 +68,19 @@
                 @for (service of services; track $index) {
                 <nz-card [nzTitle]="service.name" [nzExtra]="editTemplate" class="m-b-4 service-card"
                     [nzBodyStyle]="{ padding: '8px' }">
-                    <div class="flex gap-1rem">
-                        <div>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+                        <div class="flex-none">
                             <nz-avatar nzShape="square" style="border-radius: 3px;width: 150px;height: 110px;"
                                 nzSrc="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemtrNW10ZTkxaTlvbWg2amhtZTlicGo1bms4cDFuYXY2MjVveWVsaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YONOfpU88lg0RkO8MM/giphy.gif"></nz-avatar>
                         </div>
-                        <div>
+                        <div class="flex-1 w-full flex flex-col items-center sm:items-start">
                             <h4 style="margin-bottom:0"></h4>
-                            <!-- <p class="child_text">{{service.description}}</p> -->
                             <span
                                 class="industry-tag text-xs font-medium px-2 py-1 rounded-full text-blue-800 bg-blue-100">
                                 {{service.industrySegment?.name}}
                             </span>
-                            <div class="flex gap-1rem wrap mt-4">
-
+                            
+                            <div class="flex gap-4 flex-wrap mt-auto sm:mt-4 pt-4 sm:pt-0 w-full justify-center sm:justify-start">
                                 <div class="date_block">
                                     <span class="child_text">Duration</span>
                                     <div class="expiry-date">{{service.defaultDuration}} Min</div>

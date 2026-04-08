@@ -146,32 +146,32 @@
 
         <div class="lg:col-span-1 space-y-6">
             <!-- Workout Duration Analysis -->
-            <div class="p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex gap-8">
-                <div class="mb-8" *ngFor="let monthData of heatmapData">
+            <div class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col sm:flex-row gap-4 sm:gap-8">
+                <div class="mb-4 sm:mb-8 w-full overflow-hidden" *ngFor="let monthData of heatmapData">
                     <!-- Month Label -->
                     <div class="text-xs font-medium text-zinc-500 mb-3">
                         {{ monthData.monthLabel }}
                     </div>
 
-                    <div class="flex gap-3">
+                    <div class="flex gap-2 sm:gap-3">
 
                         <!-- Weekday Labels (MATCH GRID EXACTLY) -->
-                        <div class="grid grid-rows-7 gap-[3px] text-[10px] text-zinc-400">
-                            <div class="h-6 flex items-center">Sun</div>
-                            <div class="h-6 flex items-center">Mon</div>
-                            <div class="h-6 flex items-center">Tue</div>
-                            <div class="h-6 flex items-center">Wed</div>
-                            <div class="h-6 flex items-center">Thu</div>
-                            <div class="h-6 flex items-center">Fri</div>
-                            <div class="h-6 flex items-center">Sat</div>
+                        <div class="grid grid-rows-7 gap-[3px] text-[10px] text-zinc-400 flex-shrink-0">
+                            <div class="h-5 sm:h-6 flex items-center">S</div>
+                            <div class="h-5 sm:h-6 flex items-center">M</div>
+                            <div class="h-5 sm:h-6 flex items-center">T</div>
+                            <div class="h-5 sm:h-6 flex items-center">W</div>
+                            <div class="h-5 sm:h-6 flex items-center">T</div>
+                            <div class="h-5 sm:h-6 flex items-center">F</div>
+                            <div class="h-5 sm:h-6 flex items-center">S</div>
                         </div>
 
                         <!-- Heatmap Grid -->
-                        <div class="overflow-x-auto">
-                            <div class="grid grid-rows-7 grid-flow-col gap-[4px] w-max">
+                        <div class="overflow-x-auto pb-2 scrollbar-hide">
+                            <div class="grid grid-rows-7 grid-flow-col gap-[3px] sm:gap-[4px] w-max">
                                 <ng-container *ngFor="let day of monthData.heatmapData">
 
-                                    <div class="w-6 h-6 rounded-md transition-colors duration-200 cursor-pointer"
+                                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-sm sm:rounded-md transition-colors duration-200 cursor-pointer"
                                         [ngClass]="{
                                             'bg-transparent': day.empty,
                                             'bg-zinc-200 cursor-not-allowed': day.future,
@@ -188,9 +188,7 @@
 
                                 </ng-container>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -198,17 +196,17 @@
 
         <!-- 📊 BAR SECTION -->
         <div class="lg:col-span-1 space-y-6">
-            <div class="p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+            <div class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
                 <!-- HEADER -->
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h3 class="text-sm font-semibold text-zinc-900 !mb-0">Workout Duration Analysis</h3>
-                        <p class="text-xs text-zinc-500 mt-0.5 !mb-0">
-                            Monthly activity heatmap + session comparison
+                        <h3 class="text-sm font-semibold text-zinc-900 !mb-0">Duration Analysis</h3>
+                        <p class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 !mb-0">
+                            Session length comparison
                         </p>
                     </div>
                 </div>
-                <div class="flex items-end justify-center gap-8 sm:gap-16 h-46 border-b border-zinc-100 relative">
+                <div class="flex items-end justify-center gap-6 sm:gap-16 h-40 sm:h-46 border-b border-zinc-100 relative">
 
                     <!-- Grid lines -->
                     <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
@@ -220,36 +218,36 @@
                     </div>
 
                     <!-- Shortest -->
-                    <div class="flex flex-col items-center gap-3 z-10 group">
-                        <div class="relative w-12 sm:w-16 bg-zinc-100 rounded-t-sm flex items-end justify-center"
+                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
+                        <div class="relative w-10 sm:w-16 bg-zinc-100 rounded-t-sm flex items-end justify-center"
                             [style.height.%]="(shortestDuration / longestDuration) * 100">
-                            <div class="mb-2 text-xs font-semibold text-zinc-600">
+                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-zinc-600">
                                 {{shortestDuration}}m
                             </div>
                         </div>
-                        <p class="text-xs font-medium text-zinc-500">Shortest</p>
+                        <p class="text-[10px] sm:text-xs font-medium text-zinc-500">Min</p>
                     </div>
 
                     <!-- Average -->
-                    <div class="flex flex-col items-center gap-3 z-10 group">
-                        <div class="relative w-12 sm:w-16 bg-indigo-100 rounded-t-sm flex items-end justify-center"
+                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
+                        <div class="relative w-10 sm:w-16 bg-indigo-100 rounded-t-sm flex items-end justify-center"
                             [style.height.%]="(averageDuration / longestDuration) * 100">
-                            <div class="mb-2 text-xs font-semibold text-indigo-700">
+                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-indigo-700">
                                 {{averageDuration}}m
                             </div>
                         </div>
-                        <p class="text-xs font-medium text-indigo-600">Average</p>
+                        <p class="text-[10px] sm:text-xs font-medium text-indigo-600">Avg</p>
                     </div>
 
                     <!-- Longest -->
-                    <div class="flex flex-col items-center gap-3 z-10 group">
-                        <div class="relative w-12 sm:w-16 bg-zinc-800 rounded-t-sm flex items-end justify-center"
+                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
+                        <div class="relative w-10 sm:w-16 bg-zinc-800 rounded-t-sm flex items-end justify-center"
                             style="height: 100%;">
-                            <div class="mb-2 text-xs font-semibold text-white">
+                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-white">
                                 {{longestDuration}}m
                             </div>
                         </div>
-                        <p class="text-xs font-medium text-zinc-900">Longest</p>
+                        <p class="text-[10px] sm:text-xs font-medium text-zinc-900">Max</p>
                     </div>
                 </div>
             </div>

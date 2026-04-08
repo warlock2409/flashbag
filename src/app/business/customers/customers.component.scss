@@ -236,31 +236,34 @@
   color: #1f2937;
 }
 
-.filter-indicator {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #d1d5db;
-  color: #6b7280;
-  font-size: 0.75rem;
+.filter-icon {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  transition: color 0.2s;
+
+  .filter-btn-active & {
+    color: #4f46e5;
+  }
+
+  &.active-icon {
+    .filter-btn-active & {
+       color: #16a34a;
+    }
+  }
+
+  &.inactive-icon {
+    .filter-btn-active & {
+       color: #ef4444;
+    }
+  }
 
   @media (max-width: 768px) {
-    width: 16px;
-    height: 16px;
-    font-size: 0.625rem;
+    font-size: 0.8rem;
   }
 }
 
-.filter-indicator-active {
-  background-color: #58d784;
-  color: #ffffff;
-}
-
 .filter-text {
-  @media (max-width: 480px) {
+  @media (max-width: 520px) {
     display: none;
   }
 }
