@@ -329,7 +329,7 @@ export class ProductDetailsComponent implements OnInit {
     };
 
     this.isLoading = true;
-    this.orgService.addProductBatch(this.selectedProduct.id, batchRequest).subscribe({
+    this.orgService.addProductBatch(this.selectedProduct.orgProductId, batchRequest).subscribe({
       next: (res: any) => {
         this.isLoading = false;
         this.sweatAlert.success('Stock added successfully');
