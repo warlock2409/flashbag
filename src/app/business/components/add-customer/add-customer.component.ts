@@ -16,13 +16,16 @@ import { DocumentDto } from 'src/app/components/upload-media/upload-media.compon
 import { ShopService } from 'src/app/services/shop.service'; // Added import
 import { PaymentService } from 'src/app/services/payment.service'; // Added import
 import { InvoiceModel, ItemModel, PaymentModel } from 'src/app/models/payment.model'; // Added import
+import { PhoneNumberPipe } from 'src/app/pipes/phone-number.pipe';
+
 
 @Component({
   selector: 'app-add-customer',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule, ReactiveFormsModule, UploadMediaComponent], // Added UploadMediaComponent to imports
+  imports: [CommonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule, ReactiveFormsModule, UploadMediaComponent, PhoneNumberPipe], // Added UploadMediaComponent to imports
   templateUrl: './add-customer.component.html',
-  styleUrl: './add-customer.component.scss'
+  styleUrl: './add-customer.component.scss',
+  providers: [PhoneNumberPipe]
 })
 export class AddCustomerComponent implements OnInit {
 
@@ -36,6 +39,8 @@ export class AddCustomerComponent implements OnInit {
   // Injected services
   shopService = inject(ShopService);
   paymentService = inject(PaymentService);
+  phoneNumberPipe = inject(PhoneNumberPipe);
+
 
   constructor(private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddCustomerComponent>,
@@ -181,6 +186,18 @@ export class AddCustomerComponent implements OnInit {
     return null;
   }
 
+  allowOnlyNumbers(event: any, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9]/g, '');
+    
+    if (controlName === 'phone') {
+      value = this.phoneNumberPipe.transform(value);
+    }
+    
+    input.value = value;
+    this.customerForm.get(controlName)?.setValue(value);
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -276,25 +293,27 @@ export class AddCustomerComponent implements OnInit {
 
   getCustomer(): Customer {
     const formValue = this.customerForm.value;
-    // Merge country code with phone number
-    const fullPhoneNumber = formValue.countryCode && formValue.phone
-      ? `${formValue.countryCode}${formValue.phone}`
-      : formValue.phone;
+    // Clean only the phone part and prepend country code
+    const cleanPhone = formValue.phone ? formValue.phone.replace(/\D/g, '') : '';
+    const fullPhoneNumber = formValue.countryCode && cleanPhone
+      ? `${formValue.countryCode}${cleanPhone}`
+      : cleanPhone;
 
     return {
       firstName: formValue.name,
       email: formValue.email || undefined,  // optional if not provided
       contactNumber: fullPhoneNumber || undefined,   // optional if not provided
-      id: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
+      existingCustomerId: formValue.existingCustomerId ? parseInt(formValue.existingCustomerId) : undefined
     };
   }
 
   getCustomerWithDocument(): Customer {
     const formValue = this.customerForm.value;
-    // Merge country code with phone number
-    const fullPhoneNumber = formValue.countryCode && formValue.phone
-      ? `${formValue.countryCode}${formValue.phone}`
-      : formValue.phone;
+    // Clean only the phone part and prepend country code
+    const cleanPhone = formValue.phone ? formValue.phone.replace(/\D/g, '') : '';
+    const fullPhoneNumber = formValue.countryCode && cleanPhone
+      ? `${formValue.countryCode}${cleanPhone}`
+      : cleanPhone;
 
     const customer: any = {
       firstName: formValue.name,

@@ -1,0 +1,76 @@
+<div class="flex flex-col bg-white rounded-xl shadow-xl w-full h-[600px] overflow-hidden">
+    <!-- Dialog Header -->
+    <div class="flex justify-between items-center px-6 py-4 border-b border-slate-200">
+        <h2 class="text-xl font-semibold text-slate-800 m-0">Select Physical Product</h2>
+        <button mat-icon-button (click)="close()">
+            <mat-icon style="color: lightcoral;">cancel</mat-icon>
+        </button>
+    </div>
+
+    <!-- Search -->
+    <div class="p-4 border-b border-slate-200 bg-slate-50 shrink-0">
+        <div class="relative">
+            <input type="text" placeholder="Search products by name..." [ngModel]="searchTerm"
+                (ngModelChange)="onSearchChange($event)"
+                class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-1 focus:ring-violet-200 focus:border-violet-200 outline-none transition-all">
+            <mat-icon class="absolute left-3 top-3 text-slate-400">search</mat-icon>
+        </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="flex-1 overflow-y-auto p-6 bg-slate-50 custom-scrollbar text-left">
+        <div *ngIf="filteredProducts.length === 0 && !isLoading"
+            class="text-center text-slate-500 py-12 flex flex-col items-center">
+            <mat-icon class="!text-5xl !w-12 !h-12 text-slate-300 mb-4">inventory_2</mat-icon>
+            <p class="text-lg">No products found.</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+            <label *ngFor="let product of filteredProducts"
+                class="flex items-center p-4 rounded-xl border transition-all cursor-pointer bg-white"
+                [class.border-violet-500]="selectedProduct?.id === product.id"
+                [class.ring-2]="selectedProduct?.id === product.id"
+                [class.ring-violet-200]="selectedProduct?.id === product.id"
+                [class.border-slate-200]="selectedProduct?.id !== product.id" (click)="selectProduct(product)">
+
+                <div
+                    class="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center mr-4 border border-slate-100">
+                    <img *ngIf="product.documentDto?.attachments?.[0]?.url"
+                        [src]="product.documentDto.attachments[0].url" class="w-full h-full object-cover">
+                    <mat-icon *ngIf="!product.documentDto?.attachments?.[0]?.url"
+                        class="text-slate-400">inventory_2</mat-icon>
+                </div>
+
+                <div class="flex-1">
+                    <div class="font-bold text-slate-800 text-lg">{{ product.name }}</div>
+                    <div class="text-sm text-slate-500 mt-1 line-clamp-1" *ngIf="product.description">{{
+                        product.description }}</div>
+                    <div class="text-sm font-semibold text-violet-600 mt-2">{{ product.price | currency:'INR' }}</div>
+                </div>
+
+                <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ml-4"
+                    [class.border-violet-500]="selectedProduct?.id === product.id"
+                    [class.border-slate-300]="selectedProduct?.id !== product.id">
+                    <div class="w-3 h-3 rounded-full bg-violet-500" *ngIf="selectedProduct?.id === product.id"></div>
+                </div>
+            </label>
+        </div>
+
+        <div *ngIf="isLoading" class="text-center py-6 text-slate-500">
+            Loading...
+        </div>
+
+        <div *ngIf="!isLastPage && !isLoading" class="mt-6 text-center">
+            <button mat-stroked-button (click)="loadMore()" class="!border-slate-300 !text-slate-600">
+                Load More
+            </button>
+        </div>
+    </div>
+
+    <!-- Dialog Footer -->
+    <div class="border-t border-slate-200 px-6 py-4 flex justify-end items-center gap-3 bg-white shrink-0">
+        <button mat-stroked-button (click)="close()">Cancel</button>
+        <button mat-raised-button style="background-color: #a684ff; color: white;" [disabled]="!selectedProduct"
+            (click)="confirm()">Confirm Selection</button>
+    </div>
+</div>

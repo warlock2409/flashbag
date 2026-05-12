@@ -25,6 +25,8 @@ import { ProductDetailsComponent } from './settings/components/business-setup/se
 import { AdvertisementComponent } from './settings/components/advertisement/advertisement.component';
 import { GoalPlanComponent } from './settings/components/business-setup/setup-components/goal-plan/goal-plan.component';
 import { SalesComponent } from './settings/components/sales/sales.component';
+import { ChallengeListComponent } from './settings/components/business-setup/setup-components/challenge-builder/challenge-list.component';
+import { ChallengeBuilderComponent } from './settings/components/business-setup/setup-components/challenge-builder/challenge-builder';
 
 const routes: Routes = [
   {
@@ -64,6 +66,13 @@ const routes: Routes = [
       {
         path: 'gym-checkin',
         component: GymCheckInComponent
+      },
+      {
+        path: "challenge",
+        children: [
+          { path: "", component: ChallengeListComponent },
+          { path: "create", component: ChallengeBuilderComponent }
+        ]
       },
       {
         path: 'settings',
@@ -130,7 +139,7 @@ const routes: Routes = [
               {
                 path: "product",
                 component: ProductDetailsComponent
-              }
+              },
             ]
           }
         ]

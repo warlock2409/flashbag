@@ -20,6 +20,7 @@ import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import { DiscountDialogComponent } from './discount-dialog/discount-dialog.component';
 import { CustomerMembershipComponent } from '../../customers/customer-membership/customer-membership.component';
 import { CustomerGeneralComponent } from '../../customers/customer-general/customer-general.component';
+import { BatchSelectionDialogComponent } from './batch-selection-dialog/batch-selection-dialog.component';
 
 @Component({
   selector: 'app-pos',
@@ -82,7 +83,7 @@ export class PosComponent implements OnInit {
     { id: 'memberships', name: 'Memberships', icon: 'card_membership' }, // 'award' → 'card_membership'
     // { id: 'services', name: 'Services', icon: 'build' },           // 'settings' → 'build'
     // { id: 'packages', name: 'Packages', icon: 'inventory_2' },    // 'package' → 'inventory_2'
-    // { id: 'products', name: 'Products', icon: 'shopping_bag' },   // Material icon
+    { id: 'products', name: 'Products', icon: 'shopping_bag' },   // Material icon
     // { id: 'rentals', name: 'Rentals', icon: 'access_time' }       // 'clock' → 'access_time'
   ];
   activeCategory: string = 'memberships';
@@ -126,8 +127,36 @@ export class PosComponent implements OnInit {
 
   // Order-level discount
   orderDiscount: number = 0;
+  invoiceReward: any = null;
 
-  addToCart(item: Item) {
+  addToCart(item: any) {
+    if (this.activeCategoryName === "Products") {
+      this.shopService.getProductDetails(item.id).subscribe({
+        next: (res: any) => {
+          const batches = res.data?.batches || [];
+          if (batches.length === 0) {
+            this._snackBar.error('No batches available for this product.');
+            return;
+          } else if (batches.length === 1) {
+            this.addBatchToCart(item, batches[0]);
+          } else {
+            const dialogRef = this.dialog.open(BatchSelectionDialogComponent, {
+              width: '500px',
+              data: { product: res.data, batches: batches }
+            });
+            dialogRef.afterClosed().subscribe(selectedBatch => {
+              if (selectedBatch) {
+                this.addBatchToCart(item, selectedBatch);
+              }
+            });
+          }
+        },
+        error: (err: any) => {
+          this.swal.error('Failed to fetch product details.');
+        }
+      });
+      return;
+    }
 
     const existing = this.cart.find(i => i.id === item.id);
 
@@ -201,6 +230,32 @@ export class PosComponent implements OnInit {
     }
   }
 
+  addBatchToCart(item: any, batch: any, reward?: any) {
+    const existing = this.cart.find(i =>
+      (i as any).id === item.id &&
+      (i as any).batchId === batch.batchId &&
+      !!(i as any).customerRewardDto === !!reward
+    );
+
+    if (existing) {
+      if (!reward) {
+        existing.quantity! += 1;
+      } else {
+        this._snackBar.info('This reward product is already in your cart.');
+      }
+    } else {
+      const newItem: any = {
+        ...item,
+        quantity: 1,
+        batchId: batch.batchId,
+        basePrice: batch.sellingPrice, // override base price with batch selling price
+        name: `${item.name} (${batch.batchNumber})`
+      };
+      if (reward) (newItem as any).customerRewardDto = reward;
+      this.cart.push(newItem);
+    }
+  }
+
   editStartDate(index: number) {
     if (this.invoice.invoiceNumber) return;
 
@@ -224,7 +279,12 @@ export class PosComponent implements OnInit {
   }
 
   updateQuantity(index: number, delta: number) {
-    const newQty = this.cart[index].quantity! + delta;
+    const item = this.cart[index];
+    if (delta > 0 && (item as any).customerRewardDto) {
+      this._snackBar.info('Quantity for reward items cannot be increased.');
+      return;
+    }
+    const newQty = item.quantity! + delta;
     if (newQty > 0) this.cart[index].quantity = newQty;
     else this.cart.splice(index, 1);
   }
@@ -233,46 +293,188 @@ export class PosComponent implements OnInit {
     this.cart.splice(index, 1);
   }
 
-  // Cart totals
   get subtotal(): number {
-    return this.cart.reduce((sum, item) => sum + (item.basePrice * (item.quantity || 1)), 0);
-  }
-
-  get tax(): number {
+    if (!this.cart) return 0;
     return this.cart.reduce((sum, item) => {
-      const rate = item.taxRate ?? 0;
-      return sum + (item.basePrice * (item.quantity || 1) * (rate / 100));
+      return sum + ((item.basePrice || 0) * (item.quantity || 1));
     }, 0);
   }
 
+  get netSubtotal(): number {
+    if (!this.cart) return 0;
+    return this.cart.reduce((sum, item) => {
+      let price = item.basePrice || 0;
+      let qty = item.quantity || 1;
+      let itemTotal = price * qty;
+
+      // Handle item-level discount from existing invoice
+      if (item.discount) {
+        itemTotal -= item.discount;
+      } else {
+        // Handle item-level reward (during creation phase)
+        const reward = (item as any).customerRewardDto;
+        if (reward) {
+          if (reward.type === 'PHYSICAL_PRODUCT') {
+            itemTotal = 0;
+          } else if (reward.type === 'DISCOUNT') {
+            const discPercentage = reward.discountPercentage || 100;
+            itemTotal = itemTotal - (itemTotal * discPercentage / 100);
+          }
+        }
+      }
+      return sum + itemTotal;
+    }, 0);
+  }
+
+  get invoiceLevelDiscountOnSubtotal(): number {
+    const netSub = this.netSubtotal;
+    if (this.invoiceReward && this.invoiceReward.scope?.toUpperCase() === 'INVOICE') {
+      const type = this.invoiceReward.type?.toUpperCase();
+      if (type === 'PHYSICAL_PRODUCT') {
+        return Math.max(0, netSub);
+      } else if (type === 'DISCOUNT') {
+        const percentage = this.invoiceReward.discountPercentage || 0;
+        return (netSub * percentage) / 100;
+      }
+    }
+    return this.orderDiscount;
+  }
+
+  get tax(): number {
+    if (!this.cart || this.cart.length === 0) return 0;
+    const netSub = this.netSubtotal;
+    if (netSub <= 0) return 0;
+
+    const disc = this.invoiceLevelDiscountOnSubtotal;
+    const ratio = Math.max(0, (netSub - disc) / netSub);
+
+    return this.cart.reduce((sum, item) => {
+      let price = item.basePrice || 0;
+      let qty = item.quantity || 1;
+      let taxableAmount = price * qty;
+
+      if (item.discount) {
+        taxableAmount -= item.discount;
+      } else {
+        const reward = (item as any).customerRewardDto;
+        if (reward) {
+          if (reward.type === 'PHYSICAL_PRODUCT') {
+            taxableAmount = 0;
+          } else if (reward.type === 'DISCOUNT') {
+            const discPercentage = reward.discountPercentage || 100;
+            taxableAmount = taxableAmount - (taxableAmount * discPercentage / 100);
+          }
+        }
+      }
+      const rate = item.taxRate ?? 0;
+      return sum + (taxableAmount * (rate / 100) * ratio);
+    }, 0);
+  }
+
+  get currentOrderDiscount(): number {
+    const totalDisc = (this.subtotal - this.netSubtotal) + this.invoiceLevelDiscountOnSubtotal;
+
+    if (this.invoiceReward && this.invoiceReward.scope === 'INVOICE' && this.invoiceReward.type === 'PHYSICAL_PRODUCT') {
+      return this.subtotal + this.tax;
+    }
+
+    return totalDisc;
+  }
+
   get total(): number {
-    return this.subtotal + this.tax - this.orderDiscount - this.paidAmount;
+    return this.grandTotal - this.paidAmount;
   }
 
   get grandTotal(): number {
-    return this.subtotal + this.tax - this.orderDiscount;
+    return this.subtotal + this.tax - this.currentOrderDiscount;
   }
 
   get paidAmount(): number {
     if (!this.invoice || !this.invoice.payments || this.invoice.payments.length === 0) return 0;
-    return this.invoice.payments.reduce((sum, p) => sum + (p.amount || p.paidAmount || 0), 0);
+    return this.invoice.payments.reduce((sum, p) => sum + (Number(p.amount) || Number(p.paidAmount) || 0), 0);
   }
 
   openDiscountDialog() {
+    // if (this.cart.length === 0) {
+    //   this._snackBar.info('Please add items to cart first');
+    //   return;
+    // }
+    if (!this.selectedCustomer) {
+      this._snackBar.info('Please select or add a customer first');
+      return;
+    }
+
     const dialogRef = this.dialog.open(DiscountDialogComponent, {
       minWidth: '500px',
       data: {
-        subtotal: this.subtotal,
-        currentDiscount: this.orderDiscount
+        subtotal: this.netSubtotal,
+        currentDiscount: this.orderDiscount,
+        customerId: this.selectedCustomer?.id,
+        shopCode: this.shopCode
       }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.orderDiscount = result.amount;
-        this._snackBar.success('Discount of ' + this.orderDiscount + ' applied');
+        if (result.type === 'manual') {
+          this.orderDiscount = result.amount ?? 0;
+          this.invoiceReward = null;
+          this._snackBar.success('Manual discount of ' + this.orderDiscount + ' applied');
+        } else if (result.type === 'coupon') {
+          this.applyReward(result.reward, result.coupon);
+        }
       }
     });
+  }
+
+  applyReward(reward: any, coupon: any) {
+    if (reward.scope?.toUpperCase() === 'INVOICE') {
+      const discountPercentage = reward.discountPercentage || coupon.discountPercentage || 100;
+      this.invoiceReward = { ...reward, discountPercentage };
+      
+      const type = reward.type?.toUpperCase();
+      if (type === 'DISCOUNT') {
+        this._snackBar.success(`Coupon ${reward.couponCode} applied: ${discountPercentage}% discount`);
+      } else if (type === 'PHYSICAL_PRODUCT') {
+        this._snackBar.success(`Coupon ${reward.couponCode} applied: 100% discount (Free Reward)`);
+      } else {
+        this._snackBar.success(`Coupon ${reward.couponCode} applied to invoice`);
+      }
+    } else if (reward.scope?.toUpperCase() === 'ITEM') {
+      const productId = reward.productId;
+      this._snackBar.info('Adding product for reward...');
+      this.shopService.getProductDetails(productId).subscribe({
+        next: (res: any) => {
+          if (res.data) {
+            const productToAdd = {
+              id: res.data.productId,
+              name: res.data.productName,
+              description: res.data.productDescription,
+              basePrice: res.data.price,
+              itemType: "PRODUCT",
+              image: res.data.documentDto?.attachments?.[0]?.url || this.placeHolderImg
+            };
+
+            const batches = res.data.batches || [];
+            if (batches.length === 0) {
+              this._snackBar.error('No batches available for this reward product.');
+            } else if (batches.length === 1) {
+              this.addBatchToCart(productToAdd, batches[0], reward);
+            } else {
+              const bDialogRef = this.dialog.open(BatchSelectionDialogComponent, {
+                width: '500px',
+                data: { product: res.data, batches: batches }
+              });
+              bDialogRef.afterClosed().subscribe(selectedBatch => {
+                if (selectedBatch) {
+                  this.addBatchToCart(productToAdd, selectedBatch, reward);
+                }
+              });
+            }
+          }
+        }
+      });
+    }
   }
 
   get invoiceButtonText(): string {
@@ -304,6 +506,9 @@ export class PosComponent implements OnInit {
   deselectCustomer() {
     this.selectedCustomer = undefined;
     this.hasPendingMembership = false;
+    this.cart = [];
+    this.orderDiscount = 0;
+    this.invoiceReward = null;
   }
 
   openMembershipDialog() {
@@ -398,7 +603,43 @@ export class PosComponent implements OnInit {
     const category = this.categories.find(c => c.id === this.activeCategory);
     if (category?.name == "Memberships") {
       this.getMembershipByShop();
+    } else if (category?.name == "Products") {
+      this.getProductsByShop();
     }
+  }
+
+  getProductsByShop() {
+    this.shopService.getShopProducts().subscribe({
+      next: (res: any) => {
+        if (res.data && res.data.content) {
+          const productItems = res.data.content.map((p: any) => {
+            return {
+              id: p.productId,
+              name: p.productName,
+              description: p.productDescription,
+              basePrice: p.price,
+              itemType: "PRODUCT",
+              image: p.documentDto && p.documentDto.attachments && p.documentDto.attachments.length > 0
+                ? p.documentDto.attachments[0].url
+                : this.placeHolderImg,
+              availableStock: p.availableStock,
+              categoryName: p.categoryName,
+              brand: p.productBrand,
+              lowStock: p.lowStock
+            };
+          });
+
+          this.items = {
+            ...this.items,
+            ['products']: productItems
+          };
+          console.log(this.items, ".Products");
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching products', err);
+      }
+    });
   }
 
   openCustomerGeneralDialog() {
@@ -476,8 +717,9 @@ export class PosComponent implements OnInit {
 
     const invoice: InvoiceModel = {
       customerId: this.selectedCustomer.id!,
-      discount: this.orderDiscount,
+      discount: this.invoiceReward ? 0 : this.invoiceLevelDiscountOnSubtotal,
       items: [],
+      customerRewardDto: this.invoiceReward
     };
 
     this.cart.forEach((cart: Item) => {
@@ -487,15 +729,24 @@ export class PosComponent implements OnInit {
         itemId: cart.id,
         quantity: cart.quantity!,
       }
+      if ((cart as any).batchId) {
+        cartItem.batchId = (cart as any).batchId;
+      }
       if (cartItem.itemType == "MEMBERSHIPS") {
-        // const timestamp = new Date("2025-09-08").getTime();
         cartItem.startDate = cart.startDate?.getTime();
+      }
+      if ((cart as any).customerRewardDto) {
+        cartItem.customerRewardDto = (cart as any).customerRewardDto;
       }
       invoice.items.push(cartItem);
     });
 
     this.shopService.createInvoice(invoice).subscribe({
       next: (res: ResponseDate) => {
+        if (res.status == 500) {
+          this.swal.error(res.message);
+          return;
+        }
         this._snackBar.success("Invoice Created");
         this.invoice = res.data;
         confetti({
@@ -578,6 +829,33 @@ export class PosComponent implements OnInit {
       }
       // Load the discount from existing invoice
       this.orderDiscount = this.invoice.discount || 0;
+
+      // Hydrate images for PRODUCT items — invoice response doesn't include documentDto
+      const productItemIds = this.invoice.items
+        .filter(i => i.itemType === 'PRODUCT')
+        .map(i => i.itemId)
+        .filter(id => !!id);
+
+      if (productItemIds.length > 0) {
+        this.shopService.getProductsByIds(productItemIds).subscribe({
+          next: (res: any) => {
+            const products: any[] = res.data || [];
+            this.cart = this.cart.map(cartItem => {
+              if (cartItem.itemType !== 'PRODUCT') return cartItem;
+              // itemId was preserved in normalizeInvoiceItem; match against product.productId
+              const product = products.find(p => p.productId === (cartItem as any).itemId);
+              if (!product) return cartItem;
+              return {
+                ...cartItem,
+                image: product.documentDto?.attachments?.[0]?.url || this.placeHolderImg
+              };
+            });
+          },
+          error: (err: any) => {
+            console.error('Failed to fetch product images for existing invoice:', err);
+          }
+        });
+      }
     } else {
       // Auto-open GodBox if starting a new invoice
       // setTimeout(() => {
@@ -587,17 +865,30 @@ export class PosComponent implements OnInit {
   }
 
   private normalizeInvoiceItem(dbItem: any): Item {
-    return {
+    const item: Item = {
       id: dbItem.id,
+      itemId: dbItem.itemId,  // preserve so we can hydrate product images later
       name: dbItem.itemName,
-      description: '', // not provided by invoice, maybe fetch separately?
+      description: '',
       basePrice: dbItem.price,
       quantity: dbItem.quantity,
       taxRate: dbItem.taxRate,
       itemType: dbItem.itemType,
-      image: '', // not present in invoice response, you might load it from master list
+      image: '',
+      discount: dbItem.discount,
       startDate: dbItem.scheduledStart ? new Date(dbItem.scheduledStart) : undefined
     };
+
+    if (dbItem.couponCode) {
+      item.customerRewardDto = {
+        couponCode: dbItem.couponCode,
+        // Infer type and percentage from discount amount
+        type: dbItem.discount === (dbItem.price * dbItem.quantity) ? 'PHYSICAL_PRODUCT' : 'DISCOUNT',
+        discountPercentage: (dbItem.discount / (dbItem.price * dbItem.quantity)) * 100
+      };
+    }
+
+    return item;
   }
 
   getMembershipByShop() {
@@ -769,13 +1060,13 @@ export class PosComponent implements OnInit {
           this.firePoppers();
           this._snackBar.success("Payment Completed");
           this.getInvoiceById(result.invoiceId);
-          if (this.selectedCustomer?.id) {
+          const hasMembership = invoice.items?.some((i: any) => i.itemType === 'MEMBERSHIPS');
+          if (hasMembership && this.selectedCustomer?.id) {
             this.fetchCustomerMembership(this.selectedCustomer.id, true);
           }
         }
       }
     });
-
   }
 
   downloadInvoice(invoice: any) {

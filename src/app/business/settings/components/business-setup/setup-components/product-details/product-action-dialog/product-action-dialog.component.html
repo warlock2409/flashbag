@@ -1,0 +1,145 @@
+<!-- Dialog Overlay -->
+<div id="productDialog" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col dialog-animate">
+
+        <!-- Dialog Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 py-3 px-3">
+            <h2 class="text-lg font-semibold text-gray-800 m-0">
+                {{viewMode === 'add' ? 'Add New Product' : 'Modify Product Details'}}
+            </h2>
+            <button (click)="closeDialog()"
+                class="text-gray-400 hover:text-red-500 cursor-pointer border-none bg-transparent">
+                <mat-icon style="color: lightcoral;">cancel</mat-icon>
+            </button>
+        </div>
+
+        <!-- Dialog Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <form [formGroup]="productForm" class="space-y-6">
+
+                <!-- Product Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Product Name <span class="text-red-500">*</span>
+                    </label>
+                    <input formControlName="name" type="text" placeholder="e.g. Whey Protein Isolate"
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
+                </div>
+
+                <!-- Brand & Type -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Brand / Sub-title
+                        </label>
+                        <input formControlName="subName" type="text" placeholder="e.g. Vanilla Blast"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Product Type <span class="text-red-500">*</span>
+                        </label>
+                        <select formControlName="type"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400">
+                            <option value="PHYSICAL">Physical Product</option>
+                            <option value="DIGITAL">Digital Voucher / Membership</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                    </label>
+                    <textarea formControlName="description" rows="3" placeholder="Explain the benefits..."
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none"></textarea>
+                </div>
+
+                <!-- Category & Price -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Category <span class="text-red-500">*</span>
+                        </label>
+                        <select formControlName="category"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400">
+                            <option value="">Select Category</option>
+                            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Selling Price (INR) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₹</span>
+                            <input type="number" formControlName="price"
+                                class="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Threshold -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Low Stock Threshold
+                    </label>
+                    <input type="number" formControlName="lowStockThreshold"
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-violet-400 focus:ring-violet-400 focus:outline-none">
+                </div>
+
+                <!-- Toggles -->
+                <!-- <div class="flex flex-wrap items-center gap-x-12 gap-y-4 bg-gray-50 p-4 rounded-lg stabilize">
+                    <mat-slide-toggle formControlName="taxable" color="primary" class="font-medium text-gray-700">Apply GST/Tax</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="isAddon" color="primary" class="font-medium text-gray-700">Product is an Add-on</mat-slide-toggle>
+                </div> -->
+
+                <!-- Digital Configuration -->
+                <div *ngIf="productForm.get('type')?.value === 'DIGITAL'"
+                    class="bg-blue-50 p-6 rounded-xl border border-blue-100 space-y-4">
+                    <h3 class="text-blue-700 font-semibold text-sm uppercase tracking-wider">Digital Service Logic</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-blue-500 uppercase mb-1">Voucher Type</label>
+                            <select formControlName="voucherType"
+                                class="w-full rounded-md border-none bg-white px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm text-sm">
+                                <option value="SESSION">Session Credits</option>
+                                <option value="CREDIT">Monetary Balance</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-blue-500 uppercase mb-1">Base Allocation</label>
+                            <input type="number" formControlName="voucherAmount"
+                                class="w-full rounded-md border-none bg-white px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-blue-500 uppercase mb-1">Validity Days</label>
+                            <input type="number" formControlName="validityDays"
+                                class="w-full rounded-md border-none bg-white px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none shadow-sm text-sm">
+                        </div>
+                    </div>
+                </div>
+                <!-- Media Upload -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Product Media (Image/Video)
+                    </label>
+                    <app-upload-media (uploaded)="setDocument($event)"
+                        [existingUploads]="existingUploads"></app-upload-media>
+                </div>
+            </form>
+        </div>
+
+        <!-- Dialog Footer -->
+        <div class="border-t border-gray-200 p-4 flex justify-end space-x-3 gap-2">
+            <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+            <button mat-raised-button [disabled]="productForm.invalid" style="background-color: #a684ff; color: white;"
+                (click)="saveProduct()">
+                {{viewMode === 'add' ? 'Confirm' : 'Update'}}
+            </button>
+        </div>
+
+    </div>
+</div>

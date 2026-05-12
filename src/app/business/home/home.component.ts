@@ -10,6 +10,8 @@ import moment from 'moment-timezone';
 import { AblyService } from 'src/app/services/ably.service';
 import { ShopActionsComponent } from '../settings/components/business-setup/setup-components/location/location-action/shop-actions/shop-actions.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { ChallengeDetailsDialogComponent } from '../settings/components/business-setup/setup-components/challenge-builder/challenge-details-dialog/challenge-details-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -91,6 +93,9 @@ export class HomeComponent implements OnDestroy {
     this.getTrailSessions();
     console.log("Loading getTrailSessions Shops");
 
+    this.loadChallenges();
+    console.log("Loading loadChallenges");
+
   }
 
   isLoading = false;
@@ -105,6 +110,18 @@ export class HomeComponent implements OnDestroy {
   hourlyComparision: any[] = [];
   trailListCustomer: WaitListDto[] = [];
   checkInPercentage = "0";
+  
+  // Challenge Section
+  challenges: any[] = [];
+  challengeMap: Map<number, any> = new Map();
+  challengeParticipants: any[] = [];
+  selectedChallengeId: any = '';
+  challengeDateRange = {
+    start: moment().startOf('day').format('YYYY-MM-DD'),
+    end: moment().endOf('day').format('YYYY-MM-DD')
+  };
+  selectedChallengeTarget: number = 10;
+  isChallengeLoading: boolean = false;
 
   getCurrentUser() {
     let user = localStorage.getItem('currentUser');
@@ -365,6 +382,84 @@ export class HomeComponent implements OnDestroy {
     this.configurePanelOpen = false;
     this.loadGymDashboard();
     this.getTrailSessions();
+  }
+
+  // Challenge Participants Methods
+  loadChallenges() {
+    this.orgApiService.getChallengesByShop(0, 100, '', 'ACTIVE').subscribe({
+      next: (res: any) => {
+        this.challenges = res.data?.content || [];
+        this.challenges.forEach(c => this.challengeMap.set(c.id, c));
+        this.loadChallengeParticipants();
+      },
+      error: (err) => console.error('Error loading challenges:', err)
+    });
+  }
+
+  loadChallengeParticipants() {
+    this.isChallengeLoading = true;
+
+    const selected = this.challenges.find(c => c.id == this.selectedChallengeId);
+    this.selectedChallengeTarget = selected?.targetValue || 10;
+    
+    // Convert local start/end to UTC for API
+    const fromDate = moment(this.challengeDateRange.start).startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+    const toDate = moment(this.challengeDateRange.end).endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
+
+    this.orgApiService.getChallengeCustomers(
+      this.selectedChallengeId,
+      0,
+      10,
+      '',
+      'ALL',
+      fromDate,
+      toDate
+    ).subscribe({
+      next: (res: any) => {
+        this.challengeParticipants = res.data?.content || [];
+        this.isChallengeLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading challenge participants:', err);
+        this.isChallengeLoading = false;
+      }
+    });
+  }
+
+  onChallengeFilterChange() {
+    this.loadChallengeParticipants();
+  }
+
+  getChallengeForParticipant(participant: any) {
+    // Attempt to find challenge by challengeId if available, or just return basic info
+    const challengeId = participant.challengeId;
+    return this.challengeMap.get(challengeId);
+  }
+
+  viewChallengeDetails(challengeId: number) {
+    if (!challengeId) return;
+    
+    this.isChallengeLoading = true;
+    this.orgApiService.getChallengeById(challengeId).subscribe({
+      next: (res: any) => {
+        this.isChallengeLoading = false;
+        if (res.data) {
+          this.dialog.open(ChallengeDetailsDialogComponent, {
+            data: {
+              challenge: res.data
+            },
+            width: '550px',
+            maxWidth: '95vw',
+            panelClass: 'custom-dialog-container'
+          });
+        }
+      },
+      error: (err: any) => {
+        this.isChallengeLoading = false;
+        console.error('Error fetching challenge details:', err);
+        Swal.fire('Error', 'Could not fetch challenge details.', 'error');
+      }
+    });
   }
 
   // Chart js 

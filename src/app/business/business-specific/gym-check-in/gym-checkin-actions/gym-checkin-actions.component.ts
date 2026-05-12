@@ -22,6 +22,7 @@ export class GymCheckinActionsComponent {
   membershipEnd: string = 'Ends Sep 30';
   streak: string = '5 days';
   reward: string = 'Next reward in 2 days';
+  customerChallengeDtos: any[] = [];
 
   attendance: any = {};
   parts: string[] = ["chest"];
@@ -81,6 +82,122 @@ export class GymCheckinActionsComponent {
       this.weeklySessions = `${attendedDays}/${totalDays}`;
       this.weekProgressPercent = Math.round((attendedDays / totalDays) * 100);
     }
+    console.log(this.data.customerChallengeDtos, "customerChallengeDtos");
+    if (this.data.customerChallengeDtos) {
+      this.customerChallengeDtos = this.data.customerChallengeDtos;
+    }
+  }
+
+  get attendanceMilestones() {
+    return [...this.customerChallengeDtos]
+      .filter(c => c.conditionType === 'ATTENDANCE')
+      .sort((a, b) => a.targetValue - b.targetValue);
+  }
+
+  get purchaseMilestones() {
+    return this.customerChallengeDtos.filter(c => c.conditionType === 'PURCHASE_AMOUNT');
+  }
+
+  get nextAttendanceMilestone() {
+    return this.attendanceMilestones.find(m => !m.completed);
+  }
+
+  get sessionsToNextReward() {
+    // Find the first milestone that is neither completed nor expired
+    const nextValid = this.attendanceMilestones.find(m => !m.completed && m.status !== 'EXPIRED');
+    if (!nextValid) return null;
+
+    // Use current value from the first incomplete milestone to get the most recent total sessions
+    const currentTotal = this.attendanceMilestones.find(m => !m.completed)?.currentValue || 0;
+
+    return Math.max(0, nextValid.targetValue - currentTotal);
+  }
+
+  get visibleAttendanceMilestones() {
+    const milestones = this.attendanceMilestones;
+    if (milestones.length === 0) return [];
+
+    // Find the current active milestone (the first one not completed)
+    const currentIndex = milestones.findIndex(m => !m.completed);
+
+    // Handle case where all are completed
+    if (currentIndex === -1) {
+      return milestones.slice(Math.max(0, milestones.length - 5));
+    }
+
+    // Target window: [idx-2, idx-1, idx (current), idx+1, idx+2]
+    const start = Math.max(0, currentIndex - 2);
+    const end = Math.min(milestones.length, currentIndex + 3);
+
+    return milestones.slice(start, end);
+  }
+
+  getVisibleNodePosition(milestone: any) {
+    const visible = this.visibleAttendanceMilestones;
+    if (visible.length === 0) return 0;
+    if (visible.length === 1) return 50;
+
+    const idx = visible.findIndex(m => m.targetValue === milestone.targetValue);
+    if (idx === -1) return 0;
+
+    // Space nodes between 10% and 90% to allow progress to be visible at both ends
+    return 10 + (idx / (visible.length - 1)) * 80;
+  }
+
+  get totalAttendanceProgress() {
+    const visible = this.visibleAttendanceMilestones;
+    const all = this.attendanceMilestones;
+    
+    if (visible.length === 0 || all.length === 0) return 0;
+
+    const currentIndex = visible.findIndex(m => !m.completed);
+
+    // Use current value from the milestone we are actually working towards (currNode),
+    // as completed milestones might have their currentValue capped at their targetValue.
+    const currentTotal = currentIndex !== -1 ? visible[currentIndex].currentValue : (all[all.length - 1]?.currentValue || 0);
+
+    // If all visible are completed, fill to 100% (or at least past the last node)
+    if (currentIndex === -1) return 100;
+
+    // Layout constants (must match getVisibleNodePosition)
+    const padding = 10; 
+    const availableWidth = 80;
+
+    const currNode = visible[currentIndex];
+    const currNodePos = padding + (currentIndex / (visible.length - 1)) * availableWidth;
+
+    if (currentIndex === 0) {
+      // Progress towards the first visible milestone
+      // Check if there is a previous milestone globally
+      const globalIdx = all.findIndex(m => m.targetValue === currNode.targetValue);
+      
+      if (globalIdx === 0) {
+        // Progress from 0 sessions to the first milestone (10% position)
+        const progress = Math.min(1, Math.max(0, currentTotal / currNode.targetValue));
+        return progress * padding; // Fills from 0 to 10%
+      } else {
+        // Progress from a hidden previous milestone to the first visible one
+        const prevGlobal = all[globalIdx - 1];
+        const range = currNode.targetValue - prevGlobal.targetValue;
+        if (range <= 0) return 0;
+        
+        const progress = Math.min(1, Math.max(0, (currentTotal - prevGlobal.targetValue) / range));
+        return progress * padding; // This is a bit simplified, but ensures we show progress entering the window
+      }
+    }
+
+    const prevNode = visible[currentIndex - 1];
+    const prevNodePos = padding + ((currentIndex - 1) / (visible.length - 1)) * availableWidth;
+    
+    const segmentWidth = currNodePos - prevNodePos;
+    const targetDiff = currNode.targetValue - prevNode.targetValue;
+    
+    if (targetDiff <= 0) return prevNodePos;
+
+    const progressInSegment = (currentTotal - prevNode.targetValue) / targetDiff;
+    const clampedProgress = Math.min(1, Math.max(0, progressInSegment));
+
+    return prevNodePos + (clampedProgress * segmentWidth);
   }
 
   ngAfterViewInit() {

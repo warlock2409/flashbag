@@ -97,10 +97,12 @@ export class BusinessSetupComponent {
       return acc;
     }, {} as any);
 
-    this.router.navigate([path], {
-      relativeTo: this.route,
-      queryParams
-    });
+    const navigationOptions: any = { queryParams };
+    if (!path.startsWith('/')) {
+      navigationOptions.relativeTo = this.route;
+    }
+
+    this.router.navigate([path], navigationOptions);
     
     // Close menu after navigation on mobile
     if (this.isMobileView) {

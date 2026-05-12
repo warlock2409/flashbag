@@ -121,4 +121,33 @@ export class ShopService {
     return this.Http.put<ServiceResponse<any>>(url, payload);
   }
 
+  getShopProducts(page: number = 0, size: number = 100) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/api/v1/products/shops/{shopCode}/products?page={page}&size={size}"
+      .replace("{shopCode}", shopCode!)
+      .replace("{page}", page.toString())
+      .replace("{size}", size.toString());
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getProductDetails(productId: number) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/v1/products/${productId}/shops/${shopCode}`;
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getProductsByIds(productIds: number[]) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/v1/products/shops/${shopCode}`;
+    const params = productIds.map(id => `ids=${id}`).join('&');
+    return this.Http.get<ServiceResponse<any>>(`${url}?${params}`);
+  }
+
+  getCustomerChallenges(customerId: number, shopCode: string) {
+    let url = "http://localhost:8080/customer/{customerId}/shop/{shopCode}"
+      .replace("{customerId}", customerId.toString())
+      .replace("{shopCode}", shopCode);
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
 }

@@ -1,0 +1,367 @@
+<div class="challenge-builder-container p-6 bg-slate-50 min-h-screen">
+  <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
+
+    <!-- Left Side: Form Steps -->
+    <div class="flex-1 space-y-6" [formGroup]="challengeForm">
+      <!-- Header Section -->
+      <header class="mb-8 flex items-center gap-4">
+        <button mat-icon-button (click)="goBack()" class="!bg-white !shadow-sm hover:!shadow-md transition-all">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <h1 class="!text-2xl !mb-0 font-bold text-slate-800">Create New Challenge</h1>
+          <p class="text-slate-500 mt-0.5">Design an engaging challenge to reward your loyal customers.</p>
+        </div>
+      </header>
+
+      <!-- Step 1: Condition -->
+      <mat-card class="!rounded-xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">1
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">What should the customer do?</h2>
+        </div>
+
+        <mat-radio-group formControlName="conditionType" class="flex flex-col gap-4">
+          <div class="p-4 border rounded-xl cursor-pointer hover:bg-slate-50 transition-colors"
+            [class.border-violet-500]="isConditionSelected('ATTENDANCE')"
+            [class.border-slate-200]="!isConditionSelected('ATTENDANCE')"
+            [ngClass]="{'bg-violet-50': isConditionSelected('ATTENDANCE')}" (click)="setConditionType('ATTENDANCE')">
+            <mat-radio-button value="ATTENDANCE" color="primary">
+              <span class="ml-2 block text-left">
+                <span class="block font-medium text-slate-800">Attend multiple times</span>
+                <span class="text-sm text-slate-500">Track attendance or check-ins at your locations.</span>
+              </span>
+            </mat-radio-button>
+          </div>
+          <div class="p-4 border rounded-xl cursor-pointer hover:bg-slate-50 transition-colors"
+            [class.border-violet-500]="isConditionSelected('PURCHASE_AMOUNT')"
+            [class.border-slate-200]="!isConditionSelected('PURCHASE_AMOUNT')"
+            [ngClass]="{'bg-violet-50': isConditionSelected('PURCHASE_AMOUNT')}"
+            (click)="setConditionType('PURCHASE_AMOUNT')">
+            <mat-radio-button value="PURCHASE_AMOUNT" color="primary">
+              <span class="ml-2 block text-left">
+                <span class="block font-medium text-slate-800">Spend a specific amount</span>
+                <span class="text-sm text-slate-500">Reward customers based on their total spending.</span>
+              </span>
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </mat-card>
+
+      <!-- Step 2: Goal -->
+      <mat-card class="!rounded-xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">2
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">Set the Goal</h2>
+        </div>
+        <div class="max-w-xs text-left">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Target {{ getGoalLabel() }}</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" formControlName="targetValue" placeholder="e.g. 10" min="0"
+              (wheel)="$event.preventDefault()" (keydown)="$event.key === '-' ? $event.preventDefault() : null">
+            <span matSuffix class="text-slate-400 mr-2">{{ getGoalLabel() }}</span>
+          </mat-form-field>
+        </div>
+      </mat-card>
+
+      <!-- Step 3: Reward -->
+      <mat-card class="!rounded-xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">3
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">What do they get?</h2>
+        </div>
+        <mat-radio-group formControlName="rewardType" class="flex flex-col gap-4 mb-6">
+          <div class="p-4 border rounded-xl cursor-pointer hover:bg-slate-50 transition-colors"
+            [class.border-violet-500]="isRewardSelected('DISCOUNT')"
+            [class.border-slate-200]="!isRewardSelected('DISCOUNT')"
+            [ngClass]="{'bg-violet-50': isRewardSelected('DISCOUNT')}" (click)="setRewardType('DISCOUNT')">
+            <mat-radio-button value="DISCOUNT" color="primary">
+              <span class="ml-2 font-medium text-slate-800">Discount Percentage</span>
+            </mat-radio-button>
+          </div>
+          <div class="p-4 border rounded-xl cursor-pointer hover:bg-slate-50 transition-colors"
+            [class.border-violet-500]="isRewardSelected('PRODUCT')"
+            [class.border-slate-200]="!isRewardSelected('PRODUCT')"
+            [ngClass]="{'bg-violet-50': isRewardSelected('PRODUCT')}" (click)="setRewardType('PRODUCT')">
+            <mat-radio-button value="PRODUCT" color="primary">
+              <span class="ml-2 font-medium text-slate-800">Physical Product</span>
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+
+        <div *ngIf="isRewardSelected('DISCOUNT')"
+          class="max-w-xs text-left animate-in fade-in slide-in-from-top-2 duration-300">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Discount Percentage (%)</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" formControlName="discountPercentage" placeholder="e.g. 15" min="0"
+              (wheel)="$event.preventDefault()" (keydown)="$event.key === '-' ? $event.preventDefault() : null">
+            <span matSuffix class="text-slate-400 mr-2">% OFF</span>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="isRewardSelected('PRODUCT')"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left animate-in fade-in slide-in-from-top-2 duration-300">
+          <section>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Selected Product</label>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div class="flex-1 px-4 py-3 border border-slate-200 rounded-lg flex items-center justify-between bg-slate-50 overflow-hidden">
+                <ng-container *ngIf="products.length > 0 && challengeForm.get('productId')?.value; else noProduct">
+                  <span class="text-slate-800 font-medium truncate">{{ products[0].name }}</span>
+                </ng-container>
+                <ng-template #noProduct>
+                  <span class="text-slate-400">No product selected</span>
+                </ng-template>
+              </div>
+              <button mat-stroked-button type="button" class="!h-[50px] !border-slate-300" (click)="openProductDialog()">
+                <mat-icon class="!text-slate-600">inventory_2</mat-icon>
+                <span class="text-slate-700 font-medium ml-1">{{ challengeForm.get('productId')?.value ? 'Change' : 'Select' }}</span>
+              </button>
+            </div>
+          </section>
+          <section>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Quantity</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <input matInput type="number" formControlName="quantity" placeholder="1" min="0"
+                (wheel)="$event.preventDefault()" (keydown)="$event.key === '-' ? $event.preventDefault() : null">
+            </mat-form-field>
+          </section>
+        </div>
+      </mat-card>
+
+      <!-- Step 4: Audience -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">4
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">Who is this for?</h2>
+        </div>
+        <mat-radio-group formControlName="audienceType" class="flex flex-col md:flex-row gap-6 mb-8">
+          <mat-radio-button value="ALL" color="primary"><span class="ml-2 font-medium">All
+              Customers</span></mat-radio-button>
+          <mat-radio-button value="SPECIFIC" color="primary"><span class="ml-2 font-medium">Specific Membership
+              Plan</span></mat-radio-button>
+        </mat-radio-group>
+
+        <div *ngIf="challengeForm.get('audienceType')?.value === 'SPECIFIC'"
+            class="mt-8 text-left animate-in fade-in slide-in-from-top-2 duration-300 space-y-6">
+            
+            <!-- New Members Tagging -->
+            <div class="flex items-center justify-between p-4 bg-violet-50 rounded-xl border border-violet-100">
+                <div>
+                    <h3 class="text-sm font-bold text-violet-900 mb-0.5">Target New Members</h3>
+                    <p class="text-xs text-violet-700 opacity-80 mb-0">Restrict this challenge to members who joined recently.</p>
+                </div>
+                <mat-slide-toggle formControlName="forNewMembers" color="primary"></mat-slide-toggle>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Selected Membership Plan</label>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div class="flex-1 px-4 py-3 border border-slate-200 rounded-lg flex items-center justify-between bg-slate-50 overflow-hidden">
+                        <ng-container *ngIf="membershipPlans.length > 0 && challengeForm.get('membershipPlanId')?.value; else noPlan">
+                            <span class="text-slate-800 font-medium truncate">{{ membershipPlans[0].name }}</span>
+                        </ng-container>
+                        <ng-template #noPlan>
+                            <span class="text-slate-400">No membership plan selected</span>
+                        </ng-template>
+                    </div>
+                    <button mat-stroked-button type="button" class="!h-[50px] !border-slate-300" (click)="openMembershipDialog()">
+                        <mat-icon class="!text-slate-600">card_membership</mat-icon>
+                        <span class="text-slate-700 font-medium ml-1">{{ challengeForm.get('membershipPlanId')?.value ? 'Change' : 'Select' }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+      </mat-card>
+
+      <!-- Step 5: Shops -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">5
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">Available Shops</h2>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Select participating locations</label>
+          <div class="flex flex-wrap gap-3">
+            <div *ngFor="let shop of shops" (click)="toggleShop(shop.id)"
+              class="px-4 py-2 rounded-full border cursor-pointer transition-all duration-200 flex items-center gap-2"
+              [class.bg-violet-500]="isShopSelected(shop.id)" [class.text-white]="isShopSelected(shop.id)"
+              [class.border-violet-500]="isShopSelected(shop.id)" [class.bg-white]="!isShopSelected(shop.id)"
+              [class.text-slate-600]="!isShopSelected(shop.id)" [class.border-slate-200]="!isShopSelected(shop.id)">
+              <span class="text-sm font-medium">{{shop.name}}</span>
+              <mat-icon *ngIf="isShopSelected(shop.id)" class="!text-sm">check</mat-icon>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="challengeForm.get('shopIds')?.touched && challengeForm.get('shopIds')?.errors?.['required']"
+          class="text-xs text-red-500 mt-2 text-left">Please select at least one shop.</p>
+      </mat-card>
+
+      <!-- Step 6: Expiry -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">6
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">Claim Window</h2>
+        </div>
+        <div class="max-w-xs text-left">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Expiry Days</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" formControlName="expiryDays" min="0" (wheel)="$event.preventDefault()"
+              (keydown)="$event.key === '-' ? $event.preventDefault() : null">
+            <span matSuffix class="text-slate-400 mr-2">days</span>
+          </mat-form-field>
+          <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+            Customer must claim the reward within this period after completing the goal.
+          </p>
+        </div>
+      </mat-card>
+
+      <!-- Step 7: Basic Info -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">7
+          </div>
+          <h2 class="text-xl !mb-0 font-semibold text-slate-800">Basic Info</h2>
+        </div>
+        <div class="space-y-6 text-left">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Challenge Name</label>
+            <mat-form-field appearance="outline" class="w-full"><input matInput formControlName="name"
+                placeholder="Name"></mat-form-field>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-2">Start Date</label>
+              <mat-form-field appearance="outline" class="w-full">
+                <input matInput [matDatepicker]="startPicker" formControlName="startDate" placeholder="DD/MM/YYYY">
+                <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-2">End Date</label>
+              <mat-form-field appearance="outline" class="w-full">
+                <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="DD/MM/YYYY">
+                <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Step 8: Reward Limit -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-4">
+            <div
+              class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">8
+            </div>
+            <h2 class="text-xl !mb-0 font-semibold text-slate-800">Reward Limit (Optional)</h2>
+          </div>
+          <mat-slide-toggle formControlName="limitRewards" color="primary"></mat-slide-toggle>
+        </div>
+        <div *ngIf="challengeForm.get('limitRewards')?.value"
+          class="max-w-xs animate-in fade-in slide-in-from-top-2 duration-300 text-left">
+          <label class="block text-sm font-medium text-slate-700 mb-2">Max Redemptions</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <input matInput type="number" formControlName="maxRedemptions" placeholder="e.g. 100" min="0"
+              (wheel)="$event.preventDefault()" (keydown)="$event.key === '-' ? $event.preventDefault() : null">
+            <span matSuffix class="text-slate-400 mr-2">total</span>
+          </mat-form-field>
+        </div>
+      </mat-card>
+
+      <!-- Step 9: Enrollment -->
+      <mat-card class="!rounded-2xl !shadow-sm border border-slate-200 overflow-hidden p-6">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 font-bold">9
+            </div>
+            <div>
+              <h2 class="text-xl !mb-0 font-semibold text-slate-800">Auto Enrollment</h2>
+              <p class="text-sm text-slate-500 mt-0.5">Automatically enroll eligible customers into this challenge.</p>
+            </div>
+          </div>
+          <mat-slide-toggle formControlName="autoEnroll" color="primary"></mat-slide-toggle>
+        </div>
+        
+        <div class="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-xl flex gap-3 text-left">
+            <mat-icon class="!text-blue-500 !text-xl">info</mat-icon>
+            <p class="text-sm text-blue-800 mb-0 leading-relaxed">
+                When enabled, customers who meet the audience criteria will be automatically enrolled without needing manual activation.
+            </p>
+        </div>
+      </mat-card>
+
+      <!-- Submit Actions -->
+      <div class="flex items-center justify-center gap-4 pt-6 pb-12">
+        <button mat-stroked-button type="button">
+          Cancel
+        </button>
+        <button mat-raised-button [style.background-color]="challengeForm.invalid ? null : '#a684ff'"
+          [style.color]="challengeForm.invalid ? null : 'white'" (click)="onSubmit()"
+          [disabled]="challengeForm.invalid">
+          Create Challenge
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Side: Preview Panel (Sticky) -->
+    <div class="lg:w-96">
+      <div class="sticky top-6 space-y-6">
+        <mat-card
+          class="!rounded-2xl border-t-4 border-t-violet-500 overflow-hidden !bg-slate-900 border border-slate-800">
+          <div class="p-6">
+            <h3 class="text-sm font-bold !text-white uppercase tracking-widest mb-4">Rule Preview</h3>
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 mb-6 text-center">
+              <p class="text-lg font-medium text-slate-100 italic">“{{ getRulePreview() }}”</p>
+            </div>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400">Status</span>
+                <span class="px-2 py-1 rounded-md text-xs font-bold" [class.bg-green-900]="challengeForm.valid"
+                  [class.text-green-400]="challengeForm.valid" [class.bg-amber-900]="!challengeForm.valid"
+                  [class.text-amber-400]="!challengeForm.valid">
+                  {{ challengeForm.valid ? 'READY' : 'INCOMPLETE' }}
+                </span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400">Action</span>
+                <span class="font-medium text-slate-200">{{ challengeForm.get('conditionType')?.value }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400">Reward</span>
+                <span class="font-medium text-slate-200">{{ challengeForm.get('rewardType')?.value }}</span>
+              </div>
+            </div>
+            <mat-divider class="!my-6 !border-slate-800"></mat-divider>
+            <div class="flex items-center gap-3 text-sm text-slate-400">
+              <mat-icon class="!text-lg !text-green-500" style="height: 28px;">info_outline</mat-icon>
+              <p class="!mb-0">Live instantly after creation.</p>
+            </div>
+          </div>
+        </mat-card>
+
+        <!-- <mat-card class="!rounded-2xl bg-violet-600 text-white p-6 !shadow-lg">
+          <div class="flex items-start gap-4">
+            <mat-icon class="mt-1">lightbulb</mat-icon>
+            <div>
+              <h4 class="font-bold mb-1">Pro Tip</h4>
+              <p class="text-violet-50 text-sm leading-relaxed">
+                10–15 attendance goals show the highest retention rate.
+              </p>
+            </div>
+          </div>
+        </mat-card> -->
+      </div>
+    </div>
+
+  </div>
+</div>

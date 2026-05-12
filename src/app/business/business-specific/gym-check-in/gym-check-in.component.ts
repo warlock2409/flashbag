@@ -12,6 +12,8 @@ import { ResponseDate } from 'src/app/app.component';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 import { AblyService } from 'src/app/services/ably.service';
 import { MatRippleModule } from '@angular/material/core';
+import { QrPrintDialogComponent } from './qr-print-dialog/qr-print-dialog.component';
+import { ChallengeCompletionDialogComponent } from './components/challenge-completion-dialog/challenge-completion-dialog.component';
 import { Subscription } from 'rxjs';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import Swal from 'sweetalert2';
@@ -19,7 +21,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-gym-check-in',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule, MatRippleModule],
+  imports: [FormsModule, CommonModule, MatIconModule, MatRippleModule, QrPrintDialogComponent, ChallengeCompletionDialogComponent],
   templateUrl: './gym-check-in.component.html',
   styleUrls: ['./gym-check-in.component.scss'] // Added SCSS file reference
 })
@@ -207,17 +209,50 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       "weeklyAttendance": checkinInfo.weeklyAttendance,
       "membershipPlanName": checkinInfo.membershipPlanName,
       "isCheckIn": checkinInfo.isCheckIn,
-      "todoDto": checkinInfo.todoDto
+      "todoDto": checkinInfo.todoDto,
+      "customerChallengeDtos": checkinInfo.customerChallengeDtos
     };
 
-    const dialogRef = this.dialog.open(GymCheckinActionsComponent, {
-      data: data
-    });
+    const openMainDialog = () => {
+      const dialogRef = this.dialog.open(GymCheckinActionsComponent, {
+        data: data
+      });
 
-    dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
-      if (result) {
+      dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
+        if (result) {
+          // Handle result
+        }
+      });
+    };
 
+    // Check for just completed challenges and show celebration first
+    if (checkinInfo.customerChallengeDtos?.length) {
+      const completedChallenge = checkinInfo.customerChallengeDtos.find((c: any) => c.justCompleted);
+      if (completedChallenge) {
+        const celebrationRef = this.dialog.open(ChallengeCompletionDialogComponent, {
+          data: completedChallenge,
+          width: '400px',
+          maxWidth: '95vw',
+          panelClass: 'custom-dialog-container'
+        });
+
+        celebrationRef.afterClosed().subscribe(() => {
+          openMainDialog();
+        });
+        return;
       }
+    }
+
+    // If no challenge completed, open main dialog immediately
+    openMainDialog();
+  }
+
+  openQrPreview() {
+    this.dialog.open(QrPrintDialogComponent, {
+      width: '100%',
+      maxWidth: '430px',
+      data: {},
+      autoFocus: false
     });
   }
 

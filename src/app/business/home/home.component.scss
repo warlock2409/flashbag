@@ -1,8 +1,10 @@
 .glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateZ(0);
 }
 
 .glass-card-hover:hover {
@@ -71,13 +73,13 @@
 .animate-slide-up {
     animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(40px) translateZ(0);
 }
 
 .animate-slide-right {
     animation: slideRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-30px) translateZ(0);
 }
 
 .animate-blur-in {
@@ -89,7 +91,7 @@
 .animate-scale-in {
     animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.8) translateZ(0);
 }
 
 .animate-pulse-glow {
@@ -125,14 +127,14 @@
 @keyframes slideUp {
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) translateZ(0);
     }
 }
 
 @keyframes slideRight {
     to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) translateZ(0);
     }
 }
 
@@ -146,7 +148,7 @@
 @keyframes scaleIn {
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
     }
 }
 

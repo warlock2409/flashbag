@@ -1,1 +1,683 @@
-<p>product-details works!</p>
+<div class="product-management-container animate-in fade-in duration-500">
+
+    <!-- SCREEN 1: PRODUCT LIST (Inventory Library) -->
+    <ng-container *ngIf="viewMode === 'list'">
+        <div class="flex justify-between items-start mb-10">
+            <div>
+                <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight !mb-2">Inventory Library</h1>
+                <p class="text-slate-500 text-md">Manage your supplements, memberships, and shop items.</p>
+            </div>
+            <button mat-stroked-button (click)="openProductDialog('add')">
+                <i class="fas fa-plus"></i>
+                <span> Add Product</span>
+            </button>
+
+        </div>
+
+        <!-- Stats Cards -->
+        <!-- <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12">
+            <div
+                class="bg-white p-8 md:p-7 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                <div
+                    class="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1 md:mb-3 truncate">
+                    Total Value</div>
+                <div class="flex items-baseline gap-1 md:gap-2 flex-wrap">
+                    <span class="text-lg md:text-2xl font-bold text-slate-800">₹{{stats.totalValue | number}}</span>
+                    <span class="text-[10px] md:text-xs font-bold text-emerald-500">+{{stats.valueChange}}%</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 md:p-7 rounded-2xl border border-slate-100 shadow-sm">
+                <div
+                    class="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1 md:mb-3 truncate">
+                    Active SKUs</div>
+                <div class="text-xl md:text-2xl font-bold text-slate-800">{{stats.activeSkus}}</div>
+            </div>
+
+            <div class="bg-white p-8 md:p-7 rounded-2xl border border-slate-100 shadow-sm">
+                <div
+                    class="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1 md:mb-3 truncate">
+                    Low Stock</div>
+                <div class="text-xl md:text-2xl font-bold text-rose-500">{{stats.lowStockItems}}</div>
+            </div>
+
+            <div class="bg-white p-8 md:p-7 rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                <div
+                    class="text-[10px] md:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1 md:mb-3 truncate">
+                    Top Performer</div>
+                <div class="text-sm md:text-xl font-bold text-slate-800 truncate" [matTooltip]="stats.topPerformer">
+                    {{stats.topPerformer}}</div>
+            </div>
+        </div> -->
+
+        <!-- Inventory List (Table for Desktop, Cards for Mobile) -->
+        <div class="overflow-hidden min-h-[400px]">
+
+            <!-- Pagination Header (Moved from Bottom) -->
+            <div class="px-8 py-4 border-b border-slate-50 flex justify-between items-center bg-white">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    {{pageNumber * pageSize + 1}} to {{(pageNumber * pageSize) + products.length}} of
+                    {{totalElements}} products
+                </div>
+                <div class="flex gap-2 items-center">
+                    <div *ngIf="isLoading" class="mr-4">
+                        <i class="fas fa-circle-notch fa-spin text-indigo-500"></i>
+                    </div>
+                    <button [disabled]="pageNumber === 0 || isLoading"
+                        (click)="getShopProducts(pageNumber - 1, pageSize)"
+                        class="px-4 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50">Previous</button>
+                    <div class="flex gap-1">
+                        <button
+                            class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center text-[11px] font-bold text-indigo-600 border border-indigo-100">{{pageNumber
+                            + 1}}</button>
+                    </div>
+                    <button [disabled]="(pageNumber + 1) * pageSize >= totalElements || isLoading"
+                        (click)="getShopProducts(pageNumber + 1, pageSize)"
+                        class="px-4 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50">Next</button>
+                </div>
+            </div>
+
+            <!-- Desktop Table view -->
+            <section
+                class="mt-6 hidden lg:block rounded-xl bg-white border border-neutral-200 overflow-hidden responsive-table">
+                <!-- Header -->
+                <div
+                    class="grid grid-cols-12 px-4 sm:px-6 py-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200 responsive-table-header bg-slate-50">
+                    <div class="col-span-4">Product Name</div>
+                    <div class="col-span-2">Category</div>
+                    <div class="col-span-2">Price</div>
+                    <div class="col-span-3">Stock</div>
+                    <div class="col-span-1 text-right">Actions</div>
+                </div>
+
+                <!-- Body -->
+                <div id="table-body" class="divide-y divide-neutral-100">
+                    <div *ngFor="let product of products; let rowIndex = index" data-role="row"
+                        class="grid grid-cols-12 items-center px-4 sm:px-6 py-4 hover:bg-neutral-50 transition-colors hover:border-neutral-200 responsive-table-row fade-in"
+                        [style.animation-delay]="rowIndex * 0.05 + 's'">
+
+                        <!-- Product Name -->
+                        <div class="col-span-4 flex items-center gap-5">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl transition-transform hover:scale-110 overflow-hidden ring-1 ring-slate-100">
+                                <img *ngIf="product.documentDto?.attachments?.[0]?.url"
+                                    [src]="product.documentDto?.attachments?.[0]?.url"
+                                    class="w-full h-full object-cover">
+                                <i *ngIf="!product.documentDto?.attachments?.[0]?.url"
+                                    class="fa-solid fa-box text-slate-300"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="font-medium text-slate-800 text-[13px] leading-tight">
+                                        {{product.name}}
+                                    </div>
+                                    <div class="w-1.5 h-1.5 rounded-full"
+                                        [class]="product.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-slate-300'"
+                                        [matTooltip]="product.status | titlecase"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 font-medium truncate max-w-[200px]">
+                                    {{product.subName || product.description}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-span-2">
+                            <span class="px-3 py-1.5 bg-blue-50 text-[#3b82f6] rounded-lg text-[11px] font-bold">
+                                {{product.category}}
+                            </span>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="col-span-2">
+                            <div class="font-bold text-slate-700 font-sans tracking-tight">
+                                ₹{{product.price | number:'1.2-2'}}
+                            </div>
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="col-span-3 pr-8">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex justify-between items-center mb-0.5 px-0.5">
+                                    <span *ngIf="product.stock >= 999"
+                                        class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Unlimited</span>
+                                    <span *ngIf="product.stock < 999"
+                                        class="text-[10px] font-bold uppercase tracking-wider"
+                                        [class]="product.stock <= product.lowStockThreshold ? 'text-rose-500' : 'text-emerald-500'">
+                                        {{product.stock === 0 ? '0 Units' : product.stock + ' Units Left'}}
+                                    </span>
+                                    <span *ngIf="product.stock < 999" class="text-[10px] text-slate-400 font-bold">
+                                        {{(product.stock / product.maxStock * 100) | number:'1.0-0'}}%
+                                    </span>
+                                </div>
+                                <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000"
+                                        [style.width.%]="product.stock >= 999 ? 100 : (product.stock / product.maxStock * 100)"
+                                        [class]="product.stock <= product.lowStockThreshold ? 'bg-rose-500' : 'bg-emerald-400'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="col-span-1 text-right flex items-center justify-end gap-1">
+                            <button (click)="switchView('details', product)"
+                                class="w-9 h-9 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors flex items-center justify-center"
+                                matTooltip="View Details">
+                                <i class="fa-solid fa-eye text-sm"></i>
+                            </button>
+                            <button (click)="openProductDialog('edit', product)"
+                                class="w-9 h-9 rounded-lg hover:bg-amber-50 text-slate-400 hover:text-amber-600 transition-colors flex items-center justify-center"
+                                matTooltip="Edit Product">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </button>
+                            <button (click)="deleteProduct(product.orgProductId)"
+                                class="w-9 h-9 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors flex items-center justify-center"
+                                matTooltip="Delete Product">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Card View (Improved Separation) -->
+            <div class="md:hidden p-4 space-y-4 bg-slate-50/30">
+                <div *ngFor="let product of products"
+                    class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div
+                            class="w-14 h-14 rounded-xl bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 border border-slate-100">
+                            <img *ngIf="product.documentDto?.attachments?.[0]?.url"
+                                [src]="product.documentDto?.attachments?.[0]?.url" class="w-full h-full object-cover">
+                            <i *ngIf="!product.documentDto?.attachments?.[0]?.url"
+                                class="fa-solid fa-box text-slate-300"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="font-bold text-slate-800 text-sm truncate">{{product.name}}</div>
+                                <div class="w-1.5 h-1.5 rounded-full shrink-0"
+                                    [class]="product.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-slate-300'"></div>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2 flex-wrap">
+                                <span class="px-2 py-0.5 text-[#3b82f6] text-[9px] font-bold truncate">
+                                    {{product.category}}
+                                </span>
+                            </div>
+                            <div class="font-black text-slate-800 font-sans tracking-tight text-md">₹{{product.price |
+                                number:'1.2-2'}}</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="space-y-1.5 mb-5 bg-slate-50 p-3 rounded-xl border border-slate-50">
+                        <div
+                            class="flex justify-between items-center text-[9px] font-extrabold uppercase tracking-wider">
+                            <span class="text-slate-400">Inventory Status</span>
+                            <span
+                                [class]="product.stock <= product.lowStockThreshold ? 'text-rose-500' : 'text-emerald-500'">
+                                {{product.stock >= 999 ? 'Unlimited' : product.stock + ' Units'}}
+                            </span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-1000"
+                                [style.width.%]="product.stock >= 999 ? 100 : (product.stock / product.maxStock * 100)"
+                                [class]="product.stock <= product.lowStockThreshold ? 'bg-rose-500' : 'bg-emerald-400'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-tight">ID: #{{(product.id +
+                            '') |
+                            slice:0:8 | uppercase}}</div>
+                        <div class="flex items-center gap-2">
+                            <button (click)="switchView('details', product)"
+                                class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:text-blue-600 flex items-center justify-center transition-colors">
+                                <i class="fa-solid fa-eye text-sm"></i>
+                            </button>
+                            <button (click)="openProductDialog('edit', product)"
+                                class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:text-amber-600 flex items-center justify-center transition-colors">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </button>
+                            <button (click)="deleteProduct(product.id)"
+                                class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </ng-container>
+
+
+    <!-- SCREEN 3: PRODUCT DETAILS PAGE (Keep current improved layout) -->
+    <ng-container *ngIf="viewMode === 'details' && selectedProduct">
+        <div class="animate-in slide-in-from-bottom-4 duration-500 max-w-[1200px] mx-auto text-slate-800">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center gap-2 text-[10px] md:text-sm font-bold mb-6 mt-4">
+                <button (click)="switchView('list')"
+                    class="text-slate-500 hover:text-slate-800 transition-colors">Inventory</button>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
+                <span class="text-slate-500">{{selectedProduct.category}}</span>
+                <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
+                <span class="text-blue-600 truncate max-w-[150px] md:max-w-[200px]">{{selectedProduct.name}}</span>
+            </div>
+
+            <!-- Header Title Area -->
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-0 mb-8 md:mb-10">
+                <div>
+                    <h1
+                        class="text-3xl md:text-[40px] leading-tight md:leading-none font-extrabold text-slate-800 tracking-tight mb-3">
+                        {{selectedProduct.name}}</h1>
+                    <p class="text-slate-500 font-medium font-sans text-sm md:text-[15px]">
+                        Category: {{selectedProduct.category}} &bull; SKU: {{selectedProduct.id |
+                        uppercase}}-{{selectedProduct.type | slice:0:3}}
+                    </p>
+                </div>
+                <div class="text-left md:text-right flex flex-col items-start md:items-end justify-center">
+                    <div class="text-3xl md:text-[42px] leading-none font-black text-blue-600 tracking-tight mb-1">
+                        ₹{{selectedProduct.price | number:'1.2-2'}}</div>
+                    <div class="text-[10px] md:text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">
+                        Current Unit Price
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
+                <!-- Total Revenue -->
+                <div class="bg-white p-5 md:p-7 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="text-[11px] font-bold text-slate-500 font-sans tracking-tight mb-3 uppercase">Total
+                        Revenue</div>
+                    <div class="text-lg md:text-[24px] leading-none font-extrabold text-slate-800 tracking-tight mb-4">
+                        ₹{{selectedProduct.revenue | number:'1.2-2'}}</div>
+                    <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>12.5% vs last month</span>
+                    </div>
+                </div>
+
+                <!-- Available -->
+                <div
+                    class="bg-white p-5 md:p-7 rounded-2xl border border-slate-100 shadow-sm relative min-h-[140px] md:min-h-[160px] flex flex-col items-start justify-center">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-xl text-blue-500 flex items-center justify-center text-lg mb-3 md:mb-4">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">Available
+                    </div>
+                    <div class="text-xl md:text-2xl font-extrabold text-slate-800">{{selectedProduct.stock}}</div>
+                </div>
+
+                <!-- Reserved -->
+                <div
+                    class="bg-white p-5 md:p-7 rounded-2xl border border-slate-100 shadow-sm relative min-h-[140px] md:min-h-[160px] flex flex-col items-start justify-center">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-xl text-slate-500 flex items-center justify-center text-lg mb-3 md:mb-4">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <div class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">Reserved</div>
+                    <div class="text-xl md:text-2xl font-extrabold text-slate-800">{{selectedProduct.reservedStock}}
+                    </div>
+                </div>
+
+                <!-- Profit -->
+                <div
+                    class="bg-white p-5 md:p-7 rounded-2xl border border-slate-100 shadow-sm relative min-h-[140px] md:min-h-[160px] flex flex-col items-start justify-center">
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-xl text-emerald-500 flex items-center justify-center text-lg mb-3 md:mb-4">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                    </div>
+                    <div class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">Profit</div>
+                    <div class="text-xl md:text-2xl font-extrabold text-slate-800">₹{{selectedProduct.profit | number}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batches Table (Match Image) -->
+            <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden mb-12">
+                <div
+                    class="px-6 md:px-8 py-6 md:py-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 md:gap-0 rounded-t-[24px]">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight !mb-2">Inventory Batches
+                        </h2>
+                        <p class="text-sm md:text-[15px] text-slate-500 mt-1 font-medium">Detailed breakdown of active
+                            stock lots
+                            and expiration timelines.</p>
+                    </div>
+                    <div class="flex items-center gap-3 md:gap-6 w-full sm:w-auto">
+                        <button mat-stroked-button (click)="openAddStockModal(addStockTpl)" class="w-full sm:w-auto">
+                            <i class="fa-solid fa-plus"></i> Add Stock
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hidden md:block overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr
+                                class="bg-[#f8fafc] text-[11px] font-extrabold text-slate-400 uppercase tracking-wider border-y border-slate-100">
+                                <th class="px-8 py-5">Batch Number</th>
+                                <th class="px-8 py-5">Remaining Qty</th>
+                                <th class="px-8 py-5">Reserved Qty</th>
+                                <th class="px-8 py-5 whitespace-nowrap">Cost Price</th>
+                                <th class="px-8 py-5 whitespace-nowrap">Selling Price</th>
+                                <th class="px-8 py-5 whitespace-nowrap">Expiry Date</th>
+                                <th class="px-8 py-5">Status</th>
+                                <th class="px-8 py-5 text-right">Actions</th>
+                            </tr>
+                        <tbody class="divide-y divide-slate-100">
+                            <!-- Loading State -->
+                            <tr *ngIf="isLoading">
+                                <td colspan="7" class="py-20 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <i class="fa-solid fa-circle-notch fa-spin text-3xl text-blue-600 mb-4"></i>
+                                        <div class="text-[13px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Fetching Batch Data...
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Show real batches if available -->
+                            <ng-container *ngIf="!isLoading">
+                                <tr *ngFor="let batch of selectedProduct.batches"
+                                    class="hover:bg-slate-50/50 transition-colors">
+                                    <td class="px-8 py-6 font-bold text-slate-800 text-[12px]">
+                                        {{batch.batchNumber}}
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <div class="flex items-center gap-3">
+                                            <span
+                                                class="font-bold text-slate-800 w-8 text-[14px]">{{batch.remainingQuantity}}</span>
+                                            <div class="h-1.5 w-16 bg-slate-100 rounded-full overflow-hidden">
+                                                <div class="h-full bg-[#0052cc] rounded-full"
+                                                    [style.width.%]="(batch.remainingQuantity / batch.totalQuantity) * 100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-6 font-medium text-slate-500 text-[14px]">
+                                        {{batch.reservedQuantity || 0}}
+                                    </td>
+                                    <td class="px-8 py-6 font-bold text-slate-800 font-sans text-[14px]">
+                                        ₹{{batch.costPrice | number:'1.2-2'}}
+                                    </td>
+                                    <td class="px-8 py-6 font-bold text-[#0052cc] font-sans text-[14px]">
+                                        ₹{{batch.sellingPrice | number:'1.2-2'}}
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <span class="font-medium text-[14px] text-slate-500">
+                                            {{batch.expiryDate ? (batch.expiryDate | date:'dd MMM yyyy') : 'No Expiry'}}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <div
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-600">
+                                            {{batch.status}}
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-6 text-right">
+                                        <button *ngIf="batch.remainingQuantity === batch.totalQuantity"
+                                            (click)="writeOffBatch(batch)"
+                                            class="w-8 h-8 rounded-lg hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors flex items-center justify-center ml-auto"
+                                            matTooltip="Write-off / Delete Batch">
+                                            <i class="fa-solid fa-trash-can text-[11px]"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Batches Stack View -->
+                <div class="md:hidden divide-y divide-slate-100">
+                    <div *ngFor="let batch of selectedProduct.batches" class="p-6 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Batch
+                                    Number</div>
+                                <div class="font-black text-slate-800">{{batch.batchNumber || '#BCH-DEMO-2024'}}</div>
+                            </div>
+                            <div class="text-right">
+                                <div
+                                    class="inline-flex px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-600">
+                                    {{batch.status || 'ACTIVE'}}
+                                </div>
+                                <button *ngIf="batch.remainingQuantity === batch.totalQuantity"
+                                    (click)="writeOffBatch(batch)"
+                                    class="inline-flex px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-rose-100 text-rose-600 ml-2">
+                                    Write-off
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-[9px] font-extrabold text-slate-400 uppercase mb-1">Cost</div>
+                                <div class="font-bold text-slate-700 text-sm">₹{{(batch.costPrice || 42) |
+                                    number:'1.2-2'}}</div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-extrabold text-slate-400 uppercase mb-1">Selling</div>
+                                <div class="font-bold text-[#0052cc] text-sm">₹{{(batch.sellingPrice || 84.50) |
+                                    number:'1.2-2'}}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="flex-1 max-w-[140px]">
+                                <div class="text-[9px] font-extrabold text-slate-400 uppercase mb-1">Stock Level</div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-800 text-sm">{{batch.remainingQuantity}}</span>
+                                    <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-[#0052cc] rounded-full"
+                                            [style.width.%]="(batch.remainingQuantity / 500) * 100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[9px] font-extrabold text-slate-400 uppercase mb-1">Expires</div>
+                                <div class="font-bold text-slate-600 text-sm"
+                                    [class.text-rose-500]="batch.status === 'CLEARANCE'">
+                                    {{batch.expiryDate ? (batch.expiryDate | date:'dd MMM yyyy') : 'No Expiry'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="px-8 py-8 border-t border-slate-100 flex justify-between items-center bg-white">
+                    <div class="text-[12px] font-bold text-slate-500">
+                        Showing {{selectedProduct.batches.length || 3}} of {{selectedProduct.batches.length > 0 ?
+                        selectedProduct.batches.length : 12}} inventory batches
+                    </div>
+                    <div class="flex gap-4 text-slate-400 text-xs">
+                        <button
+                            class="w-8 h-8 rounded-lg hover:bg-slate-50 flex items-center justify-center transition-colors"><i
+                                class="fa-solid fa-chevron-left"></i></button>
+                        <button
+                            class="w-8 h-8 rounded-lg hover:bg-slate-50 flex items-center justify-center transition-colors"><i
+                                class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+</div>
+
+<!-- SCREEN 4: ADD STOCK MODAL TEMPLATE -->
+<ng-template #addStockTpl>
+    <div class="p-8 max-h-[90vh] overflow-y-auto w-full relative bg-black rounded-xl">
+        <!-- Close button moved to left side -->
+        <div class="flex justify-between">
+            <label class="block text-[16px] font-medium text-white">Add Stock</label>
+            <i class="fa-solid fa-xmark text-lg text-white cursor-pointer" mat-dialog-close></i>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8 pt-6">
+            <!-- Left Side: Form -->
+            <div class="flex-1">
+                <form [formGroup]="stockForm" class="space-y-6">
+                    <!-- Destination Shop -->
+                    <div>
+                        <label class="block text-[13px] font-bold text-slate-500 mb-2">Destination Shop</label>
+                        <div
+                            class="w-full px-4 py-3 bg-[#1e1e1e] border border-slate-700/50 rounded-xl font-semibold text-slate-300 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-store text-indigo-400"></i>
+                                <span>{{stockForm.get('shop')?.value}}</span>
+                            </div>
+                            <span
+                                class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-800 px-2 py-0.5 rounded">Default</span>
+                        </div>
+                    </div>
+
+                    <!-- Quantity & Expiry -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <label class="block text-[13px] font-bold text-slate-500 mb-2">Restock Quantity</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i
+                                        class="fa-solid fa-box text-sm"></i></span>
+                                <input type="number" formControlName="quantity"
+                                    class="w-full pl-11 pr-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-800">
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-[13px] font-bold text-slate-500 mb-2">Expiry Date
+                                (Optional)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i
+                                        class="fa-regular fa-calendar"></i></span>
+                                <input type="date" formControlName="expiryDate"
+                                    class="w-full pl-11 pr-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-500 uppercase text-xs tracking-wider">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prices -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <label class="block text-[13px] font-bold text-slate-500 mb-2">Cost Price per Unit</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₹</span>
+                                <input type="number" formControlName="costPrice"
+                                    class="w-full pl-10 pr-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-800">
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-[13px] font-bold text-slate-500 mb-2">Selling Price per
+                                Unit</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₹</span>
+                                <input type="number" formControlName="sellingPrice"
+                                    class="w-full pl-10 pr-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-800">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supplier Ref -->
+                    <div>
+                        <label class="block text-[13px] font-bold text-slate-500 mb-2">Supplier Reference</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i
+                                    class="fa-solid fa-truck"></i></span>
+                            <input type="text" formControlName="supplierRef" placeholder="e.g. PO-8923-WH"
+                                class="w-full pl-11 pr-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400 placeholder:font-medium">
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label class="block text-[13px] font-bold text-slate-500 mb-2">Restock Notes</label>
+                        <textarea formControlName="notes" rows="4"
+                            placeholder="Any special instructions for this batch..."
+                            class="w-full px-4 py-3 bg-[#f3f4f6] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-semibold text-slate-800 placeholder:text-slate-400 placeholder:font-medium"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side: Analytics & Actions -->
+            <div class="w-full lg:w-[320px] flex flex-col gap-5 pt-2">
+
+                <!-- Profit Overview Box -->
+                <div class="bg-[#eaedf1] p-6 rounded-2xl relative overflow-hidden">
+                    <h3 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-3">Projected
+                        Profit</h3>
+                    <div class="flex items-baseline gap-1.5 mb-6 relative z-10">
+                        <span
+                            class="text-[44px] leading-none font-black text-[#0052cc] tracking-tight">{{getProfitMargin()
+                            | number:'1.0-1'}}%</span>
+                        <span class="text-[13px] font-bold text-slate-500">margin</span>
+                    </div>
+
+                    <div class="space-y-4 relative z-10">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="font-medium text-slate-500">Total Cost</span>
+                            <span class="font-bold text-slate-800">₹{{getTotalCost() | number:'1.2-2'}}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="font-medium text-slate-500">Expected Revenue</span>
+                            <span class="font-bold text-slate-800">₹{{getExpectedRevenue() | number:'1.2-2'}}</span>
+                        </div>
+                        <div
+                            class="pt-4 mt-1 border-t border-slate-200/60 flex justify-between items-center text-[15px]">
+                            <span class="font-black text-slate-800">Net Profit</span>
+                            <span class="font-black text-emerald-600 tracking-tight">₹{{getNetProfit() |
+                                number:'1.2-2'}}</span>
+                        </div>
+                    </div>
+                    <!-- Decorative subtle icon in background -->
+                    <i
+                        class="fa-solid fa-arrow-trend-up absolute -bottom-6 -right-4 text-[100px] text-slate-300/30 -rotate-12 pointer-events-none"></i>
+                </div>
+
+                <!-- Margin Health Check Box (Warning) -->
+                <div class="bg-[#fce8e8] p-4 rounded-2xl flex gap-4 border border-[#fbd5d5]"
+                    *ngIf="getProfitMargin() < 40">
+                    <div
+                        class="w-6 h-6 rounded-full bg-[#d03d56] text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                        <i class="fa-solid fa-exclamation text-[10px]"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-[13px] font-bold text-[#b42b40] mb-1">Margin Health Check</h4>
+                        <p class="text-[12px] text-[#c94157] font-medium leading-relaxed pr-2">
+                            Selling price should ideally be at least 40% above cost for accessories.<br>
+                            Current: <span class="font-bold">Warning</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Margin Health Check Box (Healthy) -->
+                <div class="bg-[#edfaef] p-4 rounded-2xl flex gap-4 border border-[#d3f4d8]"
+                    *ngIf="getProfitMargin() >= 40">
+                    <div
+                        class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                        <i class="fa-solid fa-check text-[10px]"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-[13px] font-bold text-emerald-800 mb-1">Margin Health Check</h4>
+                        <p class="text-[12px] text-emerald-700/90 font-medium leading-relaxed pr-2">
+                            Margin is robust and aligns with expectations.<br>
+                            Current: <span class="font-bold">Healthy</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button [disabled]="stockForm.invalid" (click)="confirmAddStock()" mat-stroked-button
+                    style="background: #8a2be2cf; padding: 24px; color: white;">
+                    <i class="fa-regular fa-square-plus"></i>
+                    Add to Inventory
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

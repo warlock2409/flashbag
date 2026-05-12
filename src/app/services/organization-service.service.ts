@@ -396,4 +396,113 @@ export class OrganizationServiceService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
+  // Products
+  createProduct(product: any) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/api/v1/products/org/{orgCode}".replace("{orgCode}", orgCode!);
+    return this.Http.post<ServiceResponse<any>>(url, product);
+  }
+
+  getOrgProducts(page: number = 0, size: number = 10, productName?: string) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = `http://localhost:8080/api/v1/products/org/${orgCode}?page=${page}&size=${size}`;
+    if (productName) {
+      url += `&productName=${encodeURIComponent(productName)}`;
+    }
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getShopProducts(page: number = 0, size: number = 10) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/api/v1/products/shops/{shopCode}/products?page={page}&size={size}"
+      .replace("{shopCode}", shopCode!)
+      .replace("{page}", page.toString())
+      .replace("{size}", size.toString());
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  updateProduct(id: string | number, product: any) {
+    let url = "http://localhost:8080/api/v1/products/{id}".replace("{id}", id.toString());
+    return this.Http.put<ServiceResponse<any>>(url, product);
+  }
+
+  deleteProduct(id: string | number) {
+    let url = "http://localhost:8080/api/v1/products/{id}".replace("{id}", id.toString());
+    return this.Http.delete<ServiceResponse<any>>(url);
+  }
+
+  getProductDetails(productId: string | number) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/api/v1/products/{productId}/shops/{shopCode}"
+      .replace("{productId}", productId.toString())
+      .replace("{shopCode}", shopCode!);
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  addProductBatch(productId: string | number, batchData: any) {
+    let url = "http://localhost:8080/api/v1/products/{productId}/batches"
+      .replace("{productId}", productId.toString());
+    return this.Http.post<ServiceResponse<any>>(url, batchData);
+  }
+
+  writeOffBatch(batchId: string | number, notes: string | null) {
+    let url = "http://localhost:8080/api/v1/products/batches/{batchId}/write-off"
+      .replace("{batchId}", batchId.toString());
+    return this.Http.post<ServiceResponse<any>>(url, { notes: notes });
+  }
+
+  // Challenges
+  createChallenge(challengeData: any) {
+    let orgCode = localStorage.getItem("orgCode");
+    let url = "http://localhost:8080/challenge/org/{orgCode}".replace("{orgCode}", orgCode!);
+    return this.Http.post<ServiceResponse<any>>(url, challengeData);
+  }
+
+  getChallengesByShop(page: number = 0, size: number = 10, search?: string, status?: string) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/challenge/shop/${shopCode}?page=${page}&size=${size}`;
+    if (search) {
+      url += `&search=${encodeURIComponent(search)}`;
+    }
+    if (status && status !== 'ALL') {
+      url += `&status=${status}`;
+    }
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  toggleChallengeShopStatus(challengeId: number | string, active: boolean) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/challenge/${challengeId}/shop/${shopCode}/status?active=${active}`;
+    return this.Http.put<ServiceResponse<any>>(url, {});
+  }
+
+  deleteChallenge(challengeId: number | string) {
+    return this.Http.delete<ServiceResponse<any>>(`http://localhost:8080/challenge/${challengeId}`);
+  }
+
+  getChallengeCustomers(challengeId?: number | string, page: number = 0, size: number = 10, search?: string, status?: string, fromDate?: string, toDate?: string) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/challenge/shop/${shopCode}/customers?page=${page}&size=${size}`;
+    if (challengeId) {
+      url += `&challengeId=${challengeId}`;
+    }
+    if (search) {
+      url += `&search=${encodeURIComponent(search)}`;
+    }
+    if (status && status !== 'ALL') {
+      url += `&status=${status}`;
+    }
+    if (fromDate) {
+      url += `&fromDate=${encodeURIComponent(fromDate)}`;
+    }
+    if (toDate) {
+      url += `&toDate=${encodeURIComponent(toDate)}`;
+    }
+    return this.Http.get<ServiceResponse<any>>(url);
+  }
+
+  getChallengeById(challengeId: number | string) {
+    return this.Http.get<ServiceResponse<any>>(`http://localhost:8080/challenge/${challengeId}`);
+  }
+
 }

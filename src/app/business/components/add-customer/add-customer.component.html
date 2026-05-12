@@ -19,6 +19,7 @@
                 <div class="form-field">
                     <label class="block mb-1 md:mb-2 text-sm font-medium">Existing Customer ID</label>
                     <input type="text" autocomplete="off" formControlName="existingCustomerId"
+                        (input)="allowOnlyNumbers($event, 'existingCustomerId')"
                         class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5"
                         placeholder="Enter existing customer ID (if applicable)" />
                 </div>
@@ -52,7 +53,7 @@
                         </mat-select>
 
                         <!-- Phone Number Input -->
-                        <input type="tel" formControlName="phone"
+                        <input type="tel" formControlName="phone" (input)="allowOnlyNumbers($event, 'phone')"
                             class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full flex-1 p-2.5"
                             [class.opacity-50]="isEditMode"
                             placeholder="Phone number" />

@@ -1,0 +1,151 @@
+.challenge-list-container {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+  .mat-mdc-table {
+    background: transparent;
+  }
+
+  .custom-progress {
+    --mdc-linear-progress-active-indicator-color: #14b8a6; // Teal 500
+    --mdc-linear-progress-track-color: #f1f5f9; // Slate 100
+  }
+
+  .mat-mdc-card {
+    transition: transform 0.2s ease-in-out;
+  }
+}
+
+// Controls Section
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (min-width: 769px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.search-container {
+  flex: 1;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background-color: white;
+
+  &:focus {
+    outline: none;
+    border-color: #d1d5db;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 10px 8px 36px;
+    font-size: 0.8125rem;
+  }
+}
+
+.filter-container {
+  width: 100%;
+
+  @media (min-width: 769px) {
+    width: auto;
+  }
+}
+
+.filter-wrapper {
+  display: flex;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  padding: 4px;
+
+  @media (max-width: 768px) {
+    padding: 2px;
+  }
+}
+
+.filter-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 480px) {
+    justify-content: center;
+    gap: 4px;
+  }
+}
+
+.filter-btn-active {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.filter-icon {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  transition: color 0.2s;
+
+  .filter-btn-active & {
+    color: #4f46e5;
+  }
+
+  &.active-icon {
+    .filter-btn-active & {
+       color: #16a34a;
+    }
+  }
+
+  &.inactive-icon {
+    .filter-btn-active & {
+       color: #ef4444;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}
+
+.filter-text {
+  @media (max-width: 520px) {
+    display: none;
+  }
+}

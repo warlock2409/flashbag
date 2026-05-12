@@ -64,6 +64,7 @@ export interface Category {
 export interface Item {
   id: number;
   name: string;
+  itemId?: number;
   description: string;
   basePrice: number;
   duration?: string;
@@ -74,7 +75,12 @@ export interface Item {
   startDate?: Date;
   endDate?: Date;
   taxRate?: number;
-  itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCTS';
+  availableStock?: number;
+  lowStock?: boolean;
+  brand?: string;
+  itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT';
+  customerRewardDto?: any;
+  discount?: number;
 }
 
 
@@ -92,7 +98,7 @@ export interface WaitListDto {
 }
 
 export interface MembershipSummary {
-  checkInCount?: number, 
+  checkInCount?: number,
   expiringMemberships?: any[],
-  activeMemberships?:number
+  activeMemberships?: number
 }

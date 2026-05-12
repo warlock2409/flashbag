@@ -2,38 +2,43 @@ import { UserDto } from "../services/auth.service";
 import { Customer } from "./customer.model";
 
 export interface InvoiceModel {
-    id?:number,
+    id?: number,
     customerId: number;
-    customer?:Customer
+    customer?: Customer
     discount: number;
     items: ItemModel[];
     invoiceNumber?: string,
     status?: string,
-    grandTotal?:number,
-    invoiceDate?:string,
-    payments?: any[]
+    grandTotal?: number,
+    invoiceDate?: string,
+    payments?: any[],
+    customerRewardDto?: any // Add this
 }
 
 export interface ItemModel {
     itemName: string;
-    itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCTS'; // restrict if you know all possible types
+    itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT'; // restrict if you know all possible types
     itemId: number;
     quantity: number;
-    startDate?: number
+    startDate?: number;
+    batchId?: number;
+    price?: number; // added for completeness if needed
+    taxRate?: number;
+    customerRewardDto?: any // Add this
 }
 
 
 export interface PaymentModel {
-    paymentMode:string,
-    grandTotal:number,
-    paidAmount?:number
+    paymentMode: string,
+    grandTotal: number,
+    paidAmount?: number
 }
 
 export interface PaymentResponse {
-  id: number;
-  invoiceId: number;
-  status: 'COMPLETED' | 'SUCCESS' | 'FAILED' | 'PENDING' | 'REFUNDED';
-  paidAmount: number;
-  paymentMode: 'CASH' | 'CARD' | 'UPI' | 'WALLET' | 'NET_BANKING';
-  transactionId: string;
+    id: number;
+    invoiceId: number;
+    status: 'COMPLETED' | 'SUCCESS' | 'FAILED' | 'PENDING' | 'REFUNDED';
+    paidAmount: number;
+    paymentMode: 'CASH' | 'CARD' | 'UPI' | 'WALLET' | 'NET_BANKING';
+    transactionId: string;
 }
