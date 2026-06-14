@@ -12,6 +12,7 @@ import { ShopActionsComponent } from '../settings/components/business-setup/setu
 import { AuthService } from 'src/app/services/auth.service';
 import { ChallengeDetailsDialogComponent } from '../settings/components/business-setup/setup-components/challenge-builder/challenge-details-dialog/challenge-details-dialog.component';
 import Swal from 'sweetalert2';
+import { PointOfSaleComponent } from '../components/point-of-sale/point-of-sale.component';
 
 @Component({
   selector: 'app-home',
@@ -96,7 +97,85 @@ export class HomeComponent implements OnDestroy {
     this.loadChallenges();
     console.log("Loading loadChallenges");
 
+    // this.checkSubscriptionPlan(); // For Org Billing 
   }
+
+  checkSubscriptionPlan() {
+    this.orgApiService.getOrganizationDetails().subscribe({
+      next: (res: any) => {
+        const plan = res.data?.organizationPlan;
+        if (plan) {
+          const endDateStr = plan.endDate;
+          if (!endDateStr) return;
+
+          // Calculate remaining days using moment (timezone aware)
+          const endMoment = moment.utc(endDateStr);
+          const nowMoment = moment.tz(this.timeZone);
+          const daysDiff = endMoment.tz(this.timeZone).diff(nowMoment, 'days');
+
+          // Flow 1: if active and autorenew false and its expiring soon we need to show alert dialog
+          if (plan.active && plan.autoRenew === false && daysDiff >= 0 && daysDiff <= 7) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Subscription Expiring Soon',
+              html: `Your active plan <strong>${plan.planName || 'Basic Plan'}</strong> is set to expire on <strong>${moment(endDateStr).format('LL')}</strong> (${daysDiff} days remaining).<br>Auto-renewal is disabled. Please renew/upgrade to avoid service interruption.`,
+              confirmButtonText: 'Renew Now',
+              showCancelButton: true,
+              cancelButtonText: 'Remind Me Later',
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'rounded-lg px-4 py-2 font-semibold',
+                cancelButton: 'rounded-lg px-4 py-2 font-semibold'
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.dialog.open(PointOfSaleComponent, {
+                  width: '100%',
+                  maxWidth: '100vw',
+                  height: '100%',
+                  panelClass: 'full-screen-dialog',
+                  disableClose: true
+                });
+              }
+            });
+          }
+
+          // Flow 2: if not active and expired by endDate then we need to show different alert that account will deactivate in 3 days
+          else if (!plan.active && daysDiff < 0) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Subscription Expired',
+              html: `Your subscription to <strong>${plan.planName || 'Basic Plan'}</strong> expired on <strong>${moment(endDateStr).format('LL')}</strong>.<br><strong style="color: #ea580c;">Warning:</strong> Your account will be fully deactivated in 3 days. Please purchase a new plan immediately.`,
+              confirmButtonText: 'Renew Subscription',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              confirmButtonColor: '#3085d6',
+              customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'rounded-lg px-4 py-2 font-semibold'
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.dialog.open(PointOfSaleComponent, {
+                  width: '100%',
+                  maxWidth: '100vw',
+                  height: '100%',
+                  panelClass: 'full-screen-dialog',
+                  disableClose: true
+                });
+              }
+            });
+          }
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching subscription details:', err);
+      }
+    });
+  }
+
 
   isLoading = false;
   shops: ShopModel[] = [];
@@ -110,7 +189,7 @@ export class HomeComponent implements OnDestroy {
   hourlyComparision: any[] = [];
   trailListCustomer: WaitListDto[] = [];
   checkInPercentage = "0";
-  
+
   // Challenge Section
   challenges: any[] = [];
   challengeMap: Map<number, any> = new Map();
@@ -401,7 +480,7 @@ export class HomeComponent implements OnDestroy {
 
     const selected = this.challenges.find(c => c.id == this.selectedChallengeId);
     this.selectedChallengeTarget = selected?.targetValue || 10;
-    
+
     // Convert local start/end to UTC for API
     const fromDate = moment(this.challengeDateRange.start).startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
     const toDate = moment(this.challengeDateRange.end).endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z';
@@ -438,7 +517,7 @@ export class HomeComponent implements OnDestroy {
 
   viewChallengeDetails(challengeId: number) {
     if (!challengeId) return;
-    
+
     this.isChallengeLoading = true;
     this.orgApiService.getChallengeById(challengeId).subscribe({
       next: (res: any) => {

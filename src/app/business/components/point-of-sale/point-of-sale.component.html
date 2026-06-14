@@ -8,7 +8,7 @@
 
         <div class="main-container flex flex-col md:flex-row gap-4 flex-1 overflow-hidden">
             <!-- Products Section (60%) -->
-            <div class="products-section shadow-sm w-full md:w-4/5 h-[calc(100vh-95px)] overflow-y-auto "
+            <div class="products-section shadow-sm w-full md:w-4/5 h-[calc(100vh-5px)] overflow-y-auto "
                 style="overflow-y: auto;">
 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden h-full">
@@ -29,7 +29,8 @@
                                     class="mt-4 pricing-card bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 relative max-w-[320px]">
                                     <ng-container>
                                         <div class="p-8">
-                                            <h1 class="text-2xl font-bold text-gray-800 mb-2">{{plan.name}} - {{plan.months}} Months</h1>
+                                            <h1 class="text-2xl font-bold text-gray-800 mb-2">{{plan.name}} -
+                                                {{plan.months}} Months</h1>
                                             <p class="text-gray-600 mb-6">{{plan.description}}</p>
 
                                             <div class="mb-4">
@@ -54,10 +55,12 @@
                                         <div class="border-t border-gray-200 px-8 py-6 bg-gray-50">
                                             <h4 class="font-semibold text-gray-800 mb-4">What's included:</h4>
                                             <ul class="space-y-3" *ngIf="plan?.planFeatureDtos">
-                                                <li *ngFor="let feature of plan?.planFeatureDtos" class="flex items-center">
+                                                <li *ngFor="let feature of plan?.planFeatureDtos"
+                                                    class="flex items-center">
                                                     <i class="fas fa-check text-green-500 mr-3"></i>
                                                     <span class="text-gray-700">
-                                                        <span *ngIf="feature.unit == 'PER_GB'">{{feature.value}} GB</span>
+                                                        <span *ngIf="feature.unit == 'PER_GB'">{{feature.value}}
+                                                            GB</span>
                                                         <span *ngIf="feature.unit == 'COUNT'">{{feature.value}} </span>
                                                         {{ feature.name}}
                                                     </span>
@@ -108,42 +111,6 @@
                             </div>
 
                         </mat-step>
-
-                        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-                            <!-- Add-ons section -->
-                            <ng-template matStepLabel>Select Business Model</ng-template>
-
-                            <div>
-                                <p>Select Your Primary Business Type</p>
-                                <div class="filter-chips">
-                                    <mat-chip-listbox [value]="selectedFilter" (change)="onFilterChange($event.value)">
-                                        <mat-chip-option *ngFor="let filter of modelFilters" [value]="filter.name"
-                                            [selected]="selectedFilter === filter.name">
-                                            {{filter.name}}
-                                        </mat-chip-option>
-                                    </mat-chip-listbox>
-                                </div>
-                                <div class="m-24">
-                                    <div *ngIf="selectedFilter == 'Service'">
-                                        <p>Businesses that provide professional services to customers rather than
-                                            physical
-                                            products.</p>
-                                        <p>Offering expertise, care, or experiences tailored to meet client needs.</p>
-                                        <p>Focusing on delivering value through services, convenience, and quality
-                                            experiences.</p>
-                                        <p>Companies that help clients solve problems or enhance their lives through
-                                            specialized services.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end">
-                                <button mat-flat-button (click)="stepper.previous()">Back</button>
-                                <button mat-flat-button matStepperNext>Next</button>
-                            </div>
-                        </mat-step>
-
-
 
                         <mat-step>
                             <ng-template matStepLabel>Select Add-ons</ng-template>
@@ -269,7 +236,7 @@
                         <button
                             class="flex-1 py-2 bg-violet-400 text-white rounded hover:bg-green-600 transition-colors duration-200"
                             id="checkout" (click)="checkout()" type="button">
-                            <i class="fas fa-check-circle mr-2"></i> Request
+                            <i class="fas fa-check-circle mr-2"></i> Pay
                         </button>
                     </div>
                 </div>

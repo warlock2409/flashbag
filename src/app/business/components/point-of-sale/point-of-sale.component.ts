@@ -14,6 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { InvoiceItem } from './InvoiceItem';
 import Swal from 'sweetalert2';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
+import { environment } from 'src/environments/environment';
 
 export interface InvoiceData {
   id: number,
@@ -28,9 +29,11 @@ export interface InvoiceData {
 }
 
 export interface CreateOrganizationPlanDto {
-  invoiceItems: InvoiceItemDto[];
+  addOns: InvoiceItemDto[];
+  planId: number;
   totalAmount: string;
-  businessModelType:string
+  businessModelType: string;
+  notificationChannels: string[];
 }
 
 interface InvoiceItemDto {
@@ -70,14 +73,14 @@ export class PointOfSaleComponent {
   //Selected Plan 
   selectedPlan: InvoiceData | null = null;
 
-  constructor(private masterService: MasterService, private SwalService:SweatAlertService) {
+  constructor(private masterService: MasterService, private SwalService: SweatAlertService) {
     this.getBusinessModels();
   }
 
   onFilterChange(modelName: any) {
     // Find Business Model by id
     let model = this.modelFilters.find(model => model.name == modelName);
-   
+
   }
 
   getBusinessModels() {
@@ -90,7 +93,7 @@ export class PointOfSaleComponent {
       },
       error: (err: any) => {
         this.SwalService.error("Something Went Wrong Try Again Later");
-        this.SwalService.alertTeam("POS","Buy Business Plan","Load Business Model",err.error.toString());
+        this.SwalService.alertTeam("POS", "Buy Business Plan", "Load Business Model", err.error.toString());
       }
     })
   }
@@ -98,7 +101,7 @@ export class PointOfSaleComponent {
   getBusinessPlan() {
     this.masterService.getPlansByOrganization().subscribe({
       next: (res: ResponseDate) => {
-        this.businessPlans = res.data.sort((a: Plan, b: Plan) =>  b.basePrice - a.basePrice);
+        this.businessPlans = res.data.sort((a: Plan, b: Plan) => b.basePrice - a.basePrice);
       },
       error: (err: any) => {
 
@@ -140,7 +143,7 @@ export class PointOfSaleComponent {
 
 
   onQuantityChange(item: InvoiceItem, operation: 'increase' | 'decrease') {
-    
+
     const planChanged = item.type === 'PLAN';
 
     // Update the quantity on this item
@@ -254,32 +257,85 @@ export class PointOfSaleComponent {
   }
 
   checkout() {
+    if (!this.selectedPlan) {
+      this._snackBar.warning('Please select a plan before checking out.');
+      return;
+    }
+
+
+
+    // Get organization ID from currentUser in localStorage
+    const orgCode = localStorage.getItem('orgCode');
+    if (orgCode == null) {
+      this._snackBar.error("Organization not found! Log out and Login again");
+      return;
+    }
+
+    const planId = this.selectedPlan.id;
+    console.log('Initiating subscription purchase with Cashfree for plan ID:', planId, 'and organization ID:', orgCode);
     // Calculate total amount from invoiceItems (use your InvoiceItem class getter)
     const totalAmount = this.invoiceItems
       .reduce((sum, item) => sum + item.totalPrice, 0);
 
     // Build the CreateOrganizationPlanDto
     const requestPurchase: CreateOrganizationPlanDto = {
-      invoiceItems: this.invoiceItems.map(item => this.mapToInvoiceItemDto(item)),
+      addOns: this.invoiceItems.map(item => this.mapToInvoiceItemDto(item)),
+      planId: planId,
+      notificationChannels: ["EMAIL", "SMS"],
       totalAmount: totalAmount.toFixed(2),
-      businessModelType :this.selectedFilter.toUpperCase()
+      businessModelType: this.selectedFilter.toUpperCase()
     };
-
-    console.log('Checking out with total:', totalAmount);
-
-    this.masterService.requestPurchase(requestPurchase).subscribe({
+    this.masterService.createSubscription(orgCode, requestPurchase).subscribe({
       next: (res: ResponseDate) => {
-        this._snackBar.success('Check out completed');
-        this.SwalService.paymentrequest("POS",totalAmount.toString(),"Payment Request");
-        this.closeDialog();
+        console.log('Subscription API response:', res);
+        if (res.status === 200 && res.data && res.data.subscriptionSessionId) {
+          this.initiateCashfreeSubscription(res.data.subscriptionSessionId);
+        } else {
+          this._snackBar.error(res.message || 'Failed to initiate platform subscription.');
+        }
       },
       error: (err: any) => {
-        this._snackBar.error('Checkout failed. Please try again.');
+        this._snackBar.error(err.error?.message || 'Error initiating platform subscription.');
         console.error(err);
       }
     });
-    this._snackBar.success('Check out completed');
-    // this.closeDialog();
+  }
+
+  initiateCashfreeSubscription(subscriptionSessionId: string) {
+    try {
+      const isProd = environment.production;
+      if (!(window as any).Cashfree) {
+        this._snackBar.error('Cashfree SDK is not loaded. Please refresh the page.');
+        return;
+      }
+
+      const cashfree = (window as any).Cashfree({
+        mode: isProd ? 'production' : 'sandbox'
+      });
+
+      const checkoutOptions = {
+        subsSessionId: subscriptionSessionId,
+        redirectTarget: '_modal'
+      };
+
+      cashfree.subscriptionsCheckout(checkoutOptions).then((result: any) => {
+        console.log('Cashfree subscription checkout completed/closed:', result);
+        Swal.fire({
+          icon: 'info',
+          title: 'Subscription Initiated',
+          text: 'Mandate authorization has been initiated. Please complete the validation in the opened payment window.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          this.closeDialog();
+        });
+      }).catch((err: any) => {
+        console.error('Cashfree subscription checkout error:', err);
+        this._snackBar.error('An error occurred during Cashfree checkout.');
+      });
+    } catch (error) {
+      console.error('Error in Cashfree subscription checkout initialization:', error);
+      this._snackBar.error('Failed to initialize Cashfree Subscription SDK.');
+    }
   }
 
   mapToInvoiceItemDto(item: InvoiceItem): InvoiceItemDto {
