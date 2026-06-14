@@ -318,8 +318,14 @@
               (click)="openCustomerActions(expiringMembership.customerDTO)" style="cursor: pointer;">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                  <div class="px-4 py-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 icon-hover">
-                    <i class="fa-solid fa-user"></i>
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center overflow-hidden flex-shrink-0"
+                    [class.cursor-zoom-in]="expiringMembership.customerDTO?.documentDto?.attachments?.[0]?.url"
+                    (click)="expiringMembership.customerDTO?.documentDto?.attachments?.[0]?.url ? openImagePreview(expiringMembership.customerDTO.documentDto.attachments[0].url, $event) : null">
+                    <img *ngIf="expiringMembership.customerDTO?.documentDto?.attachments?.[0]?.url"
+                      [src]="expiringMembership.customerDTO.documentDto.attachments[0].url"
+                      class="w-full h-full object-cover" alt="Customer Image">
+                    <i *ngIf="!expiringMembership.customerDTO?.documentDto?.attachments?.[0]?.url"
+                      class="fa-solid fa-user"></i>
                   </div>
                   <div>
                     <span

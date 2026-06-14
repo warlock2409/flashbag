@@ -36,7 +36,7 @@ interface HeightEntry {
 })
 export class CustomerGeneralComponent implements OnInit {
   organizationService = inject(OrganizationServiceService);
-  
+
   constructor(
     private shopConfigService: ShopConfigService,
     private customerProfileService: CustomerProfileService,
@@ -56,18 +56,20 @@ export class CustomerGeneralComponent implements OnInit {
         const date = new Date(this.data.customer.createdAt);
         this.memberSince = date.toLocaleString('default', { month: 'short', year: 'numeric' });
       }
-      
+
       // Check if documentId exists in the customer data
-      if (this.data.customer.documentId) {
+      if (this.data.customer.documentDto) {
+        this.sampleUploads = this.data.customer.documentDto;
+      } else if (this.data.customer.documentId) {
         this.loadDocumentById(this.data.customer.documentId);
       }
-        
+
       // Load customer profiles if customer ID is available
       if (this.customerId) {
         this.loadCustomerProfiles();
       }
     }
-      
+
     this.loadShopConfigurations();
   }
 
@@ -89,7 +91,7 @@ export class CustomerGeneralComponent implements OnInit {
   dateOfBirth: string = '';
   privateNotes: string = '';
   goals: string[] = ['Weight Loss', 'Cardio'];
-  
+
   // Document upload
   sampleUploads: DocumentDto | null = null;
 
@@ -432,7 +434,7 @@ export class CustomerGeneralComponent implements OnInit {
   loadCustomerProfiles() {
     this.loadingProfiles = true;
     const customerId = this.customerId;
-    
+
     if (!customerId) {
       console.error('Customer ID not available');
       this.loadingProfiles = false;
@@ -457,7 +459,7 @@ export class CustomerGeneralComponent implements OnInit {
     // Clear existing weight entries to avoid duplicates
     this.weightEntries = [];
     this.heightEntries = [];
-    
+
     // Apply customer profile data to component properties
     this.customerProfiles.forEach(profile => {
       // Skip invalid entries
@@ -465,8 +467,8 @@ export class CustomerGeneralComponent implements OnInit {
         console.warn('Skipping invalid profile entry:', profile);
         return;
       }
-      
-      switch(profile.type) {
+
+      switch (profile.type) {
         case 'HEIGHT':
           const heightValue = Number(profile.value);
           if (!isNaN(heightValue) && heightValue > 0) {
@@ -516,11 +518,11 @@ export class CustomerGeneralComponent implements OnInit {
     // Sort entries by date (newest first)
     this.weightEntries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     this.heightEntries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    
+
     // Calculate changes
     this.calculateWeightChanges();
     this.calculateHeightChanges();
-    
+
     console.log('Applied customer profiles. Weight entries:', this.weightEntries);
     console.log('Applied customer profiles. Height entries:', this.heightEntries);
   }
@@ -530,12 +532,12 @@ export class CustomerGeneralComponent implements OnInit {
     if (this.weightEntries.length === 0) {
       return;
     }
-    
+
     if (this.weightEntries.length === 1) {
       this.weightEntries[0].change = 0;
       return;
     }
-    
+
     // Calculate changes for all entries except the last one
     for (let i = 0; i < this.weightEntries.length - 1; i++) {
       const currentWeight = this.weightEntries[i].weight;
@@ -543,7 +545,7 @@ export class CustomerGeneralComponent implements OnInit {
       const change = currentWeight - previousWeight;
       this.weightEntries[i].change = parseFloat(change.toFixed(1));
     }
-    
+
     // Last entry (chronologically) has no previous entry to compare with
     this.weightEntries[this.weightEntries.length - 1].change = 0;
   }
@@ -553,12 +555,12 @@ export class CustomerGeneralComponent implements OnInit {
     if (this.heightEntries.length === 0) {
       return;
     }
-    
+
     if (this.heightEntries.length === 1) {
       this.heightEntries[0].change = 0;
       return;
     }
-    
+
     // Calculate changes for all entries except the last one
     for (let i = 0; i < this.heightEntries.length - 1; i++) {
       const currentHeight = this.heightEntries[i].height;
@@ -566,7 +568,7 @@ export class CustomerGeneralComponent implements OnInit {
       const change = currentHeight - previousHeight;
       this.heightEntries[i].change = parseFloat(change.toFixed(1));
     }
-    
+
     // Last entry (chronologically) has no previous entry to compare with
     this.heightEntries[this.heightEntries.length - 1].change = 0;
   }
@@ -657,7 +659,7 @@ export class CustomerGeneralComponent implements OnInit {
   setDocument($event: DocumentDto) {
     this.sampleUploads = $event;
     console.log("Document received", $event);
-    
+
     // If we have a document ID and customer ID, update the customer with the new document
     if ($event.id && this.customerId) {
       this.updateCustomerWithDocument($event.id);

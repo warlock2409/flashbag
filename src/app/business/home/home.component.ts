@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ChallengeDetailsDialogComponent } from '../settings/components/business-setup/setup-components/challenge-builder/challenge-details-dialog/challenge-details-dialog.component';
 import Swal from 'sweetalert2';
 import { PointOfSaleComponent } from '../components/point-of-sale/point-of-sale.component';
+import { ImagePreviewDialog } from '../customers/customers.component';
 
 @Component({
   selector: 'app-home',
@@ -455,6 +456,16 @@ export class HomeComponent implements OnDestroy {
     if (!customer) return;
     this.selectedCustomer = customer;
     this.configurePanelOpen = true;
+  }
+
+  openImagePreview(url: string, event: MouseEvent): void {
+    event.stopPropagation(); // Prevent opening customer actions sidebar
+    this.dialog.open(ImagePreviewDialog, {
+      data: { url },
+      panelClass: 'image-preview-dialog',
+      maxWidth: '90vw',
+      maxHeight: '90vh'
+    });
   }
 
   closeConfigurePanel() {

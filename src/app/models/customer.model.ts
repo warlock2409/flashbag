@@ -10,4 +10,6 @@ export interface Customer {
     phone?: string;
     membershipName?: string;
     membershipExpiry?: string | Date;
+    documentId?: number;
+    documentDto?: any;
 }

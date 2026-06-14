@@ -265,8 +265,13 @@
                                 <div class="flex items-start gap-4">
                                     <!-- Initial-based Avatar -->
                                     <div
-                                        class="w-12 h-12 rounded-full bg-violet-200 flex items-center justify-center text-violet-700 font-bold text-lg flex-shrink-0 shadow-sm">
-                                        {{ (selectedCustomer.firstName?.charAt(0) || 'C').toUpperCase() }}
+                                        class="w-12 h-12 rounded-full bg-violet-200 flex items-center justify-center text-violet-700 font-bold text-lg flex-shrink-0 shadow-sm overflow-hidden">
+                                        <img *ngIf="selectedCustomer.documentDto?.attachments?.[0]?.url"
+                                            [src]="selectedCustomer.documentDto.attachments[0].url"
+                                            class="w-full h-full object-cover" alt="Customer">
+                                        <span *ngIf="!selectedCustomer.documentDto?.attachments?.[0]?.url">
+                                            {{ (selectedCustomer.firstName?.charAt(0) || 'C').toUpperCase() }}
+                                        </span>
                                     </div>
 
                                     <div class="flex-1 min-w-0">

@@ -12,6 +12,7 @@ import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
 import { GodBoxComponent } from '../god-box/god-box.component';
 import { InvoiceModel, ItemModel, PaymentResponse } from 'src/app/models/payment.model';
+import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { toBlob } from 'html-to-image';
 import Swal from 'sweetalert2';
@@ -41,6 +42,7 @@ export class PosComponent implements OnInit {
 
   placeHolderImg = 'https://seanl80.sg-host.com/wp-content/uploads/woocommerce-placeholder-600x600.png'
   shopService = inject(ShopService);
+  orgService = inject(OrganizationServiceService);
 
   // Responsive properties
   isMobile: boolean = false;
@@ -431,7 +433,7 @@ export class PosComponent implements OnInit {
     if (reward.scope?.toUpperCase() === 'INVOICE') {
       const discountPercentage = reward.discountPercentage || coupon.discountPercentage || 100;
       this.invoiceReward = { ...reward, discountPercentage };
-      
+
       const type = reward.type?.toUpperCase();
       if (type === 'DISCOUNT') {
         this._snackBar.success(`Coupon ${reward.couponCode} applied: ${discountPercentage}% discount`);
@@ -503,6 +505,27 @@ export class PosComponent implements OnInit {
   selectedCustomer?: Customer;
   hasPendingMembership: boolean = false;
 
+  selectCustomer(customer: any) {
+    this.selectedCustomer = customer;
+    if (customer) {
+      if (customer.id) {
+        this.fetchCustomerMembership(customer.id);
+      }
+
+      const docId = customer.documentId || customer.documentDto?.id;
+      if (docId && !customer.documentDto) {
+        this.orgService.getDocumentById(docId).subscribe({
+          next: (res: any) => {
+            if (this.selectedCustomer && this.selectedCustomer.id === customer.id) {
+              this.selectedCustomer.documentDto = res.data;
+            }
+          },
+          error: (err: any) => console.error('Error loading customer document:', err)
+        });
+      }
+    }
+  }
+
   deselectCustomer() {
     this.selectedCustomer = undefined;
     this.hasPendingMembership = false;
@@ -535,8 +558,7 @@ export class PosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (this.isUserDto(result)) {
-        this.selectedCustomer = result;
-        this.fetchCustomerMembership(result.id!);
+        this.selectCustomer(result);
       }
     });
   }
@@ -824,9 +846,8 @@ export class PosComponent implements OnInit {
       this.invoice = this.data.existingInvoice;
       this.cart = this.invoice.items.map(i => this.normalizeInvoiceItem(i));
       this.selectedCustomer = this.invoice.customer!;
-      if (this.selectedCustomer?.id) {
-        this.fetchCustomerMembership(this.selectedCustomer.id);
-      }
+      this.selectCustomer(this.selectedCustomer);
+      console.log("selectCustomer", this.selectedCustomer);
       // Load the discount from existing invoice
       this.orderDiscount = this.invoice.discount || 0;
 
