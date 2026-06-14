@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
   constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
-        console.log('Facebook SDK inside');
+    console.log('Facebook SDK inside');
 
     this.themeService.setInitialTheme();
 
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
           version: 'v19.0' // Use v19.0 or latest
         });
         console.log('Facebook SDK initialized');
-        resolve(); 
+        resolve();
       };
 
       const script = document.createElement('script');
@@ -109,8 +109,8 @@ export interface ResponseDate {
   message: string;
   status: number;
   data: any;
-  totalElements?:number;
-  pageSize?:number;
+  totalElements?: number;
+  pageSize?: number;
 }
 
 export interface ServiceResponse<T> { data: any, message: string, status: number }

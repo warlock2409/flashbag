@@ -6,6 +6,9 @@ import { routes } from './app-routing.module';
 import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { UploadxModule } from 'node_modules/ngx-uploadx/public-api';
 import * as Sentry from "@sentry/angular";
 import { RouterModule } from '@angular/router';
@@ -26,6 +29,9 @@ Sentry.init({
     NavbarComponent,
     BrowserAnimationsModule,
     MatMenuModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     UploadxModule
   ],
   providers: [

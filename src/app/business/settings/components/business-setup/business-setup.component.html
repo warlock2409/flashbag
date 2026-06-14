@@ -39,7 +39,7 @@
 
         <li nz-submenu nzTitle="Catelog" nzOpen>
           <ul>
-            <li nz-menu-item (click)="navigateTo('./product')">Products</li>
+            <li nz-menu-item (click)="navigateTo('./product')" [nzDisabled]="details?.status != 'ACTIVE'">Products</li>
             <!-- <li nz-menu-item (click)="navigateTo('./rental')">Rental</li> -->
             <li nz-menu-item (click)="navigateTo('./service')" [class.ant-menu-item-selected]="isActive('service')"
               [nzDisabled]="details?.status != 'ACTIVE'">Services</li>
@@ -53,7 +53,8 @@
             </li>
             <li nz-menu-item (click)="navigateTo('./goalPlan')" [nzDisabled]="details?.status != 'ACTIVE'">Goal Plans
             </li>
-            <li nz-menu-item (click)="navigateTo('/business/challenge')" [nzDisabled]="details?.status != 'ACTIVE'">Challenges
+            <li nz-menu-item (click)="navigateTo('/business/challenge')" [nzDisabled]="details?.status != 'ACTIVE'">
+              Challenges
             </li>
           </ul>
         </li>

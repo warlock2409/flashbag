@@ -19,20 +19,22 @@
         <!-- Content Section Split 30/70 -->
         <div class="flex flex-1 overflow-hidden p-2 md:p-4 min-h-[50vh] md:min-h-[500px]">
             <!-- Left Sidebar -->
-            <div class="w-16 md:w-1/4 border-r border-gray-100 p-2 md:p-4 overflow-y-auto shrink-0 flex flex-col items-center md:items-stretch">
+            <div
+                class="w-16 md:w-1/4 border-r border-gray-100 p-2 md:p-4 overflow-y-auto shrink-0 flex flex-col items-center md:items-stretch">
                 <div class="flex flex-col space-y-2 gap-2 w-full">
-                    <button *ngFor="let tab of tabs" (click)="selectedTab = tab" style="color: white;" [class]="
+                    <button *ngFor="let tab of tabs" (click)="selectedTab = tab" style="color: white;"
+                        [class]="
                         selectedTab === tab
                         ? 'bg-[#ededed29] p-2 md:px-3 md:py-2 rounded-lg flex items-center justify-center md:justify-start w-full'
                         : 'text-white p-2 md:px-3 md:py-2 rounded-lg hover:bg-[#ededed29] cursor-pointer flex items-center justify-center md:justify-start w-full'">
-                        
+
                         <!-- Mobile Icon -->
                         <mat-icon class="md:hidden" [ngSwitch]="tab">
                             <ng-container *ngSwitchCase="'Customer'">person</ng-container>
                             <ng-container *ngSwitchCase="'Screens'">view_quilt</ng-container>
                             <ng-container *ngSwitchDefault>folder</ng-container>
                         </mat-icon>
-                        
+
                         <!-- Desktop Text -->
                         <span class="hidden md:inline">{{ tab }}</span>
                     </button>
@@ -54,20 +56,26 @@
                 <!-- Other Tabs -->
                 <div *ngIf="selectedTab === 'Customer'" class="text-gray-100 md:mt-4">
                     @for (customer of customers; track $index) {
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center bg-[#71687f] rounded-lg p-3 md:p-2 mt-2 hover:bg-[#857c94] transition-colors cursor-pointer gap-2 md:gap-0" (click)="returnCustomer(customer)">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center bg-[#2f2b36] rounded-lg p-3 md:p-2 mt-2 hover:bg-[#857c94] transition-colors cursor-pointer gap-2 md:gap-0"
+                        (click)="returnCustomer(customer)">
                         <div class="flex items-center gap-3">
-                            <div class="customer-dp-wrapper godbox-dp shrink-0" (click)="customer.profileImage ? openImagePreview(customer.profileImage, $event) : null">
-                                <img *ngIf="customer.profileImage" [src]="customer.profileImage" [alt]="customer.firstName">
+                            <div class="customer-dp-wrapper godbox-dp shrink-0"
+                                (click)="customer.profileImage ? openImagePreview(customer.profileImage, $event) : null">
+                                <img *ngIf="customer.profileImage" [src]="customer.profileImage"
+                                    [alt]="customer.firstName">
                                 <div *ngIf="!customer.profileImage" class="placeholder-dp">
-                                  {{ getInitials(customer.firstName, customer.lastName) }}
+                                    {{ getInitials(customer.firstName, customer.lastName) }}
                                 </div>
                             </div>
                             <div class="flex flex-col overflow-hidden">
-                                <p class="font-semibold text-white m-0 text-sm truncate">{{customer.firstName}} {{customer.lastName}}</p>
+                                <p class="font-semibold text-white m-0 text-sm truncate">{{customer.firstName}}
+                                    {{customer.lastName}}</p>
                                 <div class="flex items-center gap-1 flex-wrap">
                                     <p class="text-purple-300 text-xs m-0">#{{customer.id}}</p>
-                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingCustomerId">({{customer.existingCustomerId}})</p>
-                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingId">({{customer.existingId}})</p>
+                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingCustomerId">
+                                        ({{customer.existingCustomerId}})</p>
+                                    <p class="text-purple-400 text-xs m-0" *ngIf="customer.existingId">
+                                        ({{customer.existingId}})</p>
                                 </div>
                             </div>
                         </div>

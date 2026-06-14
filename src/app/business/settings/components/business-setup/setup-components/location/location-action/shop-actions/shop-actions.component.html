@@ -137,7 +137,7 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="businessModels.length > 1">
+                            <!-- <div *ngIf="businessModels.length > 1">
                                 <p class="parent_text flex items-end gap1 justify-between ">
                                     Add Secondary Business Models
 
@@ -149,7 +149,7 @@
                                 </p>
                                 <button mat-flat-button color="primary" type="button" (click)="addSecondaryModel()">Add
                                     Secondary</button>
-                            </div>
+                            </div> -->
 
                             <div formArrayName="secondaryModels" class="mt-4">
                                 <div *ngFor="let sec of secondaryModels.controls; let i = index" [formGroupName]="i"

@@ -24,4 +24,15 @@ export class PaymentService {
     return this.Http.post<ServiceResponse<any>>(url, payment);
   }
 
+  createCashfreeOrder(id: number | undefined) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/api/payments/shop/{shopCode}/invoice/{invoiceId}/order".replace("{shopCode}", shopCode!).replace("{invoiceId}", id!.toString());
+    return this.Http.post<ServiceResponse<any>>(url, {});
+  }
+
+  createPaymentSession(body: any, id: number | undefined) {
+    let shopCode = localStorage.getItem("shopCode");
+    let url = "http://localhost:8080/api/payments/shop/{shopCode}/invoice/{invoiceId}/session".replace("{shopCode}", shopCode!).replace("{invoiceId}", id!.toString());
+    return this.Http.post<ServiceResponse<any>>(url, body);
+  }
 }

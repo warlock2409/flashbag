@@ -122,7 +122,8 @@ export class MembershipActionsComponent {
       industryId: 0,
       benefits: [],
       shopIds: [],
-      mode: 'Beginner'
+      mode: 'Beginner',
+      enableOnlineSale: true
     };
 
     if (existingPlan) {
@@ -136,7 +137,8 @@ export class MembershipActionsComponent {
         industryId: existingPlan.industryId ?? 0,
         benefits: existingPlan.benefits ? [...existingPlan.benefits] : [],
         shopIds: existingPlan.shopIds ? [...existingPlan.shopIds] : [],
-        mode: existingPlan.mode ?? 'Beginner'
+        mode: existingPlan.mode ?? 'Beginner',
+        enableOnlineSale: existingPlan.enableOnlineSale ?? true
       };
 
       let durationBenefit = existingPlan.benefits
@@ -407,11 +409,6 @@ export class MembershipActionsComponent {
     this.orgService.createOrgMembership(this.membershipPlan).subscribe({
       next: async (res: ResponseDate) => {
         console.log(res.data);
-        try {
-          await this.createExerciseTodo(this.exerciseDays, res.data.id);
-        } catch (error) {
-          console.error('Failed to create exercise todos', error);
-        }
         this.dialogRef.close(res.data);
       },
       error: (err: any) => {
@@ -473,11 +470,11 @@ export class MembershipActionsComponent {
 
     this.orgService.updateOrgMembership(this.membershipPlan, this.membershipPlan.id).subscribe({
       next: async (res: ResponseDate) => {
-        try {
-          await this.createExerciseTodo(this.exerciseDays, res.data.id);
-        } catch (error) {
-          console.error('Failed to create exercise todos', error);
-        }
+        // try {
+        //   await this.createExerciseTodo(this.exerciseDays, res.data.id);
+        // } catch (error) {
+        //   console.error('Failed to create exercise todos', error);
+        // }
         this.dialogRef.close(res.data);
       },
       error: (err: any) => {

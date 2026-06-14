@@ -124,29 +124,17 @@
                         <h3 class="text-xl font-medium  mb-4">Online Sales & Redemption</h3>
                         <div class="space-y-4">
                             <label class="flex items-center">
-                                <input type="checkbox" checked
+                                <input type="checkbox" [(ngModel)]="membershipPlan.enableOnlineSale"
                                     class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                 <span class="ml-2 text-gray-700">Enable online sales</span>
                             </label>
-                            <!-- <label class="flex items-center">
-                        <input type="checkbox" checked
-                            class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                        <span class="ml-2 text-gray-700">Enable online redemption</span>
-                    </label>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Redemption Code (optional)
-                        </label>
-                        <input type="text" placeholder="e.g., GOLD2023" class="w-full rounded-md border border-gray-300 px-3 py-2 
-                                focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div> -->
                         </div>
                     </div>
 
                     <!-- Short Description -->
                     <div class="md:col-span-2 mb-4">
                         <h3 class="text-xl font-medium  mb-4">Short Description</h3>
-                        <input type="text" placeholder="Enter short description" class="w-full rounded-md border border-gray-300 px-3 py-2 
+                        <input type="text" maxlength="254" placeholder="Enter short description" class="w-full rounded-md border border-gray-300 px-3 py-2 
                                 focus:border-violet-400 focus:ring-violet-400 focus:outline-none"
                             [(ngModel)]="membershipPlan.description">
                     </div>
@@ -185,18 +173,18 @@
         <!-- Dialog Footer -->
         <div class="border-t border-gray-200 p-4 flex justify-end space-x-3">
             <div class="space-x-3 flex gap-2">
-                
-                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex === (stepper.steps.length - 2)"
+
+                <button mat-raised-button color="accent" *ngIf="stepper.selectedIndex < ((stepper.steps?.length || 2) - 1)"
                     type="submit" (click)="validateMembershipDetails()">
                     Next
                 </button>
-                <button mat-raised-button *ngIf="stepper.selectedIndex === (stepper.steps.length - 1)"
+                <button mat-raised-button *ngIf="stepper.selectedIndex === ((stepper.steps?.length || 2) - 1)"
                     (click)="stepperPrev()">Back</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && !data.isUpdate"
+                    *ngIf="stepper.selectedIndex === ((stepper.steps?.length || 2) - 1) && !data.isUpdate"
                     (click)="createMembership()">Confirm</button>
                 <button mat-raised-button style="background-color: #a684ff; color: white;"
-                    *ngIf="stepper.selectedIndex === (stepper.steps.length - 1) && data.isUpdate"
+                    *ngIf="stepper.selectedIndex === ((stepper.steps?.length || 2) - 1) && data.isUpdate"
                     (click)="updateMembership()">Update</button>
             </div>
         </div>

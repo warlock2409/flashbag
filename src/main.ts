@@ -11,6 +11,9 @@ import { OrderPanelService } from './app/services/order-panel.service';
 import { ProfilePanelService } from './app/services/profile-panel.service';
 import { SettingsPanelService } from './app/services/settings-panel.service';
 import { AuthInterceptor } from './app/interceptor/auth.interceptor';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -20,6 +23,8 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     OrderPanelService,
     ProfilePanelService,
-    SettingsPanelService
+    SettingsPanelService,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth())
   ]
 }).catch(err => console.error(err));

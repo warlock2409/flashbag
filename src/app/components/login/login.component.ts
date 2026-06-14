@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { BusinessRequestDialogComponent } from '../business-request-dialog/business-request-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,8 @@ export class LoginComponent implements OnInit {
   loading = false;
   error = '';
   loginType: 'customer' | 'business' = 'customer';
+  shopCode: string | null = null;
+  shopName: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -37,25 +40,44 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    google.accounts.id.initialize({
-      client_id: "196972985831-fma8p5mvuhhrl3tkrhpborng0094f48o.apps.googleusercontent.com",
-      callback: (resp:any)=>{
-
-      }
+    this.route.params.subscribe(params => {
+      this.shopCode = params['shopCode'];
     });
-
-    google.accounts.id.renderButton(
-      document.getElementById("buttonDiv"),
-      { theme: "outline", size: "large" }  // customization attributes
-    );
 
     this.route.queryParams.subscribe(params => {
       this.loginType = params['type'] || 'customer';
+      this.shopName = params['shop'];
     });
 
     if (this.authService.isLoggedIn()) {
       this.redirectBasedOnRole();
     }
+  }
+
+  continueWithGoogle() {
+    this.loading = true;
+    this.error = '';
+
+    Swal.fire({
+      title: 'Processing...',
+      text: 'Please wait while we sign you in',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    this.authService.googleSignIn().subscribe({
+      next: () => {
+        Swal.close();
+        this.redirectBasedOnRole();
+      },
+      error: (err) => {
+        Swal.close();
+        this.error = err.message || 'Google login failed';
+        this.loading = false;
+      }
+    });
   }
 
   onSubmit() {
@@ -82,6 +104,11 @@ export class LoginComponent implements OnInit {
   }
 
   private redirectBasedOnRole() {
+    if (this.shopCode) {
+      this.router.navigate(['/s', this.shopCode]);
+      return;
+    }
+
     if (this.authService.isBusiness()) {
       this.router.navigate(['/business/pick-organization']);
     } else {

@@ -23,16 +23,17 @@ interface ShopData {
       </div>
       <div class="shop-info">
         <h1>{{shopData.name}}</h1>
-        <div class="rating">
+        <!-- <div class="rating">
           <span class="stars">★★★★★</span>
           <span>{{shopData.rating}} ({{shopData.totalReviews}} reviews)</span>
-        </div>
+        </div> -->
         <p class="location">{{shopData.location}}</p>
       </div>
     </div>
   `,
   styles: [`
     .shop-header {
+      width: 100%;
       margin-bottom: 24px;
 
       .image-gallery {
@@ -41,9 +42,17 @@ interface ShopData {
         gap: 12px;
         margin-bottom: 24px;
 
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
         .main-image {
           width: 100%;
-          height: 400px;
+          height: 300px;
+          @media (min-width: 768px) {
+            height: 400px;
+          }
           object-fit: cover;
           border-radius: 8px;
         }
@@ -53,9 +62,18 @@ interface ShopData {
           grid-template-rows: repeat(2, 1fr);
           gap: 12px;
 
+          @media (max-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: none;
+            gap: 8px;
+          }
+
           img {
             width: 100%;
-            height: 194px;
+            height: 146px;
+            @media (min-width: 768px) {
+              height: 194px;
+            }
             object-fit: cover;
             border-radius: 8px;
           }
@@ -66,6 +84,8 @@ interface ShopData {
         h1 {
           font-size: 24px;
           margin-bottom: 12px;
+          color: #f8fafc;
+          font-weight: 700;
         }
 
         .rating {
@@ -80,7 +100,7 @@ interface ShopData {
         }
 
         .location {
-          color: #666;
+          color: #c4cec6ff;
         }
       }
     }

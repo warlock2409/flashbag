@@ -340,6 +340,17 @@ export class LocationComponent {
     this.selectedShop = null;
   }
 
+  copyShopLink(shop: ShopModel) {
+    const origin = window.location.origin;
+    const link = `${origin}/login/s/${shop.code}?type=customer&shop=${encodeURIComponent(shop.name)}`;
+    navigator.clipboard.writeText(link).then(() => {
+      this.sweatAlert.success("Copied!");
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+      this.sweatAlert.error("Failed to copy link");
+    });
+  }
+
   handleConfigOption(option: string) {
     console.log('Configuration option selected:', option);
     

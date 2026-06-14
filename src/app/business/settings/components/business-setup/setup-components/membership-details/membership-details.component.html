@@ -66,9 +66,15 @@
                 </div>
             </div>
             <ng-template #editTemplate>
-                <button mat-stroked-button class="edit-button" (click)="openEditMembership(membership)">
-                    Edit
-                </button>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5" [title]="membership.enableOnlineSale ? 'Online Sales Enabled' : 'Online Sales Disabled'">
+                        <span class="w-2.5 h-2.5 rounded-full shadow-sm" [ngClass]="membership.enableOnlineSale ? 'bg-green-500' : 'bg-red-500'"></span>
+                        <span class="text-xs text-gray-500 font-medium hidden sm:inline-block">Online Sales</span>
+                    </div>
+                    <button mat-stroked-button class="edit-button" (click)="openEditMembership(membership)">
+                        Edit
+                    </button>
+                </div>
             </ng-template>
         </nz-card>
         }

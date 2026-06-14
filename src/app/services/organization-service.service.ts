@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Observable, EMPTY } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { ServiceResponse } from '../app.component';
 import { Customer } from '../models/customer.model';
@@ -460,6 +461,7 @@ export class OrganizationServiceService {
 
   getChallengesByShop(page: number = 0, size: number = 10, search?: string, status?: string) {
     let shopCode = localStorage.getItem("shopCode");
+    if (!shopCode) return EMPTY;
     let url = `http://localhost:8080/challenge/shop/${shopCode}?page=${page}&size=${size}`;
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;

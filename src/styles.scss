@@ -16,7 +16,7 @@
     .xs\:grid-cols-1 {
       grid-template-columns: repeat(1, minmax(0, 1fr));
     }
-    
+
     .xs\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -42,7 +42,8 @@ body {
 }
 
 .swal2-timer-progress-bar {
-  background: #1411ca !important; /* light green */
+  background: #1411ca !important;
+  /* light green */
 }
 
 .mat-mdc-dialog-surface {
@@ -238,7 +239,7 @@ input:-webkit-autofill:active {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
 }
 
 .spinner {
@@ -281,7 +282,7 @@ input:-webkit-autofill:active {
 
 .show-mobile {
   display: none !important;
-  
+
   @media (max-width: 768px) {
     display: block !important;
   }
@@ -289,7 +290,7 @@ input:-webkit-autofill:active {
 
 .show-tablet {
   display: none !important;
-  
+
   @media (max-width: 1024px) {
     display: block !important;
   }
@@ -303,7 +304,7 @@ input:-webkit-autofill:active {
 
 .responsive-flex-row {
   flex-direction: row;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -311,7 +312,7 @@ input:-webkit-autofill:active {
 
 .responsive-full-width {
   width: auto;
-  
+
   @media (max-width: 768px) {
     width: 100% !important;
   }
@@ -319,7 +320,7 @@ input:-webkit-autofill:active {
 
 .responsive-padding {
   padding: 20px;
-  
+
   @media (max-width: 768px) {
     padding: 10px;
   }
@@ -327,7 +328,7 @@ input:-webkit-autofill:active {
 
 .responsive-margin {
   margin: 20px;
-  
+
   @media (max-width: 768px) {
     margin: 10px;
   }
@@ -336,11 +337,11 @@ input:-webkit-autofill:active {
 // Global responsive spacing for navbar
 .navbar-spacing {
   padding-top: 100px !important;
-  
+
   @media (max-width: 1024px) {
     padding-top: 100px !important;
   }
-  
+
   @media (max-width: 768px) {
     padding-top: 90px !important;
   }
@@ -349,7 +350,7 @@ input:-webkit-autofill:active {
 // Responsive utility classes for consistent spacing
 .responsive-pt-large {
   padding-top: 100px;
-  
+
   @media (max-width: 768px) {
     padding-top: 90px;
   }
@@ -357,7 +358,7 @@ input:-webkit-autofill:active {
 
 .responsive-pt-medium {
   padding-top: 80px;
-  
+
   @media (max-width: 768px) {
     padding-top: 70px;
   }
@@ -365,7 +366,7 @@ input:-webkit-autofill:active {
 
 .responsive-pt-small {
   padding-top: 60px;
-  
+
   @media (max-width: 768px) {
     padding-top: 50px;
   }
@@ -374,11 +375,11 @@ input:-webkit-autofill:active {
 // Responsive typography adjustments
 .responsive-text-large {
   font-size: 1.5rem;
-  
+
   @media (max-width: 768px) {
     font-size: 1.25rem;
   }
-  
+
   @media (max-width: 480px) {
     font-size: 1.125rem;
   }
@@ -386,7 +387,7 @@ input:-webkit-autofill:active {
 
 .responsive-text-medium {
   font-size: 1rem;
-  
+
   @media (max-width: 480px) {
     font-size: 0.875rem;
   }
@@ -394,7 +395,7 @@ input:-webkit-autofill:active {
 
 .responsive-text-small {
   font-size: 0.875rem;
-  
+
   @media (max-width: 480px) {
     font-size: 0.75rem;
   }
@@ -403,12 +404,12 @@ input:-webkit-autofill:active {
 // Responsive button adjustments
 .responsive-button {
   padding: 8px 16px;
-  
+
   @media (max-width: 768px) {
     padding: 6px 12px;
     font-size: 0.875rem;
   }
-  
+
   @media (max-width: 480px) {
     padding: 4px 8px;
     font-size: 0.8125rem;
@@ -418,7 +419,7 @@ input:-webkit-autofill:active {
 // Responsive card adjustments
 .responsive-card {
   border-radius: 12px;
-  
+
   @media (max-width: 768px) {
     border-radius: 8px;
   }
@@ -428,19 +429,19 @@ input:-webkit-autofill:active {
 .horizontal-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  
+
   // Hide scrollbar but keep functionality
   &::-webkit-scrollbar {
     display: none;
   }
-  
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
 .scroll-fade {
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;

@@ -9,7 +9,7 @@
 
                 @if (currentView=='organization') {
                 <nz-descriptions-item nzTitle="Organization name">{{details?.name}}</nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Country" >{{ details?.country
+                <nz-descriptions-item nzTitle="Country">{{ details?.country
                     }}</nz-descriptions-item>
                 <nz-descriptions-item nzTitle="Currency">{{ details?.currency
                     }}</nz-descriptions-item>
@@ -55,7 +55,7 @@
     <!-- Current Plan -->
 
     <!-- No plan -->
-    <div *ngIf="!details?.organizationPlan"
+    <div *ngIf="!details?.organizationPlan || details.organizationPlan.paymentStatus == 'PENDING'"
         class="mt-4 pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 relative max-w-[320px]">
         <div class="p-8">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">You don’t have an active plan</h3>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Has plan -->
-    <div *ngIf="details?.organizationPlan"
+    <div *ngIf="details?.organizationPlan && details.organizationPlan.paymentStatus != 'PENDING'"
         class="mt-4 pricing-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 relative max-w-[320px]">
         <div class="p-8">
             <h3 class="text-2xl font-bold text-gray-800 mb-2">{{ details.organizationPlan.planName }}</h3>

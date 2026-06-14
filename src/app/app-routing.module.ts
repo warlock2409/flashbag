@@ -9,8 +9,10 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login/s/:shopCode', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   { path: 'shop/:id', component: ShopDetailsComponent },
+  { path: 's/:shopCode', component: ShopDetailsComponent },
   {
     path: 'business',
     loadChildren: () => import('./business/business.module').then(m => m.BusinessModule)

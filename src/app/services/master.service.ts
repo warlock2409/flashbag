@@ -73,6 +73,11 @@ export class MasterService {
     return this.Http.post<ServiceResponse<any>>(url, requestPurchase);
   }
 
+  createSubscription(orgCode: string, requestPurchase: CreateOrganizationPlanDto) {
+    let url = `http://localhost:8080/api/platform/organizations/${orgCode}/subscriptions`;
+    return this.Http.post<ServiceResponse<any>>(url, requestPurchase);
+  }
+
 
 
   organizationBuilder(name: string, termAccepted: boolean, visitors: number, email: string) {

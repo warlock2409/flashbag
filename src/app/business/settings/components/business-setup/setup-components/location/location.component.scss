@@ -156,6 +156,17 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+    
+    button {
+      width: 100%;
+      margin: 0;
+    }
+  }
 }
 
 .edit-button {

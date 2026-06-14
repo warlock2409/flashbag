@@ -42,19 +42,19 @@ export interface AddOn {
 }
 
 
-export interface Industry{
-  id:number;
-  name:string
+export interface Industry {
+  id: number;
+  name: string
 }
 
-export interface IndustrySegment{
-  id:number;
-  name:string;
+export interface IndustrySegment {
+  id: number;
+  name: string;
 }
 
 export interface OrganizationServiceModel {
   id?: number;                // optional (for updates)
-  serviceKey?:string;
+  serviceKey?: string;
   name: string;               // service name
   description: string;        // service description
   isAddon: boolean;           // whether this service is an addon
@@ -66,11 +66,11 @@ export interface OrganizationServiceModel {
   organizationId?: number;     // FK to organization
   industrySegment?: Pick<IndustrySegment, "id"> & Partial<IndustrySegment>;  // FK to industry segment
   shopIds: number[];          // list of shop IDs mapped to service
-  checked?:boolean;
+  checked?: boolean;
 }
 
 export interface OrganizationMembershipPlan {
-  id?: number;      
+  id?: number;
   name: string;
   basePrice: number;
   description: string;
@@ -82,8 +82,9 @@ export interface OrganizationMembershipPlan {
   durationValue?: number;
   durationUnit?: string;
   durationLabel?: string | null;
-  industry?:string;
+  industry?: string;
   maxDuration?: { value: number; unit: string };
+  enableOnlineSale?: boolean;
 }
 export interface MembershipBenefit {
   id?: number;

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ServiceResponse } from '../app.component';
 import { InvoiceModel } from '../models/payment.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ export class ShopService {
 
   constructor() {
     // localStorage.setItem('shopCode', 'BIFITN888');
+  }
+
+  getShopDetails(shopCode: string) {
+    const url = `${environment.apiUrl}/shop/${shopCode}/details`;
+    return this.Http.get<ServiceResponse<any>>(url);
   }
 
   getAllShopMembership() {
@@ -150,4 +156,20 @@ export class ShopService {
     return this.Http.get<ServiceResponse<any>>(url);
   }
 
+  bookTrial(membershipId: number, userUID: string, payload: any) {
+    let url = "http://localhost:8080/book/membership/{membershipId}/shop/customer/userId/{userUID}"
+      .replace("{membershipId}", membershipId.toString())
+      .replace("{userUID}", userUID);
+    return this.Http.post<ServiceResponse<any>>(url, payload);
+  }
+
+  getCustomerEvents(uid: string) {
+    const url = `http://localhost:8080/customer/${uid}/events`;
+    return this.Http.get(url);
+  }
+
+  getCustomerShopDetails(uid: string, shopCode: string) {
+    const url = `http://localhost:8080/customer/${uid}/shop/${shopCode}/details`;
+    return this.Http.get(url);
+  }
 }
