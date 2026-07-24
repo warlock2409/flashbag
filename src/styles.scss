@@ -61,6 +61,16 @@ body {
   }
 }
 
+// Follow-ups chat dialog: edge-to-edge, rounded
+.followups-dialog {
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #ece5dd !important;
+  }
+}
+
 .cdk-overlay-container {
   z-index: 1000;
 }

@@ -5,6 +5,7 @@ import { BookingPanelComponent } from './components/shared/booking-panel/booking
 import { OrderPanelComponent } from './components/shared/order-panel/order-panel.component';
 import { ProfilePanelComponent } from './components/shared/profile-panel/profile-panel.component';
 import { SettingsPanelComponent } from './components/shared/settings-panel/settings-panel.component';
+import { TrendPanelComponent } from './components/shared/trend-panel/trend-panel.component';
 import { MatNativeDateModule } from '@angular/material/core';
 
 declare const FB: any;
@@ -41,6 +42,7 @@ const fbLoginCallback = (response: any) => {
     OrderPanelComponent,
     ProfilePanelComponent,
     SettingsPanelComponent,
+    TrendPanelComponent,
     MatNativeDateModule
   ],
   template: `
@@ -51,6 +53,7 @@ const fbLoginCallback = (response: any) => {
     <app-order-panel></app-order-panel>
     <app-profile-panel></app-profile-panel>
     <app-settings-panel></app-settings-panel>
+    <app-trend-panel></app-trend-panel>
   `,
   styles: [`
     // .main-content {

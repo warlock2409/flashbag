@@ -5,12 +5,14 @@ import { LandingComponent } from './components/landing/landing.component';
 import { HomeComponent } from './components/home/home.component';
 import { ShopDetailsComponent } from './components/shop-details/shop-details.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { WeightLossCalculatorComponent } from './components/weight-loss-calculator/weight-loss-calculator.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/s/:shopCode', component: LoginComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'weightlosscalculator', component: WeightLossCalculatorComponent },
   { path: 'shop/:id', component: ShopDetailsComponent },
   { path: 's/:shopCode', component: ShopDetailsComponent },
   {

@@ -19,6 +19,8 @@ import { ResponseDate } from 'src/app/app.component';
 import { OrganizationMembershipPlan } from 'src/app/models/organization';
 import { Industry } from 'src/app/models/business.model';
 import { DataStorageService } from 'src/app/services/data-storage.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { MembershipPurchaseCount } from 'src/app/models/shop.model';
 
 interface Option {
   label: string;
@@ -40,16 +42,17 @@ interface Option {
 export class MembershipDetailsComponent {
   isMobileView = false;
 
-  constructor(private orgService: OrganizationServiceService, private dataService: DataStorageService) {
+  constructor(private orgService: OrganizationServiceService, private dataService: DataStorageService, private dashboardService: DashboardService) {
     // Register Chart.js modules to avoid tree-shaking issues
     Chart.register(...registerables);
-    // Fetch All Organization Membership 
+    // Fetch All Organization Membership
     this.industries = dataService.getIndustry();
     if (this.industries.length < 1) {
       this.getOrgIndustry();
     } else {
       this.getOrgMemberships();
     }
+    this.loadMembershipPurchaseCounts();
     this.checkScreenSize();
   }
 
@@ -153,10 +156,61 @@ export class MembershipDetailsComponent {
     this.destroyChart();
   }
 
-  //  Real flow 
+  //  Real flow
   readonly dialog = inject(MatDialog);
   memberships: OrganizationMembershipPlan[] = [];
   industries: Industry[] = [];
+
+  // Membership purchase counts (active/inactive breakdown per plan)
+  membershipPurchaseCounts: MembershipPurchaseCount[] = [];
+  isZoomModalOpen = false;
+  sortBy: 'default' | 'active' | 'inactive' = 'default';
+
+  loadMembershipPurchaseCounts() {
+    try {
+      this.dashboardService.getMembershipPurchaseCounts().subscribe({
+        next: (res) => {
+          this.membershipPurchaseCounts = res.data || [];
+        },
+        error: (err) => console.error('Error fetching membership purchase counts:', err)
+      });
+    } catch (e) {
+      console.warn('DashboardService requires active shopCode:', e);
+    }
+  }
+
+  // Purchase breakdown for a given membership, matched by plan name.
+  getPurchaseCount(membership: OrganizationMembershipPlan): MembershipPurchaseCount | undefined {
+    return this.membershipPurchaseCounts.find(pc => pc.membershipPlanName === membership.name);
+  }
+
+  get sortedMembershipPurchaseCounts() {
+    const list = [...this.membershipPurchaseCounts];
+    if (this.sortBy === 'active') {
+      return list.sort((a, b) => b.activeCount - a.activeCount);
+    } else if (this.sortBy === 'inactive') {
+      return list.sort((a, b) => b.inactiveCount - a.inactiveCount);
+    }
+    return list;
+  }
+
+  toggleSort() {
+    if (this.sortBy === 'default') {
+      this.sortBy = 'active';
+    } else if (this.sortBy === 'active') {
+      this.sortBy = 'inactive';
+    } else {
+      this.sortBy = 'default';
+    }
+  }
+
+  openZoomModal() {
+    this.isZoomModalOpen = true;
+  }
+
+  closeZoomModal() {
+    this.isZoomModalOpen = false;
+  }
 
   setMembership(data: OrganizationMembershipPlan[]) {
     this.memberships = data;

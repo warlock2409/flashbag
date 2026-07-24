@@ -14,6 +14,7 @@ import { ChallengeDetailsDialogComponent } from '../settings/components/business
 import Swal from 'sweetalert2';
 import { PointOfSaleComponent } from '../components/point-of-sale/point-of-sale.component';
 import { ImagePreviewDialog } from '../customers/customers.component';
+import { TrendPanelService } from 'src/app/services/trend-panel.service';
 
 @Component({
   selector: 'app-home',
@@ -29,12 +30,26 @@ export class HomeComponent implements OnDestroy {
   dashboardService = inject(DashboardService);
   orgApiService = inject(OrganizationServiceService);
   swallService = inject(SweatAlertService);
+  trendPanelService = inject(TrendPanelService);
   private sub!: Subscription;
 
 
   selectedCustomer: any;
   configurePanelOpen: boolean = false;
   isMobileView: any = false;
+  isSplitOpen: boolean = false;
+
+  // Today's check-in (active customers) side panel
+  activeCustomersPanelOpen: boolean = false;
+  activeCustomers: any[] = [];
+  activeCustomersLoading: boolean = false;
+  activeCustomersPage: number = 0;
+  activeCustomersSize: number = 10;
+  activeCustomersTotal: number = 0;
+
+  toggleSplitScreen() {
+    this.trendPanelService.toggle();
+  }
 
   shopCategory = new Map<string, string>([
     ['Fitness & Gyms', 'Gym'],
@@ -63,11 +78,20 @@ export class HomeComponent implements OnDestroy {
       // this.trailListCustomer.unshift(msg.data);
       this.getTrailSessions();
     });
+
+    // Keep the split-screen layout in sync with the trend panel state so the
+    // main content reserves space (split screen) instead of being overlaid.
+    this.sub = this.trendPanelService.isOpen$.subscribe(isOpen => {
+      this.isSplitOpen = isOpen;
+    });
   }
 
   ngOnDestroy() {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
+    }
+    if (this.sub && !this.sub.closed) {
+      this.sub.unsubscribe();
     }
   }
 
@@ -446,9 +470,13 @@ export class HomeComponent implements OnDestroy {
 
     if (mean === 0) return '0%';
 
-    const diffPercentage = ((mean - today) / mean) * 100;
-
-    return `${diffPercentage.toFixed(1)}% less than average`;
+    if (today >= mean) {
+      const diffPercentage = ((today - mean) / mean) * 100;
+      return `${diffPercentage.toFixed(1)}% more than average`;
+    } else {
+      const diffPercentage = ((mean - today) / mean) * 100;
+      return `${diffPercentage.toFixed(1)}% less than average`;
+    }
   }
 
   // Customer Actions
@@ -472,6 +500,89 @@ export class HomeComponent implements OnDestroy {
     this.configurePanelOpen = false;
     this.loadGymDashboard();
     this.getTrailSessions();
+  }
+
+  // Today's Check-In side panel
+  openActiveCustomers() {
+    this.activeCustomersPanelOpen = true;
+    this.activeCustomersPage = 0;
+    this.loadActiveCustomers();
+  }
+
+  closeActiveCustomers() {
+    this.activeCustomersPanelOpen = false;
+  }
+
+  loadActiveCustomers() {
+    if (!localStorage.getItem("shopCode")) return;
+
+    this.activeCustomersLoading = true;
+    const today = moment().format('YYYY-MM-DD');
+
+    this.orgApiService.getActiveCustomers(
+      this.activeCustomersPage,
+      this.activeCustomersSize,
+      today
+    ).subscribe({
+      next: (res) => {
+        this.activeCustomers = res.data || [];
+        this.activeCustomersTotal = res.totalElements ?? this.activeCustomers.length;
+        this.activeCustomersLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading today\'s check-in customers:', err);
+        this.activeCustomers = [];
+        this.activeCustomersLoading = false;
+      }
+    });
+  }
+
+  onActiveCustomersPageChange(event: any) {
+    this.activeCustomersPage = event.pageIndex;
+    this.activeCustomersSize = event.pageSize;
+    this.loadActiveCustomers();
+  }
+
+  // Health score color code based on healthStatus
+  private healthStatusColors: { [key: string]: string } = {
+    HEALTHY: '#22C55E',
+    WATCH: '#FACC15',
+    NEEDS_ATTENTION: '#F97316',
+    CRITICAL: '#EF4444'
+  };
+
+  getHealthColor(status: string): string {
+    return this.healthStatusColors[status] || '#9CA3AF';
+  }
+
+  // Retention trend health, derived from this month's renewals vs. expirations.
+  // Percentage = how many of the memberships due for renewal were actually renewed.
+  get trendRetentionRate(): number {
+    const expiring = this.membershipSummary?.expiringThisMonth ?? 0;
+    const renewed = this.membershipSummary?.renewedThisMonth ?? 0;
+    if (expiring <= 0) {
+      // Nothing was due — treat as fully healthy if anything renewed, else neutral.
+      return renewed > 0 ? 100 : 0;
+    }
+    return Math.min(Math.round((renewed / expiring) * 100), 100);
+  }
+
+  // Human-readable health label for the retention rate.
+  get trendHealthLabel(): string {
+    const rate = this.trendRetentionRate;
+    if (rate >= 75) return 'Excellent';
+    if (rate >= 50) return 'Good';
+    if (rate >= 25) return 'Moderate';
+    return 'Critical';
+  }
+
+  // Number of active bars (out of 4) to light up in the trend card.
+  get trendActiveBars(): number {
+    const rate = this.trendRetentionRate;
+    if (rate >= 75) return 4;
+    if (rate >= 50) return 3;
+    if (rate >= 25) return 2;
+    return 1;
   }
 
   // Challenge Participants Methods

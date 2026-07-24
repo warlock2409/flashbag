@@ -10,6 +10,7 @@ import { PosActionsComponent } from './pos-actions/pos-actions.component';
 import { AddCustomerComponent } from '../add-customer/add-customer.component';
 import { ShopService } from 'src/app/services/shop.service';
 import { ResponseDate } from 'src/app/app.component';
+import { environment } from 'src/environments/environment';
 import { GodBoxComponent } from '../god-box/god-box.component';
 import { InvoiceModel, ItemModel, PaymentResponse } from 'src/app/models/payment.model';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
@@ -1168,7 +1169,9 @@ export class PosComponent implements OnInit {
         `Plan: ${planName}\n` +
         `End Date: ${endDate}\n` +
         `Thank you for being a valued member!\n` +
-        `– ${shopName}`;
+        `– ${shopName}\n\n` +
+        `Download our app: ${environment.appDownloadUrl}\n` +
+        `Note: Use the same email & phone number you gave at the gym to access your existing membership.`;
 
       const message = encodeURIComponent(messageContent);
 

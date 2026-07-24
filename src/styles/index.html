@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kavach — Gold, Crafted as Protection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0B0B0D;
+  --surface:#151515;
+  --surface-2:#1B1B1D;
+  --line: rgba(255,255,255,0.08);
+  --gold:#D4AF37;
+  --gold-bright:#F7D774;
+  --gold-muted:#9E7C1F;
+  --white:#FFFFFF;
+  --gray:#CFCFCF;
+  --gray-dim: rgba(207,207,207,0.55);
+  --glow: rgba(212,175,55,0.25);
+  --grad-btn: linear-gradient(180deg,#E8C76A 0%, #CFAF4D 100%);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --maxw: 1180px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+@media(max-width:720px){.wrap{padding:0 20px;}}
+
+.eyebrow{
+  font-family:'Space Grotesk',monospace;
+  font-size:12px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:500;
+}
+h1,h2,h3{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  letter-spacing:0.005em;
+  margin:0;
+  color:var(--white);
+}
+.num{font-family:'Space Grotesk',monospace; font-weight:600;}
+
+::selection{background:var(--glow); color:var(--gold-bright);}
+:focus-visible{outline:2px solid var(--gold-bright); outline-offset:3px; border-radius:6px;}
+
+/* button */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:15px 30px;
+  border-radius:999px;
+  font-family:'Inter',sans-serif; font-size:14.5px; font-weight:600;
+  letter-spacing:0.01em;
+  cursor:pointer;
+  border:none;
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease), filter .25s var(--ease);
+}
+.btn-primary{
+  background:var(--grad-btn);
+  color:#1A1300;
+  box-shadow:0 8px 24px -8px var(--glow);
+}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 30px -8px rgba(212,175,55,0.45);}
+.btn-secondary{
+  background:transparent;
+  color:var(--white);
+  border:1px solid var(--line);
+}
+.btn-secondary:hover{border-color:var(--gold); color:var(--gold-bright); transform:translateY(-2px);}
+.btn:active{transform:scale(.97);}
+
+/* ============ NAV ============ */
+header.nav{
+  position:fixed; top:0; left:0; right:0; z-index:60;
+  backdrop-filter:blur(16px) saturate(140%);
+  background:rgba(11,11,13,0.55);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--maxw); margin:0 auto; padding:16px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo{
+  font-family:'Cormorant Garamond',serif; font-size:23px; letter-spacing:0.06em;
+  display:flex; align-items:center; gap:8px;
+}
+.logo .mark{width:20px;height:20px;}
+.nav-links{display:flex; gap:34px; align-items:center;}
+.nav-links a{font-size:14px; color:var(--gray); transition:color .2s;}
+.nav-links a:hover{color:var(--gold-bright);}
+.nav-cta{display:flex; align-items:center; gap:14px;}
+.nav-cta .btn{padding:10px 22px; font-size:13.5px;}
+.nav-toggle{display:none; background:none; border:none; color:var(--white); padding:6px;}
+@media(max-width:880px){
+  .nav-links{display:none;}
+  .nav-toggle{display:block;}
+}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex; align-items:center;
+  padding-top:120px; padding-bottom:60px;
+  overflow:hidden;
+}
+.hero-bg-glow{
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 38%, rgba(212,175,55,0.16), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212,175,55,0.06), transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative; z-index:2;
+  max-width:var(--maxw); margin:0 auto; padding:0 28px;
+  display:grid; grid-template-columns:1fr; gap:30px;
+  text-align:center;
+}
+.hero-shield-stage{
+  position:relative;
+  width:100%; max-width:480px; margin:0 auto;
+  aspect-ratio:1/1;
+}
+.hero h1{
+  font-size:clamp(40px,6.4vw,72px);
+  line-height:1.06;
+  font-weight:500;
+}
+.hero h1 em{font-style:italic; color:var(--gold-bright); font-weight:500;}
+.hero p.sub{
+  max-width:540px; margin:18px auto 0;
+  color:var(--gray); font-size:17px; line-height:1.6;
+}
+.hero-ctas{display:flex; gap:16px; justify-content:center; margin-top:8px; flex-wrap:wrap;}
+.hero-eyebrow{display:flex; justify-content:center; gap:10px; align-items:center;}
+.hero-eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+
+@media(min-width:980px){
+  .hero-inner{grid-template-columns: 1.05fr 0.95fr; text-align:left; align-items:center;}
+  .hero h1, .hero p.sub, .hero-ctas, .hero-eyebrow{text-align:left; margin-left:0;}
+  .hero-ctas{justify-content:flex-start;}
+  .hero-eyebrow{justify-content:flex-start;}
+  .hero-shield-stage{order:2; max-width:560px;}
+}
+
+/* shield svg layers */
+.shield-rotor{
+  position:absolute; inset:0;
+  transform-origin:50% 50%;
+}
+.shield-charge{
+  position:absolute; inset:0;
+  animation: chargeCycle 4.2s ease-in-out infinite;
+  transform-origin:50% 50%;
+  will-change: filter, transform;
+}
+@keyframes chargeCycle{
+  0%   { filter:brightness(0.82) saturate(0.88); transform:scale(0.982); }
+  38%  { filter:brightness(1.05) saturate(1.05); transform:scale(1.0); }
+  52%  { filter:brightness(1.55) saturate(1.3) drop-shadow(0 0 28px rgba(247,215,116,0.65)); transform:scale(1.035); }
+  62%  { filter:brightness(1.15) saturate(1.1); transform:scale(1.01); }
+  100% { filter:brightness(0.82) saturate(0.88); transform:scale(0.982); }
+}
+.discharge-flash{
+  position:absolute; inset:0; border-radius:50%;
+  background:radial-gradient(circle, rgba(247,215,116,0.55), transparent 65%);
+  opacity:0;
+  animation: dischargeFlash 4.2s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes dischargeFlash{
+  0%,42%{ opacity:0; transform:scale(0.8); }
+  52%{ opacity:0.9; transform:scale(1.15); }
+  64%{ opacity:0; transform:scale(1.4); }
+  100%{ opacity:0; transform:scale(0.8); }
+}
+.shield-tilt{
+  position:absolute; inset:0;
+  transition:transform .5s var(--ease);
+  transform-style:preserve-3d;
+}
+.pulse-ring{
+  position:absolute; inset:0;
+  border-radius:50%;
+  border:1.5px solid var(--glow);
+  opacity:0;
+  animation:pulseRing 4.2s var(--ease) infinite;
+}
+.pulse-ring.r2{animation-delay:1.4s;}
+.pulse-ring.r3{animation-delay:2.8s;}
+@keyframes pulseRing{
+  0%{ transform:scale(0.66); opacity:0; border-color:rgba(212,175,55,0.2); }
+  35%{ opacity:0.75; border-color:rgba(247,215,116,0.7); }
+  70%{ transform:scale(1.3); opacity:0; }
+  100%{ opacity:0; transform:scale(1.3); }
+}
+.particle{
+  position:absolute; width:3px; height:3px; border-radius:50%;
+  background:var(--gold-bright);
+  box-shadow:0 0 7px 2px var(--gold-bright);
+  opacity:0.85;
+  animation: flyParticle var(--pdur,7s) ease-in-out infinite;
+  animation-delay: var(--pdelay,0s);
+}
+@keyframes flyParticle{
+  0%   { transform:translate(0,0) scale(0.5); opacity:0.25; }
+  20%  { transform:translate(var(--dx1,18px), var(--dy1,-22px)) scale(1.1); opacity:1; }
+  45%  { transform:translate(var(--dx2,-14px), var(--dy2,16px)) scale(0.7); opacity:0.5; }
+  68%  { transform:translate(var(--dx3,24px), var(--dy3,10px)) scale(1.3); opacity:1; }
+  86%  { transform:translate(var(--dx4,-10px), var(--dy4,-18px)) scale(0.8); opacity:0.6; }
+  100% { transform:translate(0,0) scale(0.5); opacity:0.25; }
+}
+
+/* ============ GOLD PRICE TICKER (sticky) ============ */
+.price-bar{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+  z-index:55;
+  background:rgba(21,21,21,0.72);
+  border:1px solid var(--line);
+  backdrop-filter:blur(18px) saturate(150%);
+  border-radius:999px;
+  padding:10px 10px 10px 18px;
+  display:flex; align-items:center; gap:16px;
+  box-shadow:0 16px 40px -16px rgba(0,0,0,0.6);
+  max-width:92vw;
+  transition:opacity .4s, transform .4s;
+}
+.price-bar .seg{display:flex; align-items:baseline; gap:6px; white-space:nowrap;}
+.price-bar .seg .lbl{font-size:11px; color:var(--gray-dim); letter-spacing:0.05em; text-transform:uppercase;}
+.price-bar .seg .val{font-family:'Space Grotesk',monospace; font-size:15px; font-weight:600; color:var(--gold-bright);}
+.price-bar .seg .chg{font-size:11.5px; font-weight:600;}
+.price-bar .chg.up{color:#8FBF7A;}
+.price-bar .divider{width:1px; height:22px; background:var(--line);}
+.price-bar .refresh-dot{
+  width:7px;height:7px;border-radius:50%; background:var(--gold);
+  animation:shimmerDot 2.4s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes shimmerDot{0%,100%{opacity:0.35;} 50%{opacity:1; box-shadow:0 0 8px 2px var(--glow);}}
+.price-bar .bar-cta{
+  background:var(--grad-btn); color:#1A1300; font-weight:700; font-size:12.5px;
+  padding:9px 18px; border-radius:999px; border:none; cursor:pointer;
+}
+@media(max-width:640px){
+  .price-bar{ width:94vw; justify-content:space-between; padding:10px 12px; gap:10px;}
+  .price-bar .bar-cta{display:none;}
+}
+
+/* ============ GENERIC SECTION ============ */
+section{padding:120px 0; position:relative;}
+@media(max-width:780px){section{padding:80px 0;}}
+.section-head{max-width:680px; margin-bottom:64px;}
+.section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+.section-head h2{font-size:clamp(30px,4vw,46px); margin-top:14px; line-height:1.16;}
+.section-head p{color:var(--gray); font-size:16px; margin-top:14px; line-height:1.6;}
+.divider-line{height:1px; background:var(--line); width:100%; margin:0 auto;}
+
+/* reveal on scroll */
+.reveal{opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease);}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+/* ============ COMPARISON ============ */
+.compare-table{
+  border-radius:var(--radius-lg);
+  background:var(--surface);
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+.compare-row{
+  display:grid; grid-template-columns:1.2fr 1fr 1fr;
+  padding:18px 28px;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+}
+.compare-row:last-child{border-bottom:none;}
+.compare-row.head{background:var(--surface-2); font-family:'Space Grotesk',monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray-dim);}
+.compare-row .lab{color:var(--gray); font-size:14.5px;}
+.compare-row .trad{color:var(--gray-dim); font-size:14.5px;}
+.compare-row .ours{color:var(--gold-bright); font-size:14.5px; font-weight:600; display:flex; align-items:center; gap:8px;}
+.compare-row .ours svg{width:14px;height:14px; flex-shrink:0;}
+@media(max-width:640px){
+  .compare-row{grid-template-columns:1fr 1fr; padding:16px 16px; row-gap:6px;}
+  .compare-row .lab{grid-column:1/-1; font-weight:600; color:var(--white); font-size:13.5px; margin-bottom:2px;}
+}
+
+/* ============ COINS ============ */
+.coin-strip{display:flex; gap:14px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;}
+.coin-strip::-webkit-scrollbar{display:none;}
+.coin-chip{
+  flex-shrink:0; padding:10px 20px; border-radius:999px; border:1px solid var(--line);
+  font-family:'Space Grotesk',monospace; font-size:14px; color:var(--gray); cursor:pointer;
+  transition:.25s var(--ease);
+}
+.coin-chip.active{ background:var(--grad-btn); color:#1A1300; border-color:transparent; font-weight:600;}
+.coin-display{
+  margin-top:48px; display:grid; grid-template-columns:1fr; gap:48px; align-items:center;
+}
+@media(min-width:880px){.coin-display{grid-template-columns:0.8fr 1fr;}}
+.coin-visual{position:relative; width:100%; max-width:320px; margin:0 auto; aspect-ratio:1/1;}
+.coin-disc{
+  position:absolute; inset:0; border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 28%, var(--gold-bright), var(--gold) 45%, var(--gold-muted) 100%);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.35), 0 30px 60px -20px rgba(212,175,55,0.35);
+  animation:coinSpin 7s linear infinite;
+}
+@keyframes coinSpin{ 0%{transform:rotateY(0);} 100%{transform:rotateY(360deg);} }
+.coin-disc .ring{
+  position:absolute; inset:14px; border-radius:50%;
+  border:2px dashed rgba(11,11,13,0.35);
+}
+.coin-disc .center-mark{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-size:15px; color:rgba(11,11,13,0.6); letter-spacing:0.1em;
+}
+.coin-feats{display:flex; flex-direction:column; gap:18px;}
+.coin-feat{display:flex; gap:14px; align-items:flex-start;}
+.coin-feat svg{width:20px;height:20px; flex-shrink:0; margin-top:2px; color:var(--gold);}
+.coin-feat .t{font-size:15px; font-weight:600; color:var(--white);}
+.coin-feat .d{font-size:13.5px; color:var(--gray-dim); margin-top:2px;}
+
+/* ============ COLLECTIONS ============ */
+.collection-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
+}
+@media(max-width:980px){.collection-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:680px){.collection-grid{grid-template-columns:repeat(2,1fr);}}
+.collection-card{
+  position:relative; border-radius:var(--radius-md);
+  background:linear-gradient(160deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line);
+  padding:26px 20px;
+  aspect-ratio:1/1.05;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  cursor:pointer;
+  transition:transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+  overflow:hidden;
+}
+.collection-card::before{
+  content:''; position:absolute; top:18px; right:18px; width:34px; height:34px;
+  border-radius:50%; background:radial-gradient(circle, var(--glow), transparent 70%);
+  opacity:0; transition:opacity .35s;
+}
+.collection-card:hover{transform:translateY(-6px); border-color:var(--gold-muted); box-shadow:0 18px 40px -22px var(--glow);}
+.collection-card:hover::before{opacity:1;}
+.collection-card .ic{font-size:30px; margin-bottom:14px; opacity:0.9;}
+.collection-card .name{font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--white);}
+
+/* ============ CUSTOM CHAT ============ */
+.chat-shell{
+  border-radius:var(--radius-lg);
+  background:rgba(21,21,21,0.6);
+  border:1px solid var(--line);
+  backdrop-filter:blur(20px);
+  padding:10px;
+  max-width:680px; margin:0 auto;
+}
+.chat-window{
+  min-height:220px; padding:24px; display:flex; flex-direction:column; gap:14px;
+}
+.chat-bubble{
+  align-self:flex-start; max-width:78%;
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:16px; padding:12px 16px; font-size:14.5px; color:var(--gray);
+  opacity:0; transform:translateY(10px);
+  animation:bubbleIn .5s var(--ease) forwards;
+}
+.chat-bubble.me{align-self:flex-end; background:linear-gradient(160deg, rgba(212,175,55,0.18), rgba(212,175,55,0.05)); border-color:var(--gold-muted); color:var(--white);}
+@keyframes bubbleIn{to{opacity:1; transform:translateY(0);}}
+.chat-examples{display:flex; flex-wrap:wrap; gap:8px; padding:0 24px 16px;}
+.chat-example{
+  font-size:12.5px; color:var(--gray-dim); border:1px solid var(--line); border-radius:999px;
+  padding:7px 14px; cursor:pointer; transition:.2s;
+}
+.chat-example:hover{color:var(--gold-bright); border-color:var(--gold-muted);}
+.chat-input-row{
+  display:flex; align-items:center; gap:10px;
+  background:var(--surface); border:1px solid var(--line); border-radius:999px;
+  padding:8px 8px 8px 20px;
+}
+.chat-input-row input{
+  flex:1; background:none; border:none; color:var(--white); font-size:14.5px; outline:none;
+}
+.chat-input-row input::placeholder{color:var(--gray-dim);}
+.chat-input-row button{
+  background:var(--grad-btn); border:none; color:#1A1300; font-weight:700; font-size:13px;
+  padding:11px 20px; border-radius:999px; cursor:pointer;
+}
+
+/* ============ HORIZONTAL PROCESS ============ */
+.process-track{
+  display:flex; gap:0; overflow-x:auto; padding-bottom:18px; scrollbar-width:none;
+}
+.process-track::-webkit-scrollbar{display:none;}
+.process-step{
+  flex:0 0 168px; display:flex; flex-direction:column; align-items:center; text-align:center;
+  position:relative; padding:0 8px;
+}
+.process-step .ic-circle{
+  width:56px; height:56px; border-radius:50%; background:var(--surface); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:14px;
+  transition:border-color .4s, box-shadow .4s;
+}
+.process-step.active .ic-circle{border-color:var(--gold); box-shadow:0 0 0 6px var(--glow);}
+.process-step .lab{font-size:13px; color:var(--gray); font-weight:500;}
+.process-connector{flex:0 0 40px; height:1px; background:var(--line); align-self:center; margin-top:-30px;}
+@media(max-width:780px){.process-step{flex:0 0 130px;}}
+
+/* ============ WHY CHOOSE ============ */
+.why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+@media(max-width:880px){.why-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.why-grid{grid-template-columns:1fr;}}
+.why-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:30px 26px; transition:border-color .3s, transform .3s;
+}
+.why-card:hover{border-color:var(--gold-muted); transform:translateY(-4px);}
+.why-card .ic{width:38px;height:38px; color:var(--gold); margin-bottom:18px;}
+.why-card .t{font-size:18px; font-weight:600; color:var(--white); margin-bottom:8px; font-family:'Cormorant Garamond',serif;}
+.why-card .d{font-size:14px; color:var(--gray-dim); line-height:1.55;}
+
+/* ============ VERTICAL TIMELINE ============ */
+.vt{position:relative; max-width:640px; margin:0 auto; padding-left:36px;}
+.vt::before{content:''; position:absolute; left:9px; top:6px; bottom:6px; width:1px; background:var(--line);}
+.vt-item{position:relative; padding-bottom:38px;}
+.vt-item:last-child{padding-bottom:0;}
+.vt-item .dot{
+  position:absolute; left:-36px; top:2px; width:19px; height:19px; border-radius:50%;
+  background:var(--surface); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .4s, background .4s;
+}
+.vt-item.done .dot{background:var(--gold); border-color:var(--gold); box-shadow:0 0 12px 2px var(--glow);}
+.vt-item .dot::after{content:''; width:6px; height:6px; border-radius:50%; background:var(--bg); opacity:0;}
+.vt-item.done .dot::after{opacity:1; background:#1A1300;}
+.vt-item .t{font-size:16.5px; font-weight:600; color:var(--white); font-family:'Cormorant Garamond',serif; font-size:19px;}
+.vt-item .d{font-size:13.5px; color:var(--gray-dim); margin-top:3px;}
+
+/* ============ TESTIMONIALS ============ */
+.testi-row{display:flex; gap:18px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none;}
+.testi-row::-webkit-scrollbar{display:none;}
+.testi-card{
+  flex:0 0 230px; aspect-ratio:9/15;
+  border-radius:var(--radius-md); background:linear-gradient(160deg, var(--surface-2), var(--surface));
+  border:1px solid var(--line);
+  padding:18px; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
+}
+.testi-card .stars{color:var(--gold); font-size:13px; letter-spacing:2px;}
+.testi-card .quote{font-size:13.5px; color:var(--gray); line-height:1.55;}
+.testi-card .who{font-size:12.5px; color:var(--gray-dim); display:flex; align-items:center; gap:8px;}
+.testi-card .who .av{width:26px;height:26px;border-radius:50%; background:var(--grad-btn); flex-shrink:0;}
+
+/* ============ TRUST ============ */
+.trust-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+@media(max-width:880px){.trust-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:560px){.trust-grid{grid-template-columns:repeat(2,1fr);}}
+.trust-item{
+  border:1px solid var(--line); border-radius:var(--radius-sm); padding:22px 14px;
+  text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.trust-item svg{width:26px;height:26px; color:var(--gold);}
+.trust-item span{font-size:12.5px; color:var(--gray-dim); line-height:1.4;}
+
+/* ============ FAQ ============ */
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:24px 0; cursor:pointer; font-size:17px; font-family:'Cormorant Garamond',serif; color:var(--white);
+}
+.faq-q .plus{font-size:20px; color:var(--gold); transition:transform .3s var(--ease); flex-shrink:0;}
+.faq-item.open .plus{transform:rotate(45deg);}
+.faq-a{max-height:0; overflow:hidden; transition:max-height .4s var(--ease);}
+.faq-a p{padding:0 0 22px; color:var(--gray-dim); font-size:14.5px; line-height:1.6; max-width:620px;}
+
+/* ============ FINAL CTA ============ */
+.final-cta{
+  position:relative; text-align:center; padding:140px 0;
+  overflow:hidden;
+}
+.final-glow{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%);
+  filter:blur(10px);
+  animation:finalPulse 6s ease-in-out infinite;
+}
+@keyframes finalPulse{0%,100%{opacity:0.7; transform:translate(-50%,-50%) scale(1);} 50%{opacity:1; transform:translate(-50%,-50%) scale(1.08);}}
+.final-cta h2{font-size:clamp(32px,5vw,54px); position:relative; z-index:2; max-width:680px; margin:0 auto 30px;}
+.final-cta .btn{position:relative; z-index:2;}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line); padding:64px 0 110px;}
+.foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px;}
+@media(max-width:780px){.foot-grid{grid-template-columns:1fr 1fr;}}
+.foot-col h4{font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-dim); margin-bottom:16px; font-weight:600; font-family:'Inter',sans-serif;}
+.foot-col a{display:block; font-size:14px; color:var(--gray); margin-bottom:10px; transition:color .2s;}
+.foot-col a:hover{color:var(--gold-bright);}
+.foot-bottom{
+  margin-top:50px; padding-top:24px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  font-size:12.5px; color:var(--gray-dim);
+}
+
+/* ============ MOBILE STICKY BOTTOM CTA ============ */
+.mobile-sticky-cta{
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:65;
+  background:rgba(11,11,13,0.85); backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  padding:14px 18px; padding-bottom:max(14px, env(safe-area-inset-bottom));
+}
+@media(max-width:640px){
+  .mobile-sticky-cta{display:block;}
+  .price-bar{bottom:78px;}
+}
+.mobile-sticky-cta .btn{width:100%;}
+
+/* mobile menu */
+.mobile-menu{
+  position:fixed; inset:0; z-index:70; background:rgba(11,11,13,0.97);
+  display:flex; flex-direction:column; padding:90px 32px 32px;
+  transform:translateY(-100%); transition:transform .4s var(--ease);
+}
+.mobile-menu.open{transform:translateY(0);}
+.mobile-menu a{font-size:24px; font-family:'Cormorant Garamond',serif; margin-bottom:24px; color:var(--white);}
+.mobile-menu .close-x{position:absolute; top:24px; right:24px; background:none; border:none; color:var(--white); font-size:24px; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo">
+      <svg class="mark" viewBox="0 0 24 24" fill="none"><path d="M12 2L20 5.5V11C20 16.5 16.5 20.5 12 22C7.5 20.5 4 16.5 4 11V5.5L12 2Z" stroke="#D4AF37" stroke-width="1.4"/></svg>
+      KAVACH
+    </div>
+    <nav class="nav-links">
+      <a href="#coins">Gold Coins</a>
+      <a href="#collections">Collections</a>
+      <a href="#custom">Custom Design</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-secondary" style="display:none" id="dummy"></button>
+      <a class="btn btn-primary" href="#custom" style="display:inline-flex">Start Designing</a>
+      <button class="nav-toggle" id="menuToggle" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6H21M3 12H21M3 18H21" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-x" id="menuClose">✕</button>
+  <a href="#coins">Gold Coins</a>
+  <a href="#collections">Collections</a>
+  <a href="#custom">Custom Design</a>
+  <a href="#process">Process</a>
+  <a href="#faq">FAQ</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow reveal in">
+        <span class="dot"></span>
+        <span class="eyebrow">Inspired by Kavacha — Divine Protection</span>
+      </div>
+      <h1 style="margin-top:18px;">Protect Your Wealth.<br>Wear Your <em>Legacy</em>.</h1>
+      <p class="sub">Custom-crafted gold jewellery and investment-grade gold coins, made after you order — with every gram, every charge, and every step shown to you in real time.</p>
+      <div class="hero-ctas">
+        <a href="#custom" class="btn btn-primary">Start Your Design</a>
+        <a href="#collections" class="btn btn-secondary">Explore Collections</a>
+      </div>
+    </div>
+
+    <div class="hero-shield-stage" id="shieldStage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <div class="discharge-flash"></div>
+      <div class="shield-tilt" id="shieldTilt">
+        <div class="shield-rotor">
+          <div class="shield-charge">
+          <svg viewBox="0 0 400 400" width="100%" height="100%">
+            <defs>
+              <radialGradient id="shieldGlow" cx="50%" cy="38%" r="68%">
+                <stop offset="0%" stop-color="#F7D774"/>
+                <stop offset="55%" stop-color="#D4AF37"/>
+                <stop offset="100%" stop-color="#9E7C1F"/>
+              </radialGradient>
+              <radialGradient id="sunCore" cx="46%" cy="40%" r="62%">
+                <stop offset="0%" stop-color="#FFFBEA"/>
+                <stop offset="45%" stop-color="#F7D774"/>
+                <stop offset="100%" stop-color="#D4AF37"/>
+              </radialGradient>
+              <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="200" cy="200" r="182" fill="none" stroke="#9E7C1F" stroke-width="1" opacity="0.25"/>
+            <g filter="url(#softGlow)">
+              <circle cx="200" cy="200" r="168" fill="url(#shieldGlow)" stroke="#F7D774" stroke-width="2" opacity="0.97"/>
+            </g>
+            <circle cx="200" cy="200" r="168" fill="none" stroke="#0B0B0D" stroke-width="1" opacity="0.3"/>
+            <circle cx="200" cy="200" r="142" fill="#151515" stroke="#F7D774" stroke-width="1" opacity="0.96"/>
+            <circle cx="200" cy="200" r="116" fill="#D4AF37" stroke="#0B0B0D" stroke-width="1" opacity="0.95"/>
+            <circle cx="200" cy="200" r="90" fill="#151515" stroke="#F7D774" stroke-width="1" opacity="0.96"/>
+            <circle cx="200" cy="200" r="64" fill="#1B1B1D" stroke="#9E7C1F" stroke-width="1" opacity="0.9"/>
+            <g id="sunSpikes"></g>
+            <circle cx="200" cy="200" r="40" fill="url(#sunCore)" stroke="#0B0B0D" stroke-width="1.4" opacity="0.98"/>
+            <circle cx="200" cy="200" r="40" fill="none" stroke="#F7D774" stroke-width="1" opacity="0.65"/>
+            <circle cx="200" cy="200" r="14" fill="#0B0B0D" opacity="0.5"/>
+            <circle cx="200" cy="200" r="9" fill="#FFFBEA"/>
+          </svg>
+          </div>
+        </div>
+      </div>
+      <!-- flying gold particles -->
+      <div class="particle" style="top:18%; left:12%; --pdur:6.5s; --pdelay:0s; --dx1:30px; --dy1:-34px; --dx2:-20px; --dy2:18px; --dx3:36px; --dy3:14px; --dx4:-16px; --dy4:-22px;"></div>
+      <div class="particle" style="top:70%; left:85%; --pdur:7.8s; --pdelay:0.6s; --dx1:-28px; --dy1:-30px; --dx2:18px; --dy2:22px; --dx3:-32px; --dy3:8px; --dx4:20px; --dy4:-18px;"></div>
+      <div class="particle" style="top:85%; left:20%; --pdur:6.2s; --pdelay:1.2s; --dx1:24px; --dy1:-28px; --dx2:-22px; --dy2:-16px; --dx3:28px; --dy3:20px; --dx4:-18px; --dy4:14px;"></div>
+      <div class="particle" style="top:10%; left:80%; --pdur:8.4s; --pdelay:1.8s; --dx1:-26px; --dy1:24px; --dx2:20px; --dy2:-20px; --dx3:-30px; --dy3:-12px; --dx4:22px; --dy4:18px;"></div>
+      <div class="particle" style="top:50%; left:5%; --pdur:7s; --pdelay:0.9s; --dx1:32px; --dy1:16px; --dx2:-18px; --dy2:-24px; --dx3:26px; --dy3:-14px; --dx4:-24px; --dy4:20px;"></div>
+      <div class="particle" style="top:40%; left:92%; --pdur:6.8s; --pdelay:2.4s; --dx1:-30px; --dy1:-18px; --dx2:22px; --dy2:24px; --dx3:-20px; --dy3:-26px; --dx4:18px; --dy4:16px;"></div>
+      <div class="particle" style="top:5%; left:45%; --pdur:7.4s; --pdelay:0.3s; --dx1:18px; --dy1:-30px; --dx2:-26px; --dy2:14px; --dx3:22px; --dy3:26px; --dx4:-20px; --dy4:-16px;"></div>
+      <div class="particle" style="top:95%; left:55%; --pdur:8s; --pdelay:1.5s; --dx1:-22px; --dy1:20px; --dx2:28px; --dy2:-18px; --dx3:-24px; --dy3:18px; --dx4:20px; --dy4:-22px;"></div>
+      <div class="particle" style="top:60%; left:48%; --pdur:5.6s; --pdelay:0.5s; --dx1:14px; --dy1:-18px; --dx2:-16px; --dy2:14px; --dx3:18px; --dy3:16px; --dx4:-14px; --dy4:-12px;"></div>
+      <div class="particle" style="top:30%; left:50%; --pdur:6s; --pdelay:2s; --dx1:-16px; --dy1:-14px; --dx2:14px; --dy2:18px; --dx3:-18px; --dy3:12px; --dx4:16px; --dy4:-16px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STICKY PRICE BAR ============ -->
+<div class="price-bar" id="priceBar">
+  <div class="seg"><span class="lbl">22K/g</span><span class="val num" id="p22">₹6,412</span></div>
+  <div class="divider"></div>
+  <div class="seg"><span class="lbl">24K/g</span><span class="val num" id="p24">₹6,994</span></div>
+  <div class="divider"></div>
+  <div class="seg"><span class="refresh-dot"></span><span class="chg up num" id="pchg">+0.4%</span></div>
+  <a href="#coins" class="bar-cta">Buy Coins</a>
+</div>
+
+<!-- ============ COMPARISON ============ -->
+<section id="transparency">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Transparency, Not Tradition</span>
+      <h2>Know Exactly What You're Paying For.</h2>
+      <p>No hidden charges. No vague "wastage." Just gold rate, an honest making charge, and a price that updates with the market — live.</p>
+    </div>
+    <div class="compare-table reveal">
+      <div class="compare-row head">
+        <div>Factor</div><div>Traditional Shop</div><div>Kavach</div>
+      </div>
+      <div class="compare-row"><div class="lab">Gold Rate</div><div class="trad">Marked up, opaque</div><div class="ours">✓ Live market rate</div></div>
+      <div class="compare-row"><div class="lab">Making Charge</div><div class="trad">8–25%, negotiable</div><div class="ours">✓ Flat, shown upfront</div></div>
+      <div class="compare-row"><div class="lab">Hidden Charges</div><div class="trad">Common</div><div class="ours">✓ None, ever</div></div>
+      <div class="compare-row"><div class="lab">Wastage</div><div class="trad">5–12% "loss"</div><div class="ours">✓ Not charged</div></div>
+      <div class="compare-row"><div class="lab">Customisation</div><div class="trad">Limited stock designs</div><div class="ours">✓ Fully bespoke</div></div>
+      <div class="compare-row"><div class="lab">Manufactured</div><div class="trad">Pre-made inventory</div><div class="ours">✓ After your order</div></div>
+      <div class="compare-row"><div class="lab">Price Lock</div><div class="trad">Rarely offered</div><div class="ours">✓ Lock today's rate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GOLD COINS ============ -->
+<section id="coins">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Investment Grade</span>
+      <h2>Gold You Can Hold, Pass Down, or Cash In.</h2>
+      <p>999.9 purity, BIS hallmarked, sealed in tamper-proof packaging — sized for every kind of saver.</p>
+    </div>
+    <div class="coin-strip reveal" id="coinStrip">
+      <button class="coin-chip active">1g</button>
+      <button class="coin-chip">2g</button>
+      <button class="coin-chip">5g</button>
+      <button class="coin-chip">10g</button>
+      <button class="coin-chip">20g</button>
+      <button class="coin-chip">50g</button>
+      <button class="coin-chip">100g</button>
+    </div>
+    <div class="coin-display reveal">
+      <div class="coin-visual">
+        <div class="coin-disc">
+          <div class="ring"></div>
+          <div class="center-mark" id="coinLabel">999.9 · 1g</div>
+        </div>
+      </div>
+      <div class="coin-feats">
+        <div class="coin-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2L20 6V12C20 17 16.5 20.5 12 22C7.5 20.5 4 17 4 12V6L12 2Z"/></svg>
+          <div><div class="t">999.9 Purity</div><div class="d">Refined and certified to the highest investment-grade standard.</div></div>
+        </div>
+        <div class="coin-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          <div><div class="t">BIS Hallmarked</div><div class="d">Every coin independently verified and stamped for purity.</div></div>
+        </div>
+        <div class="coin-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M8 8V6a4 4 0 018 0v2"/></svg>
+          <div><div class="t">Secure Packaging</div><div class="d">Tamper-evident sealing with a unique traceable ID per coin.</div></div>
+        </div>
+        <div class="coin-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 17l6-6 4 4 8-8"/></svg>
+          <div><div class="t">Investment Grade</div><div class="d">Built to hold value — easy to track, easy to liquidate.</div></div>
+        </div>
+        <a href="#" class="btn btn-primary" style="margin-top:10px; align-self:flex-start;">Buy Gold Coins</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLLECTIONS ============ -->
+<section id="collections">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Collections</span>
+      <h2>Jewellery Made for the Wearer, Not the Shelf.</h2>
+    </div>
+    <div class="collection-grid reveal" id="collectionGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ CUSTOM DESIGN ============ -->
+<section id="custom">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Bespoke, by AI and by Hand</span>
+      <h2>Imagine It. We'll Craft It.</h2>
+      <p>Describe what you want in plain words. Our design studio turns it into a real, wearable piece — yours alone.</p>
+    </div>
+    <div class="chat-shell reveal">
+      <div class="chat-window" id="chatWindow">
+        <div class="chat-bubble">Describe your dream jewellery...</div>
+      </div>
+      <div class="chat-examples">
+        <span class="chat-example" data-msg="Design a lotus ring with my initials.">Design a lotus ring with my initials.</span>
+        <span class="chat-example" data-msg="Make a peacock necklace under ₹2 lakh.">Make a peacock necklace under ₹2 lakh.</span>
+        <span class="chat-example" data-msg="Convert my sketch into a real necklace.">Convert my sketch into a real necklace.</span>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Describe your dream jewellery...">
+        <button id="chatSend">Generate Design</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section id="process">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">From Idea to Heirloom</span>
+      <h2>Eight Steps. Total Visibility.</h2>
+    </div>
+    <div class="process-track reveal" id="processTrack">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE ============ -->
+<section id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why Kavach</span>
+      <h2>Built Like It's Meant to Outlast Us.</h2>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2l8 4v6c0 5.5-3.5 9.5-8 11-4.5-1.5-8-5.5-8-11V6l8-4z"/></svg>
+        <div class="t">Made After Order</div>
+        <div class="d">No inventory pushed on you — every piece is crafted once you confirm the design.</div>
+      </div>
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 12h18M12 3v18"/><circle cx="12" cy="12" r="9"/></svg>
+        <div class="t">Transparent Pricing</div>
+        <div class="d">Live gold rate plus one flat making charge. That's the entire bill.</div>
+      </div>
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        <div class="t">BIS Hallmarked</div>
+        <div class="d">Every piece independently certified for purity, no exceptions.</div>
+      </div>
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0110 0v3"/></svg>
+        <div class="t">Secure Delivery</div>
+        <div class="d">Fully insured, tracked shipping from our workshop to your door.</div>
+      </div>
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M20 21c0-4-3.5-6-8-6s-8 2-8 6"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="t">Lifetime Support</div>
+        <div class="d">Free cleaning, resizing checks, and care guidance for as long as you own it.</div>
+      </div>
+      <div class="why-card">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 4h16v4H4zM6 8v12h12V8M9 12h6"/></svg>
+        <div class="t">Trusted Manufacturing</div>
+        <div class="d">Decades of craft, now visible to you at every single stage.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANUFACTURING TIMELINE ============ -->
+<section id="manufacturing">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Manufacturing Transparency</span>
+      <h2>Watch Your Piece Come to Life.</h2>
+    </div>
+    <div class="vt reveal" id="vtTimeline">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="stories">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Customer Stories</span>
+      <h2>Worn, Loved, Passed Down.</h2>
+    </div>
+    <div class="testi-row reveal" id="testiRow">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section id="trust">
+  <div class="wrap">
+    <div class="trust-grid reveal">
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span>BIS Hallmarked</span></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2l8 4v6c0 5.5-3.5 9.5-8 11-4.5-1.5-8-5.5-8-11V6l8-4z"/></svg><span>Certified Purity</span></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><span>Secure Payments</span></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg><span>Insured Shipping</span></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>100% Transparent Pricing</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap" style="max-width:760px;">
+    <div class="section-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Everything You're Wondering.</h2>
+    </div>
+    <div class="reveal" id="faqList">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta">
+  <div class="final-glow"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <span class="eyebrow">Your Legacy Starts Here</span>
+    <h2 style="margin-top:16px;">Create Jewellery Worth Passing Down.</h2>
+    <a href="#custom" class="btn btn-primary">Start Designing</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="logo" style="margin-bottom:14px;">
+          <svg class="mark" viewBox="0 0 24 24" fill="none"><path d="M12 2L20 5.5V11C20 16.5 16.5 20.5 12 22C7.5 20.5 4 16.5 4 11V5.5L12 2Z" stroke="#D4AF37" stroke-width="1.4"/></svg>
+          KAVACH
+        </div>
+        <p style="font-size:13.5px; color:var(--gray-dim); max-width:240px; line-height:1.6;">Gold, crafted as protection — transparent, bespoke, and built to last generations.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="#collections">Collections</a>
+        <a href="#coins">Gold Coins</a>
+        <a href="#custom">Custom Design</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#why">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Connect</h4>
+        <a href="#">Instagram</a>
+        <a href="#">WhatsApp</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Kavach. All rights reserved.</span>
+      <span>Gold rates update live, Mon–Sun, 9am–9pm IST.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MOBILE STICKY CTA ============ -->
+<div class="mobile-sticky-cta">
+  <a href="#custom" class="btn btn-primary">Start Your Design</a>
+</div>
+
+<script>
+/* ---------- Build sun emblem spikes ---------- */
+(function buildSunEmblem(){
+  const cx = 200, cy = 200;
+  const NS = 'http://www.w3.org/2000/svg';
+  const spikesG = document.getElementById('sunSpikes');
+  if(!spikesG) return;
+  const spikeCount = 14;
+  const r1 = 42, r2 = 60;
+  for(let i=0;i<spikeCount;i++){
+    const a = (i/spikeCount)*Math.PI*2;
+    const aw = (Math.PI*2/spikeCount)*0.28;
+    const x1 = cx + Math.cos(a-aw)*r1, y1 = cy + Math.sin(a-aw)*r1;
+    const x2 = cx + Math.cos(a)*r2,   y2 = cy + Math.sin(a)*r2;
+    const x3 = cx + Math.cos(a+aw)*r1, y3 = cy + Math.sin(a+aw)*r1;
+    const tri = document.createElementNS(NS,'path');
+    tri.setAttribute('d', `M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)} L${x3.toFixed(1)} ${y3.toFixed(1)} Z`);
+    tri.setAttribute('fill', i % 2 === 0 ? '#F7D774' : '#D4AF37');
+    tri.setAttribute('opacity', '0.92');
+    spikesG.appendChild(tri);
+  }
+})();
+
+
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const mobileMenu = document.getElementById('mobileMenu');
+menuToggle.addEventListener('click', ()=> mobileMenu.classList.add('open'));
+menuClose.addEventListener('click', ()=> mobileMenu.classList.remove('open'));
+mobileMenu.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
+
+/* ---------- Scroll reveal ---------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.15});
+revealEls.forEach(el=> io.observe(el));
+
+/* ---------- Hero shield mouse tilt ---------- */
+const stage = document.getElementById('shieldStage');
+const tilt = document.getElementById('shieldTilt');
+if(window.matchMedia('(pointer: fine)').matches){
+  stage.addEventListener('mousemove', (e)=>{
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width - 0.5;
+    const y = (e.clientY - r.top)/r.height - 0.5;
+    tilt.style.transform = `rotateY(${x*14}deg) rotateX(${-y*14}deg)`;
+  });
+  stage.addEventListener('mouseleave', ()=>{ tilt.style.transform = 'rotateY(0) rotateX(0)'; });
+}
+
+/* ---------- Gold price ticker (simulated) ---------- */
+let base22 = 6412, base24 = 6994;
+function shimmer(el){
+  el.style.transition='color .25s';
+  el.style.color = 'var(--white)';
+  setTimeout(()=>{ el.style.color = ''; }, 350);
+}
+function updatePrice(){
+  const drift = (Math.random()-0.45)*6;
+  base22 = Math.max(6000, base22+drift);
+  base24 = Math.max(6500, base24+drift*1.09);
+  document.getElementById('p22').textContent = '₹'+Math.round(base22).toLocaleString('en-IN');
+  document.getElementById('p24').textContent = '₹'+Math.round(base24).toLocaleString('en-IN');
+  const chg = document.getElementById('pchg');
+  const pct = (drift/60).toFixed(2);
+  chg.textContent = (drift>=0?'+':'')+pct+'%';
+  chg.className = 'chg num ' + (drift>=0?'up':'down');
+  shimmer(document.getElementById('p22'));
+  shimmer(document.getElementById('p24'));
+}
+setInterval(updatePrice, 6000);
+
+/* hide price bar near footer to avoid overlap on small screens */
+const priceBar = document.getElementById('priceBar');
+const footerEl = document.querySelector('footer');
+const footIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    priceBar.style.opacity = e.isIntersecting ? '0' : '1';
+    priceBar.style.transform = e.isIntersecting ? 'translateX(-50%) translateY(20px)' : 'translateX(-50%)';
+  });
+},{threshold:0.05});
+footIO.observe(footerEl);
+
+/* ---------- Coin selector ---------- */
+const coinChips = document.querySelectorAll('.coin-chip');
+const coinLabel = document.getElementById('coinLabel');
+coinChips.forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    coinChips.forEach(c=> c.classList.remove('active'));
+    chip.classList.add('active');
+    coinLabel.textContent = '999.9 · ' + chip.textContent;
+  });
+});
+
+/* ---------- Collections grid ---------- */
+const collections = [
+  ['💍','Rings'], ['⛓️','Chains'], ['📿','Necklaces'], ['⭕','Bangles'],
+  ['✨','Bracelets'], ['🔱','Pendants'], ['🪔','Mangalsutra'], ['💎','Earrings'], ['👰','Bridal']
+];
+document.getElementById('collectionGrid').innerHTML = collections.map(c=>`
+  <div class="collection-card">
+    <div class="ic">${c[0]}</div>
+    <div class="name">${c[1]}</div>
+  </div>
+`).join('');
+
+/* ---------- Process track ---------- */
+const steps = ['Choose Design','AI Preview','CAD Design','Approval','Manufacturing','Hallmarking','Quality Check','Delivery'];
+const icons = ['✏️','🖼️','📐','✅','🔨','🛡️','🔍','📦'];
+const trackHTML = steps.map((s,i)=> `
+  <div class="process-step" data-i="${i}">
+    <div class="ic-circle">${icons[i]}</div>
+    <div class="lab">${s}</div>
+  </div>
+  ${i<steps.length-1 ? '<div class="process-connector"></div>' : ''}
+`).join('');
+document.getElementById('processTrack').innerHTML = trackHTML;
+const procSteps = document.querySelectorAll('.process-step');
+const procIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('active'); });
+},{threshold:0.6});
+procSteps.forEach(s=> procIO.observe(s));
+
+/* ---------- Vertical manufacturing timeline ---------- */
+const vtSteps = [
+  ['Order Received','Your design and payment are confirmed.'],
+  ['Gold Purchased','Raw gold sourced at the locked-in rate.'],
+  ['CAD Ready','Your design finalized into a precise 3D model.'],
+  ['Casting','Molten gold shaped into your piece.'],
+  ['Stone Setting','Stones, if any, set by hand.'],
+  ['Polishing','Surface finished to a mirror shine.'],
+  ['Hallmarking','Independently certified for purity.'],
+  ['Packaging','Sealed securely for transit.'],
+  ['Shipping','On its way, fully insured.']
+];
+document.getElementById('vtTimeline').innerHTML = vtSteps.map((s,i)=>`
+  <div class="vt-item" data-i="${i}">
+    <div class="dot"></div>
+    <div class="t">${s[0]}</div>
+    <div class="d">${s[1]}</div>
+  </div>
+`).join('');
+const vtItems = document.querySelectorAll('.vt-item');
+const vtIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('done'); });
+},{threshold:0.5});
+vtItems.forEach(v=> vtIO.observe(v));
+
+/* ---------- Testimonials ---------- */
+const testimonials = [
+  ['★★★★★','"Got a lotus ring made for my mother — fit perfectly, priced exactly as quoted."','Ananya R.'],
+  ['★★★★★','"Locked the gold rate before manufacturing began. Zero surprises at delivery."','Vikram S.'],
+  ['★★★★★','"My peacock necklace design came out even better than I imagined."','Priya M.'],
+  ['★★★★★','"Bought 10g coins as a gift — hallmark and packaging felt genuinely premium."','Karthik N.'],
+  ['★★★★★','"First time a jeweller showed me every single charge upfront."','Divya K.']
+];
+document.getElementById('testiRow').innerHTML = testimonials.map(t=>`
+  <div class="testi-card">
+    <div class="stars">${t[0]}</div>
+    <div class="quote">${t[1]}</div>
+    <div class="who"><div class="av"></div>${t[2]}</div>
+  </div>
+`).join('');
+
+/* ---------- FAQ ---------- */
+const faqs = [
+  ['How do you calculate price?','Live gold rate for the day, multiplied by weight, plus one flat making charge shown before you confirm — nothing else added.'],
+  ['Can I customise every design?','Yes. Every piece in our catalog and every custom request can be adjusted in metal weight, stone choice, size, and finish.'],
+  ['How long does manufacturing take?','Most pieces are ready in 7–12 working days after design approval, depending on complexity.'],
+  ['Can I lock today\'s gold price?','Yes. Once you approve a design, we lock the gold rate for that order so price changes later don\'t affect you.'],
+  ['What happens if gold price changes?','Once locked, your order price is fixed. If you haven\'t locked yet, pricing reflects the live rate at checkout.']
+];
+document.getElementById('faqList').innerHTML = faqs.map((f,i)=>`
+  <div class="faq-item" data-i="${i}">
+    <div class="faq-q"><span>${f[0]}</span><span class="plus">+</span></div>
+    <div class="faq-a"><p>${f[1]}</p></div>
+  </div>
+`).join('');
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(other=>{
+      other.classList.remove('open');
+      other.querySelector('.faq-a').style.maxHeight = null;
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      a.style.maxHeight = a.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ---------- Custom chat ---------- */
+const chatWindow = document.getElementById('chatWindow');
+const chatInput = document.getElementById('chatInput');
+function addBubble(text, me){
+  const b = document.createElement('div');
+  b.className = 'chat-bubble' + (me ? ' me' : '');
+  b.textContent = text;
+  chatWindow.appendChild(b);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+function handleSend(text){
+  if(!text || !text.trim()) return;
+  addBubble(text, true);
+  chatInput.value = '';
+  setTimeout(()=>{
+    addBubble("Got it — generating a preview of your design now. Our studio will follow up with CAD options shortly.", false);
+  }, 700);
+}
+document.getElementById('chatSend').addEventListener('click', ()=> handleSend(chatInput.value));
+chatInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') handleSend(chatInput.value); });
+document.querySelectorAll('.chat-example').forEach(ex=>{
+  ex.addEventListener('click', ()=> handleSend(ex.dataset.msg));
+});
+</script>
+</body>
+</html>

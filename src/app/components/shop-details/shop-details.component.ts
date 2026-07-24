@@ -8,12 +8,17 @@ import { ShopServicesComponent } from './components/shop-services/shop-services.
 import { ShopTeamComponent } from './components/shop-team/shop-team.component';
 import { ShopReviewsComponent } from './components/shop-reviews/shop-reviews.component';
 import { ShopAboutComponent } from './components/shop-about/shop-about.component';
+import { ShopTrainerComponent } from './components/shop-trainer/shop-trainer.component';
 import { ShopProductsComponent } from './components/shop-products/shop-products.component';
 import { ShopRentalsComponent } from './components/shop-rentals/shop-rentals.component';
 import { ShopMembershipComponent } from './components/shop-membership/shop-membership.component';
 import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { OnboardingWizardComponent } from '../shared/onboarding-wizard/onboarding-wizard.component';
+import { TrialDatePickerDialogComponent } from '../shared/trial-date-picker-dialog/trial-date-picker-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-shop-details',
@@ -28,6 +33,7 @@ import { MatButtonModule } from '@angular/material/button';
     ShopTeamComponent,
     ShopReviewsComponent,
     ShopAboutComponent,
+    ShopTrainerComponent,
     ShopMembershipComponent,
     MatIconModule,
     MatButtonModule
@@ -57,6 +63,62 @@ import { MatButtonModule } from '@angular/material/button';
         </div>
         
         <app-shop-header [shopData]="shopData"></app-shop-header>
+
+        <!-- Programs Section -->
+        <div class="mt-8 mb-4">
+          <h2 class="text-lg font-bold !text-white mb-4 flex items-center gap-2">
+            <mat-icon class="text-violet-400!">fitness_center</mat-icon>
+            Specialized Programs
+          </h2>
+          <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-4 px-4 sm:-mx-6 sm:px-6" [class.justify-center]="programs.length === 1">
+            <div *ngFor="let program of programs" 
+                 (click)="openProgramModal(program)"
+                 class="flex-shrink-0 w-[280px] sm:w-[320px] bg-slate-800/40 border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:border-violet-500/50 hover:scale-[1.02] transition-all duration-300 backdrop-blur-xl group">
+              <!-- Program Image -->
+              <div class="relative h-40 sm:h-44 overflow-hidden">
+                <img [src]="program.image" [alt]="program.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent"></div>
+                <span class="absolute top-3 left-3 bg-black/70 text-white text-[10px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full shadow-lg">
+                  {{program.type}}
+                </span>
+                <span class="absolute bottom-3 left-3 text-violet-200 text-xs">
+                  {{program.duration}}
+                </span>
+              </div>
+              <!-- Program Details -->
+              <div class="p-4 sm:p-5">
+                <h3 class="text-base sm:text-lg font-bold text-white! mb-1! group-hover:text-violet-400 transition-colors">{{program.title}}</h3>
+                <p class="text-slate-400 text-xs sm:text-sm font-medium mb-3 flex items-center gap-1.5">
+                  <span class="inline-block w-1.5 h-1.5 rounded-full bg-violet-400"></span>
+                  {{program.subtitle}}
+                </p>
+                <div class="flex flex-col gap-2 mb-4">
+                  <div *ngFor="let b of program.benefit" class="flex items-center gap-2 bg-violet-500/10 border border-violet-500/15 rounded-xl px-3 py-2">
+                    <mat-icon class="text-violet-400 !text-xs !w-3.5 !h-3.5 flex items-center justify-center">star</mat-icon>
+                    <span class="text-violet-200 text-[14px] sm:text-xs">{{b}}</span>
+                  </div>
+                </div>
+                <!-- Refund Policy -->
+                <div *ngIf="program.refundPolicy" class="mb-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2 flex items-center gap-2">
+                  <span class="text-emerald-300 text-[11px]">{{program.refundPolicy}}</span>
+                </div>
+                <!-- Price Section -->
+                <div class="flex items-end justify-between">
+                  <div>
+                    <span class="text-[9px] text-slate-400 font-semibold block uppercase tracking-wider">Starting at</span>
+                    <div class="flex items-baseline gap-2">
+                      <span class="text-lg sm:text-xl font-extrabold text-emerald-400">₹{{program.price | number}}</span>
+                      <span class="text-xs text-slate-400 line-through">₹{{program.originalPrice | number}}</span>
+                    </div>
+                  </div>
+                  <button class="bg-violet-600 hover:bg-violet-700 text-white rounded-xl px-3.5 py-2 text-[10px] sm:text-xs transition-all shadow-md group-hover:shadow-violet-900/30">
+                    Learn More
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         
         <app-shop-type-toggle 
           [activeType]="activeType"
@@ -68,14 +130,17 @@ import { MatButtonModule } from '@angular/material/button';
 
       <div class="mt-6">
         <ng-container [ngSwitch]="activeType">
-          <app-shop-membership 
+          <app-shop-membership
             *ngSwitchCase="'memberships'"
             [memberships]="shopData.memberships"
             [shopCode]="shopCode"
             [shopName]="shopData.name"
             [hasTrialBooking]="hasTrialBooking"
             [upcomingEvents]="upcomingEvents"
-            [activeMembership]="activeMembership">
+            [activeMembership]="activeMembership"
+            [onboarding]="onboarding"
+            [recommendedPlanId]="recommendedPlanId"
+            (changeGoal)="openOnboarding()">
           </app-shop-membership>
 
           <app-shop-services 
@@ -95,7 +160,9 @@ import { MatButtonModule } from '@angular/material/button';
         </ng-container>
       </div>
 
-        <app-shop-about 
+        <app-shop-trainer (bookSession)="onTrainerBookVisit()"></app-shop-trainer>
+
+        <app-shop-about
           [about]="shopData.about"
           [openingTimes]="shopData.openingTimes"
           [location]="shopData.location"
@@ -126,6 +193,83 @@ import { MatButtonModule } from '@angular/material/button';
         </div>
       </div>
       
+      <!-- Program Details Modal Dialog Overlay -->
+      <div *ngIf="selectedProgram" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+        <div class="bg-slate-900 border border-white/10 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+          <!-- Close Button -->
+          <button (click)="closeProgramModal()" class="absolute top-4 right-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white p-2 rounded-full backdrop-blur-sm transition-all z-10">
+            <mat-icon class="!text-xl !w-5 !h-5 flex items-center justify-center">close</mat-icon>
+          </button>
+
+          <!-- Image Header -->
+          <div class="relative h-56">
+            <img [src]="selectedProgram.image" [alt]="selectedProgram.title" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <span class="bg-black/70 text-white text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-lg">
+                {{selectedProgram.type}}
+              </span>
+              <h3 class="text-xl font-black text-white! mt-3">{{selectedProgram.title}}</h3>
+              <p class="text-slate-300 text-xs font-semibold">{{selectedProgram.subtitle}}</p>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-6 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-slate-800/40 border border-white/5 rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
+                  <mat-icon class="!text-lg !w-5 !h-5 flex items-center justify-center">schedule</mat-icon>
+                </div>
+                <div>
+                  <span class="text-[9px] text-slate-400 block font-semibold uppercase">Duration</span>
+                  <span class="text-xs text-white">{{selectedProgram.duration}}</span>
+                </div>
+              </div>
+              <div class="bg-slate-800/40 border border-white/5 rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                  <mat-icon class="!text-lg !w-5 !h-5 flex items-center justify-center">trending_down</mat-icon>
+                </div>
+                <div class="min-w-0">
+                  <span class="text-[9px] text-slate-400 block font-semibold uppercase">Target Goal</span>
+                  <div class="flex flex-col gap-0.5">
+                    <span class="text-xs text-white block truncate">{{selectedProgram.benefit[0]}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-xs font-bold text-slate-400! uppercase tracking-wider mb-2!">Program Overview</h4>
+              <p class="text-slate-300 text-s leading-relaxed">
+                {{selectedProgram.description || 'This comprehensive, goal-oriented training program is tailored to maximize your fitness results. Conducted by expert trainers, it combines progressive training protocols with targeted guidance to ensure you achieve and maintain your goals safely and efficiently.'}}
+              </p>
+            </div>
+
+            <!-- Refund Policy -->
+            <div *ngIf="selectedProgram.refundPolicy" class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-2 flex  items-center gap-3">
+              <div class="text-xs text-emerald-300 leading-relaxed">
+                {{selectedProgram.refundPolicy}}
+              </div>
+            </div>
+
+            <!-- Pricing & Action -->
+            <div class="flex items-center justify-between pt-4 border-t border-white/5">
+              <div>
+                <span class="text-[9px] text-slate-300 font-semibold block uppercase tracking-wider">Total Investment</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-xl font-black text-emerald-400">₹{{selectedProgram.price | number}}</span>
+                  <span class="text-xs text-slate-300! line-through">₹{{selectedProgram.originalPrice | number}}</span>
+                </div>
+              </div>
+              <button (click)="bookProgram(selectedProgram)" class="px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs transition-all shadow-lg shadow-violet-900/30">
+                Enquire Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div *ngIf="loading" class="flex flex-col items-center justify-center min-h-[60vh] text-slate-400">
         <div class="w-12 h-12 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mb-4"></div>
         <p class="text-lg font-medium">Loading shop details...</p>
@@ -144,6 +288,13 @@ import { MatButtonModule } from '@angular/material/button';
         padding: 16px 12px;
       }
     }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   `]
 })
 export class ShopDetailsComponent implements OnInit {
@@ -151,8 +302,48 @@ export class ShopDetailsComponent implements OnInit {
   private router = inject(Router);
   private shopService = inject(ShopService);
   private authService = inject(AuthService);
+  private dialog = inject(MatDialog);
 
   isLoggedIn = false;
+
+  selectedProgram: any = null;
+  programs = [
+    {
+      id: 'shapeshift',
+      title: 'ShapeShift Program',
+      subtitle: 'Weight Loss',
+      duration: '90 days program',
+      type: 'Group training',
+      benefit: ['Lose up to 15kg', "Build lifelong healthy habits"],
+      price: 24000,
+      originalPrice: 36000,
+      image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop',
+      refundPolicy: "Not satisfied? We'll refund 100% of your program fee.",
+      description: "More than a gym membership ShapeShift is a 90-day transformation system. Train in a small group where everyone shares the same goal, creating motivation and accountability. Follow a personalized diet plan, attend sessions at the same time every day to build discipline, and receive expert guidance throughout your journey. Together, we'll help you lose weight, build healthy habits, and create a lifestyle you can maintain. Only 8 seats available per batch. Please enquire in advance to check availability before planning to join."
+    },
+    // {
+    //   id: 'strength-gain',
+    //   title: 'Iron Core Program',
+    //   subtitle: 'Strength & Muscle Gain',
+    //   duration: '60days program',
+    //   type: 'Personal Coaching',
+    //   benefit: ['gain up to 5kg lean muscle'],
+    //   price: 18000,
+    //   originalPrice: 27000,
+    //   image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop'
+    // },
+    // {
+    //   id: 'yoga-flex',
+    //   title: 'Zen Yoga Program',
+    //   subtitle: 'Flexibility & Mind',
+    //   duration: '30days program',
+    //   type: 'Semi-private Group',
+    //   benefit: ['improve flexibility & posture'],
+    //   price: 12000,
+    //   originalPrice: 18000,
+    //   image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600&auto=format&fit=crop'
+    // }
+  ];
 
   activeType: 'products' | 'services' | 'rentals' | 'memberships' = 'memberships';
   shopCode: string | null = null;
@@ -161,6 +352,11 @@ export class ShopDetailsComponent implements OnInit {
   hasActiveMembership = false;
   activeMembership: any = null;
   upcomingEvents: any[] = [];
+
+  /** Fitness profile collected in the onboarding wizard (from localStorage). */
+  onboarding: any = null;
+  /** Plan whose duration best matches the recommended timeline. */
+  recommendedPlanId: number | null = null;
 
   shopData: any = {
     name: '',
@@ -177,10 +373,21 @@ export class ShopDetailsComponent implements OnInit {
     about: '',
     openingTimes: [],
     products: [],
-    rentals: []
+    rentals: [],
+    phone: ''
   };
 
   ngOnInit() {
+    // Pick up the fitness profile collected during the onboarding wizard.
+    const savedOnboarding = localStorage.getItem('onboardingFitness');
+    if (savedOnboarding) {
+      try {
+        this.onboarding = JSON.parse(savedOnboarding);
+      } catch {
+        this.onboarding = null;
+      }
+    }
+
     this.route.params.subscribe(params => {
       this.shopCode = params['shopCode'];
       if (this.shopCode) {
@@ -190,6 +397,64 @@ export class ShopDetailsComponent implements OnInit {
 
     // Check login status
     this.isLoggedIn = this.authService.checkAuth();
+
+    // No saved goal yet → run the onboarding wizard so we can recommend a plan.
+    if (!this.onboarding) {
+      this.openOnboarding();
+    }
+  }
+
+  /**
+   * Open the onboarding wizard, pre-filled with any saved profile so the user
+   * can change their goal. On finish, persist the new profile and refresh the
+   * recommended plan.
+   */
+  openOnboarding() {
+    const dialogRef = this.dialog.open(OnboardingWizardComponent, {
+      data: { phoneRequired: false, prefill: this.onboarding },
+      disableClose: !this.onboarding, // must complete when nothing is saved yet
+      width: '560px',
+      maxWidth: '95vw'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.fitness) {
+        this.onboarding = result.fitness;
+        localStorage.setItem('onboardingFitness', JSON.stringify(result.fitness));
+        this.computeRecommendedPlan(this.shopData.memberships);
+      }
+    });
+  }
+
+  /** Number of months a plan grants, derived from its first benefit. */
+  private planDurationMonths(plan: any): number {
+    const b = plan.benefits?.[0];
+    if (!b) return 0;
+    if (b.durationUnit === 'MONTH') return b.durationValue || 0;
+    if (b.durationUnit === 'YEAR') return (b.durationValue || 0) * 12;
+    if (b.durationUnit === 'WEEK') return Math.round((b.durationValue || 0) / 4.345);
+    if (b.accessDurationInDays) return Math.max(1, Math.round(b.accessDurationInDays / 30));
+    return 0;
+  }
+
+  /** Pick the plan whose duration best fits the recommended timeline. */
+  private computeRecommendedPlan(plans: any[]) {
+    const months = this.onboarding?.timelineMonths;
+    if (!months || !plans?.length) {
+      this.recommendedPlanId = null;
+      return;
+    }
+    const withDuration = plans.filter(p => p.durationMonths > 0);
+    if (!withDuration.length) {
+      this.recommendedPlanId = null;
+      return;
+    }
+    // Smallest plan that still covers the timeline; else the longest available.
+    const covering = withDuration
+      .filter(p => p.durationMonths >= months)
+      .sort((a, b) => a.durationMonths - b.durationMonths);
+    const longest = [...withDuration].sort((a, b) => b.durationMonths - a.durationMonths)[0];
+    this.recommendedPlanId = (covering[0] ?? longest).id;
   }
 
   fetchShopDetails(code: string) {
@@ -209,23 +474,30 @@ export class ShopDetailsComponent implements OnInit {
             : data.email,
           latitude: data.addressDto?.latitude,
           longitude: data.addressDto?.longitude,
-          memberships: data.membershipPlans?.map((plan: any) => ({
-            id: plan.id,
-            name: plan.name,
-            price: plan.basePrice,
-            description: plan.description,
-            duration: plan.benefits?.[0]?.durationValue ? `${plan.benefits[0].durationValue} ${plan.benefits[0].durationUnit}` : '',
-            benefits: plan.benefits
-          })) || [],
+          memberships: data.membershipPlans?.map((plan: any) => {
+            const durationMonths = this.planDurationMonths(plan);
+            return {
+              id: plan.id,
+              name: plan.name,
+              price: plan.basePrice,
+              description: plan.description,
+              duration: plan.benefits?.[0]?.durationValue ? `${plan.benefits[0].durationValue} ${plan.benefits[0].durationUnit}` : '',
+              durationMonths,
+              pricePerMonth: durationMonths > 0 ? Math.round(plan.basePrice / durationMonths) : plan.basePrice,
+              benefits: plan.benefits
+            };
+          }) || [],
           services: [],
           products: [],
           reviews: [],
           team: [],
           about: `Welcome to ${data.shopCode}. Contact: ${data.phone}`,
           openingTimes: this.formatOpeningTimes(data.shopHours),
-          rentals: []
+          rentals: [],
+          phone: data.phone
         };
 
+        this.computeRecommendedPlan(this.shopData.memberships);
         this.fetchCustomerEvents();
         this.loading = false;
       },
@@ -307,10 +579,155 @@ export class ShopDetailsComponent implements OnInit {
   onContact() {
     console.log('Business Enquiry Contact Clicked');
     // You can add logic here to open a form, WhatsApp, or email
-    window.open('https://wa.me/917871227902', '_blank');
+    const phone = this.getFormattedPhone();
+    window.open(`https://wa.me/${phone}`, '_blank');
+  }
+
+  /**
+   * Trainer CTA handler. If a plan was recommended for the user's timeline,
+   * book a visit for it (same trial flow as the membership cards). Otherwise
+   * fall back to WhatsApp.
+   */
+  onTrainerBookVisit() {
+    const plan = (this.shopData.memberships || []).find(
+      (p: any) => p.id === this.recommendedPlanId
+    );
+    if (plan) {
+      this.bookTrialForPlan(plan);
+    } else {
+      const phone = this.getFormattedPhone();
+      window.open(`https://wa.me/${phone}`, '_blank');
+    }
+  }
+
+  /** Book a trial/visit for the given plan (mirrors ShopMembershipComponent). */
+  private bookTrialForPlan(plan: any) {
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (!currentUserStr) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'Please log in to book a visit.',
+        icon: 'info',
+        confirmButtonText: 'Login',
+        confirmButtonColor: '#7c3aed',
+        showCancelButton: true,
+        background: '#1e293b',
+        color: '#f1f5f9'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+      });
+      return;
+    }
+
+    const currentUser = JSON.parse(currentUserStr);
+    const firebaseUid = currentUser.firebaseUid;
+
+    if (!firebaseUid) {
+      Swal.fire({
+        title: 'Error',
+        text: 'User unique ID not found. Please log in again.',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        background: '#1e293b',
+        color: '#f1f5f9'
+      });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(TrialDatePickerDialogComponent, {
+      width: '90vw',
+      maxWidth: '400px',
+      panelClass: 'trial-date-picker-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(selectedDate => {
+      if (selectedDate) {
+        Swal.fire({
+          title: 'Booking Visit...',
+          text: 'Please wait while we process your request.',
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          background: '#1e293b',
+          color: '#f1f5f9',
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        const utcDate = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()));
+        const payload = {
+          membershipId: plan.id,
+          shopCode: this.shopCode,
+          requestedDate: utcDate.toISOString()
+        };
+
+        this.shopService.bookTrial(plan.id, firebaseUid, payload).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Success!',
+              text: `Visit booked successfully for ${selectedDate.toLocaleDateString()}!`,
+              icon: 'success',
+              confirmButtonColor: '#7c3aed',
+              background: '#1e293b',
+              color: '#f1f5f9'
+            });
+
+            // Refresh upcoming events / trial state.
+            this.shopService.getCustomerEvents(firebaseUid).subscribe({
+              next: (eventsRes: any) => {
+                if (eventsRes && eventsRes.data) {
+                  this.upcomingEvents = eventsRes.data;
+                  this.hasTrialBooking = this.upcomingEvents.some(event =>
+                    event.shopDto?.code === this.shopCode && (event.status === 'REQUESTED' || event.status === 'APPROVED' || event.status === 'DECLINED')
+                  );
+                }
+              }
+            });
+          },
+          error: () => {
+            Swal.fire({
+              title: 'Failed',
+              text: 'Failed to book visit. Please try again later.',
+              icon: 'error',
+              confirmButtonColor: '#ef4444',
+              background: '#1e293b',
+              color: '#f1f5f9'
+            });
+          }
+        });
+      }
+    });
   }
 
   onTypeChange(type: 'products' | 'services' | 'rentals' | 'memberships') {
     this.activeType = type;
+  }
+
+  openProgramModal(program: any) {
+    this.selectedProgram = program;
+  }
+
+  closeProgramModal() {
+    this.selectedProgram = null;
+  }
+
+  private getFormattedPhone(): string {
+    let phone = this.shopData.phone || '917871227902';
+    // Remove any non-digit characters
+    phone = phone.replace(/\D/g, '');
+    if (phone && !phone.startsWith('91')) {
+      phone = '91' + phone;
+    }
+    return phone;
+  }
+
+  bookProgram(program: any) {
+    this.closeProgramModal();
+    const phone = this.getFormattedPhone();
+    const message = `Hello, I would like to enquire about the *${program.title}* program.`;
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
   }
 }

@@ -12,11 +12,25 @@
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <div class="login-header">
                 <div class="logo-container">
-                    <h1 class="app-title">9Myle</h1>
+                    <div class="logo-card">
+                        <img src="assets/png/logo.png" alt="9Myle" class="logo-image" />
+                        <span class="logo-name">9Myle</span>
+                    </div>
                 </div>
-                <span class="login-badge">{{loginType === 'business' ? 'Business' : 'Customer'}} Login</span>
-                <h2 class="welcome-text">Welcome Back{{shopName ? ' to ' + shopName : ''}}!</h2>
-                <p class="subtitle">Sign in to continue your journey</p>
+                <div *ngIf="loginType === 'business'">
+                    <span class="login-badge">{{loginType === 'business' ? 'Business' : 'Customer'}} Login</span>
+                    <h2 class="welcome-text">Welcome Back{{shopName ? ' to ' + shopName : ''}}!</h2>
+                    <p class="subtitle">Sign in to continue your journey</p>
+                </div>
+                <div *ngIf="loginType != 'business'">
+                    <!-- <p class="logo-slogan">Every business in your pocket</p> -->
+                    <span class="login-badge">Every business in your pocket</span>
+                    <h2 style="font-size: 22px;margin: 10px 0 9px;color: #25ff00;font-weight: 600;">
+                        Welcome {{shopName ? ' to ' + shopName : ''}}!
+                    </h2> 
+                    <span class="subtitle">Your transformation starts today.</span>
+                    <p class="subtitle">Let's build a fitness plan that's made just for you.</p>
+                </div>
             </div>
 
             <ng-container *ngIf="loginType === 'business'">

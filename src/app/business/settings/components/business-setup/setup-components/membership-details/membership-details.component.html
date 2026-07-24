@@ -35,23 +35,24 @@
                     <p class="membership-description child_text">{{membership.description}}</p>
                     <div class="membership-stats">
                         <div class="stat-item">
+                            <span class="stat-label child_text">Max Duration</span>
+                            <div class="stat-value expiry-date">{{membership.maxDuration ? membership.maxDuration.value
+                                + ' ' + membership.maxDuration.unit : 'N/A'}}</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label child_text">Price</span>
+                            <div class="stat-value expiry-date">{{membership.basePrice | currency:'INR'}}</div>
+                        </div>
+                        <!-- <div class="stat-item">
                             <span class="stat-label child_text">Benefits</span>
                             <div class="stat-value expiry-date">{{membership.benefits.length}}</div>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label child_text">Industry</span>
                             <div class="stat-value expiry-date">{{membership.industry}}</div>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label child_text">Price</span>
-                            <div class="stat-value expiry-date">{{membership.basePrice | currency:'INR'}}</div>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label child_text">Max Duration</span>
-                            <div class="stat-value expiry-date">{{membership.maxDuration ? membership.maxDuration.value + ' ' + membership.maxDuration.unit : 'N/A'}}</div>
-                        </div>
+                        </div> -->
                     </div>
-                    
+
                     <!-- Mobile view - simplified display -->
                     <div class="mobile-membership-info">
                         <div class="mobile-stat-box">
@@ -60,15 +61,45 @@
                         </div>
                         <div class="mobile-stat-box" *ngIf="membership.maxDuration">
                             <span class="mobile-label">Max Duration</span>
-                            <div class="mobile-value">{{membership.maxDuration.value}} {{membership.maxDuration.unit}}</div>
+                            <div class="mobile-value">{{membership.maxDuration.value}} {{membership.maxDuration.unit}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Membership Purchase Status -->
+                    <div class="purchase-status" *ngIf="getPurchaseCount(membership) as plan">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Membership
+                                Status</span>
+                            <span class="text-sm font-semibold text-gray-700">
+                                <span class="text-emerald-600 font-bold">{{ plan.activeCount }}</span>
+                                <span class="text-gray-400 mx-1">/</span>
+                                <span class="text-gray-500">{{ plan.totalCount }}</span>
+                                <span class="text-[11px] text-gray-400 ml-1">Active / Total</span>
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden flex">
+                            <div *ngIf="plan.totalCount > 0" class="bg-emerald-500 h-full transition-all duration-500"
+                                [style.width.%]="(plan.activeCount / plan.totalCount) * 100"></div>
+                            <div *ngIf="plan.totalCount > 0" class="bg-rose-500 h-full transition-all duration-500"
+                                [style.width.%]="(plan.inactiveCount / plan.totalCount) * 100"></div>
+                            <div *ngIf="plan.totalCount === 0" class="bg-gray-100 h-full w-full"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] mt-1.5">
+                            <span class="text-emerald-600">Active: {{ plan.activeCount }} (₹{{ plan.activeCount *
+                                plan.basePrice | number }})</span>
+                            <span class="text-rose-500">Inactive: {{ plan.inactiveCount }} (₹{{ plan.inactiveCount *
+                                plan.basePrice | number }})</span>
                         </div>
                     </div>
                 </div>
             </div>
             <ng-template #editTemplate>
                 <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-1.5" [title]="membership.enableOnlineSale ? 'Online Sales Enabled' : 'Online Sales Disabled'">
-                        <span class="w-2.5 h-2.5 rounded-full shadow-sm" [ngClass]="membership.enableOnlineSale ? 'bg-green-500' : 'bg-red-500'"></span>
+                    <div class="flex items-center gap-1.5"
+                        [title]="membership.enableOnlineSale ? 'Online Sales Enabled' : 'Online Sales Disabled'">
+                        <span class="w-2.5 h-2.5 rounded-full shadow-sm"
+                            [ngClass]="membership.enableOnlineSale ? 'bg-green-500' : 'bg-red-500'"></span>
                         <span class="text-xs text-gray-500 font-medium hidden sm:inline-block">Online Sales</span>
                     </div>
                     <button mat-stroked-button class="edit-button" (click)="openEditMembership(membership)">
@@ -82,11 +113,89 @@
     </nz-card>
 
     <ng-template #extraTemplate>
-        <button mat-stroked-button class="create-button" (click)="openMembershipAction()">
-            <i class="fas fa-plus"></i>
-            Create Membership
-        </button>
+        <div class="flex items-center gap-2">
+            <button mat-stroked-button class="create-button" *ngIf="membershipPurchaseCounts.length"
+                (click)="openZoomModal()">
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                Consolidated View
+            </button>
+            <button mat-stroked-button class="create-button" (click)="openMembershipAction()">
+                <i class="fas fa-plus"></i>
+                Create Membership
+            </button>
+        </div>
     </ng-template>
+</div>
+
+<!-- Consolidated Membership Status Modal -->
+<div *ngIf="isZoomModalOpen" class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/85 backdrop-blur-md" (click)="closeZoomModal()"></div>
+    <div class="relative w-full max-w-4xl !bg-zinc-950 border !border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center p-6 border-b !border-white/10">
+            <div>
+                <h3 class="text-lg font-bold !text-white">Membership Status Breakdown</h3>
+                <p class="text-xs !text-white/40">Complete overview of all active and inactive membership plans</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <!-- Sort Toggle inside Modal -->
+                <button (click)="toggleSort()" class="px-3 py-1.5 rounded-lg !bg-white/5 hover:!bg-white/10 text-xs !text-white/80 hover:!text-white flex items-center space-x-2 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-arrow-down-wide-short !text-indigo-400"></i>
+                    <span>Sort: {{ sortBy === 'default' ? 'Default' : sortBy === 'active' ? 'Active' : 'Inactive' }}</span>
+                </button>
+                <button (click)="closeZoomModal()" class="w-8 h-8 rounded-full !bg-white/5 hover:!bg-white/10 flex items-center justify-center !text-white/60 hover:!text-white transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Body (Grid) -->
+        <div class="p-6 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div *ngFor="let plan of sortedMembershipPurchaseCounts" class="p-4 !bg-white/5 border !border-white/5 rounded-xl space-y-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="text-sm font-semibold !text-white">{{ plan.membershipPlanName }}</h4>
+                            <span class="text-xs !text-white/40">{{ plan.durationValue }} {{ plan.durationUnit | titlecase }}{{ plan.durationValue > 1 ? 's' : '' }}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs !text-white/40">Base Price</span>
+                            <p class="text-sm font-bold !text-white">₹{{ plan.basePrice | number }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Line scale -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs !text-white/50">
+                            <span>Distribution</span>
+                            <span class="font-medium !text-white">{{ plan.activeCount }} <span class="!text-white/45">/ {{ plan.totalCount }} Active</span></span>
+                        </div>
+                        <div class="w-full !bg-white/5 rounded-full h-3 overflow-hidden flex">
+                            <div *ngIf="plan.totalCount > 0" class="!bg-emerald-500 h-full transition-all duration-500"
+                                [style.width.%]="(plan.activeCount / plan.totalCount) * 100"></div>
+                            <div *ngIf="plan.totalCount > 0" class="!bg-rose-500 h-full transition-all duration-500"
+                                [style.width.%]="(plan.inactiveCount / plan.totalCount) * 100"></div>
+                            <div *ngIf="plan.totalCount === 0" class="!bg-white/5 h-full w-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Stats and Values -->
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t !border-white/5">
+                        <div class="!bg-emerald-500/10 rounded-lg p-2 flex flex-col justify-center">
+                            <span class="text-[10px] !text-emerald-400/70 font-semibold uppercase tracking-wider">Active</span>
+                            <span class="text-sm font-bold !text-emerald-400 mt-0.5">{{ plan.activeCount }}</span>
+                            <span class="text-[10px] !text-emerald-400/60 mt-0.5">₹{{ plan.activeCount * plan.basePrice | number }}</span>
+                        </div>
+                        <div class="!bg-rose-500/10 rounded-lg p-2 flex flex-col justify-center">
+                            <span class="text-[10px] !text-rose-400/70 font-semibold uppercase tracking-wider">Inactive</span>
+                            <span class="text-sm font-bold !text-rose-400 mt-0.5">{{ plan.inactiveCount }}</span>
+                            <span class="text-[10px] !text-rose-400/60 mt-0.5">₹{{ plan.inactiveCount * plan.basePrice | number }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- <app-side-panel [isOpen]="isPanelOpen" [title]="'Membership'" (closePanel)="closePanel()"

@@ -1,0 +1,539 @@
+<div class="wlc bg-zinc-50 min-h-screen text-zinc-900">
+
+  <!-- ===== Hero ===== -->
+  <section class="bg-linear-to-b from-violet-700 to-violet-400 text-white">
+    <div class="max-w-4xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+      <span class="inline-flex items-center gap-2 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-wide mb-5">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+        Shape Shift · 90 Day Program
+      </span>
+      <h1 class="text-2xl sm:text-4xl font-bold tracking-tight leading-tight">
+        Weight loss, explained simply.
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-violet-50/90 max-w-2xl mx-auto">
+        Your body weight changes when the calories you eat are different from
+        the calories your body uses.
+      </p>
+      <!-- The core formula -->
+      <div class="mt-8 inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 rounded-2xl bg-black/30 backdrop-blur px-4 sm:px-6 py-4">
+        <span class="rounded-lg bg-white/90 text-violet-700 font-semibold px-3 py-2 text-sm">Calories Consumed</span>
+        <span class="text-xl font-bold">−</span>
+        <span class="rounded-lg bg-white/90 text-violet-700 font-semibold px-3 py-2 text-sm">Calories Burned</span>
+        <span class="text-xl font-bold">=</span>
+        <span class="rounded-lg bg-amber-300 text-amber-900 font-bold px-3 py-2 text-sm">Weight Change</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-5 sm:px-8 py-10 sm:py-14 space-y-14">
+
+    <!-- ===== 1. How weight loss works ===== -->
+    <section>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">1 · How weight loss works</h2>
+      </div>
+      <p class="text-zinc-600 text-sm sm:text-base mb-6">Your body burns calories every day through four channels:</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div *ngFor="let b of burnChannels"
+             class="rounded-2xl border border-zinc-200 bg-white p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl leading-none">{{ b.icon }}</span>
+            <div>
+              <div class="text-sm font-semibold text-zinc-900">{{ b.title }}</div>
+              <div class="text-xs text-zinc-500 mt-0.5">{{ b.desc }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Worked example -->
+      <div class="mt-6 rounded-2xl bg-white border border-zinc-200 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+        <div class="text-[11px] uppercase tracking-wide text-zinc-400 font-semibold mb-3">Worked example</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div class="rounded-xl bg-zinc-50 py-3">
+            <div class="text-lg font-bold text-zinc-900">2500</div>
+            <div class="text-[11px] text-zinc-500">burned / day</div>
+          </div>
+          <div class="rounded-xl bg-zinc-50 py-3">
+            <div class="text-lg font-bold text-zinc-900">2000</div>
+            <div class="text-[11px] text-zinc-500">eaten / day</div>
+          </div>
+          <div class="rounded-xl bg-violet-50 py-3">
+            <div class="text-lg font-bold text-violet-700">500</div>
+            <div class="text-[11px] text-violet-500">deficit / day</div>
+          </div>
+          <div class="rounded-xl bg-emerald-50 py-3">
+            <div class="text-lg font-bold text-emerald-700">≈ 2 kg</div>
+            <div class="text-[11px] text-emerald-600">fat loss / month</div>
+          </div>
+        </div>
+        <p class="text-s text-zinc-600 mt-4! leading-relaxed">
+          500 × 7 = <b>3,500 kcal / week</b> ≈ 0.45 kg fat. Sustained, a 500 kcal
+          daily deficit trims roughly <b>2 kg of fat per month</b>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 2. Diet vs training — what each one decides ===== -->
+    <section>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">2 · Diet vs training — what each one decides</h2>
+      </div>
+      <p class="text-zinc-600 text-sm sm:text-base mb-6">
+        A calorie deficit is what makes you lose weight — so why train at all?
+        Because the deficit decides <b>whether</b> the scale moves; training decides
+        <b>what</b> you actually lose.
+      </p>
+
+      <!-- Same deficit, two outcomes -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div *ngFor="let d of dietPaths"
+             class="rounded-2xl border bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col"
+             [ngClass]="d.good ? 'border-emerald-200' : 'border-zinc-200'">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold text-zinc-900">{{ d.title }}</div>
+            <span class="rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                  [ngClass]="d.good ? 'bg-emerald-50 text-emerald-600' : 'bg-zinc-100 text-zinc-500'">
+              {{ d.good ? 'Keeps muscle' : 'Loses muscle' }}
+            </span>
+          </div>
+          <div class="text-xs text-zinc-500 mt-1">{{ d.detail }}</div>
+          <div class="mt-3 rounded-xl px-3 py-2 text-center"
+               [ngClass]="d.good ? 'bg-emerald-50' : 'bg-zinc-50'">
+            <span class="text-sm font-bold" [ngClass]="d.good ? 'text-emerald-700' : 'text-zinc-700'">{{ d.deficit }}</span>
+          </div>
+          <ul class="mt-4 space-y-1.5 flex-1">
+            <li *ngFor="let o of d.outcome" class="flex items-start gap-2 text-sm text-zinc-600">
+              <span class="shrink-0 leading-tight">{{ d.good ? '✅' : '⚠️' }}</span>
+              {{ o }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- The moving-house analogy -->
+      <div class="mt-5 rounded-2xl bg-violet-50/60 border border-violet-100 p-5">
+        <div class="text-[11px] uppercase tracking-wide text-violet-500 font-semibold mb-2">Think of it like moving house</div>
+        <p class="text-sm text-zinc-700 leading-relaxed">
+          You need to throw out 20 kg of stuff. Without instructions, movers might
+          toss your <b>sofa, TV and laptop</b> along with the old newspapers. A
+          diet alone leaves your body guessing the same way. Strength training is
+          the instruction: <b>“keep the muscle — burn the stored fat instead.”</b>
+        </p>
+      </div>
+
+      <!-- Exercise does far more than burn calories -->
+      <div class="mt-5">
+        <p class="text-zinc-600 text-sm sm:text-base mb-3">
+          Burning ~300 kcal in a session is one of the <b>least</b> important things
+          training does. The bigger wins:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div *ngFor="let b of benefits"
+               class="rounded-xl border border-zinc-200 bg-white px-3 py-3 flex items-center gap-2.5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+            <span class="text-lg leading-none">{{ b.icon }}</span>
+            <span class="text-sm font-medium text-zinc-700">{{ b.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- The one-line principle -->
+      <div class="mt-5 rounded-2xl bg-zinc-900 text-white p-5 sm:p-6 space-y-2.5">
+        <div class="flex items-baseline gap-2 text-sm sm:text-base">
+          <span class="text-violet-400 font-semibold shrink-0 w-24">Diet</span>
+          <span class="text-zinc-200">decides whether you lose weight.</span>
+        </div>
+        <div class="flex items-baseline gap-2 text-sm sm:text-base">
+          <span class="text-violet-400 font-semibold shrink-0 w-24">Training</span>
+          <span class="text-zinc-200">decides whether you lose fat or muscle.</span>
+        </div>
+        <div class="flex items-baseline gap-2 text-sm sm:text-base">
+          <span class="text-violet-400 font-semibold shrink-0 w-24">Protein</span>
+          <span class="text-zinc-200">protects the muscle you keep.</span>
+        </div>
+        <div class="flex items-baseline gap-2 text-sm sm:text-base">
+          <span class="text-violet-400 font-semibold shrink-0 w-24">Consistency</span>
+          <span class="text-zinc-200">decides whether the results last.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3. Target for 10–15 kg in 90 days ===== -->
+    <section>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">3 · Losing 10–15 kg in 90 days</h2>
+      </div>
+      <p class="text-zinc-600 text-sm sm:text-base mb-6">
+        90 days = 13 weeks. One kg of fat stores ≈ 7,700 kcal, so the daily
+        deficit you need scales with the goal:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+          <div class="text-sm font-semibold text-zinc-900">10 kg fat loss</div>
+          <div class="text-xs text-zinc-500 mt-1">10 × 7,700 = 77,000 kcal</div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span class="text-3xl font-bold text-violet-600">≈ 850</span>
+            <span class="text-sm text-zinc-500">kcal deficit / day</span>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+          <div class="text-sm font-semibold text-zinc-900">15 kg fat loss</div>
+          <div class="text-xs text-zinc-500 mt-1">15 × 7,700 = 115,500 kcal</div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span class="text-3xl font-bold text-violet-600">≈ 1,280</span>
+            <span class="text-sm text-zinc-500">kcal deficit / day</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 rounded-2xl bg-violet-700 text-white p-5 text-center">
+        <div class="text-[11px] uppercase tracking-wide text-violet-100 font-semibold">Program target deficit</div>
+        <div class="text-3xl font-bold mt-1">750 – 1000 kcal / day</div>
+        <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm font-medium">
+          <span class="rounded-full bg-white/15 px-3 py-1">✅ Diet control</span>
+          <span class="rounded-full bg-white/15 px-3 py-1">✅ Strength training</span>
+          <span class="rounded-full bg-white/15 px-3 py-1">✅ Walking / cardio</span>
+          <span class="rounded-full bg-white/15 px-3 py-1">✅ Protein intake</span>
+        </div>
+      </div>
+
+      <p class="text-s text-zinc-600 mt-4! leading-relaxed">
+        <b>Important:</b> we never take daily intake below <b>1,500 kcal</b>.
+        Losing ~1 kg/week needs a ~1,100 kcal/day deficit, which for many people
+        would fall under that floor — so your real safe maximum depends on your
+        own numbers. <a href="#calculator" class="text-violet-600 font-medium underline underline-offset-2">See your personal safe maximum ↓</a>
+      </p>
+    </section>
+
+    <!-- ===== 3. Interactive calculator ===== -->
+    <section id="calculator">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">4 · Your personal calorie target</h2>
+      </div>
+      <p class="text-zinc-600 text-sm sm:text-base mb-6">
+        Enter your details — we compute your BMI, BMR (Mifflin-St Jeor), TDEE and
+        the exact deficit for your Shape Shift plan.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+
+        <!-- Inputs -->
+        <div class="lg:col-span-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-5">
+          <div class="space-y-1.5">
+            <label class="text-xs font-medium text-zinc-500 px-1">Gender</label>
+            <div class="flex gap-2">
+              <button type="button" *ngFor="let g of genderOptions" (click)="gender = g"
+                class="flex-1 rounded-xl border py-2.5 text-sm font-medium capitalize transition-all"
+                [ngClass]="gender === g ? 'border-violet-500 ring-2 ring-violet-500/20 bg-violet-50/50 text-violet-700' : 'border-zinc-200 text-zinc-600 hover:border-violet-300'">
+                {{ g }}
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-zinc-500 px-1">Age</label>
+              <input [(ngModel)]="age" type="number" min="10" max="100" placeholder="30"
+                class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 transition-all">
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-zinc-500 px-1">Height (cm)</label>
+              <input [(ngModel)]="height" type="number" min="120" max="230" placeholder="170"
+                class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 transition-all">
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-medium text-zinc-500 px-1">Weight (kg)</label>
+              <input [(ngModel)]="weight" type="number" min="30" max="300" placeholder="90"
+                class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 transition-all">
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-medium text-zinc-500 px-1">Activity level</label>
+            <div class="grid grid-cols-1 gap-2">
+              <button type="button" *ngFor="let a of activityLevels" (click)="activityKey = a.key"
+                class="text-left rounded-xl border px-4 py-2.5 flex items-center justify-between transition-all"
+                [ngClass]="activityKey === a.key ? 'border-violet-500 ring-2 ring-violet-500/20 bg-violet-50/50' : 'border-zinc-200 hover:border-violet-300'">
+                <span>
+                  <span class="block text-sm font-medium text-zinc-900">{{ a.label }}</span>
+                  <span class="block text-[11px] text-zinc-500">{{ a.desc }}</span>
+                </span>
+                <span class="text-[11px] font-semibold text-zinc-400">× {{ a.factor }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="lg:col-span-3 space-y-4">
+
+          <!-- BMI card -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold text-zinc-900 leading-none">{{ bmi ?? '—' }}</span>
+                <span class="text-[11px] text-zinc-400 font-medium">BMI</span>
+                <span class="text-sm font-semibold" [ngClass]="bmiCategoryColor">{{ bmiCategory }}</span>
+              </div>
+              <span class="text-[11px] text-zinc-400 font-medium">{{ weight }} kg • {{ height }} cm</span>
+            </div>
+
+            <div class="relative mt-6">
+              <div class="h-2 w-full rounded-full overflow-hidden flex">
+                <div class="bg-sky-400" style="width: 14%"></div>
+                <div class="bg-emerald-400" style="width: 26%"></div>
+                <div class="bg-amber-400" style="width: 20%"></div>
+                <div class="bg-rose-400" style="width: 40%"></div>
+              </div>
+              <div class="absolute -top-3.5 -translate-x-1/2 transition-all duration-500 flex flex-col items-center"
+                   [style.left.%]="bmiMarkerPosition">
+                <div class="w-3.5 h-3.5 rounded-full bg-violet-500 ring-2 ring-white shadow-md"></div>
+                <div class="w-0.5 h-1.5 bg-zinc-900"></div>
+              </div>
+            </div>
+            <div class="flex justify-between mt-1.5 text-[9px] font-medium text-zinc-400">
+              <span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
+            </div>
+          </div>
+
+          <!-- BMR → TDEE -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <div class="text-[11px] uppercase tracking-wide text-zinc-400 font-semibold">BMR</div>
+              <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-2xl font-bold text-zinc-900">{{ bmr ?? '—' }}</span>
+                <span class="text-xs text-zinc-500">kcal</span>
+              </div>
+              <div class="text-[11px] text-zinc-500 mt-1">Energy at complete rest</div>
+            </div>
+            <div class="rounded-2xl border border-violet-200 bg-violet-50/40 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <div class="text-[11px] uppercase tracking-wide text-violet-500 font-semibold">TDEE (maintenance)</div>
+              <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-2xl font-bold text-violet-700">{{ tdee ?? '—' }}</span>
+                <span class="text-xs text-violet-500">kcal</span>
+              </div>
+              <div class="text-[11px] text-violet-500/80 mt-1">BMR × {{ activity.factor }}</div>
+            </div>
+          </div>
+
+          <!-- Safe maximum — capped by BOTH the calorie floor and a healthy BMI -->
+          <div class="rounded-2xl border-2 border-violet-300 bg-violet-50/50 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+            <div class="flex items-center gap-2">
+              <span class="text-lg leading-none">🛡️</span>
+              <div class="text-[11px] uppercase tracking-wide text-violet-600 font-semibold">How much you should aim to lose</div>
+            </div>
+
+            <!-- STATE A: already lean → losing weight isn't the goal -->
+            <ng-container *ngIf="alreadyLean">
+              <p class="text-sm text-zinc-700 mt-3 leading-relaxed">
+                You're already at a healthy, lean weight (BMI {{ bmi }}). Losing
+                more — let alone 15 kg — would make you <b>underweight</b>. This
+                program isn't about the scale for you: focus on
+                <b>building muscle & body recomposition</b> instead.
+              </p>
+            </ng-container>
+
+            <!-- STATE B: room to lose safely -->
+            <ng-container *ngIf="!alreadyLean">
+              <div class="mt-3 flex items-end justify-between gap-3">
+                <div>
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-bold text-violet-700">{{ recommendedMaxLoss ?? '—' }}</span>
+                    <span class="text-sm text-zinc-500">kg max</span>
+                  </div>
+                  <div class="text-[11px] text-zinc-500 mt-0.5">
+                    {{ weight }} kg → <b>{{ recommendedTargetWeight }} kg</b> target
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="flex items-baseline gap-1 justify-end">
+                    <span class="text-lg font-semibold text-zinc-800">{{ maxWeeklyLoss ?? '—' }}</span>
+                    <span class="text-[11px] text-zinc-500">kg / week</span>
+                  </div>
+                  <div class="text-[11px] text-zinc-500 mt-0.5">max healthy rate</div>
+                </div>
+              </div>
+
+              <!-- Daily deficit for THIS customer's recommended loss -->
+              <div class="mt-3 grid grid-cols-2 gap-3">
+                <div class="rounded-xl bg-white/70 border border-violet-100 px-3 py-2.5">
+                  <div class="text-[10px] uppercase tracking-wide text-violet-500 font-semibold">Daily deficit</div>
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-lg font-bold text-zinc-900">{{ recommendedDailyDeficit ?? '—' }}</span>
+                    <span class="text-[11px] text-zinc-500">kcal / day</span>
+                  </div>
+                </div>
+                <div class="rounded-xl bg-white/70 border border-violet-100 px-3 py-2.5">
+                  <div class="text-[10px] uppercase tracking-wide text-emerald-600 font-semibold">Eat per day</div>
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-lg font-bold text-zinc-900">{{ recommendedDailyCalories ?? '—' }}</span>
+                    <span class="text-[11px] text-zinc-500">kcal / day</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Healthy range -->
+              <div class="mt-3 rounded-xl bg-white/70 border border-violet-100 px-3 py-2 text-[12px] text-zinc-600">
+                Healthy weight for your height:
+                <b class="text-zinc-800">{{ healthyWeightLow }}–{{ healthyWeightHigh }} kg</b>
+                <span class="text-zinc-400"> (BMI 18.5–25)</span>
+              </div>
+
+              <!-- Why this number: which limit binds -->
+              <p *ngIf="limitingFactor === 'health'" class="text-[12px] text-amber-700 mt-3 leading-relaxed">
+                ⚠ Losing the full <b>15 kg</b> would drop you to BMI
+                <b>{{ bmiAfterFifteen }}</b> — too lean. We cap your goal at
+                <b>{{ recommendedMaxLoss }} kg</b> so you land at a healthy
+                {{ recommendedTargetWeight }} kg.
+              </p>
+              <p *ngIf="limitingFactor === 'calorie'" class="text-[11px] text-zinc-500 mt-3! leading-relaxed">
+                Capped so you never eat below <b>{{ minCalories }} kcal/day</b>
+                (max safe deficit ≈ <b>{{ maxSafeDeficit }} kcal/day</b>). You have
+                the body-fat headroom to lose more, but slower and safer wins.
+              </p>
+            </ng-container>
+          </div>
+
+          <!-- Deficit targets -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <div class="text-[11px] uppercase tracking-wide text-emerald-600 font-semibold">Beginner · TDEE − 500</div>
+              <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-2xl font-bold text-zinc-900">{{ beginnerCalories ?? '—' }}</span>
+                <span class="text-xs text-zinc-500">kcal / day</span>
+              </div>
+              <div class="text-[11px] text-zinc-500 mt-1">≈ {{ beginnerLoss ?? '—' }} kg over 90 days</div>
+              <div *ngIf="beginnerFloored" class="text-[10px] text-amber-600 font-medium mt-1">⚠ Raised to the {{ minCalories }} kcal floor</div>
+            </div>
+            <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <div class="text-[11px] uppercase tracking-wide text-rose-600 font-semibold">Aggressive · TDEE − 900</div>
+              <div class="mt-1 flex items-baseline gap-1">
+                <span class="text-2xl font-bold text-zinc-900">{{ aggressiveCalories ?? '—' }}</span>
+                <span class="text-xs text-zinc-500">kcal / day</span>
+              </div>
+              <div class="text-[11px] text-zinc-500 mt-1">≈ {{ aggressiveLoss ?? '—' }} kg over 90 days</div>
+              <div *ngIf="aggressiveFloored" class="text-[10px] text-amber-600 font-medium mt-1">⚠ Raised to the {{ minCalories }} kcal floor</div>
+            </div>
+          </div>
+
+          <!-- Protein -->
+          <div class="rounded-2xl bg-zinc-900 text-white p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-[11px] uppercase tracking-wide text-zinc-300 font-semibold">Daily protein target</div>
+                <div class="mt-1 flex items-baseline gap-1">
+                  <span class="text-2xl font-bold">{{ proteinLow ?? '—' }}–{{ proteinHigh ?? '—' }}</span>
+                  <span class="text-xs text-zinc-400">g / day</span>
+                </div>
+              </div>
+              <div class="text-right text-[12px] text-zinc-200 leading-relaxed">
+                1.6–2.2 g per kg<br>body weight
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 4. Calories by BMI category ===== -->
+    <section>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">5 · Calories by BMI category</h2>
+      </div>
+      <p class="text-zinc-600 text-sm sm:text-base mb-2">
+        A 120 kg person can't eat the same as a 70 kg person. Rough guidance
+        (male, age 25–40, moderate activity):
+      </p>
+      <div class="overflow-x-auto rounded-2xl border border-zinc-200 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+        <table class="w-full text-sm min-w-[520px]">
+          <thead>
+            <tr class="text-left text-[11px] uppercase tracking-wide text-zinc-400 border-b border-zinc-100">
+              <th class="px-4 py-3 font-semibold">BMI</th>
+              <th class="px-4 py-3 font-semibold">Category</th>
+              <th class="px-4 py-3 font-semibold">Maintenance</th>
+              <th class="px-4 py-3 font-semibold">Fat loss</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-50">
+            <tr *ngFor="let row of calorieTable"
+                class="transition-colors"
+                [ngClass]="row.category === bmiCategory ? 'bg-violet-50/60' : ''">
+              <td class="px-4 py-3 font-medium text-zinc-700">{{ row.bmi }}</td>
+              <td class="px-4 py-3 text-zinc-700">
+                {{ row.category }}
+                <span *ngIf="row.category === bmiCategory" class="ml-1 text-[10px] font-semibold text-violet-600">· you</span>
+              </td>
+              <td class="px-4 py-3 text-zinc-600">{{ row.maintenance }}</td>
+              <td class="px-4 py-3 text-zinc-600">{{ row.fatLoss }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== 5. The 90-day system ===== -->
+    <section>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-5 bg-violet-500 rounded-full"></span>
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight mb-0!">6 · The 90-day Shape Shift system</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div *ngFor="let p of phases"
+             class="rounded-2xl border bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col"
+             [ngClass]="p.borderCls">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center"
+                  [ngClass]="p.badgeBg">{{ p.no }}</span>
+            <span class="text-[11px] uppercase tracking-wide text-zinc-400 font-semibold">{{ p.range }}</span>
+          </div>
+          <div class="text-base font-semibold text-zinc-900 mt-3">{{ p.name }}</div>
+          <div class="text-sm font-medium mt-1" [ngClass]="p.deficitText">{{ p.deficit }}</div>
+
+          <ul class="mt-3 space-y-1.5 flex-1">
+            <li *ngFor="let f of p.focus" class="flex items-center gap-2 text-sm text-zinc-600">
+              <span class="w-1.5 h-1.5 rounded-full shrink-0" [ngClass]="p.dotBg"></span>
+              {{ f }}
+            </li>
+          </ul>
+
+          <div class="mt-4 rounded-xl bg-zinc-50 px-3 py-2 text-center">
+            <span class="text-[11px] text-zinc-400 font-medium">Expected · </span>
+            <span class="text-sm font-semibold text-zinc-800">{{ p.expected }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 6. Formula / closing ===== -->
+    <section>
+      <div class="rounded-2xl bg-linear-to-b from-zinc-900 to-zinc-800 text-white p-6 sm:p-10 text-center">
+        <p class="text-sm sm:text-base text-zinc-300 max-w-2xl mx-auto">
+          Fat loss is not magic. Your body stores extra energy as fat. When we
+          create a controlled calorie deficit through training + nutrition, your
+          body uses stored fat as fuel.
+        </p>
+
+        <div class="mt-8 flex flex-col items-center gap-2 text-sm sm:text-base font-semibold">
+          <span class="rounded-lg bg-white/10 px-4 py-2">Strength Training</span>
+          <span class="text-violet-400 text-lg">+</span>
+          <span class="rounded-lg bg-white/10 px-4 py-2">High Protein Nutrition</span>
+          <span class="text-violet-400 text-lg">+</span>
+          <span class="rounded-lg bg-white/10 px-4 py-2">Calorie Deficit</span>
+          <span class="text-violet-400 text-lg">+</span>
+          <span class="rounded-lg bg-white/10 px-4 py-2">Daily Accountability</span>
+          <span class="text-violet-400 text-lg">=</span>
+          <span class="rounded-lg bg-violet-500 px-5 py-2.5 text-base sm:text-lg">10–15 Kg Transformation in 90 Days</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

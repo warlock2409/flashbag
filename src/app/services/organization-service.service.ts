@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
-import { ServiceResponse } from '../app.component';
+import { ResponseDate, ServiceResponse } from '../app.component';
 import { Customer } from '../models/customer.model';
 import { AddressModel, ShopHoursModel, ShopModel, WaitListDto } from '../models/shop.model';
 import { OrganizationMembershipPlan, OrganizationServiceModel } from '../models/organization';
@@ -56,6 +56,15 @@ export class OrganizationServiceService {
       prompt: prompt
     }
     let url = "http://localhost:8080/api/llm/prompt/toGenerate";
+    return this.Http.post<ServiceResponse<any>>(url, data);
+  }
+
+  generateContentVertex(prompt: string, maxOutputTokens: number) {
+    let data = {
+      maxOutputTokens: maxOutputTokens,
+      prompt: prompt
+    }
+    let url = "http://localhost:8080/api/llm/prompt/toGenerate/vertex";
     return this.Http.post<ServiceResponse<any>>(url, data);
   }
 
@@ -365,6 +374,25 @@ export class OrganizationServiceService {
     return this.Http.put<ServiceResponse<any>>(url, advertisement);
   }
 
+  // Retention follow-ups (outreach history) for a customer.
+  getCustomerFollowUps(customerId: number) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/retention/follow-ups/shops/${shopCode}/customers/${customerId}`;
+    return this.Http.get<any[]>(url);
+  }
+
+  // Paginated retention follow-ups for the shop on a given date (YYYY-MM-DD).
+  getFollowUpsByDate(date: string, page: number = 0, size: number = 20) {
+    const shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/api/retention/follow-ups/shops/${shopCode}/date/${date}?page=${page}&size=${size}`;
+    return this.Http.get<any>(url);
+  }
+
+  deleteFollowUp(id: number) {
+    let url = `http://localhost:8080/api/retention/follow-ups/${id}`;
+    return this.Http.delete<void>(url);
+  }
+
   getCustomerProgress(customerId: number) {
     const shopCode = localStorage.getItem("shopCode");
     let url = `http://localhost:8080/api/membership/shop/${shopCode}/customer/${customerId}/progress`;
@@ -505,6 +533,34 @@ export class OrganizationServiceService {
 
   getChallengeById(challengeId: number | string) {
     return this.Http.get<ServiceResponse<any>>(`http://localhost:8080/challenge/${challengeId}`);
+  }
+
+  // Active (checked-in) customers by activity. Pass `date` (YYYY-MM-DD) to get
+  // check-ins for a specific day (e.g. today), or month/year for a period.
+  getActiveCustomers(
+    page: number = 0,
+    size: number = 10,
+    date?: string,
+    month?: number,
+    year?: number,
+    customerId?: number
+  ) {
+    let orgCode = localStorage.getItem("orgCode");
+    let shopCode = localStorage.getItem("shopCode");
+    let url = `http://localhost:8080/users/organization/${orgCode}/customers/${shopCode}/activity?page=${page}&size=${size}`;
+    if (date) {
+      url += `&date=${encodeURIComponent(date)}`;
+    }
+    if (month != null) {
+      url += `&month=${month}`;
+    }
+    if (year != null) {
+      url += `&year=${year}`;
+    }
+    if (customerId != null) {
+      url += `&customerId=${customerId}`;
+    }
+    return this.Http.get<ResponseDate>(url);
   }
 
 }

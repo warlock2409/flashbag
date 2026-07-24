@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { ShopService } from '../../../../services/shop.service';
@@ -27,6 +27,32 @@ export class ShopMembershipComponent {
   @Input() hasTrialBooking: boolean = false;
   @Input() upcomingEvents: any[] = [];
   @Input() activeMembership: any = null;
+  /** Fitness profile from the onboarding wizard (goal, timeline, before/after images). */
+  @Input() onboarding: any = null;
+  /** Id of the plan recommended for the user's timeline. */
+  @Input() recommendedPlanId: number | null = null;
+  /** Emitted when the user wants to re-run the onboarding wizard. */
+  @Output() changeGoal = new EventEmitter<void>();
+
+  onBookVisit(plan: any) {
+    this.onBookTrial(plan);
+  }
+
+  /**
+   * Show the recommended plan and any longer ones, hiding shorter plans.
+   * Falls back to all plans if no recommendation was matched.
+   */
+  get displayedPlans(): any[] {
+    if (this.recommendedPlanId != null) {
+      const recommended = this.memberships.find(p => p.id === this.recommendedPlanId);
+      if (recommended) {
+        return this.memberships
+          .filter(p => (p.durationMonths ?? 0) >= (recommended.durationMonths ?? 0))
+          .sort((a, b) => (a.durationMonths ?? 0) - (b.durationMonths ?? 0));
+      }
+    }
+    return this.memberships;
+  }
 
   onBookTrial(plan: any) {
     console.log(plan);

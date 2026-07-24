@@ -100,5 +100,20 @@ export interface WaitListDto {
 export interface MembershipSummary {
   checkInCount?: number,
   expiringMemberships?: any[],
-  activeMemberships?: number
+  activeMemberships?: number,
+  expiringThisMonth?: number,
+  renewedThisMonth?: number
+}
+
+// One membership plan's purchase breakdown as returned by the
+// membership purchase-count API.
+export interface MembershipPurchaseCount {
+  membershipPlanId?: number;
+  membershipPlanName: string;
+  durationValue: number;
+  durationUnit: string;
+  basePrice: number;
+  activeCount: number;
+  inactiveCount: number;
+  totalCount: number;
 }

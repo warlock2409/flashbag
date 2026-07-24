@@ -5,10 +5,12 @@ import { map, delay, tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AblyService } from './ably.service';
 import { Auth, GoogleAuthProvider, signInWithPopup, UserCredential } from '@angular/fire/auth';
-import { from, switchMap, EMPTY } from 'rxjs';
+import { from, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { PhoneUpdateDialogComponent } from '../components/shared/phone-update-dialog/phone-update-dialog.component';
+import { OnboardingWizardComponent } from '../components/shared/onboarding-wizard/onboarding-wizard.component';
+import { TrendPanelService } from './trend-panel.service';
+import Swal from 'sweetalert2';
 
 export interface User {
   id: string;
@@ -71,7 +73,8 @@ export class AuthService {
     private router: Router,
     private ablyService: AblyService,
     private fireAuth: Auth,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private trendPanelService: TrendPanelService
   ) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
     this.currentUser = this.currentUserSubject.asObservable();
@@ -125,35 +128,71 @@ export class AuthService {
 
     return this.http.post(url, payload).pipe(
       switchMap((response: any) => {
-        if (response && response.data && response.data.phoneRequired) {
-          const dialogRef = this.dialog.open(PhoneUpdateDialogComponent, {
-            data: { email: response.data.email },
-            disableClose: true,
-            width: '450px'
-          });
+        // The backend may return the user DTO directly or wrapped in `data`
+        const data = response?.data ?? response;
+        const phoneRequired = !!(data && data.phoneRequired);
 
-          return dialogRef.afterClosed().pipe(
-            switchMap(result => {
-              if (result) {
-                return this.updatePhone({
-                  ...result,
-                  fireBaseIdToken: token,
-                  firebaseUid: uid
-                });
-              }
-              return EMPTY;
-            })
-          );
-        }
-        return of(response);
+        // The onboarding wizard (goal → about you → body analysis) always runs;
+        // the final profile step is only shown when a phone number is required.
+        // Close the "Processing..." loader so it doesn't block the dialog.
+        Swal.close();
+
+        const dialogRef = this.dialog.open(OnboardingWizardComponent, {
+          data: { email: data?.email, phoneRequired },
+          disableClose: true,
+          width: '560px',
+          maxWidth: '95vw'
+        });
+
+        return dialogRef.afterClosed().pipe(
+          switchMap(result => {
+            if (!result) {
+              // Wizard dismissed without finishing — keep whatever session we got.
+              return of(data);
+            }
+
+            // Fitness data is collected on the frontend for now — persist it
+            // locally until the backend endpoint is ready.
+            if (result.fitness) {
+              console.log('Onboarding fitness data:', result.fitness);
+              localStorage.setItem('onboardingFitness', JSON.stringify(result.fitness));
+            }
+
+            // Only hit updatePhone when the profile step was actually shown.
+            if (phoneRequired && result.profile) {
+              // Re-show the loader while we persist the phone number.
+              Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we sign you in',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+              });
+              return this.updatePhone({
+                ...result.profile,
+                fireBaseIdToken: token,
+                firebaseUid: uid
+              }).pipe(
+                // updatePhone may not echo back the token, so merge over the
+                // original firebase response (which already holds a valid one).
+                map((updateResp: any) => {
+                  const updated = updateResp?.data ?? updateResp ?? {};
+                  return { ...data, ...updated, token: updated.token ?? data.token };
+                })
+              );
+            }
+
+            // No phone needed — the firebase response already carries the token.
+            return of(data);
+          })
+        );
       }),
-      tap((response: any) => {
-        console.log(response);
-        if (response && response.data) {
+      tap((data: any) => {
+        console.log(data);
+        if (data && data.token) {
           const user = {
-            ...response.data,
-            token: response.data.token,
-            firebaseUid: response.data.firebaseUid || uid
+            ...data,
+            token: data.token,
+            firebaseUid: data.firebaseUid || uid
           };
           this.currentUserSubject.next(user);
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -197,6 +236,9 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
+    // Close the trend side panel so it doesn't linger over the login screen.
+    this.trendPanelService.close();
+
     // Determine the redirect type based on the current URL before clearing anything
     const url = this.router.url;
     const isShopPage = url.includes('/s/');

@@ -194,7 +194,15 @@
             {{customer.totalSpent | currency:'INR' }}
             }
           </div>
-          <div class="table-cell membership-cell">{{customer.membershipName}}</div>
+          <div class="table-cell membership-cell">
+            <span>{{customer.membershipName}}</span>
+            <span *ngIf="customer.healthScore != null" class="health-badge"
+              [style.color]="getHealthColor(customer.healthStatus)"
+              [style.backgroundColor]="getHealthColor(customer.healthStatus) + '1A'"
+              [title]="customer.healthStatus + (customer.riskLevel ? ' · ' + customer.riskLevel + ' risk' : '')">
+              <i class="fa-solid fa-heart-pulse"></i>{{ customer.healthScore }}
+            </span>
+          </div>
           <div class="table-cell expiry-cell">
             <span *ngIf="!customer.membershipExpiry" class="expiry-badge expiry-badge-empty">— — —</span>
 
@@ -233,11 +241,19 @@
               {{customer.firstName}} {{customer.lastName}}
             </h3>
           </div>
-          <span class="card-status"
-            [class.card-status-inactive]="!customer.membershipExpiry || isExpired(customer.membershipExpiry)">
-            {{ !customer.membershipExpiry ? 'No Membership' : (isExpired(customer.membershipExpiry) ? 'Expired' :
-            'Active') }}
-          </span>
+          <div class="card-header-badges">
+            <span *ngIf="customer.healthScore != null" class="health-badge"
+              [style.color]="getHealthColor(customer.healthStatus)"
+              [style.backgroundColor]="getHealthColor(customer.healthStatus) + '1A'"
+              [title]="customer.healthStatus + (customer.riskLevel ? ' · ' + customer.riskLevel + ' risk' : '')">
+              <i class="fa-solid fa-heart-pulse"></i>{{ customer.healthScore }}
+            </span>
+            <span class="card-status"
+              [class.card-status-inactive]="!customer.membershipExpiry || isExpired(customer.membershipExpiry)">
+              {{ !customer.membershipExpiry ? 'No Membership' : (isExpired(customer.membershipExpiry) ? 'Expired' :
+              'Active') }}
+            </span>
+          </div>
         </div>
         <div class="card-company">{{customer.companyName}}</div>
         <div class="card-contact">

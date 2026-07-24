@@ -1,0 +1,12 @@
+# Never cache the app shell — it points at hashed bundles that change every deploy.
+# This is what fixes the "MIME type text/html for module script" error.
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Hashed build assets are content-addressed, so cache them forever.
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/*.css
+  Cache-Control: public, max-age=31536000, immutable

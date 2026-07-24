@@ -28,7 +28,9 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              { "glob": "_headers", "input": "src", "output": "/" },
+              { "glob": "_redirects", "input": "src", "output": "/" }
             ],
             "styles": [
               "node_modules/@uppy/core/dist/style.min.css",

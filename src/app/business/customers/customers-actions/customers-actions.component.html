@@ -1,11 +1,11 @@
-<div class="bg-white p-4 rounded-xl shadow-md" #reportCard>
+<div class="bg-white p-6 sm:p-8 rounded-xl shadow-md" #reportCard>
     <!-- Profile Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div class="flex items-center gap-4">
             <div class="relative">
                 <div class="h-14 w-14 rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden">
-                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Vivian" alt="avatar"
-                        class="h-full w-full object-cover opacity-90" />
+                    <img [src]="customerPhotoUrl" (error)="onAvatarError($event)" [alt]="customer.customer.firstName"
+                        crossorigin="anonymous" class="h-full w-full object-cover" />
                 </div>
                 <div class="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-emerald-500 border-2 border-white rounded-full"
                     *ngIf="!isExpired(customer.customer.membershipExpiry)">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 no-capture">
             <button mat-stroked-button class="action-button" (click)="copyReportAsImage()"
                 *ngIf="customerProgress != null && !processing">
                 <i class="fa-brands fa-whatsapp mr-2"></i>
@@ -141,13 +141,14 @@
     </div>
 
     <!-- Detailed Metrics Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <!-- Left Column: Detailed Charts -->
 
         <div class="lg:col-span-1 space-y-6">
             <!-- Workout Duration Analysis -->
-            <div class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col sm:flex-row gap-4 sm:gap-8">
-                <div class="mb-4 sm:mb-8 w-full overflow-hidden" *ngFor="let monthData of heatmapData">
+            <div
+                class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col sm:flex-row gap-4 sm:gap-8">
+                <div class="mb-4 sm:mb-8 w-auto flex-shrink-0" *ngFor="let monthData of heatmapData">
                     <!-- Month Label -->
                     <div class="text-xs font-medium text-zinc-500 mb-3">
                         {{ monthData.monthLabel }}
@@ -167,7 +168,7 @@
                         </div>
 
                         <!-- Heatmap Grid -->
-                        <div class="overflow-x-auto pb-2 scrollbar-hide">
+                        <div class="pb-2">
                             <div class="grid grid-rows-7 grid-flow-col gap-[3px] sm:gap-[4px] w-max">
                                 <ng-container *ngFor="let day of monthData.heatmapData">
 
@@ -194,62 +195,100 @@
             </div>
         </div>
 
-        <!-- 📊 BAR SECTION -->
+        <!-- 📊 BMI SECTION -->
         <div class="lg:col-span-1 space-y-6">
-            <div class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-                <!-- HEADER -->
-                <div class="flex items-center justify-between mb-6">
+            <!-- BMI Card (shown when we have a recent weight & height) -->
+            <div *ngIf="hasBmi"
+                class="p-4 sm:p-6 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+                <div class="flex items-center justify-between mb-5">
                     <div>
-                        <h3 class="text-sm font-semibold text-zinc-900 !mb-0">Duration Analysis</h3>
-                        <p class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 !mb-0">
-                            Session length comparison
+                        <h3 class="text-sm font-semibold text-zinc-900 !mb-0 !leading-normal whitespace-nowrap">Body
+                            Mass Index</h3>
+                        <p class="text-[10px] sm:text-xs text-zinc-500 mt-0.5 !mb-0 !leading-normal whitespace-nowrap">
+                            {{ latestWeight }} kg • {{ latestHeight }} cm
                         </p>
                     </div>
                 </div>
-                <div class="flex items-end justify-center gap-6 sm:gap-16 h-40 sm:h-46 border-b border-zinc-100 relative">
 
-                    <!-- Grid lines -->
-                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                        <div class="w-full h-px border-t border-dashed border-zinc-100"></div>
-                        <div class="w-full h-px border-t border-dashed border-zinc-100"></div>
-                        <div class="w-full h-px border-t border-dashed border-zinc-100"></div>
-                        <div class="w-full h-px border-t border-dashed border-zinc-100"></div>
-                        <div class="w-full h-px bg-transparent"></div>
+                <div class="flex items-end gap-3 mb-6">
+                    <span class="text-4xl font-semibold text-zinc-900 !leading-tight">{{ bmi }}</span>
+                    <span class="text-xs font-medium mb-1 !leading-normal" [ngClass]="bmiCategoryColor">{{ bmiCategory
+                        }}</span>
+                </div>
+
+                <!-- Scale -->
+                <div class="relative">
+                    <div class="h-2.5 w-full rounded-full overflow-hidden flex">
+                        <div class="bg-sky-400" style="width: 14%"></div>
+                        <div class="bg-emerald-400" style="width: 26%"></div>
+                        <div class="bg-amber-400" style="width: 20%"></div>
+                        <div class="bg-rose-400" style="width: 40%"></div>
                     </div>
-
-                    <!-- Shortest -->
-                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
-                        <div class="relative w-10 sm:w-16 bg-zinc-100 rounded-t-sm flex items-end justify-center"
-                            [style.height.%]="(shortestDuration / longestDuration) * 100">
-                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-zinc-600">
-                                {{shortestDuration}}m
-                            </div>
+                    <!-- Marker -->
+                    <div class="absolute -top-4 -translate-x-1/2 transition-all duration-500 flex flex-col items-center"
+                        [style.left.%]="bmiMarkerPosition">
+                        <div
+                            class="w-8 h-8 rounded-full bg-violet-500 text-white text-xs font-semibold flex items-center justify-center ring-2 ring-white shadow-md">
+                            {{ customerInitial }}
                         </div>
-                        <p class="text-[10px] sm:text-xs font-medium text-zinc-500">Min</p>
-                    </div>
-
-                    <!-- Average -->
-                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
-                        <div class="relative w-10 sm:w-16 bg-indigo-100 rounded-t-sm flex items-end justify-center"
-                            [style.height.%]="(averageDuration / longestDuration) * 100">
-                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-indigo-700">
-                                {{averageDuration}}m
-                            </div>
-                        </div>
-                        <p class="text-[10px] sm:text-xs font-medium text-indigo-600">Avg</p>
-                    </div>
-
-                    <!-- Longest -->
-                    <div class="flex flex-col items-center gap-2 sm:gap-3 z-10 group">
-                        <div class="relative w-10 sm:w-16 bg-zinc-800 rounded-t-sm flex items-end justify-center"
-                            style="height: 100%;">
-                            <div class="mb-2 text-[10px] sm:text-xs font-semibold text-white">
-                                {{longestDuration}}m
-                            </div>
-                        </div>
-                        <p class="text-[10px] sm:text-xs font-medium text-zinc-900">Max</p>
+                        <div class="w-0.5 h-2 bg-zinc-900"></div>
                     </div>
                 </div>
+
+                <div class="flex justify-between mt-2 text-[10px] font-medium text-zinc-400">
+                    <span>15</span>
+                    <span>18.5</span>
+                    <span>25</span>
+                    <span>30</span>
+                    <span>40</span>
+                </div>
+
+                <div class="flex justify-between mt-3 text-[10px] font-medium">
+                    <span class="text-sky-600">Underweight</span>
+                    <span class="text-emerald-600">Normal</span>
+                    <span class="text-amber-600">Overweight</span>
+                    <span class="text-rose-600">Obese</span>
+                </div>
+
+                <!-- Weight trend (start → latest) -->
+                <div *ngIf="hasWeightChange" class="mt-2 pt-3 border-t border-zinc-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[11px] uppercase tracking-wider font-semibold text-zinc-400 !mb-1">
+                                Weight Trend
+                            </p>
+                            <p class="text-sm font-medium text-zinc-600 !mb-0">
+                                {{ startWeight }} kg → {{ latestWeight }} kg
+                            </p>
+                        </div>
+                        <span class="text-3xl sm:text-4xl font-bold !leading-tight whitespace-nowrap"
+                            [ngClass]="weightChangeColor.split(' ')[0]">
+                            {{ weightChangeLabel }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fallback: no weight/height on file -->
+            <div *ngIf="!hasBmi"
+                class="h-full p-4 sm:p-5 rounded-xl border border-zinc-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center">
+                <div class="w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center mb-2.5 text-xl">
+                    ⚖️
+                </div>
+                <h3 class="text-sm font-semibold text-zinc-900 !mb-1">Body Mass Index</h3>
+                <p class="text-xs text-zinc-600 !mb-1 max-w-xs">
+                    Looks like your weight and height aren't updated yet, so we can't track your progress.
+                </p>
+                <p class="text-[11px] text-zinc-400 !mb-3 max-w-xs">
+                    Ask your gym to update your measurements, or download the app to manage them yourself.
+                </p>
+                <a [href]="appDownloadUrl" target="_blank" rel="noopener"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium !text-white bg-black! hover:bg-violet-600 rounded-lg transition-colors shadow-sm">
+                    Download the 9myle app
+                </a>
+                <p class="text-[11px] text-zinc-400 mt-3 !mb-0 max-w-xs">
+                    Note: Use the same email &amp; phone number you gave at the gym to access your existing membership.
+                </p>
             </div>
         </div>
     </div>

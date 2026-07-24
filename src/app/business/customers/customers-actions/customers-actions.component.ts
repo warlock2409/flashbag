@@ -6,6 +6,9 @@ import { ElementRef, ViewChild } from '@angular/core';
 import { toBlob } from 'html-to-image';
 import Swal from 'sweetalert2';
 import { MatButtonModule } from '@angular/material/button';
+import { environment } from 'src/environments/environment';
+import { CustomerProfileService } from 'src/app/services/customer-profile.service';
+import { CustomerProfile } from 'src/app/models/customer-profile.model';
 
 @Component({
   selector: 'app-customers-actions',
@@ -25,6 +28,14 @@ export class CustomersActionsComponent {
 
   readonly customer = inject<any>(MAT_DIALOG_DATA);
   orgService = inject(OrganizationServiceService);
+  customerProfileService = inject(CustomerProfileService);
+  /** Play Store link shown when weight/height are missing. */
+  readonly appDownloadUrl = environment.appDownloadUrl;
+  /** Most recent weight (kg) and height (cm) from the customer's profile. */
+  latestWeight: number | null = null;
+  latestHeight: number | null = null;
+  /** Earliest recorded weight (kg), used for the start-to-latest change. */
+  startWeight: number | null = null;
   customerProgress: any;
   totalVisits: number = 0;
   averageDuration: number = 0;
@@ -35,10 +46,18 @@ export class CustomersActionsComponent {
   growth: number = 0;
   loader: boolean = false;
   processing: boolean = false;
+  /** Pre-filled WhatsApp message from the action-runner (report flow). */
+  initialMessage: string = '';
 
 
   constructor(private dialogRef: MatDialogRef<CustomersActionsComponent>) {
     console.log(this.customer);
+    this.initialMessage = this.customer?.initialMessage || '';
+
+    // Load weight & height profiles for the BMI card
+    if (this.customer && this.customer.customer && this.customer.customer.id) {
+      this.loadBmiProfiles(this.customer.customer.id);
+    }
 
     // Call the progress API when the component initializes
     if (this.customer && this.customer.customer && this.customer.customer.id) {
@@ -81,7 +100,133 @@ export class CustomersActionsComponent {
     }
   }
 
+  // ----- BMI (uses the most recent weight & height from the customer profile) -----
 
+  /** Fetch the customer's profiles and keep the newest WEIGHT/HEIGHT values. */
+  private loadBmiProfiles(customerId: number): void {
+    this.customerProfileService.getCustomerProfiles(Number(customerId)).subscribe({
+      next: (response) => {
+        const profiles: CustomerProfile[] = response?.data || [];
+
+        // Newest-first list of numeric values for a given profile type.
+        const sortedValues = (type: string): number[] =>
+          profiles
+            .filter(p => p.type === type && p.value != null && !isNaN(Number(p.value)) && Number(p.value) > 0)
+            .sort((a, b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime())
+            .map(p => Number(p.value));
+
+        const weights = sortedValues('WEIGHT');
+        const heights = sortedValues('HEIGHT');
+
+        this.latestWeight = weights.length > 0 ? weights[0] : null;
+        this.startWeight = weights.length > 0 ? weights[weights.length - 1] : null;
+        this.latestHeight = heights.length > 0 ? heights[0] : null;
+      },
+      error: (error) => {
+        console.error('Error fetching customer profiles for BMI:', error);
+        this.latestWeight = null;
+        this.latestHeight = null;
+      }
+    });
+  }
+
+  /** True when we have both a weight and a height to compute BMI from. */
+  get hasBmi(): boolean {
+    return this.latestWeight !== null && this.latestHeight !== null && this.latestHeight > 0;
+  }
+
+  /** True when we have at least two weight readings to compare. */
+  get hasWeightChange(): boolean {
+    return this.startWeight !== null && this.latestWeight !== null && this.startWeight > 0
+      && this.startWeight !== this.latestWeight;
+  }
+
+  /** Weight change from the first to the latest reading, as a percentage. */
+  get weightChangePercent(): number | null {
+    if (!this.hasWeightChange) return null;
+    const change = ((this.latestWeight as number) - (this.startWeight as number)) / (this.startWeight as number) * 100;
+    return parseFloat(change.toFixed(1));
+  }
+
+  /** Percentage change formatted with a leading sign, e.g. "-10%" or "+4.2%". */
+  get weightChangeLabel(): string {
+    const pct = this.weightChangePercent;
+    if (pct === null) return '';
+    return `${pct > 0 ? '+' : ''}${pct}%`;
+  }
+
+  /** Tailwind classes for the weight-change badge (green for loss, red for gain). */
+  get weightChangeColor(): string {
+    const pct = this.weightChangePercent;
+    if (pct === null) return 'text-zinc-500 bg-zinc-50 border-zinc-100';
+    return pct <= 0
+      ? 'text-emerald-600 bg-emerald-50 border-emerald-100'
+      : 'text-rose-600 bg-rose-50 border-rose-100';
+  }
+
+  /** Placeholder avatar used when the customer has no photo on file. */
+  get placeholderAvatar(): string {
+    const name = this.customer?.customer?.firstName || this.customer?.customer?.name || 'Member';
+    return `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${encodeURIComponent(name)}`;
+  }
+
+  /** Customer photo for the report header, falling back to the placeholder. */
+  get customerPhotoUrl(): string {
+    const dto = this.customer?.customer;
+    return dto?.photoUrl || dto?.documentDto?.attachments?.[0]?.url || this.placeholderAvatar;
+  }
+
+  /** Swap a broken photo for the placeholder avatar. */
+  onAvatarError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && img.src !== this.placeholderAvatar) {
+      img.src = this.placeholderAvatar;
+    }
+  }
+
+  /** BMI = weight(kg) / height(m)^2, rounded to 1 decimal. */
+  get bmi(): number | null {
+    if (!this.hasBmi) return null;
+    const heightInMeters = (this.latestHeight as number) / 100;
+    return parseFloat(((this.latestWeight as number) / (heightInMeters * heightInMeters)).toFixed(1));
+  }
+
+  /** WHO BMI category label for the current BMI. */
+  get bmiCategory(): string {
+    const bmi = this.bmi;
+    if (bmi === null) return '';
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25) return 'Normal';
+    if (bmi < 30) return 'Overweight';
+    return 'Obese';
+  }
+
+  /** Tailwind text-colour class matching the current BMI category. */
+  get bmiCategoryColor(): string {
+    switch (this.bmiCategory) {
+      case 'Underweight': return 'text-sky-600';
+      case 'Normal': return 'text-emerald-600';
+      case 'Overweight': return 'text-amber-600';
+      case 'Obese': return 'text-rose-600';
+      default: return 'text-zinc-600';
+    }
+  }
+
+  /** Marker position on the BMI scale (0-100%), scale spans BMI 15 to 40. */
+  get bmiMarkerPosition(): number {
+    const bmi = this.bmi;
+    if (bmi === null) return 0;
+    const min = 15;
+    const max = 40;
+    const clamped = Math.min(Math.max(bmi, min), max);
+    return ((clamped - min) / (max - min)) * 100;
+  }
+
+  /** First letter of the customer name, used as an avatar fallback on the BMI scale. */
+  get customerInitial(): string {
+    const name = this.customer?.customer?.firstName || this.customer?.customer?.name || '';
+    return name.trim().charAt(0).toUpperCase() || '?';
+  }
 
   calculateWidth(value: number): number {
     // Calculate width as percentage (up to 100%) based on streak value
@@ -358,7 +503,13 @@ export class CustomersActionsComponent {
       const blob = await toBlob(element, {
         backgroundColor: '#ffffff',
         pixelRatio: 2,
-        skipFonts: true   // 👈 IMPORTANT
+        skipFonts: true,   // 👈 IMPORTANT
+        // Capture the full content size so edges aren't cropped.
+        width: element.scrollWidth,
+        height: element.scrollHeight,
+        // Exclude the share button / actions from the captured snapshot
+        filter: (node: HTMLElement) =>
+          !(node instanceof HTMLElement && node.classList?.contains('no-capture'))
       });
 
       if (!blob) throw new Error('Image generation failed');
@@ -377,9 +528,12 @@ export class CustomersActionsComponent {
 
       // ✅ Open WhatsApp
       const phoneNumber = this.customer.customer.contactNumber.replace("+", ''); // replace with dynamic number
-      const message = encodeURIComponent(
-        'Hi 👋 Here is your attendance report.'
-      );
+      const shopName = localStorage.getItem("shopName") || '';
+      const messageText = (this.initialMessage || 'Hi 👋 Here is your attendance report.') +
+        (shopName ? `\n– ${shopName}` : '') +
+        `\n\nDownload our app: ${environment.appDownloadUrl}\n` +
+        `Note: Use the same email & phone number you gave at the gym to access your existing membership.`;
+      const message = encodeURIComponent(messageText);
 
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 

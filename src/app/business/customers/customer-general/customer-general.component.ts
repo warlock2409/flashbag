@@ -131,6 +131,82 @@ export class CustomerGeneralComponent implements OnInit {
   weightEntries: WeightEntry[] = [];
   heightEntries: HeightEntry[] = [];
 
+  // ----- BMI (uses the most recent weight & height) -----
+
+  /** True when we have a recent weight and height to compute BMI from. */
+  get hasBmi(): boolean {
+    return this.weightEntries.length > 0 && this.heightEntries.length > 0;
+  }
+
+  /** Most recent weight in kg (entries are sorted newest-first). */
+  get latestWeight(): number | null {
+    return this.weightEntries.length > 0 ? this.weightEntries[0].weight : null;
+  }
+
+  /** Most recent height in cm (entries are sorted newest-first). */
+  get latestHeight(): number | null {
+    return this.heightEntries.length > 0 ? this.heightEntries[0].height : null;
+  }
+
+  /** BMI = weight(kg) / height(m)^2, rounded to 1 decimal. */
+  get bmi(): number | null {
+    const weight = this.latestWeight;
+    const height = this.latestHeight;
+    if (weight === null || height === null || height <= 0) {
+      return null;
+    }
+    const heightInMeters = height / 100;
+    return parseFloat((weight / (heightInMeters * heightInMeters)).toFixed(1));
+  }
+
+  /** WHO BMI category label for the current BMI. */
+  get bmiCategory(): string {
+    const bmi = this.bmi;
+    if (bmi === null) return '';
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25) return 'Normal';
+    if (bmi < 30) return 'Overweight';
+    return 'Obese';
+  }
+
+  /** Tailwind text-colour class matching the current BMI category. */
+  get bmiCategoryColor(): string {
+    switch (this.bmiCategory) {
+      case 'Underweight': return 'text-sky-600';
+      case 'Normal': return 'text-emerald-600';
+      case 'Overweight': return 'text-amber-600';
+      case 'Obese': return 'text-rose-600';
+      default: return 'text-zinc-600';
+    }
+  }
+
+  /**
+   * Marker position on the BMI scale as a percentage (0-100).
+   * The visible scale spans BMI 15 to 40.
+   */
+  get bmiMarkerPosition(): number {
+    const bmi = this.bmi;
+    if (bmi === null) return 0;
+    const min = 15;
+    const max = 40;
+    const clamped = Math.min(Math.max(bmi, min), max);
+    return ((clamped - min) / (max - min)) * 100;
+  }
+
+  /** First letter of the customer name, used as an avatar fallback. */
+  get customerInitial(): string {
+    return this.customerName?.trim()?.charAt(0)?.toUpperCase() || '?';
+  }
+
+  /** Resolved avatar image URL from the uploaded customer media, or null. */
+  get customerAvatarUrl(): string | null {
+    const prefix = 'https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/';
+    const attachments = (this.sampleUploads?.attachments || []).filter(a => !a.deleted);
+    const url = attachments.length > 0 ? attachments[0].url : null;
+    if (!url) return null;
+    return url.startsWith(prefix) ? url : `${prefix}${url}`;
+  }
+
   exportData() {
     console.log('Exporting customer data');
   }

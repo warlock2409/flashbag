@@ -301,6 +301,18 @@ export class CustomersComponent {
   getInitials(firstName: string, lastName: string): string {
     return ((firstName?.[0] || '') + (lastName?.[0] || '')).toUpperCase();
   }
+
+  // Health score color code based on healthStatus
+  private healthStatusColors: { [key: string]: string } = {
+    HEALTHY: '#22C55E',
+    WATCH: '#FACC15',
+    NEEDS_ATTENTION: '#F97316',
+    CRITICAL: '#EF4444'
+  };
+
+  getHealthColor(status: string): string {
+    return this.healthStatusColors[status] || '#9CA3AF';
+  }
 }
 
 // Simple internal component for image preview

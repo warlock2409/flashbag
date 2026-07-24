@@ -9,6 +9,7 @@ import { CustomersActionsComponent } from './customers-actions/customers-actions
 import { DocumentDto, UploadMediaComponent } from 'src/app/components/upload-media/upload-media.component';
 import { AddCustomerComponent } from '../components/add-customer/add-customer.component';
 import { CustomerMembershipComponent } from './customer-membership/customer-membership.component';
+import { CustomerFollowupsDialogComponent } from './customer-followups-dialog.component';
 import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 import { SweatAlertService } from 'src/app/services/sweat-alert.service';
 
@@ -83,6 +84,22 @@ import { SweatAlertService } from 'src/app/services/sweat-alert.service';
             </div>
           </div>
         </div>
+
+        <div
+          class="config-card p-4 rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          (click)="openFollowUps()"
+          >
+          <div class="flex items-center">
+            <div class="bg-emerald-100 p-2 rounded-lg mr-3 flex items-center justify-center">
+              <span class="text-pink-600 text-xl">💬</span>
+            </div>
+            <div class="flex-1">
+              <h5 class="!font-semibold text-lg text-gray-900 !mb-1">Follow-ups</h5>
+              <p class="text-sm text-gray-600 !mb-2">View retention outreach and customer responses</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   `,
@@ -190,6 +207,15 @@ export class CustomerConfigurePanelComponent {
     this.dialog.open(CustomerMembershipComponent, {
       width: '800px',
       maxHeight: '90vh',
+      data: { customer: this.customer }
+    });
+  }
+
+  openFollowUps() {
+    this.dialog.open(CustomerFollowupsDialogComponent, {
+      width: '440px',
+      maxWidth: '95vw',
+      panelClass: 'followups-dialog',
       data: { customer: this.customer }
     });
   }

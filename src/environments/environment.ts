@@ -9,7 +9,8 @@ export const environment = {
     appId: "1:1067803080668:web:b4660af9046082dc050119",
     measurementId: "G-73ZSMRGC8Z"
   },
-  apiUrl: 'http://localhost:8080'
+  apiUrl: 'http://localhost:8080',
+  appDownloadUrl: 'https://play.google.com/store/apps/details?id=com.ninemyle.app'
 };
 
 

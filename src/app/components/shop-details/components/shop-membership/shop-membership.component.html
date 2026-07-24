@@ -82,36 +82,103 @@
         </div>
     </div>
 
-    <!-- Membership Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-slate-800/50 rounded-xl p-6 shadow-xl border border-slate-700 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-900/20 hover:border-blue-500 relative overflow-hidden"
-            *ngFor="let plan of memberships">
-            <div class="mb-5">
-                <h3 class="text-lg !font-medium !text-slate-100 mb-2 leading-tight uppercase tracking-wide">
-                    {{plan.name}}
-                </h3>
-                <div class="flex items-baseline gap-1">
-                    <span class="text-sm font-medium text-slate-400">₹</span>
-                    <span class="text-2xl font-bold text-green-500">{{plan.price}}</span>
-                    <span class="text-sm text-slate-400" *ngIf="plan.duration">/{{plan.duration}}</span>
+    <!-- Transformation (before / after) from onboarding -->
+    <div *ngIf="onboarding?.currentImage && onboarding?.targetImage"
+        class="bg-white border border-slate-700 rounded-2xl p-5 mb-6">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex-1 min-w-0 text-center">
+                <div class="overflow-hidden flex justify-center h-44 sm:h-52">
+                    <img [src]="onboarding.currentImage" alt="Current"
+                        class="block h-72 sm:h-80 w-auto max-w-none object-top">
+                </div>
+                <p class="text-[11px] uppercase tracking-wide text-gray-600 font-semibold mt-2">Current</p>
+            </div>
+
+            <div class="shrink-0 text-violet-400">
+                <mat-icon>arrow_forward</mat-icon>
+            </div>
+
+            <div class="flex-1 min-w-0 text-center">
+                <div class="overflow-hidden flex justify-center h-44 sm:h-52">
+                    <img [src]="onboarding.targetImage" alt="Goal"
+                        class="block h-72 sm:h-80 w-auto max-w-none object-top">
+                </div>
+                <p class="text-[11px] uppercase tracking-wide text-violet-400 font-semibold mt-2">Goal</p>
+            </div>
+        </div>
+
+        <p *ngIf="onboarding?.timelineMonths" class="text-center text-sm text-gray-600 mt-4 !mb-0">
+            Reach your
+            <span class="text-green ">{{ onboarding.recommendedGoal || 'fitness' }}</span>
+            goal in about
+            <span class="text-green ">{{ onboarding.timelineMonths }} month{{ onboarding.timelineMonths > 1 ? 's' : '' }}</span>
+        </p>
+
+        <!-- Expected transformation -->
+        <div *ngIf="onboarding?.transformations?.length" class="mt-5 pt-5 border-t border-white/10">
+            <p class="text-[11px] uppercase tracking-wide text-gray-600 font-semibold mb-3 text-center">Expected transformation</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-md mx-auto">
+                <div *ngFor="let t of onboarding.transformations" class="flex items-center gap-2 text-sm text-gray-600">
+                    <mat-icon class="!text-base !w-5 !h-5 !text-green-500 shrink-0">check_circle</mat-icon>
+                    <span>{{ t }}</span>
                 </div>
             </div>
-            <div class="flex-grow mb-6">
-                <p class="text-sm text-slate-400 mb-5 leading-relaxed line-clamp-3" *ngIf="plan.description">
-                    {{plan.description}}</p>
-                <ul class="space-y-3" *ngIf="plan.benefits?.length">
-                    <li *ngFor="let benefit of plan.benefits" class="flex items-start gap-3 text-sm text-slate-300">
-                        <span class="text-green-500 text-base flex-shrink-0">✓</span>
-                        <span>{{benefit.benefitName}}</span>
-                    </li>
-                </ul>
+        </div>
+    </div>
+
+    <!-- Change goal -->
+    <div class="flex items-center justify-between gap-3 mb-3">
+        <p class="text-xs uppercase tracking-wide text-slate-400 font-semibold !mb-0" *ngIf="onboarding?.recommendedGoal">
+            Recommended for {{ onboarding.recommendedGoal }}
+        </p>
+        <button (click)="changeGoal.emit()"
+            class="ml-auto flex items-center gap-1.5 text-xs font-semibold text-violet-300 hover:text-violet-200 bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 rounded-lg px-3 py-1.5 transition-colors cursor-pointer">
+            <mat-icon class="!text-sm !w-4 !h-4">tune</mat-icon>
+            {{ onboarding ? 'Change goal' : 'Set your goal' }}
+        </button>
+    </div>
+
+    <!-- Membership plans (compact) -->
+    <div class="grid gap-4"
+        [ngClass]="displayedPlans.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 max-w-sm mx-auto w-full'">
+        <div *ngFor="let plan of displayedPlans"
+            class="rounded-2xl p-5 border flex flex-col transition-all duration-300"
+            [ngClass]="plan.id === recommendedPlanId
+                ? 'border-violet-500 bg-violet-600/10 ring-1 ring-violet-500/40'
+                : 'border-slate-700 bg-slate-800/50 hover:border-slate-500'">
+
+            <div class="flex items-center justify-between gap-2 mb-1">
+                <h3 class="text-base font-semibold !text-slate-100 uppercase tracking-wide !mb-0 leading-tight">
+                    {{ plan.name }}
+                </h3>
+                <span *ngIf="plan.id === recommendedPlanId"
+                    class="shrink-0 text-[10px] font-bold uppercase tracking-wide text-violet-200 bg-violet-500/25 px-2 py-0.5 rounded-full">
+                    Recommended
+                </span>
             </div>
-            <div *ngIf="!hasTrialBooking && !activeMembership">
-                <button (click)="onBookTrial(plan)"
-                    class="w-full py-3 bg-violet-500 hover:bg-violet-600 text-white rounded-lg font-medium cursor-pointer transition-colors shadow-lg shadow-violet-900/20">
-                    Book a trial
-                </button>
+
+            <p class="text-xs text-slate-400 mb-4" *ngIf="plan.durationMonths">
+                {{ plan.durationMonths }} month{{ plan.durationMonths > 1 ? 's' : '' }} membership
+            </p>
+
+            <div class="flex items-baseline gap-1">
+                <span class="text-sm font-medium text-slate-400">₹</span>
+                <span class="text-2xl font-bold text-green-500">{{ plan.price }}</span>
+                <span class="text-sm text-slate-400" *ngIf="plan.durationMonths">
+                    / {{ plan.durationMonths }} month{{ plan.durationMonths > 1 ? 's' : '' }}
+                </span>
             </div>
+            <p class="text-[11px] text-slate-400 mt-1 mb-5" *ngIf="plan.durationMonths">
+                ≈ ₹{{ plan.pricePerMonth }} / month
+            </p>
+
+            <button (click)="onBookVisit(plan)"
+                class="mt-auto w-full py-3 rounded-lg font-medium cursor-pointer transition-colors shadow-lg shadow-violet-900/20"
+                [ngClass]="plan.id === recommendedPlanId
+                    ? 'bg-violet-500 hover:bg-violet-600 text-white'
+                    : 'bg-slate-700 hover:bg-slate-600 text-white'">
+                Book a visit
+            </button>
         </div>
     </div>
 </div>
