@@ -2,7 +2,12 @@
   <!-- Bar Chart Section -->
   <div class="section bar-chart-section">
     <div class="header">
-      <h3>Monthly Revenue Comparison</h3>
+      <div class="title-with-hint">
+        <h3>Monthly Revenue Comparison</h3>
+        <span class="click-hint">
+          <mat-icon>touch_app</mat-icon> Click any month to view membership sales
+        </span>
+      </div>
     </div>
     <div class="chart-wrapper">
       <canvas #barChartCanvas></canvas>
@@ -108,6 +113,119 @@
               <mat-icon>payments</mat-icon>
               {{ invoice.payments[0].paymentMode }}
             </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>
+
+<!-- Side Panel for Monthly Membership Sales -->
+<nz-drawer
+  [nzVisible]="isMembershipPanelOpen"
+  [nzWidth]="520"
+  [nzTitle]="membershipDrawerTitle"
+  (nzOnClose)="closeMembershipPanel()"
+  nzPlacement="right"
+>
+  <ng-template #membershipDrawerTitle>
+    <div class="drawer-header membership-drawer-header">
+      <div class="drawer-header-left">
+        <mat-icon class="membership-icon">card_membership</mat-icon>
+        <div class="drawer-header-text">
+          <span class="main-title">Membership Sales</span>
+          <span class="sub-title">{{ selectedMonthLabel }} {{ selectedMonthYear }}</span>
+        </div>
+      </div>
+      <nz-tag [nzColor]="'blue'" class="month-year-badge">
+        {{ selectedMonthLabel }} {{ selectedMonthYear }}
+      </nz-tag>
+    </div>
+  </ng-template>
+
+  <ng-container *nzDrawerContent>
+    <div class="drawer-content">
+      <!-- Loading State -->
+      <div *ngIf="isLoadingMemberships" class="loading-state">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p>Loading membership sales...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoadingMemberships && (!membershipSalesData || !membershipSalesData.plans || membershipSalesData.plans.length === 0)" class="empty-state">
+        <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="'No membership sales found for ' + selectedMonthLabel + ' ' + selectedMonthYear"></nz-empty>
+      </div>
+
+      <!-- Content State -->
+      <div *ngIf="!isLoadingMemberships && membershipSalesData && membershipSalesData.plans && membershipSalesData.plans.length > 0" class="membership-details">
+        <!-- Summary KPI Cards -->
+        <div class="membership-kpis">
+          <div class="kpi-card sold-card">
+            <div class="kpi-icon-wrap sold">
+              <mat-icon>loyalty</mat-icon>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Memberships Sold</span>
+              <span class="kpi-value">{{ membershipSalesData.totalSoldCount }}</span>
+            </div>
+          </div>
+
+          <div class="kpi-card revenue-card">
+            <div class="kpi-icon-wrap revenue">
+              <mat-icon>payments</mat-icon>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Total Revenue</span>
+              <span class="kpi-value">₹{{ membershipSalesData.totalRevenue | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plans Breakdown Section -->
+        <div class="plans-section">
+          <div class="plans-header">
+            <h4>Plan Breakdown</h4>
+            <span class="plans-count-badge">{{ membershipSalesData.plans.length }} {{ membershipSalesData.plans.length === 1 ? 'Plan' : 'Plans' }}</span>
+          </div>
+
+          <div class="plans-list">
+            <div *ngFor="let plan of membershipSalesData.plans" class="plan-card">
+              <div class="plan-card-top">
+                <div class="plan-name-area">
+                  <div class="plan-icon">
+                    <mat-icon>workspace_premium</mat-icon>
+                  </div>
+                  <div class="plan-titles">
+                    <span class="plan-name">{{ plan.planName }}</span>
+                    <span class="plan-id">Plan #{{ plan.planId }}</span>
+                  </div>
+                </div>
+                <div class="plan-amounts">
+                  <span class="plan-revenue">₹{{ plan.revenue | number:'1.2-2' }}</span>
+                  <span class="plan-avg" *ngIf="plan.soldCount > 0">
+                    ≈ ₹{{ (plan.revenue / plan.soldCount) | number:'1.0-0' }} / ea
+                  </span>
+                </div>
+              </div>
+
+              <!-- Plan Progress & Metrics -->
+              <div class="plan-metrics-row">
+                <span class="sold-pill">
+                  <mat-icon>confirmation_number</mat-icon>
+                  <strong>{{ plan.soldCount }}</strong> sold
+                </span>
+                <span class="share-label" *ngIf="membershipSalesData.totalRevenue > 0">
+                  {{ ((plan.revenue / membershipSalesData.totalRevenue) * 100) | number:'1.0-1' }}% of total revenue
+                </span>
+              </div>
+
+              <!-- Revenue Share Progress Bar -->
+              <div class="plan-progress-track">
+                <div class="plan-progress-bar"
+                     [style.width.%]="membershipSalesData.totalRevenue > 0 ? ((plan.revenue / membershipSalesData.totalRevenue) * 100) : 0">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild, AfterViewInit, Output, EventEmitter, inject, OnDestroy } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import moment from 'moment-timezone';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { DashboardService, MonthlyMembershipSalesData } from 'src/app/services/dashboard.service';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -40,11 +40,23 @@ export class SalesAnalyticsCardComponent implements OnInit, AfterViewInit, OnDes
   selectedYear = 2025;
   barChart!: Chart;
 
-  // Side Panel State
+  // Side Panel State (Daily Heatmap Invoices)
   isPanelOpen = false;
   selectedDate = '';
   selectedDayInvoices: any[] = [];
   isLoadingInvoices = false;
+
+  // Membership Sales Side Panel State
+  isMembershipPanelOpen = false;
+  isLoadingMemberships = false;
+  membershipSalesData: MonthlyMembershipSalesData | null = null;
+  selectedMonthYear: number | null = null;
+  selectedMonthNumber: number | null = null;
+  selectedMonthLabel = '';
+  fullMonthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
   private dashboardService = inject(DashboardService);
   private dialog = inject(MatDialog);
@@ -171,6 +183,29 @@ export class SalesAnalyticsCardComponent implements OnInit, AfterViewInit, OnDes
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        onClick: (event: any, elements: any[], chart: any) => {
+          if (elements && elements.length > 0) {
+            const element = elements[0];
+            const datasetIndex = element.datasetIndex;
+            const monthIndex = element.index; // 0 to 11
+            const month = monthIndex + 1;
+            const year = this.revenueDataList[datasetIndex]?.year || this.selectedYear;
+            this.openMonthMembershipSales(year, month);
+          } else {
+            const points = chart.getElementsAtEventForMode(event.native, 'index', { intersect: false }, false);
+            if (points && points.length > 0) {
+              const monthIndex = points[0].index;
+              const month = monthIndex + 1;
+              const year = this.revenueDataList[points[0].datasetIndex]?.year || this.selectedYear;
+              this.openMonthMembershipSales(year, month);
+            }
+          }
+        },
+        onHover: (event: any, elements: any[]) => {
+          if (event.native?.target) {
+            (event.native.target as HTMLElement).style.cursor = elements.length ? 'pointer' : 'default';
+          }
+        },
         plugins: {
           legend: {
             display: datasets.length > 1,
@@ -256,6 +291,32 @@ export class SalesAnalyticsCardComponent implements OnInit, AfterViewInit, OnDes
 
   closePanel() {
     this.isPanelOpen = false;
+  }
+
+  openMonthMembershipSales(year: number, month: number) {
+    this.selectedMonthYear = year;
+    this.selectedMonthNumber = month;
+    this.selectedMonthLabel = this.fullMonthNames[month - 1] || this.monthNames[month - 1];
+    this.isMembershipPanelOpen = true;
+    this.isLoadingMemberships = true;
+    this.membershipSalesData = null;
+
+    this.dashboardService.getMonthlyMembershipSales(year, month)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          this.membershipSalesData = res?.data || null;
+          this.isLoadingMemberships = false;
+        },
+        error: (err: any) => {
+          console.error('Error fetching monthly membership sales', err);
+          this.isLoadingMemberships = false;
+        }
+      });
+  }
+
+  closeMembershipPanel() {
+    this.isMembershipPanelOpen = false;
   }
 
   openExisitingInvoice(invoice: any) {

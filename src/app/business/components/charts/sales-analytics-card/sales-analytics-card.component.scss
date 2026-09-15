@@ -19,6 +19,32 @@
       margin: 0;
       letter-spacing: -0.01em;
     }
+
+    .title-with-hint {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      .click-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #2563eb;
+        background: #eff6ff;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid #bfdbfe;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
   }
 }
 
@@ -284,6 +310,297 @@
         font-size: 14px;
         width: 14px;
         height: 14px;
+      }
+    }
+  }
+}
+
+// Membership Sales Drawer Styles
+.membership-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 8px;
+
+  .drawer-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .membership-icon {
+      color: #6366f1;
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+
+    .drawer-header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .main-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #1a1a1a;
+        line-height: 1.2;
+      }
+
+      .sub-title {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #64748b;
+      }
+    }
+  }
+
+  .month-year-badge {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    padding: 2px 10px;
+  }
+}
+
+.membership-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.membership-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  .kpi-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      border-color: #cbd5e1;
+    }
+
+    .kpi-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+      }
+
+      &.sold {
+        background: #eef2ff;
+        color: #4f46e5;
+      }
+
+      &.revenue {
+        background: #ecfdf5;
+        color: #059669;
+      }
+    }
+
+    .kpi-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .kpi-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+      }
+
+      .kpi-value {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.2;
+      }
+    }
+  }
+}
+
+.plans-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  .plans-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .plans-count-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+  }
+
+  .plans-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .plan-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      border-color: #6366f155;
+    }
+
+    .plan-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .plan-name-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .plan-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: #eef2ff;
+        color: #6366f1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .plan-titles {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .plan-name {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #1e293b;
+        }
+
+        .plan-id {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.72rem;
+          color: #94a3b8;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .plan-amounts {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+
+      .plan-revenue {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+
+      .plan-avg {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: 500;
+      }
+    }
+
+    .plan-metrics-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      padding-top: 4px;
+
+      .sold-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #4338ca;
+        font-weight: 600;
+
+        mat-icon {
+          font-size: 15px;
+          width: 15px;
+          height: 15px;
+        }
+
+        strong {
+          font-weight: 700;
+        }
+      }
+
+      .share-label {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 0.75rem;
+      }
+    }
+
+    .plan-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+
+      .plan-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+        border-radius: 999px;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
     }
   }

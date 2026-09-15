@@ -27,6 +27,27 @@ export interface FollowUpRequest {
   doNotDisturb?: boolean;       // CALL only — true when outcome is DND
 }
 
+export interface MembershipPlanSale {
+  planId: number;
+  planName: string;
+  soldCount: number;
+  revenue: number;
+}
+
+export interface MonthlyMembershipSalesData {
+  year: number;
+  month: number;
+  totalSoldCount: number;
+  totalRevenue: number;
+  plans: MembershipPlanSale[];
+}
+
+export interface MonthlyMembershipSalesResponse {
+  data: MonthlyMembershipSalesData;
+  message: string;
+  status: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -98,6 +119,14 @@ export class DashboardService {
 
     const url = `http://localhost:8080/api/invoices/revenue/heatmap/${shopCode}/invoices?date=${date}`;
     return this.http.get<any>(url);
+  }
+
+  getMonthlyMembershipSales(year: number, month: number) {
+    const shopCode = localStorage.getItem("shopCode");
+    if (!shopCode) throw new Error("shop code not found");
+
+    const url = `http://localhost:8080/api/invoices/revenue/${shopCode}/memberships/${year}/${month}`;
+    return this.http.get<MonthlyMembershipSalesResponse>(url);
   }
 
   // Log a retention follow-up (e.g. after a call or WhatsApp message).
