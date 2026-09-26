@@ -50,12 +50,21 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
   playableItems: any[] = [];
   currentAdIndex: number = 0;
   carouselTimer: any;
-  shopText = "Scan to Check In"
+  shopText = "Scan to Check In";
+
+  leaderboardList: any[] = [];
+  isLeaderboardLoading: boolean = false;
+  currentMonthStr: string = '';
 
   constructor(private swalService: SweatAlertService, private ablyService: AblyService, private zone: NgZone, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    this.currentMonthStr = `${year}-${month}`;
+
     let shopName = localStorage.getItem("shopName");
     if (shopName) {
       this.shopText = shopName + " Attendance"
@@ -66,6 +75,7 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setupAblySubscription();
     });
     this.loadAdvertisements();
+    this.loadLeaderboard();
   }
 
   ngAfterViewInit() {
@@ -200,6 +210,9 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openCheckInDialog(checkinInfo: any) {
     console.log('Opening check-in dialog with data:', checkinInfo);
+
+    // Refresh leaderboard on check-in
+    this.loadLeaderboard();
 
     // Use the actual incoming data instead of hardcoded sample data
     const data = {
@@ -636,5 +649,59 @@ export class GymCheckInComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onVideoEnded() {
     this.nextAd();
+  }
+
+  loadLeaderboard(month?: string) {
+    this.isLeaderboardLoading = true;
+    const targetMonth = month || this.currentMonthStr || '2026-08';
+    this.currentMonthStr = targetMonth;
+
+    this.shopService.getMonthlyLeaderboard(targetMonth).subscribe({
+      next: (res: any) => {
+        this.isLeaderboardLoading = false;
+        if (Array.isArray(res)) {
+          this.leaderboardList = res;
+        } else if (res && Array.isArray(res.data)) {
+          this.leaderboardList = res.data;
+        } else {
+          this.leaderboardList = [];
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        this.isLeaderboardLoading = false;
+        console.error('Error loading leaderboard:', err);
+        this.leaderboardList = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  formatWorkoutMinutes(mins: number): string {
+    if (!mins) return '0m';
+    const hours = Math.floor(mins / 60);
+    const remainingMins = mins % 60;
+    if (hours > 0) {
+      return `${hours}h ${remainingMins}m`;
+    }
+    return `${mins}m`;
+  }
+
+  formatCustomerName(name: string): string {
+    if (!name) return '';
+    const cleaned = name.replace(/`/g, '').trim();
+    return cleaned
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  getCustomerImageUrl(item: any): string | null {
+    if (item && item.document && item.document.attachments && Array.isArray(item.document.attachments) && item.document.attachments.length > 0) {
+      const firstImg = item.document.attachments.find((att: any) => !att.contentType || att.contentType.startsWith('image/'));
+      return firstImg?.url || item.document.attachments[0]?.url || null;
+    }
+    return null;
   }
 }

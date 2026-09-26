@@ -16,7 +16,8 @@
         <!-- Top Bar -->
         <header class="flex items-center justify-between gap-4">
             <div class="flex items-start gap-4">
-                <div (click)="openQrPreview()" class="h-9 w-9 rounded-md grid place-items-center mt-1 cursor-pointer hover:opacity-80 transition-opacity">
+                <div (click)="openQrPreview()"
+                    class="h-9 w-9 rounded-md grid place-items-center mt-1 cursor-pointer hover:opacity-80 transition-opacity">
                     <div class="h-10 w-12 rounded-xl text-white flex items-center justify-center">
                         <img src="../../../../assets/png/logo.png" alt="" srcset="">
                     </div>
@@ -123,21 +124,214 @@
 
                 <!-- Right: Advertisement - Adjust for tablet -->
                 <div class="lg:col-span-7">
-                    <!-- Advertisement block -->
-                    <div class="p-6 flex items-center h-full justify-center">
-                        <div class="rounded-lg ring-1 ring-inset ring-neutral-200 overflow-hidden bg-gray-50 w-full">
+                    <!-- Advertisement block / Leaderboard container -->
+                    <div class="p-3 sm:p-4 flex items-center h-full justify-center">
+                        <div
+                            class="rounded-xl ring-1 ring-inset ring-neutral-200 overflow-hidden bg-white w-full h-full">
 
-                            <!-- Default Static Content (if no ads) -->
-                            <div *ngIf="playableItems.length === 0" class="flex items-center justify-center">
-                                <div class="aspect-[16/9] bg-white w-full max-w-2xl">
-                                    <!-- <img src="https://livefit.com/cdn/shop/articles/top_ten_fitness_quotes_for_new_year_resolutions_goals_fitness_motivation.jpg?v=1577804322&width=1600"
-                                        alt="Fitness motivation" class="w-full h-full object-cover"> -->
-                                    <video class="w-full h-full object-cover" autoplay muted loop playsinline
-                                        preload="auto">
-                                        <source
-                                            src="https://pub-f3cc65a63e2a4ca88e58aae1aedfa9f6.r2.dev/0_Exercise_Fitness_1280x720.mp4"
-                                            type="video/mp4">
-                                    </video>
+                            <!-- Leaderboard Content (if no ads) -->
+                            <div *ngIf="playableItems.length === 0"
+                                class="w-full h-full flex flex-col bg-white text-slate-800 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                                <!-- Leaderboard Header -->
+                                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 grid place-items-center text-2xl font-bold border border-amber-200/80 shadow-xs">
+                                            🏆
+                                        </div>
+                                        <div>
+                                            <h2
+                                                class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 !mb-0 flex items-center gap-2">
+                                                Gym Leaderboard
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                    <span
+                                                        class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                    Live
+                                                </span>
+                                            </h2>
+                                            <p class="text-xs sm:text-sm text-slate-500 font-medium">Monthly Ranking •
+                                                {{ currentMonthStr }}</p>
+                                        </div>
+                                    </div>
+
+                                    <button (click)="loadLeaderboard()" [disabled]="isLeaderboardLoading"
+                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all active:scale-95 shadow-xs disabled:opacity-50 cursor-pointer">
+                                        <svg [class.animate-spin]="isLeaderboardLoading" class="w-4 h-4 text-slate-600"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                        Refresh
+                                    </button>
+                                </div>
+
+                                <!-- Loading State -->
+                                <div *ngIf="isLeaderboardLoading && leaderboardList.length === 0"
+                                    class="flex-1 flex flex-col items-center justify-center py-12 text-slate-400">
+                                    <svg class="animate-spin h-9 w-9 text-amber-500 mb-3"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                    <p class="text-sm font-semibold text-slate-600">Fetching top gym performers...</p>
+                                </div>
+
+                                <!-- Empty State -->
+                                <div *ngIf="!isLeaderboardLoading && leaderboardList.length === 0"
+                                    class="flex-1 flex flex-col items-center justify-center py-12 text-slate-400">
+                                    <div
+                                        class="w-14 h-14 rounded-full bg-slate-100 border border-slate-200 grid place-items-center text-3xl mb-3 shadow-inner">
+                                        🏋️‍♂️</div>
+                                    <p class="text-base font-bold text-slate-700">No leaderboard entries found for this
+                                        month</p>
+                                    <p class="text-xs text-slate-500 mt-1">Check in to be the first on the board!</p>
+                                </div>
+
+                                <!-- Leaderboard Content -->
+                                <div *ngIf="leaderboardList.length > 0" class="flex-1 flex flex-col min-h-0">
+
+                                    <!-- Top 3 Podium Highlights -->
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <!-- Rank 2 (Silver) -->
+                                        <div *ngIf="leaderboardList[1] as user"
+                                            class="order-1 flex flex-col items-center p-3 rounded-xl bg-gradient-to-b from-slate-100 to-slate-50/60 border border-slate-200 shadow-xs relative overflow-hidden">
+                                            <div class="absolute top-2 right-2.5 text-xs font-black text-slate-400">#2
+                                            </div>
+                                            <div class="relative mb-1">
+                                                <img *ngIf="getCustomerImageUrl(user)" [src]="getCustomerImageUrl(user)"
+                                                    class="w-14 h-14 rounded-full object-cover border-2 border-slate-300 shadow-xs"
+                                                    [alt]="user.customerName">
+                                                <div *ngIf="!getCustomerImageUrl(user)"
+                                                    class="w-9 h-9 rounded-full bg-slate-200 text-slate-700 grid place-items-center text-base font-bold border border-slate-300 shadow-xs">
+                                                    🥈
+                                                </div>
+                                                <span *ngIf="getCustomerImageUrl(user)"
+                                                    class="absolute -bottom-1 -right-1 text-xs">🥈</span>
+                                            </div>
+                                            <h3 class="text-xs !mb-0 sm:text-sm font-bold text-slate-900 truncate w-full text-center"
+                                                [title]="formatCustomerName(user.customerName)">{{
+                                                formatCustomerName(user.customerName) }}</h3>
+                                            <span class="text-sm font-black text-slate-900 mt-0.5">{{ user.score }}
+                                                <span class="text-[10px] text-slate-500 font-normal">pts</span></span>
+                                            <div
+                                                class="flex items-center gap-2 mt-1.5 text-xs text-slate-500 font-semibold">
+                                                <span>📅 {{ user.attendanceCount }}d</span>
+                                                <span>🔥 {{ user.streak }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Rank 1 (Gold) -->
+                                        <div *ngIf="leaderboardList[0] as user"
+                                            class="order-2 flex flex-col items-center p-3.5 rounded-xl bg-gradient-to-b from-amber-100/90 via-amber-50/60 to-white border-2 border-amber-400 shadow-md shadow-amber-500/10 relative overflow-hidden -mt-2">
+                                            <div class="absolute top-2 right-2.5 text-xs font-black text-amber-700">#1
+                                                👑</div>
+                                            <div class="relative mb-1">
+                                                <img *ngIf="getCustomerImageUrl(user)" [src]="getCustomerImageUrl(user)"
+                                                    class="w-16 h-16 rounded-full object-cover border-2 border-amber-400 shadow-md"
+                                                    [alt]="user.customerName">
+                                                <div *ngIf="!getCustomerImageUrl(user)"
+                                                    class="w-11 h-11 rounded-full bg-amber-100 text-amber-700 grid place-items-center text-xl font-bold border border-amber-300 shadow-xs">
+                                                    🥇
+                                                </div>
+                                                <span *ngIf="getCustomerImageUrl(user)"
+                                                    class="absolute -bottom-1 -right-1 text-sm">🥇</span>
+                                            </div>
+                                            <h3 class="text-sm !mb-0 font-extrabold text-slate-900 truncate w-full text-center"
+                                                [title]="formatCustomerName(user.customerName)">{{
+                                                formatCustomerName(user.customerName) }}</h3>
+                                            <span class="text-base font-black text-amber-700 mt-0.5">{{ user.score }}
+                                                <span class="text-xs text-amber-600/80 font-semibold">pts</span></span>
+                                            <div
+                                                class="flex items-center gap-2 mt-1.5 text-xs text-amber-900/90 font-bold">
+                                                <span>📅 {{ user.attendanceCount }}d</span>
+                                                <span>⏱️ {{ formatWorkoutMinutes(user.workoutMinutes) }}</span>
+                                                <span>🔥 {{ user.streak }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Rank 3 (Bronze) -->
+                                        <div *ngIf="leaderboardList[2] as user"
+                                            class="order-3 flex flex-col items-center p-3 rounded-xl bg-gradient-to-b from-amber-50 to-amber-50/30 border border-amber-200/90 shadow-xs relative overflow-hidden">
+                                            <div class="absolute top-2 right-2.5 text-xs font-bold text-amber-700/60">#3
+                                            </div>
+                                            <div class="relative mb-1">
+                                                <img *ngIf="getCustomerImageUrl(user)" [src]="getCustomerImageUrl(user)"
+                                                    class="w-14 h-14 rounded-full object-cover border-2 border-amber-300 shadow-xs"
+                                                    [alt]="user.customerName">
+                                                <div *ngIf="!getCustomerImageUrl(user)"
+                                                    class="w-9 h-9 rounded-full bg-amber-100 text-amber-800 grid place-items-center text-base font-bold border border-amber-200 shadow-xs">
+                                                    🥉
+                                                </div>
+                                                <span *ngIf="getCustomerImageUrl(user)"
+                                                    class="absolute -bottom-1 -right-1 text-xs">🥉</span>
+                                            </div>
+                                            <h3 class="text-xs sm:text-sm !mb-0 font-bold text-slate-900 truncate w-full text-center"
+                                                [title]="formatCustomerName(user.customerName)">{{
+                                                formatCustomerName(user.customerName) }}</h3>
+                                            <span class="text-sm font-black text-amber-800 mt-0.5">{{ user.score }}
+                                                <span
+                                                    class="text-[10px] text-amber-700/60 font-normal">pts</span></span>
+                                            <div
+                                                class="flex items-center gap-2 mt-1.5 text-xs text-slate-500 font-semibold">
+                                                <span>📅 {{ user.attendanceCount }}d</span>
+                                                <span>🔥 {{ user.streak }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Full Rankings List (Starting from Rank 4) -->
+                                    <div *ngIf="leaderboardList.length > 3"
+                                        class="flex-1 overflow-y-auto pr-1 max-h-[380px]">
+                                        <div class="space-y-2">
+                                            <div *ngFor="let item of leaderboardList.slice(3)"
+                                                class="flex items-center justify-between p-3 rounded-xl transition-all border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 shadow-2xs">
+                                                <!-- Left: Rank & Name & Photo -->
+                                                <div class="flex items-center gap-3 min-w-0">
+                                                    <span
+                                                        class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0 shadow-2xs bg-slate-100 text-slate-700 border border-slate-300">
+                                                        {{ item.rank }}
+                                                    </span>
+                                                    <img *ngIf="getCustomerImageUrl(item)"
+                                                        [src]="getCustomerImageUrl(item)"
+                                                        class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0"
+                                                        [alt]="item.customerName">
+                                                    <div class="min-w-0">
+                                                        <p
+                                                            class="text-sm font-extrabold truncate leading-tight text-slate-900">
+                                                            {{ formatCustomerName(item.customerName) }}</p>
+                                                        <div
+                                                            class="flex items-center gap-2 text-xs text-slate-500 mt-0.5 font-medium">
+                                                            <span>{{ item.attendanceCount }} Days</span>
+                                                            <span>•</span>
+                                                            <span>{{ formatWorkoutMinutes(item.workoutMinutes) }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right: Streak & Score -->
+                                                <div class="flex items-center gap-3 shrink-0 text-right">
+                                                    <div class="text-right">
+                                                        <span
+                                                            class="inline-flex items-center gap-1 text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">
+                                                            🔥 {{ item.streak }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="text-right min-w-[60px]">
+                                                        <p class="text-sm font-black text-slate-900">{{ item.score }}
+                                                        </p>
+                                                        <p
+                                                            class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                                                            Score</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 

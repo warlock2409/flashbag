@@ -172,4 +172,17 @@ export class ShopService {
     const url = `http://localhost:8080/customer/${uid}/shop/${shopCode}/details`;
     return this.Http.get(url);
   }
+
+  getMonthlyLeaderboard(month?: string) {
+    let shopCode = localStorage.getItem("shopCode") || 'BIFITN946';
+    let queryMonth = month;
+    if (!queryMonth) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      queryMonth = `${year}-${m}`;
+    }
+    let url = `http://localhost:8080/api/shops/${shopCode}/leaderboard/monthly?month=${queryMonth}`;
+    return this.Http.get<any>(url);
+  }
 }

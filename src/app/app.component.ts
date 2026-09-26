@@ -62,6 +62,7 @@ const fbLoginCallback = (response: any) => {
   `]
 })
 export class AppComponent implements OnInit {
+  title = 'flashbag';
   constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
