@@ -27,6 +27,7 @@ import { GoalPlanComponent } from './settings/components/business-setup/setup-co
 import { SalesComponent } from './settings/components/sales/sales.component';
 import { ChallengeListComponent } from './settings/components/business-setup/setup-components/challenge-builder/challenge-list.component';
 import { ChallengeBuilderComponent } from './settings/components/business-setup/setup-components/challenge-builder/challenge-builder';
+import { PromotionComponent } from './promotion/promotion.component';
 
 const routes: Routes = [
   {
@@ -73,6 +74,10 @@ const routes: Routes = [
           { path: "", component: ChallengeListComponent },
           { path: "create", component: ChallengeBuilderComponent }
         ]
+      },
+      {
+        path: 'promotion',
+        component: PromotionComponent
       },
       {
         path: 'settings',

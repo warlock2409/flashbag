@@ -30,8 +30,6 @@ import Swal from 'sweetalert2';
     ShopServicesComponent,
     ShopProductsComponent,
     ShopRentalsComponent,
-    ShopTeamComponent,
-    ShopReviewsComponent,
     ShopAboutComponent,
     ShopTrainerComponent,
     ShopMembershipComponent,

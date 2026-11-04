@@ -133,10 +133,22 @@ nz-select {
   }
 }
 
-.edit-button, .create-button {
+.edit-button, .create-button, .booster-button {
   @media (max-width: 768px) {
     font-size: 14px;
     padding: 6px 12px;
+  }
+}
+
+.booster-button {
+  color: #d97706 !important;
+  border-color: #fcd34d !important;
+  background-color: #fffbeb !important;
+
+  &:hover {
+    background-color: #fef3c7 !important;
+    border-color: #f59e0b !important;
+    color: #b45309 !important;
   }
 }
 

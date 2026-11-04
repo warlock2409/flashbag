@@ -189,11 +189,11 @@ export class AddCustomerComponent implements OnInit {
   allowOnlyNumbers(event: any, controlName: string): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/[^0-9]/g, '');
-    
+
     if (controlName === 'phone') {
       value = this.phoneNumberPipe.transform(value);
     }
-    
+
     input.value = value;
     this.customerForm.get(controlName)?.setValue(value);
   }
@@ -400,7 +400,7 @@ export class AddCustomerComponent implements OnInit {
       paidAmount: grandTotal
     };
 
-    this.paymentService.makePayment(payment, invoiceId).subscribe({
+    this.paymentService.makePayment([payment], invoiceId).subscribe({
       next: (res: ServiceResponse<any>) => {
         console.log(res.data, "recordPayment");
         this._snackBar.success('Import Completed');

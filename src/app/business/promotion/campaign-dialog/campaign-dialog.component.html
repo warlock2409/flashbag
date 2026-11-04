@@ -1,0 +1,89 @@
+<h2 mat-dialog-title class="bg-white text-gray-800 font-semibold" style="margin: 0; padding: 16px 24px; border-bottom: 1px solid #e5e7eb;">
+  {{ isEditMode ? 'Edit Gift Campaign' : 'Create Gift Campaign' }}
+</h2>
+
+<mat-dialog-content class="mat-typography bg-white" style="max-height: 75vh; overflow-y: auto;">
+  <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()" class="p-4 flex flex-col gap-4">
+
+    <div class="p-3 bg-indigo-50/70 border border-indigo-100 rounded-lg text-xs text-indigo-700">
+      <i class="fa-solid fa-network-wired mr-1.5"></i>
+      <strong>9Myle Gift Network:</strong> Customers make purchases in your shop and earn gift value coupons redeemable across partner shops in the network.
+    </div>
+
+    <!-- Campaign Name -->
+    <div class="form-field">
+      <label class="block mb-1.5 text-sm font-medium text-gray-700">Campaign Name</label>
+      <input type="text" autocomplete="off" formControlName="name"
+        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="e.g. Diwali Shopping Rewards" />
+    </div>
+
+    <!-- Description -->
+    <div class="form-field">
+      <label class="block mb-1.5 text-sm font-medium text-gray-700">Description</label>
+      <textarea formControlName="description" rows="2"
+        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="e.g. Get 10% gift value on purchases above ₹500"></textarea>
+    </div>
+
+    <!-- Reward % & Min Purchase Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Reward Percentage (%)</label>
+        <div class="relative">
+          <input type="number" formControlName="rewardPercentage" min="1" max="100"
+            class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 pr-8 text-gray-900"
+            placeholder="10" />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">%</span>
+        </div>
+        <span class="text-[11px] text-gray-400 mt-1">E.g. 10% of bill amount</span>
+      </div>
+
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Min. Purchase (₹)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">₹</span>
+          <input type="number" formControlName="minimumPurchaseRupees" min="0"
+            class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 pl-7 text-gray-900"
+            placeholder="500" />
+        </div>
+        <span class="text-[11px] text-gray-400 mt-1">Required qualifying bill amount</span>
+      </div>
+    </div>
+
+    <!-- Max Gift Cap -->
+    <div class="form-field">
+      <label class="block mb-1.5 text-sm font-medium text-gray-700">Maximum Gift Value Cap (₹)</label>
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-sm">₹</span>
+        <input type="number" formControlName="maximumGiftRupees" min="1"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 pl-7 text-gray-900"
+          placeholder="100" />
+      </div>
+      <span class="text-[11px] text-gray-400 mt-1">Maximum coupon value awarded per transaction</span>
+    </div>
+
+    <!-- Validity Dates Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Start Date</label>
+        <input type="date" formControlName="startDateStr"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900" />
+      </div>
+
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">End Date</label>
+        <input type="date" formControlName="endDateStr"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900" />
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-4 bg-white border-t border-gray-200">
+  <button mat-button (click)="onCancel()" class="!mr-2">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="campaignForm.invalid">
+    {{ isEditMode ? 'Update Campaign' : 'Create Campaign' }}
+  </button>
+</mat-dialog-actions>

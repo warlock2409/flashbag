@@ -242,8 +242,8 @@ export class PosActionsComponent {
         grandTotal: this.data.invoice.grandTotal!,
         paidAmount: this.payableAmount
       };
-
-      this.paymentService.makePayment(payment, this.data.invoice.id).subscribe({
+      let paymentModels: PaymentModel[] = [payment];
+      this.paymentService.makePayment(paymentModels, this.data.invoice.id).subscribe({
         next: (res: ResponseDate) => {
           console.log(res);
           if (res.data == null) {

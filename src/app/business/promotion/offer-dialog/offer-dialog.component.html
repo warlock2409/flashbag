@@ -1,0 +1,90 @@
+<h2 mat-dialog-title class="bg-white text-gray-800 font-semibold" style="margin: 0; padding: 16px 24px; border-bottom: 1px solid #e5e7eb;">
+  {{ isEditMode ? 'Edit Offer' : 'Add Offer' }}
+</h2>
+
+<mat-dialog-content class="mat-typography bg-white" style="max-height: 75vh; overflow-y: auto;">
+  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="p-4 flex flex-col gap-4">
+    
+    <!-- Offer Name -->
+    <div class="form-field">
+      <label class="block mb-1.5 text-sm font-medium text-gray-700">Offer Name</label>
+      <input type="text" autocomplete="off" formControlName="name"
+        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="e.g. New Customer Welcome Gift" />
+    </div>
+
+    <!-- Description -->
+    <div class="form-field">
+      <label class="block mb-1.5 text-sm font-medium text-gray-700">Description</label>
+      <textarea formControlName="description" rows="2"
+        class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="e.g. Get ₹100 off on your first purchase"></textarea>
+    </div>
+
+    <!-- Financials Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Discount Amount (₹)</label>
+        <input type="number" formControlName="discountAmountRupees" min="1"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900"
+          placeholder="100" />
+      </div>
+
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Min. Purchase (₹)</label>
+        <input type="number" formControlName="minimumPurchaseRupees" min="0"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900"
+          placeholder="500" />
+      </div>
+    </div>
+
+    <!-- Gift Cost & Max Redemptions Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Gift Cost (₹)</label>
+        <input type="number" formControlName="giftCostRupees" min="0"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900"
+          placeholder="100" />
+      </div>
+
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Max Claims</label>
+        <input type="number" formControlName="maximumRedemptions" min="1"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900"
+          placeholder="100" />
+      </div>
+    </div>
+
+    <!-- Dates Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">Start Date</label>
+        <input type="date" formControlName="startDateStr"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900" />
+      </div>
+
+      <div class="form-field">
+        <label class="block mb-1.5 text-sm font-medium text-gray-700">End Date</label>
+        <input type="date" formControlName="endDateStr"
+          class="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full p-2.5 text-gray-900" />
+      </div>
+    </div>
+
+    <!-- New Customers Only Toggle -->
+    <div class="flex items-center justify-between p-3.5 bg-gray-50 border border-gray-200 rounded-lg mt-1">
+      <div>
+        <span class="block text-sm font-medium text-gray-800">New Customers Only</span>
+        <span class="block text-xs text-gray-500">Only applicable for first-time shoppers</span>
+      </div>
+      <mat-slide-toggle formControlName="newCustomersOnly" color="primary"></mat-slide-toggle>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-4 bg-white border-t border-gray-200">
+  <button mat-button (click)="onCancel()" class="!mr-2">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="offerForm.invalid">
+    {{ isEditMode ? 'Update Offer' : 'Create Offer' }}
+  </button>
+</mat-dialog-actions>

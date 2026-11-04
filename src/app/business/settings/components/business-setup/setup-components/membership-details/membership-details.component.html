@@ -95,13 +95,16 @@
                 </div>
             </div>
             <ng-template #editTemplate>
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1.5"
                         [title]="membership.enableOnlineSale ? 'Online Sales Enabled' : 'Online Sales Disabled'">
                         <span class="w-2.5 h-2.5 rounded-full shadow-sm"
                             [ngClass]="membership.enableOnlineSale ? 'bg-green-500' : 'bg-red-500'"></span>
                         <span class="text-xs text-gray-500 font-medium hidden sm:inline-block">Online Sales</span>
                     </div>
+                    <button mat-stroked-button class="booster-button" (click)="openBoosterPanel(membership)">
+                        <i class="fa-solid fa-bolt text-amber-500 mr-1.5"></i> Booster
+                    </button>
                     <button mat-stroked-button class="edit-button" (click)="openEditMembership(membership)">
                         Edit
                     </button>
@@ -130,7 +133,8 @@
 <!-- Consolidated Membership Status Modal -->
 <div *ngIf="isZoomModalOpen" class="fixed inset-0 z-[1000] flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/85 backdrop-blur-md" (click)="closeZoomModal()"></div>
-    <div class="relative w-full max-w-4xl !bg-zinc-950 border !border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div
+        class="relative w-full max-w-4xl !bg-zinc-950 border !border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         <!-- Modal Header -->
         <div class="flex justify-between items-center p-6 border-b !border-white/10">
             <div>
@@ -139,11 +143,14 @@
             </div>
             <div class="flex items-center space-x-3">
                 <!-- Sort Toggle inside Modal -->
-                <button (click)="toggleSort()" class="px-3 py-1.5 rounded-lg !bg-white/5 hover:!bg-white/10 text-xs !text-white/80 hover:!text-white flex items-center space-x-2 transition-colors cursor-pointer">
+                <button (click)="toggleSort()"
+                    class="px-3 py-1.5 rounded-lg !bg-white/5 hover:!bg-white/10 text-xs !text-white/80 hover:!text-white flex items-center space-x-2 transition-colors cursor-pointer">
                     <i class="fa-solid fa-arrow-down-wide-short !text-indigo-400"></i>
-                    <span>Sort: {{ sortBy === 'default' ? 'Default' : sortBy === 'active' ? 'Active' : 'Inactive' }}</span>
+                    <span>Sort: {{ sortBy === 'default' ? 'Default' : sortBy === 'active' ? 'Active' : 'Inactive'
+                        }}</span>
                 </button>
-                <button (click)="closeZoomModal()" class="w-8 h-8 rounded-full !bg-white/5 hover:!bg-white/10 flex items-center justify-center !text-white/60 hover:!text-white transition-colors cursor-pointer">
+                <button (click)="closeZoomModal()"
+                    class="w-8 h-8 rounded-full !bg-white/5 hover:!bg-white/10 flex items-center justify-center !text-white/60 hover:!text-white transition-colors cursor-pointer">
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
@@ -152,11 +159,13 @@
         <!-- Modal Body (Grid) -->
         <div class="p-6 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div *ngFor="let plan of sortedMembershipPurchaseCounts" class="p-4 !bg-white/5 border !border-white/5 rounded-xl space-y-3">
+                <div *ngFor="let plan of sortedMembershipPurchaseCounts"
+                    class="p-4 !bg-white/5 border !border-white/5 rounded-xl space-y-3">
                     <div class="flex justify-between items-start">
                         <div>
                             <h4 class="text-sm font-semibold !text-white">{{ plan.membershipPlanName }}</h4>
-                            <span class="text-xs !text-white/40">{{ plan.durationValue }} {{ plan.durationUnit | titlecase }}{{ plan.durationValue > 1 ? 's' : '' }}</span>
+                            <span class="text-xs !text-white/40">{{ plan.durationValue }} {{ plan.durationUnit |
+                                titlecase }}{{ plan.durationValue > 1 ? 's' : '' }}</span>
                         </div>
                         <div class="text-right">
                             <span class="text-xs !text-white/40">Base Price</span>
@@ -168,7 +177,8 @@
                     <div class="space-y-1">
                         <div class="flex justify-between text-xs !text-white/50">
                             <span>Distribution</span>
-                            <span class="font-medium !text-white">{{ plan.activeCount }} <span class="!text-white/45">/ {{ plan.totalCount }} Active</span></span>
+                            <span class="font-medium !text-white">{{ plan.activeCount }} <span class="!text-white/45">/
+                                    {{ plan.totalCount }} Active</span></span>
                         </div>
                         <div class="w-full !bg-white/5 rounded-full h-3 overflow-hidden flex">
                             <div *ngIf="plan.totalCount > 0" class="!bg-emerald-500 h-full transition-all duration-500"
@@ -182,14 +192,18 @@
                     <!-- Stats and Values -->
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t !border-white/5">
                         <div class="!bg-emerald-500/10 rounded-lg p-2 flex flex-col justify-center">
-                            <span class="text-[10px] !text-emerald-400/70 font-semibold uppercase tracking-wider">Active</span>
+                            <span
+                                class="text-[10px] !text-emerald-400/70 font-semibold uppercase tracking-wider">Active</span>
                             <span class="text-sm font-bold !text-emerald-400 mt-0.5">{{ plan.activeCount }}</span>
-                            <span class="text-[10px] !text-emerald-400/60 mt-0.5">₹{{ plan.activeCount * plan.basePrice | number }}</span>
+                            <span class="text-[10px] !text-emerald-400/60 mt-0.5">₹{{ plan.activeCount * plan.basePrice
+                                | number }}</span>
                         </div>
                         <div class="!bg-rose-500/10 rounded-lg p-2 flex flex-col justify-center">
-                            <span class="text-[10px] !text-rose-400/70 font-semibold uppercase tracking-wider">Inactive</span>
+                            <span
+                                class="text-[10px] !text-rose-400/70 font-semibold uppercase tracking-wider">Inactive</span>
                             <span class="text-sm font-bold !text-rose-400 mt-0.5">{{ plan.inactiveCount }}</span>
-                            <span class="text-[10px] !text-rose-400/60 mt-0.5">₹{{ plan.inactiveCount * plan.basePrice | number }}</span>
+                            <span class="text-[10px] !text-rose-400/60 mt-0.5">₹{{ plan.inactiveCount * plan.basePrice |
+                                number }}</span>
                         </div>
                     </div>
                 </div>
@@ -198,120 +212,165 @@
     </div>
 </div>
 
-<!-- <app-side-panel [isOpen]="isPanelOpen" [title]="'Membership'" (closePanel)="closePanel()"
-    [panelStyles]="{ 'height': 'calc(100% - 60px)', 'width':'500px'}" class="p-4">
+<!-- Booster Side Panel -->
+<app-side-panel [isOpen]="isBoosterPanelOpen" [title]="'Membership Booster Plan'" (closePanel)="closeBoosterPanel()"
+    [panelStyles]="{ 'height': '100%', 'width': '520px' }">
+    <div class="booster-panel-container p-6 space-y-6">
 
-    <div class="panel-header">
-        <h2 class="m-0">Quarterly Plan</h2>
-        <div class="rating-container">
-            <nz-rate [ngModel]="2.5" nzAllowHalf></nz-rate>
-            <span> (200)</span>
-        </div>
-    </div>
-
-    <div class="segmented-container">
-        <nz-segmented [nzOptions]="options" (nzValueChange)="handleValueChange($event)"></nz-segmented>
-    </div>
-
-    <div *ngIf="activeSegment == 'Trend'" class="trend-section">
-        <div class="stats-container">
-            <div class="stat-item">
-                <span class="stat-label child_text">Total Users</span>
-                <div class="stat-value expiry-date">{{1924 | number}}</div>
+        <!-- Header Banner showing Membership Info -->
+        <div *ngIf="selectedMembershipForBooster"
+            class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 rounded-xl p-4 flex items-start justify-between">
+            <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-bolt text-amber-500 text-lg"></i>
+                    <h3 class="font-bold text-gray-800 text-base m-0">{{ selectedMembershipForBooster.name }}</h3>
+                </div>
+                <p class="text-xs text-gray-500 m-0">Configure attendance target rewards & boost pricing</p>
             </div>
-            <div class="stat-item">
-                <span class="stat-label child_text">Active Users</span>
-                <div class="stat-value expiry-date">{{1924 | number}}</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label child_text">Idle Users</span>
-                <div class="stat-value expiry-date">{{75 | number}}</div>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label child_text">Revenue</span>
-                <div class="stat-value expiry-date">{{75000 | number}}</div>
-            </div>
+            <span *ngIf="hasExistingBooster && boosterForm.active"
+                class="px-2.5 py-1 bg-emerald-500/15 text-emerald-700 font-semibold text-[11px] rounded-full border border-emerald-500/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+            </span>
+            <span *ngIf="hasExistingBooster && !boosterForm.active"
+                class="px-2.5 py-1 bg-gray-500/15 text-gray-600 font-semibold text-[11px] rounded-full border border-gray-500/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Inactive
+            </span>
+            <span *ngIf="!hasExistingBooster"
+                class="px-2.5 py-1 bg-amber-500/15 text-amber-700 font-semibold text-[11px] rounded-full border border-amber-500/30">
+                New Booster
+            </span>
         </div>
 
-        <div class="chart-container">
-            <canvas id="myChart" class="chart"></canvas>
+        <!-- Loading state -->
+        <div *ngIf="isBoosterLoading" class="py-12 flex flex-col items-center justify-center space-y-3">
+            <nz-spin nzSimple nzSize="large"></nz-spin>
+            <p class="text-sm text-gray-500">Loading booster plan details...</p>
         </div>
-    </div>
 
-    <div *ngIf="activeSegment == 'Details'" class="details-section">
-        <div class="form-container">
-            <span>Membership name</span>
-            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-4">
-                <input type="text" nz-input [(ngModel)]="inputValue" placeholder="Membership name" />
-            </nz-input-group>
-            <ng-template #inputClearTpl>
-                @if (inputValue) {
-                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
-                    (click)="inputValue = null" />
-                }
-            </ng-template>
-            <span>Description</span>
-            <nz-input-group [nzSuffix]="textAreaClearTpl" class="ant-input-affix-wrapper-textarea-with-clear-btn m-b-4">
-                <textarea nz-input [(ngModel)]="textValue" placeholder="Membership description"></textarea>
-            </nz-input-group>
-            <ng-template #textAreaClearTpl>
-                @if (textValue) {
-                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle" (click)="textValue = null" />
-                }
-            </ng-template>
+        <!-- Form Content -->
+        <div *ngIf="!isBoosterLoading" class="space-y-5">
 
-            <span>Membership plan</span>
-            <nz-select [(ngModel)]="selectedValue" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose"
-                class="m-b-4">
-                @for (option of optionList; track option) {
-                <nz-option [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                }
-            </nz-select>
-
-            <span>Membership type</span>
-            <nz-select [(ngModel)]="selectedValue" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose"
-                class="m-b-4">
-                @for (option of optionList; track option) {
-                <nz-option [nzValue]="option" [nzLabel]="option.label"></nz-option>
-                }
-            </nz-select>
-
-            <span>Maximum number of members</span>
-            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-4">
-                <input type="number" nz-input [(ngModel)]="inputValue" placeholder="Max Members" />
-            </nz-input-group>
-            <ng-template #inputClearTpl>
-                @if (inputValue) {
-                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
-                    (click)="inputValue = null" />
-                }
-            </ng-template>
-
-            <span>Price</span>
-            <nz-input-group [nzSuffix]="inputClearTpl" class="m-b-8">
-                <input type="number" nz-input [(ngModel)]="inputValue" placeholder="Price" />
-            </nz-input-group>
-            <ng-template #inputClearTpl>
-                @if (inputValue) {
-                <nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
-                    (click)="inputValue = null" />
-                }
-            </ng-template>
-
-            <div class="button-container">
-                <button nz-button [nzLoading]="loading" class="action-button cancel-button">
-                    <nz-icon *ngIf="loading" nzType="poweroff" />
-                    <span *ngIf="!loading">
-                        Cancel
-                    </span>
-                </button>
-                <button nz-button [nzLoading]="!loading" class="action-button update-button">
-                    <nz-icon *ngIf="!loading" nzType="poweroff" />
-                    <span *ngIf="loading">
-                        Update
-                    </span>
+            <!-- Success / Error Alert Messages -->
+            <div *ngIf="boosterSuccessMessage"
+                class="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-lg flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    {{ boosterSuccessMessage }}
+                </span>
+                <button (click)="boosterSuccessMessage = null" class="text-emerald-500 hover:text-emerald-700">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
+            <div *ngIf="boosterErrorMessage"
+                class="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-lg flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
+                    {{ boosterErrorMessage }}
+                </span>
+                <button (click)="boosterErrorMessage = null" class="text-rose-500 hover:text-rose-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Price Field -->
+            <div class="form-group space-y-1.5">
+                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Booster Price (₹) <span class="text-rose-500">*</span>
+                </label>
+                <nz-input-group nzPrefix="₹" class="w-full rounded-lg">
+                    <input type="number" nz-input [(ngModel)]="boosterForm.price" placeholder="e.g. 499" min="0" />
+                </nz-input-group>
+                <p class="text-[11px] text-gray-400">Additional price customer pays to unlock this booster plan.</p>
+            </div>
+
+            <!-- Target Attendance Days Field -->
+            <div class="form-group space-y-1.5">
+                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Attendance Target Days <span class="text-rose-500">*</span>
+                </label>
+                <nz-input-group nzPrefixIcon="calendar" class="w-full rounded-lg">
+                    <input type="number" nz-input [(ngModel)]="boosterForm.attendanceTargetDays" placeholder="e.g. 25"
+                        min="1" />
+                </nz-input-group>
+                <p class="text-[11px] text-gray-400">Number of attendance days customer must complete to qualify for the
+                    reward.</p>
+            </div>
+
+            <!-- Reward Duration Field -->
+            <div class="form-group space-y-1.5">
+                <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Reward Duration <span class="text-rose-500">*</span>
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <nz-input-group nzSuffix="Value" class="w-full rounded-lg">
+                            <input type="number" nz-input [(ngModel)]="boosterForm.rewardDurationValue"
+                                placeholder="e.g. 1" min="1" />
+                        </nz-input-group>
+                    </div>
+                    <div>
+                        <nz-select [(ngModel)]="boosterForm.rewardDurationUnit" class="w-full">
+                            <nz-option *ngFor="let unit of durationUnitOptions" [nzValue]="unit.value"
+                                [nzLabel]="unit.label"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <p class="text-[11px] text-gray-400">Bonus validity period added to customer's membership upon
+                    completing the target.</p>
+            </div>
+
+            <!-- Active Switch -->
+            <div class="form-group p-4 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-between">
+                <div>
+                    <span class="block text-sm font-semibold text-gray-800">Activate Booster Plan</span>
+                    <span class="text-xs text-gray-500">Enable or disable this booster offer for customers</span>
+                </div>
+                <nz-switch [(ngModel)]="boosterForm.active"></nz-switch>
+            </div>
+
+            <!-- Live Preview Card -->
+            <div
+                class="border border-amber-500/30 bg-gradient-to-br from-amber-50/50 via-orange-50/30 to-amber-100/20 rounded-2xl p-4 space-y-3">
+                <div class="flex items-center justify-between border-b border-amber-200/50 pb-2">
+                    <span class="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-sparkles text-amber-500"></i> Booster Offer Preview
+                    </span>
+                    <span class="text-xs font-bold text-amber-700 bg-amber-200/60 px-2 py-0.5 rounded-md">
+                        +₹{{ boosterForm.price || 0 }}
+                    </span>
+                </div>
+
+                <div class="flex items-start space-x-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-green-200 text-white flex items-center justify-center font-extrabold text-base shadow-sm shrink-0 mt-0.5">
+                        ⚡
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-700 font-medium leading-relaxed m-0">
+                            Attend <span class="font-bold text-amber-900 bg-amber-200/50 px-1.5 py-0.5 rounded">{{
+                                boosterForm.attendanceTargetDays || 0 }} days</span> within membership period to get
+                            <span class="font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">{{
+                                boosterForm.rewardDurationValue || 0 }} {{ boosterForm.rewardDurationUnit | titlecase
+                                }}</span> extra validity free!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="pt-4 flex items-center justify-end space-x-3 border-t border-gray-100 gap-2">
+                <button nz-button nzType="default" (click)="closeBoosterPanel()" class="rounded-lg">
+                    Cancel
+                </button>
+                <button nz-button nzType="primary" [nzLoading]="isBoosterSaving" (click)="saveBoosterPlan()"
+                    class="!bg-amber-500 hover:!bg-amber-600 !border-amber-500 rounded-lg font-semibold flex items-center gap-2">
+                    <i *ngIf="!isBoosterSaving"></i>
+                    <span>{{ hasExistingBooster ? 'Update Booster Plan' : 'Save Booster Plan' }}</span>
+                </button>
+            </div>
+
         </div>
+
     </div>
-</app-side-panel> -->
+</app-side-panel>

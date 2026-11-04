@@ -22,6 +22,14 @@ import { DataStorageService } from 'src/app/services/data-storage.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { MembershipPurchaseCount } from 'src/app/models/shop.model';
 
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { BoosterService } from 'src/app/services/booster.service';
+import { BoosterPlanDto, DurationUnit } from 'src/app/models/booster.model';
+
 interface Option {
   label: string;
   value: string;
@@ -34,13 +42,16 @@ interface Option {
     CommonModule,
     NzCardModule, NzAvatarModule, NzRateModule, FormsModule,
     SidePanelComponent, MatButtonModule,
-    DecimalPipe, NzSegmentedModule, NzIconModule, NzInputModule, NzSelectModule, NzButtonModule
+    DecimalPipe, NzSegmentedModule, NzIconModule, NzInputModule, NzSelectModule, NzButtonModule,
+    NzMessageModule, NzSwitchModule, NzSpinModule, NzToolTipModule, NzTagModule
   ],
   templateUrl: './membership-details.component.html',
   styleUrl: './membership-details.component.scss'
 })
 export class MembershipDetailsComponent {
   isMobileView = false;
+  private boosterService = inject(BoosterService);
+  private nzMessage = inject(NzMessageService);
 
   constructor(private orgService: OrganizationServiceService, private dataService: DataStorageService, private dashboardService: DashboardService) {
     // Register Chart.js modules to avoid tree-shaking issues
@@ -304,6 +315,140 @@ export class MembershipDetailsComponent {
         let updatedMemberships = this.memberships.filter(membership => membership.id != result.id);
         updatedMemberships.push(result);
         this.setMembership(updatedMemberships);
+      }
+    });
+  }
+
+  // Booster Side Panel State & Form
+  isBoosterPanelOpen = false;
+  selectedMembershipForBooster: OrganizationMembershipPlan | null = null;
+  isBoosterLoading = false;
+  isBoosterSaving = false;
+  hasExistingBooster = false;
+  boosterErrorMessage: string | null = null;
+  boosterSuccessMessage: string | null = null;
+
+  boosterForm: BoosterPlanDto = {
+    id: undefined,
+    membershipPlanId: 0,
+    price: 0,
+    attendanceTargetDays: 30,
+    rewardDurationValue: 1,
+    rewardDurationUnit: 'MONTH',
+    active: true
+  };
+
+  durationUnitOptions: { label: string; value: DurationUnit }[] = [
+    { label: 'Day(s)', value: 'DAY' },
+    { label: 'Month(s)', value: 'MONTH' },
+    { label: 'Year(s)', value: 'YEAR' }
+  ];
+
+  openBoosterPanel(membership: OrganizationMembershipPlan) {
+    this.selectedMembershipForBooster = membership;
+    this.isBoosterPanelOpen = true;
+    this.boosterErrorMessage = null;
+    this.boosterSuccessMessage = null;
+    this.hasExistingBooster = false;
+
+    // Reset form defaults for creation
+    this.boosterForm = {
+      id: undefined,
+      membershipPlanId: membership.id || 0,
+      price: 0,
+      attendanceTargetDays: 30,
+      rewardDurationValue: 1,
+      rewardDurationUnit: 'MONTH',
+      active: true
+    };
+
+    if (membership.id) {
+      this.fetchBoosterPlan(membership.id);
+    }
+  }
+
+  closeBoosterPanel() {
+    this.isBoosterPanelOpen = false;
+    this.selectedMembershipForBooster = null;
+  }
+
+  fetchBoosterPlan(membershipPlanId: number) {
+    this.isBoosterLoading = true;
+    this.boosterService.getBoosterPlan(membershipPlanId).subscribe({
+      next: (res) => {
+        this.isBoosterLoading = false;
+        if (res && res.data) {
+          this.hasExistingBooster = true;
+          this.boosterForm = {
+            id: res.data.id,
+            membershipPlanId: res.data.membershipPlanId || membershipPlanId,
+            price: res.data.price ?? 0,
+            attendanceTargetDays: res.data.attendanceTargetDays ?? 0,
+            rewardDurationValue: res.data.rewardDurationValue ?? 1,
+            rewardDurationUnit: res.data.rewardDurationUnit || 'MONTH',
+            active: res.data.active ?? true
+          };
+        } else {
+          this.hasExistingBooster = false;
+        }
+      },
+      error: (err) => {
+        this.isBoosterLoading = false;
+        this.hasExistingBooster = false;
+      }
+    });
+  }
+
+  saveBoosterPlan() {
+    if (!this.selectedMembershipForBooster || !this.selectedMembershipForBooster.id) {
+      this.nzMessage.error('No membership selected.');
+      return;
+    }
+
+    if (this.boosterForm.price === null || this.boosterForm.price === undefined || this.boosterForm.price < 0) {
+      this.nzMessage.error('Please enter a valid booster price.');
+      return;
+    }
+
+    if (!this.boosterForm.attendanceTargetDays || this.boosterForm.attendanceTargetDays <= 0) {
+      this.nzMessage.error('Please enter target attendance days.');
+      return;
+    }
+
+    if (!this.boosterForm.rewardDurationValue || this.boosterForm.rewardDurationValue <= 0) {
+      this.nzMessage.error('Please enter valid reward duration.');
+      return;
+    }
+
+    this.isBoosterSaving = true;
+    this.boosterErrorMessage = null;
+    this.boosterSuccessMessage = null;
+
+    const payload: BoosterPlanDto = {
+      id: this.boosterForm.id,
+      membershipPlanId: this.selectedMembershipForBooster.id,
+      price: Number(this.boosterForm.price),
+      attendanceTargetDays: Number(this.boosterForm.attendanceTargetDays),
+      rewardDurationValue: Number(this.boosterForm.rewardDurationValue),
+      rewardDurationUnit: this.boosterForm.rewardDurationUnit,
+      active: this.boosterForm.active ?? true
+    };
+
+    this.boosterService.upsertBoosterPlan(this.selectedMembershipForBooster.id, payload).subscribe({
+      next: (res) => {
+        this.isBoosterSaving = false;
+        this.nzMessage.success(res.message || 'Booster plan saved successfully!');
+        this.boosterSuccessMessage = res.message || 'Booster plan saved successfully!';
+        if (res && res.data) {
+          this.hasExistingBooster = true;
+          this.boosterForm = { ...res.data };
+        }
+      },
+      error: (err) => {
+        this.isBoosterSaving = false;
+        const msg = err?.error?.message || 'Failed to save booster plan. Please try again.';
+        this.nzMessage.error(msg);
+        this.boosterErrorMessage = msg;
       }
     });
   }

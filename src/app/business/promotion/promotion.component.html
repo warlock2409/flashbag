@@ -1,0 +1,646 @@
+<div class="overlay" *ngIf="!shopCode" style="color: white;">
+  <h1 class="text-white!">
+    “Boost your sales with irresistible promotions & gifts.”
+  </h1>
+  <h3 class="text-white!">
+    Start by creating your shop to manage promotions and gift network campaigns.
+  </h3>
+</div>
+
+<div class="customers-container">
+  <div class="customers-content">
+
+    <!-- Top Bar -->
+    <header class="header-section">
+      <div class="header-content">
+        <div class="header-icon">
+          <div class="h-9 w-9 rounded-md bg-blue-200 ring-1 ring-inset ring-neutral-200 grid place-items-center mt-1">
+            <span class="text-sm font-semibold tracking-tight"
+              style="font-family: 'Inter', ui-sans-serif, system-ui; letter-spacing: -0.02em;">
+              {{ currentView === 'promotions' ? 'PR' : 'GN' }}
+            </span>
+          </div>
+        </div>
+        <div class="header-text">
+          <div class="flex items-center gap-2">
+            <h1 class="header-title">
+              {{ currentView === 'promotions' ? 'Promotions & Offers' : 'Gift Network Campaigns' }}
+            </h1>
+            <span *ngIf="currentView === 'gift_network'"
+              class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+              Cross-Shop Vouchers
+            </span>
+          </div>
+          <p class="header-subtitle">
+            {{ currentView === 'promotions'
+            ? 'Manage in-store offers, discounts, and customer redemption rules'
+            : 'Configure in-shop coupon generation logic for customer rewards redeemable across 9Myle network partner
+            shops' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Setting Icon Toggle: In-shop coupon generation logic for cross-shop redemption -->
+        <button mat-stroked-button class="action-button setting-toggle-btn"
+          [class.active-setting-btn]="currentView === 'gift_network'" (click)="toggleViewMode()"
+          [matTooltip]="currentView === 'promotions' ? 'Configure in-shop coupon generation logic (customers redeem at other shops)' : 'Switch to In-Shop Direct Offers'">
+          <i class="fa-solid fa-gear" [class.fa-spin]="loading && currentView === 'gift_network'"></i>
+          <span class="action-text">
+            {{ currentView === 'promotions' ? 'Gift Network Logic' : 'Store Offers' }}
+          </span>
+        </button>
+
+        <!-- Refresh Button -->
+        <button mat-stroked-button class="action-button" (click)="loadData()">
+          <i class="fa-solid fa-arrows-rotate" [class.fa-spin]="loading"></i>
+          <span class="action-text">Refresh</span>
+        </button>
+
+        <!-- Create Button (Changes depending on active view) -->
+        <button *ngIf="currentView === 'promotions'" mat-stroked-button class="action-button"
+          (click)="openCreateOfferDialog()">
+          <i class="fa-solid fa-plus"></i>
+          <span class="action-text">Offer</span>
+        </button>
+
+        <button *ngIf="currentView === 'gift_network'" mat-stroked-button class="action-button"
+          (click)="openCreateCampaignDialog()">
+          <i class="fa-solid fa-plus"></i>
+          <span class="action-text">Campaign</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Commission Policy at Top -->
+    <section *ngIf="commissionPolicy"
+      class="commission-policy-card mb-4 p-4 rounded-xl border border-slate-200 bg-white shadow-xs">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+        <!-- Left: Icon & Policy Info -->
+        <div class="flex items-start sm:items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-200 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-file-contract text-base"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-sm font-semibold text-gray-800 m-0">
+                {{ commissionPolicy.description || 'Shop Commission Policy' }}
+              </h3>
+              <span *ngIf="commissionPolicy.industrySegmentName"
+                class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                {{ commissionPolicy.industrySegmentName }}
+              </span>
+              <span
+                class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Active Policy
+              </span>
+            </div>
+            <p class="text-xs text-gray-500 m-0 mt-0.5">
+              Shop: <span class="font-medium text-gray-700">{{ commissionPolicy.shopCode }}</span>
+              <span class="mx-1.5 text-gray-300">•</span>
+              Effective:
+              <span class="text-gray-600">
+                {{ commissionPolicy.effectiveFrom | date:'dd MMM yyyy' }} – {{ commissionPolicy.effectiveTo | date:'dd
+                MMM yyyy' }}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Rate Metric -->
+        <div
+          class="flex items-center gap-4 self-end md:self-center border-t md:border-t-0 pt-2 md:pt-0 w-full md:w-auto justify-between md:justify-end">
+          <div class="text-right">
+            <span class="text-[11px] font-medium text-gray-400 block uppercase tracking-wider">
+              Commission Rate
+            </span>
+            <div class="flex items-baseline gap-1 justify-end">
+              <span class="text-xl font-bold text-gray-900">
+                {{ commissionPolicy.commissionType === 'PERCENTAGE' ? commissionPolicy.commissionValue + '%' :
+                (commissionPolicy.commissionValue | currency:'INR') }}
+              </span>
+              <span class="text-[11px] text-gray-500 font-normal">
+                ({{ commissionPolicy.commissionType }})
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Gift Network Banner when in Gift Network View -->
+    <div *ngIf="currentView === 'gift_network'"
+      class="gift-network-banner mb-4 p-3.5 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 border border-indigo-100 rounded-xl flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-network-wired text-sm"></i>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-indigo-950 m-0">9Myle Gift Network: In-Shop Coupon Generation Logic</h4>
+          <p class="text-[11px] text-indigo-700/80 m-0">
+            Define purchase criteria in your store. Qualified customers receive gift coupons that they can redeem across
+            any participating partner shop in the 9Myle network.
+          </p>
+        </div>
+      </div>
+      <button (click)="openCreateCampaignDialog()"
+        class="shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-xs">
+        + New Rule
+      </button>
+    </div>
+
+    <!-- Controls -->
+    <section class="controls-section">
+      <!-- Search -->
+      <div class="search-container">
+        <div class="search-wrapper">
+          <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+            class="search-icon">
+            <path d="m21 21-4.34-4.34"></path>
+            <circle cx="11" cy="11" r="8"></circle>
+          </svg>
+          <div *ngIf="loading" class="search-icon">
+            <i class="fa-solid fa-circle-notch animate-spin text-blue-500"></i>
+          </div>
+          <input id="search" type="text"
+            [placeholder]="currentView === 'promotions' ? 'Search by offer name or description…' : 'Search by campaign name or description…'"
+            [(ngModel)]="searchQuery" (input)="onSearchChange($event)" class="search-input">
+        </div>
+      </div>
+
+      <!-- Segmented Filter -->
+      <div class="filter-container">
+        <div class="filter-wrapper">
+          <button data-filter="all" [class.filter-btn-active]="activeFilter === 'all'" class="filter-btn"
+            (click)="onFilterChange('all')">
+            <i class="fa-solid fa-tags filter-icon"></i>
+            <span class="filter-text">All</span>
+            <span class="filter-count">({{ currentView === 'promotions' ? offers.length : campaigns.length }})</span>
+          </button>
+          <button data-filter="active" [class.filter-btn-active]="activeFilter === 'active'" class="filter-btn"
+            (click)="onFilterChange('active')">
+            <i class="fa-solid fa-circle-check filter-icon active-icon"></i>
+            <span class="filter-text">Active</span>
+          </button>
+          <button data-filter="inactive" [class.filter-btn-active]="activeFilter === 'inactive'" class="filter-btn"
+            (click)="onFilterChange('inactive')">
+            <i class="fa-solid fa-circle-xmark filter-icon inactive-icon"></i>
+            <span class="filter-text">Inactive</span>
+          </button>
+          <button data-filter="expired" [class.filter-btn-active]="activeFilter === 'expired'" class="filter-btn"
+            (click)="onFilterChange('expired')">
+            <i class="fa-solid fa-calendar-xmark filter-icon"></i>
+            <span class="filter-text">Expired</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paginator -->
+    <mat-paginator [length]="totalElements" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+      aria-label="Select page" class="paginator" (page)="onPageChange($event)">
+    </mat-paginator>
+
+    <!-- ============================================== -->
+    <!-- VIEW 1: IN-STORE PROMOTIONS                    -->
+    <!-- ============================================== -->
+    <ng-container *ngIf="currentView === 'promotions'">
+      <!-- Desktop Table -->
+      <section class="desktop-table-section" *ngIf="pagedOffers.length > 0">
+        <div class="table-header">
+          <div class="table-header-cell id-header">ID</div>
+          <div class="table-header-cell offer-header">Offer</div>
+          <div class="table-header-cell discount-header">Discount</div>
+          <div class="table-header-cell min-spend-header">Min. Spend</div>
+          <div class="table-header-cell gift-cost-header">Gift Cost</div>
+          <div class="table-header-cell audience-header">Audience</div>
+          <div class="table-header-cell claims-header">Claims</div>
+          <div class="table-header-cell expiry-header">Expiry</div>
+          <div class="table-header-cell status-header">Status</div>
+          <div class="table-header-cell actions-header">Actions</div>
+        </div>
+
+        <div class="table-body">
+          <div *ngFor="let offer of pagedOffers; let rowIndex = index" class="table-row fade-in"
+            [style.animation-delay]="rowIndex * 0.04 + 's'" (click)="openOfferDetails(offer)" style="cursor: pointer;">
+
+            <!-- ID Cell -->
+            <div class="table-cell id-cell">
+              <div class="id-wrapper">
+                <span class="primary-id">#{{ offer.id || '—' }}</span>
+              </div>
+              <div class="customer-dp-wrapper">
+                <div class="placeholder-dp">
+                  <i class="fa-solid fa-gift"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Offer Cell -->
+            <div class="table-cell customer-cell">
+              <div class="customer-name-wrapper">
+                <div class="name-status">
+                  <span class="customer-name">{{ offer.name }}</span>
+                  <span class="deleted-indicator" *ngIf="offer.active === false"></span>
+                </div>
+                <span class="contact-info text-xs text-gray-400 truncate max-w-xs block">
+                  {{ offer.description }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Discount Cell -->
+            <div class="table-cell total-cell">
+              <span class="font-semibold text-indigo-600">
+                {{ ((offer.discountAmountPaise || 0) / 100) | currency:'INR' }}
+              </span>
+            </div>
+
+            <!-- Min Spend Cell -->
+            <div class="table-cell total-cell">
+              {{ ((offer.minimumPurchasePaise || 0) / 100) | currency:'INR' }}
+            </div>
+
+            <!-- Gift Cost Cell -->
+            <div class="table-cell total-cell">
+              {{ ((offer.giftCostPaise || 0) / 100) | currency:'INR' }}
+            </div>
+
+            <!-- Audience Cell -->
+            <div class="table-cell audience-cell">
+              <span *ngIf="offer.newCustomersOnly" class="health-badge"
+                style="color: #8b5cf6; background-color: rgba(139, 92, 246, 0.1);">
+                <i class="fa-solid fa-star"></i>New Only
+              </span>
+              <span *ngIf="!offer.newCustomersOnly" class="health-badge"
+                style="color: #6b7280; background-color: rgba(107, 114, 128, 0.1);">
+                <i class="fa-solid fa-users"></i>All
+              </span>
+            </div>
+
+            <!-- Claims Cell -->
+            <div class="table-cell total-cell">
+              {{ offer.maximumRedemptions }}
+            </div>
+
+            <!-- Expiry Cell -->
+            <div class="table-cell expiry-cell">
+              <span *ngIf="!offer.endDate" class="expiry-badge expiry-badge-empty">— — —</span>
+              <span *ngIf="offer.endDate && isExpired(offer.endDate)" class="expiry-badge expiry-badge-expired">
+                {{ offer.endDate | date:'dd MMM yyyy' }}
+              </span>
+              <span *ngIf="offer.endDate && !isExpired(offer.endDate)" class="expiry-badge expiry-badge-active">
+                {{ offer.endDate | date:'dd MMM yyyy' }}
+              </span>
+            </div>
+
+            <!-- Status Cell -->
+            <div class="table-cell status-cell" (click)="$event.stopPropagation()">
+              <mat-slide-toggle [checked]="offer.active ?? true" (change)="toggleOfferStatus(offer, $event)"
+                color="primary">
+              </mat-slide-toggle>
+            </div>
+
+            <!-- Actions Cell -->
+            <div class="table-cell actions-cell" (click)="$event.stopPropagation()">
+              <div class="flex items-center gap-1 justify-end">
+                <button mat-icon-button (click)="openEditOfferDialog(offer, $event)" matTooltip="Edit Offer"
+                  class="text-gray-500 hover:text-indigo-600">
+                  <mat-icon class="text-sm">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteOffer(offer, $event)" matTooltip="Delete Offer"
+                  class="text-gray-500 hover:text-red-600">
+                  <mat-icon class="text-sm">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Cards (Mobile/Tablet) -->
+      <section class="mobile-cards-section" *ngIf="pagedOffers.length > 0">
+        <article *ngFor="let offer of pagedOffers; let rowIndex = index" class="customer-card fade-in"
+          [style.animation-delay]="rowIndex * 0.04 + 's'" (click)="openOfferDetails(offer)">
+
+          <div class="card-header">
+            <div class="card-header-content">
+              <div class="customer-dp-wrapper mobile-dp">
+                <div class="placeholder-dp">
+                  <i class="fa-solid fa-gift"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="card-title">
+                  <span class="deleted-indicator" *ngIf="offer.active === false"></span>
+                  {{ offer.name }}
+                </h3>
+                <span class="text-xs text-gray-400">ID: #{{ offer.id || '—' }}</span>
+              </div>
+            </div>
+
+            <div class="card-header-badges">
+              <span *ngIf="offer.newCustomersOnly" class="health-badge"
+                style="color: #8b5cf6; background-color: rgba(139, 92, 246, 0.1);">
+                <i class="fa-solid fa-star"></i>New Only
+              </span>
+              <span *ngIf="offer.endDate && isExpired(offer.endDate)" class="card-status card-status-inactive">
+                Expired
+              </span>
+              <span *ngIf="(!offer.endDate || !isExpired(offer.endDate)) && (offer.active ?? true)" class="card-status">
+                Active
+              </span>
+            </div>
+          </div>
+
+          <p class="card-company">
+            {{ offer.description }}
+          </p>
+
+          <div class="card-contact">
+            <div class="contact-item">
+              <span class="contact-label">Min. Spend:</span>
+              <span class="contact-value">{{ ((offer.minimumPurchasePaise || 0) / 100) | currency:'INR' }}</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Gift Cost:</span>
+              <span class="contact-value">{{ ((offer.giftCostPaise || 0) / 100) | currency:'INR' }}</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Max Claims:</span>
+              <span class="contact-value">{{ offer.maximumRedemptions }}</span>
+            </div>
+          </div>
+
+          <div class="card-dates">
+            <div class="date-item">
+              <span class="date-label">Start:</span>
+              <span class="date-value">{{ offer.startDate | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="date-item">
+              <span class="date-label">Expiry:</span>
+              <span class="date-value">{{ offer.endDate | date:'dd MMM yyyy' }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer" (click)="$event.stopPropagation()">
+            <div class="card-amount">
+              <span class="text-xs text-gray-500 font-normal">Discount: </span>
+              <span class="text-indigo-600 font-semibold">
+                {{ ((offer.discountAmountPaise || 0) / 100) | currency:'INR' }}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <mat-slide-toggle [checked]="offer.active ?? true" (change)="toggleOfferStatus(offer, $event)"
+                color="primary">
+              </mat-slide-toggle>
+              <button class="view-button" (click)="openEditOfferDialog(offer, $event)">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Edit</span>
+              </button>
+              <button class="view-button text-red-500 hover:text-red-700" (click)="deleteOffer(offer, $event)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+        </article>
+      </section>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && pagedOffers.length === 0" class="empty-state">
+        <div class="empty-icon-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8V2"></path>
+            <path d="M7 2h10"></path>
+            <path d="m9 8 3 3 3-3"></path>
+          </svg>
+        </div>
+        <h3 class="empty-title">No promotions found</h3>
+        <p class="empty-description">
+          {{ searchQuery || activeFilter !== 'all' ? 'Try adjusting your search query or filter.' : 'Create an offer to
+          start rewarding your in-store customers.' }}
+        </p>
+        <button *ngIf="!searchQuery && activeFilter === 'all'" mat-stroked-button class="action-button mt-4"
+          (click)="openCreateOfferDialog()">
+          <i class="fa-solid fa-plus"></i>
+          <span>Create First Offer</span>
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- ============================================== -->
+    <!-- VIEW 2: 9MYLE GIFT NETWORK CAMPAIGNS           -->
+    <!-- ============================================== -->
+    <ng-container *ngIf="currentView === 'gift_network'">
+      <!-- Desktop Table -->
+      <section class="desktop-table-section" *ngIf="pagedCampaigns.length > 0">
+        <div class="table-header campaign-table-header">
+          <div class="table-header-cell id-header">ID</div>
+          <div class="table-header-cell offer-header">Campaign Name</div>
+          <div class="table-header-cell discount-header">Reward %</div>
+          <div class="table-header-cell min-spend-header">Min. Purchase</div>
+          <div class="table-header-cell gift-cost-header">Max Gift Cap</div>
+          <div class="table-header-cell expiry-header">Validity</div>
+          <div class="table-header-cell status-header">Status</div>
+          <div class="table-header-cell actions-header">Actions</div>
+        </div>
+
+        <div class="table-body">
+          <div *ngFor="let campaign of pagedCampaigns; let rowIndex = index"
+            class="table-row campaign-table-row fade-in" [style.animation-delay]="rowIndex * 0.04 + 's'"
+            (click)="openCampaignDetails(campaign)" style="cursor: pointer;">
+
+            <!-- ID Cell -->
+            <div class="table-cell id-cell">
+              <div class="id-wrapper">
+                <span class="primary-id">#{{ campaign.id || '—' }}</span>
+              </div>
+              <div class="customer-dp-wrapper">
+                <div class="placeholder-dp">
+                  <i class="fa-solid fa-network-wired text-indigo-600"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campaign Name & Description Cell -->
+            <div class="table-cell customer-cell">
+              <div class="customer-name-wrapper">
+                <div class="name-status">
+                  <span class="customer-name">{{ campaign.name }}</span>
+                  <span class="deleted-indicator" *ngIf="campaign.active === false"></span>
+                </div>
+                <span class="contact-info text-xs text-gray-400 truncate max-w-xs block">
+                  {{ campaign.description }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Reward % Cell -->
+            <div class="table-cell total-cell">
+              <span class="font-bold text-indigo-600 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100">
+                {{ campaign.rewardPercentage }}%
+              </span>
+            </div>
+
+            <!-- Min Purchase Cell -->
+            <div class="table-cell total-cell">
+              {{ ((campaign.minimumPurchase || 0) / 100) | currency:'INR' }}
+            </div>
+
+            <!-- Max Gift Cap Cell -->
+            <div class="table-cell total-cell">
+              {{ ((campaign.maximumGift || 0) / 100) | currency:'INR' }}
+            </div>
+
+            <!-- Validity Cell -->
+            <div class="table-cell expiry-cell">
+              <span *ngIf="!campaign.endDate" class="expiry-badge expiry-badge-empty">— — —</span>
+              <span *ngIf="campaign.endDate && isExpired(campaign.endDate)" class="expiry-badge expiry-badge-expired">
+                {{ campaign.endDate | date:'dd MMM yyyy' }}
+              </span>
+              <span *ngIf="campaign.endDate && !isExpired(campaign.endDate)" class="expiry-badge expiry-badge-active">
+                {{ campaign.endDate | date:'dd MMM yyyy' }}
+              </span>
+            </div>
+
+            <!-- Status Cell -->
+            <div class="table-cell status-cell" (click)="$event.stopPropagation()">
+              <mat-slide-toggle [checked]="campaign.active ?? true" (change)="toggleCampaignStatus(campaign, $event)"
+                color="primary">
+              </mat-slide-toggle>
+            </div>
+
+            <!-- Actions Cell -->
+            <div class="table-cell actions-cell" (click)="$event.stopPropagation()">
+              <div class="flex items-center gap-1 justify-end">
+                <button mat-icon-button (click)="openEditCampaignDialog(campaign, $event)" matTooltip="Edit Campaign"
+                  class="text-gray-500 hover:text-indigo-600">
+                  <mat-icon class="text-sm">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteCampaign(campaign, $event)" matTooltip="Deactivate Campaign"
+                  class="text-gray-500 hover:text-red-600">
+                  <mat-icon class="text-sm">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Cards (Mobile/Tablet) -->
+      <section class="mobile-cards-section" *ngIf="pagedCampaigns.length > 0">
+        <article *ngFor="let campaign of pagedCampaigns; let rowIndex = index" class="customer-card fade-in"
+          [style.animation-delay]="rowIndex * 0.04 + 's'" (click)="openCampaignDetails(campaign)">
+
+          <div class="card-header">
+            <div class="card-header-content">
+              <div class="customer-dp-wrapper mobile-dp">
+                <div class="placeholder-dp">
+                  <i class="fa-solid fa-network-wired text-indigo-600"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="card-title">
+                  <span class="deleted-indicator" *ngIf="campaign.active === false"></span>
+                  {{ campaign.name }}
+                </h3>
+                <span class="text-xs text-gray-400">ID: #{{ campaign.id || '—' }}</span>
+              </div>
+            </div>
+
+            <div class="card-header-badges">
+              <span
+                class="font-bold text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                {{ campaign.rewardPercentage }}% Reward
+              </span>
+              <span *ngIf="campaign.endDate && isExpired(campaign.endDate)" class="card-status card-status-inactive">
+                Expired
+              </span>
+              <span *ngIf="(!campaign.endDate || !isExpired(campaign.endDate)) && (campaign.active ?? true)"
+                class="card-status">
+                Active
+              </span>
+            </div>
+          </div>
+
+          <p class="card-company">
+            {{ campaign.description }}
+          </p>
+
+          <div class="card-contact">
+            <div class="contact-item">
+              <span class="contact-label">Min. Purchase:</span>
+              <span class="contact-value">{{ ((campaign.minimumPurchase || 0) / 100) | currency:'INR' }}</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Max Gift Cap:</span>
+              <span class="contact-value">{{ ((campaign.maximumGift || 0) / 100) | currency:'INR' }}</span>
+            </div>
+          </div>
+
+          <div class="card-dates">
+            <div class="date-item">
+              <span class="date-label">Start:</span>
+              <span class="date-value">{{ campaign.startDate | date:'dd MMM yyyy' }}</span>
+            </div>
+            <div class="date-item">
+              <span class="date-label">Expiry:</span>
+              <span class="date-value">{{ campaign.endDate | date:'dd MMM yyyy' }}</span>
+            </div>
+          </div>
+
+          <div class="card-footer" (click)="$event.stopPropagation()">
+            <div class="card-amount">
+              <span class="text-xs text-gray-500 font-normal">Max Gift: </span>
+              <span class="text-indigo-600 font-semibold">
+                {{ ((campaign.maximumGift || 0) / 100) | currency:'INR' }}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <mat-slide-toggle [checked]="campaign.active ?? true" (change)="toggleCampaignStatus(campaign, $event)"
+                color="primary">
+              </mat-slide-toggle>
+              <button class="view-button" (click)="openEditCampaignDialog(campaign, $event)">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Edit</span>
+              </button>
+              <button class="view-button text-red-500 hover:text-red-700" (click)="deleteCampaign(campaign, $event)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+        </article>
+      </section>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && pagedCampaigns.length === 0" class="empty-state">
+        <div class="empty-icon-container">
+          <i class="fa-solid fa-network-wired text-xl text-gray-400"></i>
+        </div>
+        <h3 class="empty-title">No Gift Network campaigns found</h3>
+        <p class="empty-description">
+          {{ searchQuery || activeFilter !== 'all' ? 'Try adjusting your search query or filter.' : 'Configure your
+          in-shop coupon generation logic to issue vouchers customers can redeem across partner shops.' }}
+        </p>
+        <button *ngIf="!searchQuery && activeFilter === 'all'" mat-stroked-button class="action-button mt-4"
+          (click)="openCreateCampaignDialog()">
+          <i class="fa-solid fa-plus"></i>
+          <span>Create Gift Network Campaign</span>
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

@@ -17,28 +17,32 @@ export interface InvoiceModel {
 
 export interface ItemModel {
     itemName: string;
-    itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT'; // restrict if you know all possible types
+    itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT' | 'BOOSTER' | string; // restrict if you know all possible types
     itemId: number;
     quantity: number;
     startDate?: number;
     batchId?: number;
     price?: number; // added for completeness if needed
     taxRate?: number;
-    customerRewardDto?: any // Add this
+    customerRewardDto?: any; // Add this
+    groupKey?: string; // Links related items like MEMBERSHIPS and BOOSTER
 }
 
 
 export interface PaymentModel {
-    paymentMode: string,
-    grandTotal: number,
-    paidAmount?: number
+    paymentMode: string;
+    grandTotal: number;
+    paidAmount?: number;
 }
 
 export interface PaymentResponse {
     id: number;
     invoiceId: number;
-    status: 'COMPLETED' | 'SUCCESS' | 'FAILED' | 'PENDING' | 'REFUNDED';
-    paidAmount: number;
-    paymentMode: 'CASH' | 'CARD' | 'UPI' | 'WALLET' | 'NET_BANKING';
-    transactionId: string;
+    status: 'COMPLETED' | 'SUCCESS' | 'FAILED' | 'PENDING' | 'REFUNDED' | string;
+    paidAmount?: number;
+    amount?: number;
+    paymentMode?: 'CASH' | 'CARD' | 'UPI' | 'WALLET' | 'GIFT_WALLET' | 'NET_BANKING' | string;
+    method?: string;
+    paymentDate?: string;
+    transactionId?: string;
 }

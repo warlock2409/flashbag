@@ -78,9 +78,11 @@ export interface Item {
   availableStock?: number;
   lowStock?: boolean;
   brand?: string;
-  itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT';
+  itemType: 'MEMBERSHIPS' | 'SERVICES' | 'PRODUCT' | 'BOOSTER' | string;
   customerRewardDto?: any;
   discount?: number;
+  groupKey?: string;
+  boosterPlan?: any;
 }
 
 

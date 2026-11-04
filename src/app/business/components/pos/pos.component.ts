@@ -23,6 +23,8 @@ import { DiscountDialogComponent } from './discount-dialog/discount-dialog.compo
 import { CustomerMembershipComponent } from '../../customers/customer-membership/customer-membership.component';
 import { CustomerGeneralComponent } from '../../customers/customer-general/customer-general.component';
 import { BatchSelectionDialogComponent } from './batch-selection-dialog/batch-selection-dialog.component';
+import { BoosterService } from 'src/app/services/booster.service';
+import { BoosterPlanDto } from 'src/app/models/booster.model';
 
 @Component({
   selector: 'app-pos',
@@ -44,6 +46,7 @@ export class PosComponent implements OnInit {
   placeHolderImg = 'https://seanl80.sg-host.com/wp-content/uploads/woocommerce-placeholder-600x600.png'
   shopService = inject(ShopService);
   orgService = inject(OrganizationServiceService);
+  boosterService = inject(BoosterService);
 
   // Responsive properties
   isMobile: boolean = false;
@@ -215,12 +218,52 @@ export class PosComponent implements OnInit {
           if (selectedDate) {
             console.log("Selected start date:", selectedDate);
 
-            // Add item with start date to cart
-            this.cart.push({
-              ...item,
-              name: item.name + (item.durationLabel ? ` (${item.durationLabel})` : ''),
-              quantity: 1,
-              startDate: selectedDate
+            // Check if active booster plan exists for this membership
+            this.boosterService.getBoosterPlan(item.id).subscribe({
+              next: (res) => {
+                const booster = res?.data;
+                if (booster && booster.active) {
+                  Swal.fire({
+                    title: '⚡ Discipline Booster Available!',
+                    html: `
+                      <div class="text-left bg-amber-50 p-4 rounded-xl border border-amber-200 text-gray-800 space-y-2">
+                        <p class="font-bold text-amber-900 text-sm m-0">Add Discipline Booster to this membership?</p>
+                        <div class="text-xs space-y-1.5 mt-2 text-gray-700">
+                          <div class="flex justify-between border-b border-amber-200/50 pb-1">
+                            <span>Booster Price:</span>
+                            <span class="font-bold text-amber-900">₹${booster.price}</span>
+                          </div>
+                          <div class="flex justify-between border-b border-amber-200/50 pb-1">
+                            <span>Attendance Target:</span>
+                            <span class="font-bold text-gray-900">${booster.attendanceTargetDays} Days</span>
+                          </div>
+                          <div class="flex justify-between">
+                            <span>Completion Reward:</span>
+                            <span class="font-bold text-emerald-700">${booster.rewardDurationValue} ${booster.rewardDurationUnit} FREE Validity</span>
+                          </div>
+                        </div>
+                      </div>
+                    `,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: `Add Booster (+₹${booster.price})`,
+                    cancelButtonText: 'Membership Only',
+                    confirmButtonColor: '#d97706',
+                    cancelButtonColor: '#6b7280'
+                  }).then((swalRes) => {
+                    if (swalRes.isConfirmed) {
+                      this.addMembershipWithBoosterToCart(item, selectedDate, booster);
+                    } else {
+                      this.addMembershipOnlyToCart(item, selectedDate);
+                    }
+                  });
+                } else {
+                  this.addMembershipOnlyToCart(item, selectedDate);
+                }
+              },
+              error: () => {
+                this.addMembershipOnlyToCart(item, selectedDate);
+              }
             });
           } else {
             console.log("User cancelled date selection");
@@ -231,6 +274,46 @@ export class PosComponent implements OnInit {
         this.cart.push({ ...item, quantity: 1 });
       }
     }
+  }
+
+  addMembershipOnlyToCart(item: Item, selectedDate: Date) {
+    this.cart.push({
+      ...item,
+      name: item.name + (item.durationLabel ? ` (${item.durationLabel})` : ''),
+      quantity: 1,
+      startDate: selectedDate
+    });
+  }
+
+  addMembershipWithBoosterToCart(item: Item, selectedDate: Date, booster: BoosterPlanDto) {
+    const groupKey = `cart-${Date.now()}`;
+
+    // 1. Membership Line Item
+    const membershipCartItem: Item = {
+      ...item,
+      name: item.name + (item.durationLabel ? ` (${item.durationLabel})` : ''),
+      quantity: 1,
+      startDate: selectedDate,
+      groupKey: groupKey,
+      boosterPlan: booster
+    };
+
+    // 2. Booster Line Item (itemId = booster.id, itemType = 'BOOSTER', groupKey = groupKey)
+    const boosterCartItem: Item = {
+      id: booster.id!,
+      itemId: booster.id!,
+      name: `⚡ Discipline Booster (${booster.attendanceTargetDays} Days Target)`,
+      description: `Target: ${booster.attendanceTargetDays} Days. Reward: ${booster.rewardDurationValue} ${booster.rewardDurationUnit} free validity.`,
+      basePrice: booster.price,
+      taxRate: item.taxRate ?? 0,
+      quantity: 1,
+      itemType: 'BOOSTER',
+      image: '',
+      groupKey: groupKey
+    };
+
+    this.cart.push(membershipCartItem, boosterCartItem);
+    this._snackBar.success('Membership & Discipline Booster added to cart!');
   }
 
   addBatchToCart(item: any, batch: any, reward?: any) {
@@ -293,7 +376,14 @@ export class PosComponent implements OnInit {
   }
 
   removeFromCart(index: number) {
-    this.cart.splice(index, 1);
+    const item = this.cart[index];
+    if (item && item.groupKey) {
+      const groupKey = item.groupKey;
+      this.cart = this.cart.filter(i => i.groupKey !== groupKey);
+      this._snackBar.info('Removed membership & booster bundle from cart.');
+    } else {
+      this.cart.splice(index, 1);
+    }
   }
 
   get subtotal(): number {
@@ -749,8 +839,13 @@ export class PosComponent implements OnInit {
       let cartItem: ItemModel = {
         itemType: cart.itemType,
         itemName: cart.name,
-        itemId: cart.id,
+        itemId: cart.itemId || cart.id,
         quantity: cart.quantity!,
+        price: cart.basePrice,
+        taxRate: cart.taxRate ?? 0
+      };
+      if (cart.groupKey) {
+        cartItem.groupKey = cart.groupKey;
       }
       if ((cart as any).batchId) {
         cartItem.batchId = (cart as any).batchId;
@@ -1074,14 +1169,18 @@ export class PosComponent implements OnInit {
       disableClose: true, data: { type: "RECORD_PAYMENT", name: "Confirm Payment", invoice: invoice, payableAmount: this.total }
     });
 
-    dialogRef.afterClosed().subscribe((result: PaymentResponse) => {
+    dialogRef.afterClosed().subscribe((result: PaymentResponse | PaymentResponse[] | any) => {
       if (result) {
         console.log(result, "payment response");
 
-        if (result.status == "COMPLETED") {
+        const payments: PaymentResponse[] = Array.isArray(result) ? result : [result];
+        const isCompleted = payments.some(p => p.status === 'COMPLETED' || p.status === 'SUCCESS' || p.status === 'PAID');
+
+        if (isCompleted) {
           this.firePoppers();
           this._snackBar.success("Payment Completed");
-          this.getInvoiceById(result.invoiceId);
+          const targetInvoiceId = payments[0]?.invoiceId || invoice.id;
+          this.getInvoiceById(targetInvoiceId);
           const hasMembership = invoice.items?.some((i: any) => i.itemType === 'MEMBERSHIPS');
           if (hasMembership && this.selectedCustomer?.id) {
             this.fetchCustomerMembership(this.selectedCustomer.id, true);

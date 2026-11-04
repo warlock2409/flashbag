@@ -39,6 +39,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { CustomerConfigurePanelComponent } from "./customers/customer-configure-panel";
 import { SalesAnalyticsCardComponent } from "./components/charts/sales-analytics-card/sales-analytics-card.component";
 import { PointOfSaleComponent } from './components/point-of-sale/point-of-sale.component';
+import { PromotionComponent } from './promotion/promotion.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { PointOfSaleComponent } from './components/point-of-sale/point-of-sale.c
     AttendanceChartComponent, MatPaginatorModule,
     CustomerConfigurePanelComponent,
     SalesAnalyticsCardComponent,
-    PointOfSaleComponent
+    PointOfSaleComponent,
+    PromotionComponent
 ],
 })
 export class BusinessModule { } 
