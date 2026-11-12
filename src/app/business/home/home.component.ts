@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 import { PointOfSaleComponent } from '../components/point-of-sale/point-of-sale.component';
 import { ImagePreviewDialog } from '../customers/customers.component';
 import { TrendPanelService } from 'src/app/services/trend-panel.service';
+import { GiftCardService, GiftCardStatusCount } from 'src/app/services/gift-card.service';
+import { CommissionDashboard, CommissionFilters, CommissionPage, CommissionSummary, GiftCommissionService } from 'src/app/services/gift-commission.service';
 
 @Component({
   selector: 'app-home',
@@ -113,6 +115,16 @@ export class HomeComponent implements OnDestroy {
     this.getCurrentUser();
     console.log("Loading getCurrentUser Shops");
 
+    // Dashboard depends on the shop's business model
+    if (this.isCommissionShop) {
+      this.loadCommissionDashboard();
+      return;
+    }
+    if (!this.isServiceShop) {
+      console.log("Shop business model is neither Service nor Commission; skipping dashboard APIs");
+      return;
+    }
+
     this.loadGymDashboard();
     console.log("Loading loadGymDashboard Shops");
 
@@ -120,6 +132,9 @@ export class HomeComponent implements OnDestroy {
     console.log("Loading getTrailSessions Shops");
 
     this.loadChallenges();
+
+    // Commission block is shown at the bottom of Service shops too
+    this.loadCommissionDashboard();
     console.log("Loading loadChallenges");
 
     // this.checkSubscriptionPlan(); // For Org Billing 
@@ -206,6 +221,81 @@ export class HomeComponent implements OnDestroy {
   shops: ShopModel[] = [];
   fallback = "";
   selectedShop!: ShopModel;
+
+  /** True only when the selected shop's primary business model is "Service". */
+  get isServiceShop(): boolean {
+    return this.selectedShop?.primaryModel?.name?.trim().toLowerCase() === 'service';
+  }
+
+  /** True only when the selected shop's primary business model is "Commission". */
+  get isCommissionShop(): boolean {
+    return this.selectedShop?.primaryModel?.name?.trim().toLowerCase() === 'commission';
+  }
+
+  // ---------- Commission dashboard ----------
+  giftCardService = inject(GiftCardService);
+  giftCommissionService = inject(GiftCommissionService);
+
+  commissionSummary: CommissionSummary | null = null;
+  commissionPage: CommissionPage | null = null;
+  commissionFilters: { from: string; to: string; status: string } = { from: '', to: '', status: '' };
+  commissionPageIndex = 0;
+  readonly commissionPageSize = 10;
+  commissionLoading = false;
+  giftCardCounts: GiftCardStatusCount | null = null;
+
+  loadCommissionDashboard() {
+    this.loadGiftCardCounts();
+    this.loadCommissions(0);
+  }
+
+  loadCommissions(page: number) {
+    if (!this.selectedShop?.code) return;
+    const filters: CommissionFilters = {
+      from: this.commissionFilters.from || undefined,
+      to: this.commissionFilters.to || undefined,
+      status: this.commissionFilters.status || undefined,
+      page,
+      size: this.commissionPageSize
+    };
+    this.commissionLoading = true;
+    this.giftCommissionService.getShopCommissions(this.selectedShop.code, filters).subscribe({
+      next: (res) => {
+        const body: CommissionDashboard = res?.data ?? (res as any);
+        this.commissionSummary = body?.summary ?? null;
+        this.commissionPage = body?.commissions ?? null;
+        this.commissionPageIndex = page;
+        this.commissionLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load commissions', err);
+        this.commissionLoading = false;
+      }
+    });
+  }
+
+  loadGiftCardCounts() {
+    if (!this.selectedShop?.code) return;
+    this.giftCardService.getShopStatusCount(this.selectedShop.code).subscribe({
+      next: (res) => this.giftCardCounts = (res?.data ?? (res as any)) as GiftCardStatusCount,
+      error: (err) => console.error('Failed to load gift card counts', err)
+    });
+  }
+
+  applyCommissionFilters() {
+    this.loadCommissions(0);
+  }
+
+  resetCommissionFilters() {
+    this.commissionFilters = { from: '', to: '', status: '' };
+    this.loadCommissions(0);
+  }
+
+  changeCommissionPage(delta: number) {
+    const next = this.commissionPageIndex + delta;
+    if (next < 0 || (this.commissionPage && next >= this.commissionPage.totalPages)) return;
+    this.loadCommissions(next);
+  }
   currentUser: any;
 
   // Service Model
@@ -346,6 +436,7 @@ export class HomeComponent implements OnDestroy {
             this.selectedShop = this.shops[0];
             localStorage.setItem("shopCode", this.selectedShop.code!);
             localStorage.setItem("shopName", this.selectedShop.name!);
+            localStorage.setItem("shopModel", this.selectedShop.primaryModel?.name ?? "");
             // Initialize Ably service
             this.ablyService.initialize("Ek4x8A.f1K1KA:QOg5QxJ5pCLKTD7MAbgHej3gaUhr07MXxLb6XzKiAu4");
             this.ablyService.setShopCode(this.selectedShop.code!);

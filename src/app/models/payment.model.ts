@@ -26,6 +26,8 @@ export interface ItemModel {
     taxRate?: number;
     customerRewardDto?: any; // Add this
     groupKey?: string; // Links related items like MEMBERSHIPS and BOOSTER
+    industrySegments?: { id: number; name?: string; type?: string; industryId?: number }[];
+    industrySegmentIds?: number[];
 }
 
 
@@ -33,6 +35,7 @@ export interface PaymentModel {
     paymentMode: string;
     grandTotal: number;
     paidAmount?: number;
+    offerId?: number; // gift-wallet offer applied to this payment
 }
 
 export interface PaymentResponse {

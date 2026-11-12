@@ -411,12 +411,12 @@
             <path d="m9 8 3 3 3-3"></path>
           </svg>
         </div>
-        <h3 class="empty-title">No promotions found</h3>
+        <h3 class="empty-title mt-4">No promotions found</h3>
         <p class="empty-description">
           {{ searchQuery || activeFilter !== 'all' ? 'Try adjusting your search query or filter.' : 'Create an offer to
           start rewarding your in-store customers.' }}
         </p>
-        <button *ngIf="!searchQuery && activeFilter === 'all'" mat-stroked-button class="action-button mt-4"
+        <button *ngIf="!searchQuery && activeFilter === 'all'" mat-stroked-button class="action-button !mt-4"
           (click)="openCreateOfferDialog()">
           <i class="fa-solid fa-plus"></i>
           <span>Create First Offer</span>

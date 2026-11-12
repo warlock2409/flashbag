@@ -1,4 +1,4 @@
-import { Component, inject, Inject, model } from '@angular/core';
+import { Component, inject, Inject, model, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -14,6 +14,9 @@ import { environment } from 'src/environments/environment';
 import { ResponseDate } from 'src/app/app.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import Swal from 'sweetalert2';
+import { GiftCardService, UserCredit } from 'src/app/services/gift-card.service';
+import { PromotionService } from 'src/app/services/promotion.service';
+import { PromotionOffer } from 'src/app/models/promotion.model';
 
 @Component({
   selector: 'app-pos-actions',
@@ -23,10 +26,24 @@ import Swal from 'sweetalert2';
   templateUrl: './pos-actions.component.html',
   styleUrl: './pos-actions.component.scss'
 })
-export class PosActionsComponent {
+export class PosActionsComponent implements OnInit {
   private _snackBar = inject(NzMessageService);
   paymentService = inject(PaymentService);
   shopService = inject(ShopService);
+  giftCardService = inject(GiftCardService);
+  promotionService = inject(PromotionService);
+
+  // Gift wallet
+  walletCredit: UserCredit | null = null;
+  walletLoaded: boolean = false;
+
+  // Gift wallet offers (only one can be applied at a time)
+  shopOffers: PromotionOffer[] = [];
+  offersLoaded: boolean = false;
+  selectedOffer: PromotionOffer | null = null;
+
+  // Pay the remaining amount (after wallet) in cash
+  payRemainingInCash: boolean = false;
 
   payableAmount: number = 0;
   isProcessing: boolean = false;
@@ -36,7 +53,7 @@ export class PosActionsComponent {
   qrCodeBase64: string | null = null;
   currentOrderId: string | null = null;
 
-  constructor(private dialogRef: MatDialogRef<PosActionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { type: string, name: string, invoice: InvoiceModel, payableAmount?: number, minDate?: Date }) {
+  constructor(private dialogRef: MatDialogRef<PosActionsComponent>, @Inject(MAT_DIALOG_DATA) public data: { type: string, name: string, invoice: InvoiceModel, payableAmount?: number, minDate?: Date, customerUserId?: number | null }) {
     console.log(this.data);
     if (this.data.minDate !== undefined) {
       this.minDate = this.data.minDate;
@@ -53,9 +70,116 @@ export class PosActionsComponent {
   minDate: Date | null = null;
   maxDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
 
-  // Payment 
+  // Payment
   selectedPayment: string | null = 'CASH';
 
+  ngOnInit() {
+    this.loadWalletBalance();
+  }
+
+  /** Wallet owner is the customer's userId (not the customer id). */
+  get customerUserId(): number | null {
+    return this.data?.customerUserId ?? this.data?.invoice?.customer?.userId ?? null;
+  }
+
+  /** Wallet is offered only when the customer has an active gift wallet. */
+  get hasWallet(): boolean {
+    return !!this.walletCredit?.active;
+  }
+
+  get walletBalanceRupees(): number {
+    return (this.walletCredit?.availableBalancePaise ?? 0) / 100;
+  }
+
+  /**
+   * Offer amount actually applied. The offer is capped by the wallet balance
+   * (and by the payable amount), so a partial amount can be applied.
+   */
+  get offerDiscountRupees(): number {
+    if (!this.selectedOffer) return 0;
+    const offerRupees = (this.selectedOffer.discountAmountPaise ?? 0) / 100;
+    return Math.max(0, Math.min(offerRupees, this.walletBalanceRupees, this.payableAmount));
+  }
+
+  /** Amount still payable after the applied offer. */
+  get effectivePayable(): number {
+    return Math.max(0, this.payableAmount - this.offerDiscountRupees);
+  }
+
+  /** Amount the gift wallet pays: the applied offer amount, or the full payable when no offer. */
+  get walletPaidRupees(): number {
+    return this.selectedOffer ? this.offerDiscountRupees : this.payableAmount;
+  }
+
+  /** Part of the payable amount not covered by the wallet (collected as cash when toggled on). */
+  get remainingAfterWallet(): number {
+    return Math.max(0, this.payableAmount - this.walletPaidRupees);
+  }
+
+  get walletInsufficient(): boolean {
+    return this.selectedPayment === 'GIFT_WALLET' && this.walletBalanceRupees < this.walletPaidRupees;
+  }
+
+  /** Segment ids found on the invoice's items. */
+  get invoiceSegmentIds(): Set<number> {
+    const ids = new Set<number>();
+    for (const item of this.data?.invoice?.items ?? []) {
+      item.industrySegments?.forEach(s => s?.id != null && ids.add(Number(s.id)));
+      item.industrySegmentIds?.forEach(id => id != null && ids.add(Number(id)));
+    }
+    return ids;
+  }
+
+  /** Active offers whose segments match the invoice and whose minimum purchase is met. */
+  get eligibleOffers(): PromotionOffer[] {
+    const segments = this.invoiceSegmentIds;
+    return this.shopOffers.filter(offer =>
+      offer.active !== false &&
+      (offer.industrySegmentIds ?? []).some(id => segments.has(Number(id))) &&
+      this.payableAmount >= (offer.minimumPurchasePaise ?? 0) / 100
+    );
+  }
+
+  loadOffers() {
+    if (this.offersLoaded) return;
+    this.promotionService.getAllOffers().subscribe({
+      next: (res: any) => {
+        const list = Array.isArray(res) ? res : (res?.data ?? []);
+        this.shopOffers = Array.isArray(list) ? list : [];
+        this.offersLoaded = true;
+      },
+      error: (err) => {
+        console.warn('Failed to load shop offers:', err);
+        this.shopOffers = [];
+        this.offersLoaded = true;
+      }
+    });
+  }
+
+  useOffer(offer: PromotionOffer) {
+    // Selecting another offer replaces the current one
+    this.selectedOffer = this.selectedOffer?.id === offer.id ? null : offer;
+  }
+
+  loadWalletBalance() {
+    const userId = this.customerUserId;
+    if (!userId) {
+      this.walletLoaded = true;
+      return;
+    }
+    this.giftCardService.getTotalCredit(userId).subscribe({
+      next: (res) => {
+        this.walletCredit = res?.data ?? null;
+        this.walletLoaded = true;
+      },
+      error: (err) => {
+        // No wallet / lookup failed: simply don't offer the option
+        console.warn('Gift wallet lookup failed:', err);
+        this.walletCredit = null;
+        this.walletLoaded = true;
+      }
+    });
+  }
 
   closeDialog() {
     this.dialogRef.close();
@@ -68,7 +192,17 @@ export class PosActionsComponent {
 
 
   selectPayment(method: string) {
+    if (method === 'GIFT_WALLET' && this.walletBalanceRupees <= 0) {
+      this._snackBar.warning('Gift wallet balance is zero.');
+      return;
+    }
     this.selectedPayment = method;
+    if (method === 'GIFT_WALLET') {
+      this.loadOffers();
+    } else {
+      // Gift-wallet offers apply only to the wallet payment
+      this.selectedOffer = null;
+    }
     console.log('Selected payment method:', this.selectedPayment);
   }
 
@@ -133,6 +267,17 @@ export class PosActionsComponent {
   }
 
   async ProcessPayment() {
+    if (this.selectedPayment === 'GIFT_WALLET') {
+      if (!this.hasWallet) {
+        this._snackBar.warning('Customer has no active gift wallet.');
+        return;
+      }
+      if (this.walletInsufficient) {
+        this._snackBar.warning('Insufficient gift wallet balance.');
+        return;
+      }
+    }
+
     if (this.selectedPayment === 'PAYMENT_LINK') {
       if (this.paymentChannel === 'collect' && !this.customerUpiId.trim()) {
         this._snackBar.warning('Please enter the customer\'s UPI VPA.');
@@ -237,12 +382,25 @@ export class PosActionsComponent {
         }
       });
     } else {
+      const isWallet = this.selectedPayment === 'GIFT_WALLET';
       let payment: PaymentModel = {
         paymentMode: this.selectedPayment!,
         grandTotal: this.data.invoice.grandTotal!,
-        paidAmount: this.payableAmount
+        paidAmount: isWallet ? this.walletPaidRupees : this.payableAmount
       };
+      if (isWallet && this.selectedOffer) {
+        payment.offerId = Number(this.selectedOffer.id);
+      }
       let paymentModels: PaymentModel[] = [payment];
+
+      // Gift wallet + remaining amount collected in cash
+      if (isWallet && this.payRemainingInCash && this.remainingAfterWallet > 0) {
+        paymentModels.push({
+          paymentMode: 'CASH',
+          grandTotal: this.data.invoice.grandTotal!,
+          paidAmount: this.remainingAfterWallet
+        });
+      }
       this.paymentService.makePayment(paymentModels, this.data.invoice.id).subscribe({
         next: (res: ResponseDate) => {
           console.log(res);

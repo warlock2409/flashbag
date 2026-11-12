@@ -557,3 +557,19 @@
         background-position: 0% 50%;
     }
 }
+/* Commission dashboard: stronger contrast over the photo background */
+.commission-view .glass-card {
+    background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.commission-view .bg-white\/5 {
+    background: rgba(0, 0, 0, 0.45) !important;
+}
+
+.commission-view .text-white\/60 {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.commission-view .text-white\/50 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}

@@ -1164,9 +1164,12 @@ export class PosComponent implements OnInit {
     })
   }
 
+  // Customers who have completed a payment in this session
+  private paidCustomerIds = new Set<number>();
+
   recordPayment(invoice: any) {
     const dialogRef = this.dialog.open(PosActionsComponent, {
-      disableClose: true, data: { type: "RECORD_PAYMENT", name: "Confirm Payment", invoice: invoice, payableAmount: this.total }
+      disableClose: true, data: { type: "RECORD_PAYMENT", name: "Confirm Payment", invoice: invoice, payableAmount: this.total, customerUserId: invoice?.customer?.userId ?? this.selectedCustomer?.userId ?? null }
     });
 
     dialogRef.afterClosed().subscribe((result: PaymentResponse | PaymentResponse[] | any) => {
@@ -1181,9 +1184,17 @@ export class PosComponent implements OnInit {
           this._snackBar.success("Payment Completed");
           const targetInvoiceId = payments[0]?.invoiceId || invoice.id;
           this.getInvoiceById(targetInvoiceId);
+
+          // Open Customer General only on the customer's first completed payment (per session)
+          const paidCustomerId = this.selectedCustomer?.id ?? invoice?.customerId;
+          const isFirstPayment = !!paidCustomerId && !this.paidCustomerIds.has(paidCustomerId);
+          if (paidCustomerId) this.paidCustomerIds.add(paidCustomerId);
+
           const hasMembership = invoice.items?.some((i: any) => i.itemType === 'MEMBERSHIPS');
           if (hasMembership && this.selectedCustomer?.id) {
             this.fetchCustomerMembership(this.selectedCustomer.id, true);
+          } else if (isFirstPayment && this.selectedCustomer?.id === paidCustomerId) {
+            this.openCustomerGeneralDialog();
           }
         }
       }

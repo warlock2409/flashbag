@@ -15,6 +15,8 @@ import { TimeZoneHelperService } from 'src/app/services/timeZoneHelper';
 export class BusinessLayoutComponent implements OnDestroy {
   isExpanded = false;
   currentShopCode = '';
+  /** Commission shops get a reduced menu (Orders, Customers, Challenges, Management, Attendance disabled). */
+  isCommissionShop = false;
   showSidebar = true;
   private currentChannelName: string | null = null;
   private currentChannelCallback: ((msg: any) => void) | null = null;
@@ -49,8 +51,15 @@ export class BusinessLayoutComponent implements OnDestroy {
     }
   }
 
+  private refreshShopModel() {
+    const model = (localStorage.getItem("shopModel") ?? "").trim().toLowerCase();
+    this.isCommissionShop = model === 'commission';
+    this.cdr.markForCheck();
+  }
+
   ngOnInit() {
     console.log("BusinessLayoutComponent ngOnInit");
+    this.refreshShopModel();
     // Check if there's already a shop code set
     const initialShopCode = this.ablyService['shopCodeSubject'].getValue();
     console.log("Initial shop code from AblyService:", initialShopCode);
@@ -78,6 +87,7 @@ export class BusinessLayoutComponent implements OnDestroy {
     this.ablyService.shopCode$.subscribe(async (shopCode) => {
       console.log("Shop code changed to:", shopCode);
       if (!shopCode) return;
+      this.refreshShopModel();
 
       // Initialize Ably service before setting up subscription
       this.initializeAblyService();

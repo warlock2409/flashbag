@@ -184,3 +184,9 @@ mat-sidenav-content {
     max-width: 0px;
   }
 }
+/* Commission shops: menu items not available */
+.nav-disabled {
+    pointer-events: none;
+    opacity: 0.35;
+    cursor: not-allowed;
+}

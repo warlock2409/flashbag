@@ -15,15 +15,15 @@
         <mat-icon>mail</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Marketing</span>
       </a> -->
-      <a mat-list-item routerLink="./orders" routerLinkActive="active" class="nav-item">
+      <a mat-list-item routerLink="./orders" routerLinkActive="active" class="nav-item" [class.nav-disabled]="isCommissionShop">
         <mat-icon class="white_bg">currency_exchange</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Orders</span>
       </a>
-      <a mat-list-item routerLink="./customers" routerLinkActive="active" class="nav-item">
+      <a mat-list-item routerLink="./customers" routerLinkActive="active" class="nav-item" [class.nav-disabled]="isCommissionShop">
         <mat-icon class="white_bg">people</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Customers</span>
       </a>
-      <a mat-list-item routerLink="./challenge" routerLinkActive="active" class="nav-item">
+      <a mat-list-item routerLink="./challenge" routerLinkActive="active" class="nav-item" [class.nav-disabled]="isCommissionShop">
         <mat-icon class="white_bg">emoji_flags</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Challenges</span>
       </a>
@@ -43,7 +43,7 @@
         <mat-icon>analytics</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Analytics</span>
       </a> -->
-      <a mat-list-item routerLink="./settings" routerLinkActive="active" class="nav-item">
+      <a mat-list-item routerLink="./settings" routerLinkActive="active" class="nav-item" [class.nav-disabled]="isCommissionShop">
         <mat-icon class="white_bg">settings</mat-icon>
         <span class="nav-label" *ngIf="isExpanded">Management</span>
       </a>
@@ -51,7 +51,7 @@
 
     <div class="absolute bottom-5 right-4 ">
       <div class="flex flex-col">
-        <a mat-list-item routerLink="./gym-checkin" routerLinkActive="active" class="nav-item">
+        <a mat-list-item routerLink="./gym-checkin" routerLinkActive="active" class="nav-item" [class.nav-disabled]="isCommissionShop">
           <mat-icon class="white_bg">assignment_turned_in</mat-icon>
           <span class="nav-label" *ngIf="isExpanded">Attendance</span>
         </a>
