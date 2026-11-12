@@ -7,6 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -16,6 +17,8 @@ import { PromotionOffer, CommissionPolicy } from 'src/app/models/promotion.model
 import { GiftCampaign } from 'src/app/models/gift-campaign.model';
 import { OfferDialogComponent } from './offer-dialog/offer-dialog.component';
 import { CampaignDialogComponent } from './campaign-dialog/campaign-dialog.component';
+
+const TOGGLE_PIN = '9639';
 
 @Component({
   selector: 'app-promotion',
@@ -28,7 +31,8 @@ import { CampaignDialogComponent } from './campaign-dialog/campaign-dialog.compo
     MatDialogModule,
     MatPaginatorModule,
     MatSlideToggleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatExpansionModule
   ],
   templateUrl: './promotion.component.html',
   styleUrls: ['./promotion.component.scss']
@@ -44,7 +48,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
   loading: boolean = false;
 
   // Active Commission Policy for the shop
-  commissionPolicy: CommissionPolicy | null = null;
+  commissionPolicies: CommissionPolicy[] = [];
   loadingPolicy: boolean = false;
 
   // View mode: 'promotions' (Store Offers) vs 'gift_network' (Cross-shop Gift Network campaigns)
@@ -99,12 +103,13 @@ export class PromotionComponent implements OnInit, OnDestroy {
     this.promotionService.getCommissionPolicy(this.shopCode).subscribe({
       next: (res: any) => {
         this.loadingPolicy = false;
-        this.commissionPolicy = res?.data || res || null;
+        const list = Array.isArray(res) ? res : (res?.data ?? []);
+        this.commissionPolicies = Array.isArray(list) ? list : [list];
       },
       error: (err: any) => {
         this.loadingPolicy = false;
         console.warn('Commission policy could not be loaded:', err);
-        this.commissionPolicy = null;
+        this.commissionPolicies = [];
       }
     });
   }
@@ -117,6 +122,40 @@ export class PromotionComponent implements OnInit, OnDestroy {
   /**
    * Toggle between In-Store Promotions and 9Myle Gift Network Campaigns
    */
+  /**
+   * Gate entry to Gift Network Logic behind a static PIN. Client-side only; not a security boundary.
+   * Switching back to Store Offers is not locked.
+   */
+  async requestToggleViewMode(): Promise<void> {
+    if (this.currentView === 'gift_network') {
+      this.toggleViewMode();
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: 'Enter PIN',
+      input: 'password',
+      inputPlaceholder: '4-digit PIN',
+      inputAttributes: {
+        maxlength: '4',
+        inputmode: 'numeric',
+        autocomplete: 'new-password',
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        spellcheck: 'false'
+      },
+      inputValidator: (value: string) => (value === TOGGLE_PIN ? null : 'Incorrect PIN'),
+      showCancelButton: true,
+      confirmButtonText: 'Unlock',
+      cancelButtonText: 'Cancel',
+      allowOutsideClick: false
+    });
+
+    if (result.isConfirmed) {
+      this.toggleViewMode();
+    }
+  }
+
   toggleViewMode(mode?: 'promotions' | 'gift_network'): void {
     if (mode) {
       this.currentView = mode;

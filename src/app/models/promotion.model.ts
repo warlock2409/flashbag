@@ -7,6 +7,7 @@ export interface PromotionOffer {
   minimumPurchasePaise: number;
   maximumRedemptions: number;
   newCustomersOnly: boolean;
+  industrySegmentIds?: number[];
   startDate: string; // ISO 8601 string
   endDate: string;   // ISO 8601 string
   active?: boolean;

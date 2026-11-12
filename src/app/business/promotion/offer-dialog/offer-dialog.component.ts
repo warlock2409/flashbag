@@ -1,14 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PromotionOffer } from 'src/app/models/promotion.model';
+import { OrganizationServiceService } from 'src/app/services/organization-service.service';
 
 export interface OfferDialogData {
   mode: 'create' | 'edit';
   offer?: PromotionOffer;
+}
+
+export interface IndustrySegmentOption {
+  id: number;
+  name: string;
+  industryName: string;
 }
 
 @Component({
@@ -16,10 +21,7 @@ export interface OfferDialogData {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatSlideToggleModule
+    ReactiveFormsModule
   ],
   templateUrl: './offer-dialog.component.html',
   styleUrls: ['./offer-dialog.component.scss']
@@ -28,8 +30,13 @@ export class OfferDialogComponent implements OnInit {
   offerForm!: FormGroup;
   isEditMode: boolean = false;
 
+  industrySegments: IndustrySegmentOption[] = [];
+  industriesLoading: boolean = false;
+  industriesError: boolean = false;
+
   constructor(
     private fb: FormBuilder,
+    private orgService: OrganizationServiceService,
     public dialogRef: MatDialogRef<OfferDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OfferDialogData
   ) {}
@@ -56,9 +63,60 @@ export class OfferDialogComponent implements OnInit {
       minimumPurchaseRupees: [minimumPurchaseRs, [Validators.required, Validators.min(0)]],
       maximumRedemptions: [offer?.maximumRedemptions ?? 100, [Validators.required, Validators.min(1)]],
       newCustomersOnly: [offer?.newCustomersOnly ?? false],
+      industrySegmentIds: [offer?.industrySegmentIds ?? [], [Validators.required]],
       startDateStr: [startStr, [Validators.required]],
       endDateStr: [endStr, [Validators.required]]
     });
+
+    this.loadIndustrySegments();
+  }
+
+  loadIndustrySegments(): void {
+    this.industriesLoading = true;
+    this.industriesError = false;
+
+    this.orgService.getOrgIndustryByShop().subscribe({
+      next: (res: any) => {
+        const industries: any[] = Array.isArray(res) ? res : (res?.data ?? []);
+        const options: IndustrySegmentOption[] = [];
+
+        industries.forEach((industry: any) => {
+          (industry?.industrySegments ?? []).forEach((segment: any) => {
+            if (segment?.id != null) {
+              options.push({
+                id: Number(segment.id),
+                name: segment.name,
+                industryName: industry.name
+              });
+            }
+          });
+        });
+
+        this.industrySegments = options;
+        this.industriesLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Error fetching industries', err);
+        this.industriesError = true;
+        this.industriesLoading = false;
+      }
+    });
+  }
+
+  isSegmentSelected(id: number): boolean {
+    const selected: number[] = this.offerForm.get('industrySegmentIds')?.value ?? [];
+    return selected.includes(id);
+  }
+
+  toggleSegment(id: number, checked: boolean): void {
+    const control = this.offerForm.get('industrySegmentIds');
+    const selected: number[] = control?.value ?? [];
+    const next = checked
+      ? [...selected.filter(x => x !== id), id]
+      : selected.filter(x => x !== id);
+    control?.setValue(next);
+    control?.markAsDirty();
+    control?.markAsTouched();
   }
 
   onSubmit(): void {
@@ -80,6 +138,7 @@ export class OfferDialogComponent implements OnInit {
       minimumPurchasePaise: Math.round(Number(raw.minimumPurchaseRupees) * 100),
       maximumRedemptions: Number(raw.maximumRedemptions),
       newCustomersOnly: Boolean(raw.newCustomersOnly),
+      industrySegmentIds: (raw.industrySegmentIds ?? []).map((id: number) => Number(id)),
       startDate: startDate,
       endDate: endDate
     };
