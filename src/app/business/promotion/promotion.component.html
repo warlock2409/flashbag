@@ -58,6 +58,13 @@
           <span class="action-text">Refresh</span>
         </button>
 
+        <!-- Download App -->
+        <a mat-stroked-button class="action-button" href="https://drive.google.com/file/d/1auFTmbwRVWKdA224CRzS_DO90pcvNnQY/view?usp=sharing"
+          target="_blank" rel="noopener" matTooltip="Download the app">
+          <i class="fa-solid fa-download"></i>
+          <span class="action-text">Download App</span>
+        </a>
+
         <!-- Create Button (Changes depending on active view) -->
         <button *ngIf="currentView === 'promotions'" mat-stroked-button class="action-button"
           (click)="openCreateOfferDialog()">
