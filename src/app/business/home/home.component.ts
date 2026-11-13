@@ -291,6 +291,10 @@ export class HomeComponent implements OnDestroy {
     this.loadCommissions(0);
   }
 
+  refreshCommissions() {
+    this.loadCommissions(this.commissionPageIndex);
+  }
+
   changeCommissionPage(delta: number) {
     const next = this.commissionPageIndex + delta;
     if (next < 0 || (this.commissionPage && next >= this.commissionPage.totalPages)) return;

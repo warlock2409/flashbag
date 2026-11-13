@@ -16,6 +16,7 @@ export interface CommissionRow {
   invoiceId: number;
   giftCardId: number;
   consumingShopId: number;
+  consumingShopName?: string;
   redeemedAmountPaise: number;
   commissionAmountPaise: number;
   status: 'ACCRUED' | 'PAID' | 'REVERSED' | string;
